@@ -1,0 +1,29 @@
+{
+  "supportsClaims": {
+    "heading": "תומך בטענות",
+    "empty": "אין טענות מקושרות מתועדות."
+  },
+  "referencedByCaseStudies": {
+    "heading": "מאוזכר במחקרי מקרה",
+    "empty": "אף מחקר מקרה לא מפנה לרישום זה."
+  },
+  "metadata": {
+    "title": "מטא-דאטה של החפץ",
+    "labels": {
+      "type": "סוג",
+      "date": "תאריך",
+      "source": "מקור",
+      "verification": "הערת אימות",
+      "claimSupported": "טענה נתמכת",
+      "claimLink": "קישור לטענה"
+    },
+    "claimLinkAction": "צפה בטענה המקושרת"
+  },
+  "index": {
+    "type": "סוג",
+    "date": "תאריך",
+    "source": "מקור",
+    "verification": "אימות",
+    "meta": "{type} · {date} · {source}"
+  }
+}

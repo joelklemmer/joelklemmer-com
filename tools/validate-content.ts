@@ -7,6 +7,7 @@ import {
   claimRegistry,
   getArtifactsManifest,
   getMediaManifest,
+  getPublicRecordId,
   institutionalFrontmatterSchema,
   publicRecordFrontmatterSchema,
   validateClaimRegistry,
@@ -96,15 +97,22 @@ getMdxFiles(institutionalDir).forEach((filePath) => {
   }
 });
 
-const publicRecordIds = new Set(
-  publicRecordEntries
-    .filter(Boolean)
-    .flatMap((entry) => [
-      entry?.frontmatter.slug,
-      entry?.frontmatter.id,
-    ])
-    .filter(Boolean) as string[],
+const publicRecordValidEntries = publicRecordEntries.filter(
+  (e): e is NonNullable<typeof e> => e != null,
 );
+const recordIds = publicRecordValidEntries.map((e) =>
+  getPublicRecordId(e.frontmatter),
+);
+const recordIdCounts = new Map<string, number>();
+for (const id of recordIds) {
+  recordIdCounts.set(id, (recordIdCounts.get(id) ?? 0) + 1);
+}
+for (const [id, count] of recordIdCounts) {
+  if (count > 1) {
+    errors.push(`Duplicate public record id: ${id} (used ${count} times)`);
+  }
+}
+const publicRecordIds = new Set(recordIds);
 
 caseStudyEntries.filter(Boolean).forEach((entry) => {
   entry?.frontmatter.proofRefs.forEach((ref) => {

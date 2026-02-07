@@ -65,11 +65,19 @@ export function getMediaManifest() {
   parsed.data.assets.forEach((asset) => {
     const assetPath = path.join(publicRoot, 'media', asset.filename);
     if (!existsSync(assetPath)) {
-      errors.push(`Missing media asset file: ${assetPath}`);
+      if (isProduction) {
+        errors.push(`Missing media asset file: ${assetPath}`);
+      } else {
+        console.warn(`[dev] Media asset file missing: ${assetPath} (id: ${asset.id})`);
+      }
       return;
     }
     if (asset.type.startsWith('image') && !asset.altText) {
-      errors.push(`Missing altText for image asset ${asset.id}`);
+      if (isProduction) {
+        errors.push(`Missing altText for image asset ${asset.id}`);
+      } else {
+        console.warn(`[dev] Missing altText for image asset ${asset.id}`);
+      }
     }
     if (isProduction) {
       const actual = sha256ForFile(assetPath);

@@ -67,6 +67,10 @@ export function getArtifactsManifest() {
     if (!existsSync(artifactPath)) {
       if (enforceRequired && item.required) {
         errors.push(`Missing required artifact file: ${artifactPath}`);
+      } else if (!isProduction) {
+        console.warn(
+          `[dev] Optional artifact file missing: ${artifactPath} (id: ${item.id})`,
+        );
       }
       return;
     }
@@ -75,6 +79,10 @@ export function getArtifactsManifest() {
       if (isProduction) {
         errors.push(
           `Checksum mismatch for ${artifactPath} (expected ${item.sha256}, got ${actual})`,
+        );
+      } else if (item.required) {
+        console.warn(
+          `[dev] Checksum mismatch for required artifact ${artifactPath}`,
         );
       }
     }

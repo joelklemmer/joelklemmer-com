@@ -1,0 +1,29 @@
+{
+  "supportsClaims": {
+    "heading": "Supports claims",
+    "empty": "No linked claims are recorded."
+  },
+  "referencedByCaseStudies": {
+    "heading": "Referenced by case studies",
+    "empty": "No case studies reference this record."
+  },
+  "metadata": {
+    "title": "Artifact metadata",
+    "labels": {
+      "type": "Type",
+      "date": "Date",
+      "source": "Source",
+      "verification": "Verification note",
+      "claimSupported": "Claim supported",
+      "claimLink": "Claim linkage"
+    },
+    "claimLinkAction": "View linked claim"
+  },
+  "index": {
+    "type": "Type",
+    "date": "Date",
+    "source": "Source",
+    "verification": "Verification",
+    "meta": "{type} · {date} · {source}"
+  }
+}

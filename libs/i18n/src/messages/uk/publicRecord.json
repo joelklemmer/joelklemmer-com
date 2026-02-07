@@ -1,0 +1,29 @@
+{
+  "supportsClaims": {
+    "heading": "Підтримує твердження",
+    "empty": "Пов'язаних тверджень не зафіксовано."
+  },
+  "referencedByCaseStudies": {
+    "heading": "Згадано в кейс-стаді",
+    "empty": "Жодне кейс-стаді не посилається на цей запис."
+  },
+  "metadata": {
+    "title": "Метадані артефакту",
+    "labels": {
+      "type": "Тип",
+      "date": "Дата",
+      "source": "Джерело",
+      "verification": "Нотатка про перевірку",
+      "claimSupported": "Підтримуване твердження",
+      "claimLink": "Зв'язок твердження"
+    },
+    "claimLinkAction": "Переглянути пов'язане твердження"
+  },
+  "index": {
+    "type": "Тип",
+    "date": "Дата",
+    "source": "Джерело",
+    "verification": "Перевірка",
+    "meta": "{type} · {date} · {source}"
+  }
+}

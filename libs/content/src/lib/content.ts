@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { defaultLocale, type AppLocale } from '@joelklemmer/i18n';
 import {
   caseStudyFrontmatterSchema,
+  getPublicRecordId,
   institutionalFrontmatterSchema,
   publicRecordFrontmatterSchema,
   type CaseStudyFrontmatter,
@@ -211,9 +212,31 @@ export async function getPublicRecordEntry(locale: AppLocale, slug: string) {
   return localized.find((entry) => entry.frontmatter.slug === slug) ?? null;
 }
 
+/** Get entry by stable recordId or slug. */
+export async function getPublicRecordByIdOrSlug(
+  locale: AppLocale,
+  idOrSlug: string,
+) {
+  const entries = await getPublicRecordEntries();
+  const localized = filterByLocale(entries, locale);
+  return (
+    localized.find(
+      (entry) =>
+        entry.frontmatter.slug === idOrSlug ||
+        getPublicRecordId(entry.frontmatter) === idOrSlug,
+    ) ?? null
+  );
+}
+
 export async function getPublicRecordSlugs() {
   const entries = await getPublicRecordEntries();
   return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
+}
+
+/** All stable record IDs (id ?? slug) across the collection, for integrity checks. */
+export async function getAllPublicRecordIds(): Promise<string[]> {
+  const entries = await getPublicRecordEntries();
+  return entries.map((e) => getPublicRecordId(e.frontmatter));
 }
 
 export async function getPressKit(locale: AppLocale) {
@@ -300,6 +323,21 @@ export async function getCaseStudy(locale: AppLocale, slug: string) {
 export async function getCaseStudySlugs() {
   const entries = await getCaseStudyEntries();
   return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
+}
+
+/** Case studies that reference this public record (proofRefs). Returns up to 6 for display. */
+export async function getCaseStudiesByRecordId(
+  recordId: string,
+  limit = 6,
+): Promise<Array<{ slug: string; title: string }>> {
+  const entries = await getCaseStudyEntries();
+  const referring = entries.filter((e) =>
+    e.frontmatter.proofRefs.includes(recordId),
+  );
+  return referring.slice(0, limit).map((e) => ({
+    slug: e.frontmatter.slug,
+    title: e.frontmatter.title,
+  }));
 }
 
 export async function renderMdx(source: string) {

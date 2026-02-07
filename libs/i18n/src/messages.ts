@@ -13,6 +13,7 @@ export const messageNamespaces = [
   'writing',
   'contact',
   'proof',
+  'publicRecord',
   'quiet',
 ] as const;
 

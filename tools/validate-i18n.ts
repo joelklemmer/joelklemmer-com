@@ -106,6 +106,38 @@ const briefSchema = z
   })
   .passthrough();
 
+const publicRecordSchema = z
+  .object({
+    supportsClaims: z.object({
+      heading: z.string().min(1),
+      empty: z.string().min(1),
+    }),
+    referencedByCaseStudies: z.object({
+      heading: z.string().min(1),
+      empty: z.string().min(1),
+    }),
+    metadata: z.object({
+      title: z.string().min(1),
+      labels: z.object({
+        type: z.string().min(1),
+        date: z.string().min(1),
+        source: z.string().min(1),
+        verification: z.string().min(1),
+        claimSupported: z.string().min(1),
+        claimLink: z.string().min(1),
+      }),
+      claimLinkAction: z.string().min(1),
+    }),
+    index: z.object({
+      type: z.string().min(1),
+      date: z.string().min(1),
+      source: z.string().min(1),
+      verification: z.string().min(1),
+      meta: z.string().min(1),
+    }),
+  })
+  .passthrough();
+
 const errors: string[] = [];
 const messagesRoot = path.join(process.cwd(), 'libs', 'i18n', 'src', 'messages');
 
@@ -161,6 +193,7 @@ locales.forEach((locale) => {
   validateNamespace(locale, 'footer', footerSchema);
   validateNamespace(locale, 'meta', metaSchema);
   validateNamespace(locale, 'brief', briefSchema);
+  validateNamespace(locale, 'publicRecord', publicRecordSchema);
 });
 validateBriefClaimKeys();
 

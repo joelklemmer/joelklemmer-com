@@ -24,21 +24,26 @@ export const publicRecordMetadata = generateMetadata;
 
 export async function PublicRecordScreen() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['proof']);
-  const t = createScopedTranslator(locale, messages, 'proof');
+  const messages = await loadMessages(locale, ['proof', 'publicRecord']);
+  const tProof = createScopedTranslator(locale, messages, 'proof');
+  const tIndex = createScopedTranslator(locale, messages, 'publicRecord');
   const entries = await getPublicRecordList(locale);
 
   return (
     <>
-      <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
+      <HeroSection
+        title={tProof('hero.title')}
+        lede={tProof('hero.lede')}
+      />
       {entries.length ? (
         <CardGridSection
-          title={t('list.title')}
-          lede={t('list.lede')}
+          title={tProof('list.title')}
+          lede={tProof('list.lede')}
           items={entries.map((entry) => ({
             title: entry.frontmatter.title,
             description: entry.frontmatter.claimSupported,
-            meta: t('list.meta', {
+            meta: tIndex('index.meta', {
+              type: entry.frontmatter.artifactType,
               date: entry.frontmatter.date,
               source: entry.frontmatter.source,
             }),
@@ -46,7 +51,10 @@ export async function PublicRecordScreen() {
           }))}
         />
       ) : (
-        <ListSection title={t('list.title')} items={[t('list.empty')]} />
+        <ListSection
+          title={tProof('list.title')}
+          items={[tProof('list.empty')]}
+        />
       )}
     </>
   );

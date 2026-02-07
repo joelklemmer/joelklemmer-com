@@ -9,7 +9,9 @@ This document describes every quality gate in the repo: how to run it, what it c
 | Format | `nx format:check` | Prettier / Nx format across the workspace |
 | Lint | `nx run web:lint` | ESLint for the web app |
 | Content validate | `nx run web:content-validate` | MDX frontmatter, proofRefs, claims, artifacts, media |
-| i18n validate | `nx run web:i18n-validate` | Translation completeness (chrome + meta) |
+| i18n validate | `nx run web:i18n-validate` | Translation completeness (chrome + meta + publicRecord) |
+| Sitemap validate | `nx run web:sitemap-validate` | Dynamic public record and case study URLs for all locales |
+| SEO validate | `nx run web:seo-validate` | Canonical and hreflang for core routes |
 | Test | `nx run web:test` | Unit tests (currently a placeholder) |
 | Build | `nx run web:build` | Next.js production build |
 | A11y | `nx run web:a11y` | Playwright + axe-core accessibility scans |
@@ -53,12 +55,30 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 - **Run:** `nx run web:i18n-validate`
 - **Implementation:** Runs `tools/validate-i18n.ts` via **tsx** with `tsconfig.base.json`.
-- **What it checks:** For each locale, JSON message files (`libs/i18n/src/messages/<locale>/*.json`) satisfy required keys for `common`, `nav`, `footer`, and `meta` (chrome + critical meta translation completeness).
+- **What it checks:** For each locale, JSON message files (`libs/i18n/src/messages/<locale>/*.json`) satisfy required keys for `common`, `nav`, `footer`, `meta`, `brief`, and `publicRecord`.
 - **Success:** Exit code 0 and stdout: `i18n validation passed.`
 
 ---
 
-## 5. Test (web)
+## 5. Sitemap validate
+
+- **Run:** `nx run web:sitemap-validate`
+- **Implementation:** Runs `tools/validate-sitemap.ts` via **tsx**. Uses sync slug getters from `@joelklemmer/content/validate` and `buildSitemapEntries` from `@joelklemmer/seo`.
+- **What it checks:** Expected sitemap entry count per locale; no duplicate URLs; every dynamic public record and case study URL present for each locale.
+- **Success:** Exit code 0 and stdout: `Sitemap validation passed: N URLs across 4 locales.`
+
+---
+
+## 6. SEO validate
+
+- **Run:** `nx run web:seo-validate`
+- **Implementation:** Runs `tools/validate-seo.ts` via **tsx`. Calls `getCanonicalUrl` and `hreflangAlternates` from `@joelklemmer/seo` for core pathnames.
+- **What it checks:** Canonical URL format for each locale; hreflang alternates include en/uk/es/he and x-default.
+- **Success:** Exit code 0 and stdout: `SEO validation passed: canonical and hreflang for N core routes.`
+
+---
+
+## 7. Test (web)
 
 - **Run:** `nx run web:test`
 - **What it checks:** Currently a placeholder that prints “No web tests configured”. Intended for future unit tests.
@@ -66,7 +86,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 6. Build (web)
+## 8. Build (web)
 
 - **Run:** `nx run web:build` or `nx build web`
 - **What it checks:** Next.js production build. Also enforces sameAs identity when `NEXT_PUBLIC_IDENTITY_SAME_AS` is set; can enforce artifact/media manifests in production.
@@ -74,7 +94,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 7. A11y
+## 9. A11y
 
 - **Run:** `nx run web:a11y`
 - **Implementation:** Delegates to `nx run web-e2e:a11y` (Playwright with `apps/web-e2e/playwright.a11y.config.ts`).
@@ -83,7 +103,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 8. E2E
+## 10. E2E
 
 - **Run:** `nx e2e web-e2e`
 - **What it checks:** Full Playwright E2E suite (default config). May depend on a prior build or serve.
@@ -98,9 +118,11 @@ This document describes every quality gate in the repo: how to run it, what it c
   1. `nx run web:lint`
   2. `nx run web:content-validate`
   3. `nx run web:i18n-validate`
-  4. `nx run web:test`
-  5. `nx run web:build`
-  6. `nx run web:a11y`
+  4. `nx run web:sitemap-validate`
+  5. `nx run web:seo-validate`
+  6. `nx run web:test`
+  7. `nx run web:build`
+  8. `nx run web:a11y`
 
 No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed.
 
@@ -155,8 +177,8 @@ Run from repo root (Node v20+). Use PowerShell on Windows.
    ```
    Success: exit 0, stdout contains `i18n validation passed.`
 
-4. **Full verify** (lint → content-validate → i18n-validate → test → build → a11y)
+4. **Full verify** (lint → content-validate → i18n-validate → sitemap-validate → seo-validate → test → build → a11y)
    ```bash
    nx run web:verify
    ```
-   Success: exit 0 after all six steps complete. If lint (or another step) has pre-existing failures, verify will fail at that step; fix those before expecting verify to pass.
+   Success: exit 0 after all eight steps complete. If lint (or another step) has pre-existing failures, verify will fail at that step; fix those before expecting verify to pass.

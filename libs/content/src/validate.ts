@@ -7,3 +7,4 @@ export * from './lib/claims';
 export * from './lib/schemas';
 export * from './lib/artifacts';
 export * from './lib/media';
+export * from './lib/sitemap-data';

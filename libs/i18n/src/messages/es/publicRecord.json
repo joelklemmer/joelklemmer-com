@@ -1,0 +1,29 @@
+{
+  "supportsClaims": {
+    "heading": "Apoya afirmaciones",
+    "empty": "No hay afirmaciones vinculadas registradas."
+  },
+  "referencedByCaseStudies": {
+    "heading": "Referenciado por estudios de caso",
+    "empty": "Ningún estudio de caso referencia este registro."
+  },
+  "metadata": {
+    "title": "Metadatos del artefacto",
+    "labels": {
+      "type": "Tipo",
+      "date": "Fecha",
+      "source": "Fuente",
+      "verification": "Nota de verificación",
+      "claimSupported": "Afirmación apoyada",
+      "claimLink": "Enlace a afirmación"
+    },
+    "claimLinkAction": "Ver afirmación vinculada"
+  },
+  "index": {
+    "type": "Tipo",
+    "date": "Fecha",
+    "source": "Fuente",
+    "verification": "Verificación",
+    "meta": "{type} · {date} · {source}"
+  }
+}

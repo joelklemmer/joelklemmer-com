@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 import {
+  getCaseStudiesByRecordId,
   getClaimsSupportingRecord,
   getPublicRecordEntry,
+  getPublicRecordId,
   getPublicRecordSlugs,
   renderMdx,
 } from '@joelklemmer/content';
@@ -56,12 +58,18 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
   if (!entry) {
     notFound();
   }
-  const messages = await loadMessages(locale, ['proof', 'brief', 'common']);
-  const t = createScopedTranslator(locale, messages, 'proof');
+  const messages = await loadMessages(locale, [
+    'proof',
+    'brief',
+    'common',
+    'publicRecord',
+  ]);
+  const t = createScopedTranslator(locale, messages, 'publicRecord');
   const tBrief = createScopedTranslator(locale, messages, 'brief');
   const tCommon = createScopedTranslator(locale, messages, 'common');
-  const recordId = entry.frontmatter.id ?? entry.frontmatter.slug;
+  const recordId = getPublicRecordId(entry.frontmatter);
   const supportingClaims = getClaimsSupportingRecord(recordId);
+  const referencedByCaseStudies = await getCaseStudiesByRecordId(recordId);
   const showFallbackNotice = entry.frontmatter.locale !== locale;
 
   return (
@@ -86,7 +94,7 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
             value: entry.frontmatter.claimSupported,
           },
           {
-            label: t('metadata.labels.artifactType'),
+            label: t('metadata.labels.type'),
             value: entry.frontmatter.artifactType,
           },
           {
@@ -115,12 +123,20 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
         ]}
       />
       <LinkListSection
-        title={t('supportsClaims.title')}
+        title={t('supportsClaims.heading')}
         items={supportingClaims.map((claim) => ({
           label: tBrief(claim.labelKey),
           href: `/${locale}/brief#claim-${claim.id}`,
         }))}
         emptyMessage={t('supportsClaims.empty')}
+      />
+      <LinkListSection
+        title={t('referencedByCaseStudies.heading')}
+        items={referencedByCaseStudies.map((cs) => ({
+          label: cs.title,
+          href: `/${locale}/casestudies/${cs.slug}`,
+        }))}
+        emptyMessage={t('referencedByCaseStudies.empty')}
       />
       <MdxSection>{await renderMdx(entry.content)}</MdxSection>
     </>
