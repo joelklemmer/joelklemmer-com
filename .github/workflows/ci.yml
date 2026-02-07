@@ -8,8 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      NX_CLOUD: "false"
-      PLAYWRIGHT_BROWSERS_PATH: "0"
+      NX_CLOUD: 'false'
+      PLAYWRIGHT_BROWSERS_PATH: '0'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
