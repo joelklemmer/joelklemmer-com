@@ -5,7 +5,12 @@ export interface BoxProps extends ComponentPropsWithoutRef<'div'> {
   as?: ElementType;
 }
 
-export function Box({ children, className, as: Component = 'div', ...rest }: BoxProps) {
+export function Box({
+  children,
+  className,
+  as: Component = 'div',
+  ...rest
+}: BoxProps) {
   return (
     <Component className={className} {...rest}>
       {children}

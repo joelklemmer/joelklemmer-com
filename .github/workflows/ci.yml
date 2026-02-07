@@ -4,29 +4,29 @@ on:
   push:
 
 jobs:
-  build:
+  ci:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20.19.0
           cache: pnpm
 
       - name: Enable pnpm
-        run: corepack enable
+        run: corepack enable && corepack prepare pnpm@10.28.2 --activate
 
-      - name: Install
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Format check
-        run: pnpm nx format:check
+        run: pnpm nx format:check --all
 
       - name: Build web
         run: pnpm nx build web
 
-      - name: E2E
+      - name: E2E tests
         run: pnpm nx e2e web-e2e

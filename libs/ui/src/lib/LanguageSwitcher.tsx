@@ -28,7 +28,9 @@ export function LanguageSwitcher() {
     <nav aria-label={t('languageSwitcher.label')}>
       <ul className="flex gap-3">
         {locales.map((targetLocale) => {
-          const restPath = restSegments.length ? `/${restSegments.join('/')}` : '';
+          const restPath = restSegments.length
+            ? `/${restSegments.join('/')}`
+            : '';
           const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
           const isCurrent = targetLocale === locale;
           const languageLabel = t(`languages.${targetLocale}`);
@@ -39,7 +41,9 @@ export function LanguageSwitcher() {
                 href={href}
                 lang={targetLocale}
                 aria-current={isCurrent ? 'page' : undefined}
-                aria-label={t('languageSwitcher.action', { language: languageLabel })}
+                aria-label={t('languageSwitcher.action', {
+                  language: languageLabel,
+                })}
                 className={isCurrent ? 'font-semibold underline' : undefined}
               >
                 {languageLabel}

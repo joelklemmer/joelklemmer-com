@@ -16,7 +16,8 @@ export interface HrefLangOptions {
 }
 
 function normalizeBaseUrl(baseUrl?: string) {
-  const resolvedBaseUrl = baseUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
+  const resolvedBaseUrl =
+    baseUrl ?? process.env.NEXT_PUBLIC_SITE_URL ?? DEFAULT_SITE_URL;
   return resolvedBaseUrl.replace(/\/+$/, '');
 }
 
@@ -48,7 +49,13 @@ export function getHrefLangs({
   const siteUrl = normalizeBaseUrl(baseUrl);
   const normalizedPath = normalizePathname(pathname);
 
-  const entries = supportedLocales.map((locale) => [locale, `${siteUrl}/${locale}${normalizedPath}`]);
+  const entries = supportedLocales.map((locale) => [
+    locale,
+    `${siteUrl}/${locale}${normalizedPath}`,
+  ]);
 
-  return Object.fromEntries([...entries, ['x-default', `${siteUrl}/${fallbackLocale}${normalizedPath}`]]);
+  return Object.fromEntries([
+    ...entries,
+    ['x-default', `${siteUrl}/${fallbackLocale}${normalizedPath}`],
+  ]);
 }

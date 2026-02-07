@@ -56,8 +56,22 @@ export default [
         {
           patterns: [
             {
-              group: ['@ui', '@ui/*', '@tokens', '@tokens/*', '@i18n', '@i18n/*', '@content', '@content/*', '@seo', '@seo/*', '@a11y', '@a11y/*'],
-              message: 'Route files must only compose from @screens and @sections. Use screens and sections libs instead.',
+              group: [
+                '@ui',
+                '@ui/*',
+                '@tokens',
+                '@tokens/*',
+                '@i18n',
+                '@i18n/*',
+                '@content',
+                '@content/*',
+                '@seo',
+                '@seo/*',
+                '@a11y',
+                '@a11y/*',
+              ],
+              message:
+                'Route files must only compose from @screens and @sections. Use screens and sections libs instead.',
             },
           ],
         },
