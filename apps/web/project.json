@@ -42,6 +42,12 @@
         "command": "node -e \"console.log('No web tests configured')\""
       }
     },
+    "restore-next-env": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "git checkout -- apps/web/next-env.d.ts"
+      }
+    },
     "verify": {
       "executor": "nx:run-commands",
       "options": {
@@ -54,6 +60,7 @@
           "nx run web:seo-validate",
           "nx run web:test",
           "nx run web:build",
+          "nx run web:restore-next-env",
           "nx run web:a11y"
         ],
         "parallel": false

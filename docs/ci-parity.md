@@ -7,8 +7,15 @@ Run locally **exactly** what CI runs so failures are reproducible and fixable be
 1. **Versions** (for logs): `node -v`, `npm -v`, `pnpm -v`, `git --version`
 2. **Install:** `pnpm install --frozen-lockfile`
 3. **Verify:** `pnpm nx run web:verify --verbose`
+4. **Restore next-env.d.ts:** `git checkout -- apps/web/next-env.d.ts` (so Next build overwrites do not dirty the tree)
+5. **Repo must be clean:** `git status --porcelain` must be empty; otherwise CI fails with the list of changed files.
+6. **Upload a11y report:** The a11y JSON report is uploaded as a workflow artifact (`tmp/reports/a11y.json` → artifact name `a11y-report`). Download it from the job summary if needed.
 
 The verify target runs, in order: format check, lint, content-validate, i18n-validate, sitemap-validate, seo-validate, test, build, a11y. See [Quality gates](quality-gates.md).
+
+### Repo must remain clean in CI
+
+Verify must not create uncommitted changes. After verify, CI runs `git status --porcelain`. If any file is modified or untracked (in tracked dirs), the job fails. This keeps CI deterministic and prevents generators (e.g. a11y report, Next typegen) from slipping in. The a11y report is written to `tmp/reports/a11y.json` (gitignored) and is available as a workflow artifact; it is not committed.
 
 ## Run locally (PowerShell)
 

@@ -58,6 +58,27 @@ jobs:
       - name: Verify (lint, content, i18n, sitemap, seo, test, build, a11y)
         run: pnpm nx run web:verify --verbose
 
+      - name: Restore next-env.d.ts
+        run: git checkout -- apps/web/next-env.d.ts
+
+      - name: Repo must be clean (no generated diffs)
+        run: |
+          STATUS=$(git status --porcelain)
+          if [ -n "$STATUS" ]; then
+            echo "::error::Verify produced uncommitted changes. Repo must remain clean in CI."
+            echo "$STATUS"
+            exit 1
+          fi
+
+      - name: Upload a11y report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: a11y-report
+          path: tmp/reports/a11y.json
+          retention-days: 7
+          if-no-files-found: ignore
+
       - name: Failure diagnostics
         if: failure()
         run: |

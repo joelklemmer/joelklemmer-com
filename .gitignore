@@ -5,6 +5,10 @@ dist
 tmp
 out-tsc
 
+# E2E / a11y reports (do not track; use tmp/reports/a11y.json)
+reports
+apps/web-e2e/reports
+
 # dependencies
 node_modules
 

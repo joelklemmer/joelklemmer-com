@@ -8,13 +8,8 @@ import {
   getPublicRecordEntries,
 } from '@joelklemmer/content';
 
-const reportPath = path.join(
-  process.cwd(),
-  'apps',
-  'web-e2e',
-  'reports',
-  'a11y.json',
-);
+// Write to untracked tmp/reports so verify does not dirty the repo (CI and local).
+const reportPath = path.join(process.cwd(), 'tmp', 'reports', 'a11y.json');
 
 test('accessibility smoke', async ({ page }) => {
   test.setTimeout(180000); // Many routes × locales; allow 3 min

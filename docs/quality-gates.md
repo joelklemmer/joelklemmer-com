@@ -100,6 +100,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 - **Implementation:** Delegates to `nx run web-e2e:a11y` (Playwright with `apps/web-e2e/playwright.a11y.config.ts`).
 - **What it checks:** axe-core accessibility scans across required routes/locales (see `apps/web-e2e/src/a11y/`).
 - **Success:** Exit code 0; no a11y violations reported.
+- **Report path:** The a11y JSON report is written to `tmp/reports/a11y.json` (gitignored). In CI it is uploaded as the `a11y-report` artifact. Verify must not create tracked diffs; this path is outside the repo tree for commit purposes.
 
 ---
 
@@ -125,7 +126,7 @@ This document describes every quality gate in the repo: how to run it, what it c
   8. `nx run web:build`
   9. `nx run web:a11y`
 
-No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed.
+No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed. Verify must not create uncommitted changes; see [CI parity](ci-parity.md) (repo must remain clean in CI).
 
 ---
 
