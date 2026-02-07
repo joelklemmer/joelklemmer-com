@@ -6,7 +6,11 @@ import {
 } from '@joelklemmer/i18n';
 import { getPublicRecordList } from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { CardGridSection, HeroSection, ListSection } from '@joelklemmer/sections';
+import {
+  CardGridSection,
+  HeroSection,
+  ListSection,
+} from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -31,10 +35,7 @@ export async function PublicRecordScreen() {
 
   return (
     <>
-      <HeroSection
-        title={tProof('hero.title')}
-        lede={tProof('hero.lede')}
-      />
+      <HeroSection title={tProof('hero.title')} lede={tProof('hero.lede')} />
       {entries.length ? (
         <CardGridSection
           title={tProof('list.title')}

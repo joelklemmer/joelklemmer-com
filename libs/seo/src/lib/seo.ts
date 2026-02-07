@@ -146,10 +146,7 @@ export interface PersonJsonLdProps {
   sameAs?: string[];
 }
 
-export function getPersonJsonLd({
-  baseUrl,
-  sameAs,
-}: PersonJsonLdProps = {}) {
+export function getPersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps = {}) {
   const url = normalizeBaseUrl(baseUrl);
   return {
     '@context': 'https://schema.org',

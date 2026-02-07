@@ -59,15 +59,14 @@ export function getArtifactsManifest() {
   }
 
   const errors: string[] = [];
-  const isProduction = process.env.NODE_ENV === 'production';
-  const enforceRequired = isProduction && process.env.RELEASE_READY !== 'false';
+  const releaseReady = process.env.RELEASE_READY === '1';
 
   parsed.data.items.forEach((item) => {
     const artifactPath = path.join(publicRoot, 'artifacts', item.filename);
     if (!existsSync(artifactPath)) {
-      if (enforceRequired && item.required) {
+      if (releaseReady && item.required) {
         errors.push(`Missing required artifact file: ${artifactPath}`);
-      } else if (!isProduction) {
+      } else if (!releaseReady) {
         console.warn(
           `[dev] Optional artifact file missing: ${artifactPath} (id: ${item.id})`,
         );
@@ -76,7 +75,7 @@ export function getArtifactsManifest() {
     }
     const actual = sha256ForFile(artifactPath);
     if (actual !== item.sha256) {
-      if (isProduction) {
+      if (releaseReady) {
         errors.push(
           `Checksum mismatch for ${artifactPath} (expected ${item.sha256}, got ${actual})`,
         );

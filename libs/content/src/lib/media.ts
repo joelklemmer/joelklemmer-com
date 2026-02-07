@@ -60,26 +60,28 @@ export function getMediaManifest() {
   }
 
   const errors: string[] = [];
-  const isProduction = process.env.NODE_ENV === 'production';
+  const releaseReady = process.env.RELEASE_READY === '1';
 
   parsed.data.assets.forEach((asset) => {
     const assetPath = path.join(publicRoot, 'media', asset.filename);
     if (!existsSync(assetPath)) {
-      if (isProduction) {
+      if (releaseReady) {
         errors.push(`Missing media asset file: ${assetPath}`);
       } else {
-        console.warn(`[dev] Media asset file missing: ${assetPath} (id: ${asset.id})`);
+        console.warn(
+          `[dev] Media asset file missing: ${assetPath} (id: ${asset.id})`,
+        );
       }
       return;
     }
     if (asset.type.startsWith('image') && !asset.altText) {
-      if (isProduction) {
+      if (releaseReady) {
         errors.push(`Missing altText for image asset ${asset.id}`);
       } else {
         console.warn(`[dev] Missing altText for image asset ${asset.id}`);
       }
     }
-    if (isProduction) {
+    if (releaseReady) {
       const actual = sha256ForFile(assetPath);
       if (actual !== asset.sha256) {
         errors.push(

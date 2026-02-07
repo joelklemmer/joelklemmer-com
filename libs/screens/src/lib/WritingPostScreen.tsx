@@ -98,7 +98,10 @@ export async function WritingPostScreen({ slug }: { slug: string }) {
           value: entry.frontmatter.excerpt,
         }
       : null,
-  ].filter(Boolean) as Array<{ label: string; value: string | React.ReactNode }>;
+  ].filter(Boolean) as Array<{
+    label: string;
+    value: string | React.ReactNode;
+  }>;
 
   return (
     <>
@@ -115,7 +118,10 @@ export async function WritingPostScreen({ slug }: { slug: string }) {
         lede={entry.frontmatter.summary}
       />
       {metadataItems.length ? (
-        <DefinitionListSection title={t('metadata.title')} items={metadataItems} />
+        <DefinitionListSection
+          title={t('metadata.title')}
+          items={metadataItems}
+        />
       ) : null}
       <MdxSection>{await renderMdx(entry.content)}</MdxSection>
     </>

@@ -26,17 +26,17 @@ export function LinkListSection({
         {items.length > 0 ? (
           <ul className="grid gap-2 text-base text-muted">
             {items.map((item) => (
-            <li key={item.href} className="flex gap-2">
-              <span aria-hidden="true">•</span>
-              <Link
-                href={item.href}
-                className={`${focusRingClass} underline underline-offset-4 hover:text-accent`}
-              >
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+              <li key={item.href} className="flex gap-2">
+                <span aria-hidden="true">•</span>
+                <Link
+                  href={item.href}
+                  className={`${focusRingClass} underline underline-offset-4 hover:text-accent`}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         ) : emptyMessage ? (
           <p className="text-base text-muted">{emptyMessage}</p>
         ) : null}

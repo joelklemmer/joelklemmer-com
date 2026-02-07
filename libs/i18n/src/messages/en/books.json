@@ -1,0 +1,26 @@
+{
+  "index": {
+    "title": "Books",
+    "subtitle": "Published volumes with verification-linked references.",
+    "listTitle": "Publications",
+    "empty": "No books are listed."
+  },
+  "entry": {
+    "sections": {
+      "metadata": "Publication metadata",
+      "verifiedReferences": "Verified references",
+      "availability": "Availability",
+      "excerpts": "Excerpts"
+    },
+    "labels": {
+      "publicationDate": "Publication date",
+      "publisher": "Publisher",
+      "author": "Author",
+      "isbn10": "ISBN-10",
+      "isbn13": "ISBN-13",
+      "formats": "Formats",
+      "language": "Language"
+    },
+    "verifiedReferencesEmpty": "No verified references."
+  }
+}

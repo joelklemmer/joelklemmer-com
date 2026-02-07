@@ -1,7 +1,7 @@
-import { WritingScreen, writingMetadata } from '@joelklemmer/screens';
+import { BooksScreen, booksMetadata } from '@joelklemmer/screens';
 
-export const generateMetadata = writingMetadata;
+export const generateMetadata = booksMetadata;
 
 export default function BooksPage() {
-  return <WritingScreen />;
+  return <BooksScreen />;
 }

@@ -2,10 +2,7 @@
   "siteName": "Joel R. Klemmer",
   "defaultTitle": "בריף אימות מנהלים",
   "defaultDescription": "מערכת אימות סמכות להערכה מנהלית ולסקירה מוסדית.",
-  "home": {
-    "title": "בית",
-    "description": "מערכת התמצאות להערכה מוסדית."
-  },
+  "home": { "title": "בית", "description": "מערכת התמצאות להערכה מוסדית." },
   "brief": {
     "title": "בריף מנהלים",
     "description": "מרכז סמכות לסקירה מובנית וניווט ראיות."
@@ -54,16 +51,11 @@
     "title": "פרטיות",
     "description": "בקרות פרטיות וטיפול בנתונים."
   },
-  "terms": {
-    "title": "תנאים",
-    "description": "תנאי גישה והגבלות שימוש."
-  },
+  "terms": { "title": "תנאים", "description": "תנאי גישה והגבלות שימוש." },
   "accessibility": {
     "title": "נגישות",
     "description": "יעדי נגישות ותדירות סקירה."
   },
-  "security": {
-    "title": "אבטחה",
-    "description": "עמדת אבטחה ודיווח."
-  }
+  "security": { "title": "אבטחה", "description": "עמדת אבטחה ודיווח." },
+  "books": { "title": "ספרים", "description": "כרכים שפורסמו עם קישורי אימות." }
 }

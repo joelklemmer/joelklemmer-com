@@ -6,10 +6,13 @@ import { compileMDX } from 'next-mdx-remote/rsc';
 import { z } from 'zod';
 import { defaultLocale, type AppLocale } from '@joelklemmer/i18n';
 import {
+  bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
+  getBookId,
   getPublicRecordId,
   institutionalFrontmatterSchema,
   publicRecordFrontmatterSchema,
+  type BookFrontmatter,
   type CaseStudyFrontmatter,
   type InstitutionalFrontmatter,
   type PublicRecordFrontmatter,
@@ -331,6 +334,83 @@ export async function getCaseStudiesByRecordId(
   limit = 6,
 ): Promise<Array<{ slug: string; title: string }>> {
   const entries = await getCaseStudyEntries();
+  const referring = entries.filter((e) =>
+    e.frontmatter.proofRefs.includes(recordId),
+  );
+  return referring.slice(0, limit).map((e) => ({
+    slug: e.frontmatter.slug,
+    title: e.frontmatter.title,
+  }));
+}
+
+// ——— Books ———
+
+export async function getBookEntries() {
+  const dir = path.join(contentRoot, 'books');
+  if (!existsSync(dir)) {
+    return [];
+  }
+  const files = await getMdxFiles(dir);
+  const entries = await Promise.all(
+    files.map(async (filePath) => {
+      const { content, data } = await readMdxFile<BookFrontmatter>(filePath);
+      const frontmatter = validateFrontmatter(
+        bookFrontmatterSchema,
+        data,
+        filePath,
+      );
+      return { frontmatter, content };
+    }),
+  );
+  return entries;
+}
+
+export async function getBookList(locale: AppLocale) {
+  const entries = await getBookEntries();
+  const localized = filterByLocale(entries, locale);
+  return [...localized].sort(
+    (a, b) =>
+      new Date(b.frontmatter.publicationDate).getTime() -
+      new Date(a.frontmatter.publicationDate).getTime(),
+  );
+}
+
+export async function getBookEntry(locale: AppLocale, slug: string) {
+  const entries = await getBookEntries();
+  const localized = filterByLocale(entries, locale);
+  return localized.find((entry) => entry.frontmatter.slug === slug) ?? null;
+}
+
+/** Get book by stable bookId or slug. */
+export async function getBookByIdOrSlug(locale: AppLocale, idOrSlug: string) {
+  const entries = await getBookEntries();
+  const localized = filterByLocale(entries, locale);
+  return (
+    localized.find(
+      (entry) =>
+        entry.frontmatter.slug === idOrSlug ||
+        getBookId(entry.frontmatter) === idOrSlug,
+    ) ?? null
+  );
+}
+
+export async function getBookSlugs() {
+  const entries = await getBookEntries();
+  return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
+}
+
+/** All stable book IDs (id ?? slug) across the collection. */
+export async function getAllBookIds(): Promise<string[]> {
+  const entries = await getBookEntries();
+  return entries.map((e) => getBookId(e.frontmatter));
+}
+
+/** Books that reference this public record (proofRefs). Returns up to 6 for display. */
+export async function getBooksByRecordId(
+  recordId: string,
+  limit = 6,
+): Promise<Array<{ slug: string; title: string }>> {
+  const entries = await getBookEntries();
   const referring = entries.filter((e) =>
     e.frontmatter.proofRefs.includes(recordId),
   );

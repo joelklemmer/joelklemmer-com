@@ -11,6 +11,7 @@ export const messageNamespaces = [
   'work',
   'operatingSystem',
   'writing',
+  'books',
   'contact',
   'proof',
   'publicRecord',

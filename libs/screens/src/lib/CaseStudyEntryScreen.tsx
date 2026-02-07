@@ -96,11 +96,13 @@ export async function CaseStudyEntryScreen({ slug }: { slug: string }) {
         constraints={entry.frontmatter.constraints}
         actions={entry.frontmatter.actions}
         outcomes={entry.frontmatter.outcomes}
-        references={references.filter(Boolean) as Array<{
-          label: string;
-          href: string;
-          meta?: string;
-        }>}
+        references={
+          references.filter(Boolean) as Array<{
+            label: string;
+            href: string;
+            meta?: string;
+          }>
+        }
         labels={{
           context: t('caseStudies.labels.context'),
           constraints: t('caseStudies.labels.constraints'),

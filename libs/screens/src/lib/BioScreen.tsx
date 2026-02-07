@@ -10,7 +10,10 @@ import {
   getInstitutionalPage,
   renderMdx,
 } from '@joelklemmer/content';
-import { DefinitionListSection, FallbackNoticeSection } from '@joelklemmer/sections';
+import {
+  DefinitionListSection,
+  FallbackNoticeSection,
+} from '@joelklemmer/sections';
 import { QuietScreen, createQuietMetadata } from './QuietScreen';
 import { focusRingClass } from '@joelklemmer/a11y';
 
@@ -28,7 +31,9 @@ export async function BioScreen() {
   const tCommon = createScopedTranslator(locale, messages, 'common');
   const tQuiet = createScopedTranslator(locale, messages, 'quiet');
   const artifacts = await getArtifactsManifest();
-  const bioArtifact = artifacts.items.find((item) => item.id === 'executive-bio');
+  const bioArtifact = artifacts.items.find(
+    (item) => item.id === 'executive-bio',
+  );
   const notice = entry?.isFallback ? (
     <FallbackNoticeSection
       title={tCommon('fallbackNotice.title')}

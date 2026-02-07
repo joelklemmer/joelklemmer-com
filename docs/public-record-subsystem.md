@@ -20,18 +20,18 @@ The Public Record is a **verification-only** evidence system. It is not narrativ
 
 ## Required frontmatter fields
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| `title` | Yes | Short title of the artifact. |
-| `artifactType` | Yes | Type label (e.g. "Recovery plan summary", "Report"). |
-| `source` | Yes | URL or citation string. |
-| `date` | Yes | ISO or `yyyy-mm-dd`. |
-| `verificationNotes` | Yes | Short note on how it was verified. |
-| `claimSupported` | Yes | Human-readable label of the claim (linkage is via claim registry). |
-| `locale` | Yes | One of: `en`, `uk`, `es`, `he`. |
-| `slug` | Yes | URL segment (unique per entry). |
-| `id` | No | Stable record ID; if omitted, `slug` is used. Must be unique across the collection. |
-| `canonical` | No | Override canonical URL if needed. |
+| Field               | Required | Description                                                                         |
+| ------------------- | -------- | ----------------------------------------------------------------------------------- |
+| `title`             | Yes      | Short title of the artifact.                                                        |
+| `artifactType`      | Yes      | Type label (e.g. "Recovery plan summary", "Report").                                |
+| `source`            | Yes      | URL or citation string.                                                             |
+| `date`              | Yes      | ISO or `yyyy-mm-dd`.                                                                |
+| `verificationNotes` | Yes      | Short note on how it was verified.                                                  |
+| `claimSupported`    | Yes      | Human-readable label of the claim (linkage is via claim registry).                  |
+| `locale`            | Yes      | One of: `en`, `uk`, `es`, `he`.                                                     |
+| `slug`              | Yes      | URL segment (unique per entry).                                                     |
+| `id`                | No       | Stable record ID; if omitted, `slug` is used. Must be unique across the collection. |
+| `canonical`         | No       | Override canonical URL if needed.                                                   |
 
 ### Example frontmatter
 

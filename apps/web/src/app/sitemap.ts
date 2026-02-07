@@ -1,5 +1,6 @@
 import type { MetadataRoute } from 'next';
 import {
+  getBookSlugs,
   getCaseStudySlugs,
   getPublicRecordSlugs,
 } from '@joelklemmer/content';
@@ -9,14 +10,16 @@ import { routing } from '../i18n/routing';
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [publicRecordSlugs, caseStudySlugs] = await Promise.all([
+  const [publicRecordSlugs, caseStudySlugs, bookSlugs] = await Promise.all([
     getPublicRecordSlugs(),
     getCaseStudySlugs(),
+    getBookSlugs(),
   ]);
   return buildSitemapEntries({
     baseUrl,
     locales: routing.locales,
     publicRecordSlugs,
     caseStudySlugs,
+    bookSlugs,
   });
 }

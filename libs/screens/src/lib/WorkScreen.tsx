@@ -6,7 +6,11 @@ import {
 } from '@joelklemmer/i18n';
 import { getCaseStudies, getPublicRecordList } from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { CaseStudySection, HeroSection, ListSection } from '@joelklemmer/sections';
+import {
+  CaseStudySection,
+  HeroSection,
+  ListSection,
+} from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -78,17 +82,22 @@ export async function WorkScreen() {
               constraints={study.frontmatter.constraints}
               actions={study.frontmatter.actions}
               outcomes={study.frontmatter.outcomes}
-              references={references.filter(Boolean) as Array<{
-                label: string;
-                href: string;
-                meta?: string;
-              }>}
+              references={
+                references.filter(Boolean) as Array<{
+                  label: string;
+                  href: string;
+                  meta?: string;
+                }>
+              }
               labels={labels}
             />
           );
         })
       ) : (
-        <ListSection title={t('caseStudies.title')} items={[t('caseStudies.empty')]} />
+        <ListSection
+          title={t('caseStudies.title')}
+          items={[t('caseStudies.empty')]}
+        />
       )}
     </>
   );

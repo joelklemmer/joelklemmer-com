@@ -10,8 +10,7 @@ import {
   hreflangAlternates,
 } from '@joelklemmer/seo';
 
-const baseUrl =
-  process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 const base = baseUrl.replace(/\/+$/, '');
 
 const corePathnames: string[] = [
@@ -37,7 +36,12 @@ const corePathnames: string[] = [
 const errors: string[] = [];
 
 for (const pathname of corePathnames) {
-  const normalizedPath = pathname === '/' ? '' : pathname.startsWith('/') ? pathname : `/${pathname}`;
+  const normalizedPath =
+    pathname === '/'
+      ? ''
+      : pathname.startsWith('/')
+        ? pathname
+        : `/${pathname}`;
 
   for (const locale of locales as AppLocale[]) {
     const canonical = getCanonicalUrl({

@@ -46,6 +46,7 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": [
+          "nx format:check --all",
           "nx run web:lint",
           "nx run web:content-validate",
           "nx run web:i18n-validate",

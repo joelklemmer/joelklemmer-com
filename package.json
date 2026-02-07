@@ -8,7 +8,8 @@
     "test:e2e": "nx e2e web-e2e",
     "typecheck": "nx run web:build --skip-nx-cache --configuration=development",
     "format": "nx format:write",
-    "format:check": "nx format:check"
+    "format:check": "nx format:check",
+    "ci:verify": "pnpm install --frozen-lockfile && pnpm nx run web:verify --verbose"
   },
   "private": true,
   "packageManager": "pnpm@10.28.2",

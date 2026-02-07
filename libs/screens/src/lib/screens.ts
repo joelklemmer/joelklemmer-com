@@ -47,3 +47,7 @@ export {
   caseStudyEntryMetadata,
   caseStudyEntryStaticParams,
 } from './CaseStudyEntryScreen';
+export { BooksScreen } from './BooksScreen';
+export { booksMetadata } from './BooksScreen';
+export { BookEntryScreen } from './BookEntryScreen';
+export { bookEntryMetadata, bookEntryStaticParams } from './BookEntryScreen';

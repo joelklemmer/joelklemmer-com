@@ -73,6 +73,7 @@ const metaSchema = z
     work: pageSchema,
     operatingSystem: pageSchema,
     writing: pageSchema,
+    books: pageSchema,
     contact: pageSchema,
     press: pageSchema,
     proof: pageSchema,
@@ -98,11 +99,56 @@ const briefSchema = z
       ),
     }),
     claims: z.object({ title: z.string().min(1), lede: z.string().min(1) }),
-    selectedOutcomes: z.object({ title: z.string().min(1), items: z.array(z.string().min(1)) }),
-    caseStudies: z.object({ title: z.string().min(1), lede: z.string().min(1) }),
-    publicRecordHighlights: z.object({ title: z.string().min(1), lede: z.string().min(1) }),
-    artifacts: z.object({ title: z.string().min(1), lede: z.string().min(1), notPublished: z.string().min(1) }),
-    contactPathway: z.object({ title: z.string().min(1), linkLabel: z.string().min(1) }),
+    selectedOutcomes: z.object({
+      title: z.string().min(1),
+      items: z.array(z.string().min(1)),
+    }),
+    caseStudies: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    publicRecordHighlights: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    artifacts: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+      notPublished: z.string().min(1),
+    }),
+    contactPathway: z.object({
+      title: z.string().min(1),
+      linkLabel: z.string().min(1),
+    }),
+  })
+  .passthrough();
+
+const booksSchema = z
+  .object({
+    index: z.object({
+      title: z.string().min(1),
+      subtitle: z.string().min(1),
+      listTitle: z.string().min(1),
+      empty: z.string().min(1),
+    }),
+    entry: z.object({
+      sections: z.object({
+        metadata: z.string().min(1),
+        verifiedReferences: z.string().min(1),
+        availability: z.string().min(1),
+        excerpts: z.string().min(1),
+      }),
+      labels: z.object({
+        publicationDate: z.string().min(1),
+        publisher: z.string().min(1),
+        author: z.string().min(1),
+        isbn10: z.string().min(1),
+        isbn13: z.string().min(1),
+        formats: z.string().min(1),
+        language: z.string().min(1),
+      }),
+      verifiedReferencesEmpty: z.string().min(1),
+    }),
   })
   .passthrough();
 
@@ -113,6 +159,10 @@ const publicRecordSchema = z
       empty: z.string().min(1),
     }),
     referencedByCaseStudies: z.object({
+      heading: z.string().min(1),
+      empty: z.string().min(1),
+    }),
+    referencedByBooks: z.object({
       heading: z.string().min(1),
       empty: z.string().min(1),
     }),
@@ -139,7 +189,13 @@ const publicRecordSchema = z
   .passthrough();
 
 const errors: string[] = [];
-const messagesRoot = path.join(process.cwd(), 'libs', 'i18n', 'src', 'messages');
+const messagesRoot = path.join(
+  process.cwd(),
+  'libs',
+  'i18n',
+  'src',
+  'messages',
+);
 
 function readJson(filePath: string) {
   const raw = readFileSync(filePath, 'utf-8');
@@ -178,10 +234,14 @@ function validateBriefClaimKeys() {
       const label = getByPath(brief, claim.labelKey);
       const summary = getByPath(brief, claim.summaryKey);
       if (typeof label !== 'string' || !label.trim()) {
-        errors.push(`${filePath}: missing or empty brief.${claim.labelKey} for claim ${claim.id}`);
+        errors.push(
+          `${filePath}: missing or empty brief.${claim.labelKey} for claim ${claim.id}`,
+        );
       }
       if (typeof summary !== 'string' || !summary.trim()) {
-        errors.push(`${filePath}: missing or empty brief.${claim.summaryKey} for claim ${claim.id}`);
+        errors.push(
+          `${filePath}: missing or empty brief.${claim.summaryKey} for claim ${claim.id}`,
+        );
       }
     }
   }
@@ -193,6 +253,7 @@ locales.forEach((locale) => {
   validateNamespace(locale, 'footer', footerSchema);
   validateNamespace(locale, 'meta', metaSchema);
   validateNamespace(locale, 'brief', briefSchema);
+  validateNamespace(locale, 'books', booksSchema);
   validateNamespace(locale, 'publicRecord', publicRecordSchema);
 });
 validateBriefClaimKeys();

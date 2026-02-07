@@ -30,5 +30,11 @@ export async function PressScreen() {
     />
   ) : null;
 
-  return <QuietScreen pageKey="press" content={content ?? undefined} notice={notice} />;
+  return (
+    <QuietScreen
+      pageKey="press"
+      content={content ?? undefined}
+      notice={notice}
+    />
+  );
 }

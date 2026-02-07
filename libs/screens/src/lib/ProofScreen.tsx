@@ -6,7 +6,11 @@ import {
 } from '@joelklemmer/i18n';
 import { getPublicRecordList } from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { CardGridSection, HeroSection, ListSection } from '@joelklemmer/sections';
+import {
+  CardGridSection,
+  HeroSection,
+  ListSection,
+} from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;

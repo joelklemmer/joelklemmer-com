@@ -35,7 +35,10 @@ export const publicRecordFrontmatterSchema = z.object({
 });
 
 /** Stable record ID: frontmatter.id if set, else slug. Must be unique across collection. */
-export function getPublicRecordId(frontmatter: { id?: string; slug: string }): string {
+export function getPublicRecordId(frontmatter: {
+  id?: string;
+  slug: string;
+}): string {
   return frontmatter.id ?? frontmatter.slug;
 }
 
@@ -47,6 +50,44 @@ export const institutionalFrontmatterSchema = z.object({
   canonical: nonEmptyString.optional(),
 });
 
+/** Book frontmatter: authority-verification only. proofRefs must reference Public Record IDs. */
+const bookFormatEnum = z.enum([
+  'Hardcover',
+  'Paperback',
+  'Kindle',
+  'Audiobook',
+  'eBook',
+  'PDF',
+]);
+export const bookFrontmatterSchema = z.object({
+  id: nonEmptyString.optional(),
+  title: nonEmptyString,
+  subtitle: nonEmptyString.optional(),
+  author: nonEmptyString.optional(),
+  publicationDate: nonEmptyString.regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD'),
+  publisher: nonEmptyString.optional(),
+  isbn10: nonEmptyString.optional(),
+  isbn13: nonEmptyString.optional(),
+  formats: z.array(bookFormatEnum).min(1),
+  language: nonEmptyString,
+  summary: nonEmptyString,
+  proofRefs: nonEmptyStringArray,
+  canonical: nonEmptyString.optional(),
+  locale: localeSchema,
+  slug: nonEmptyString,
+  excerptRefs: z.array(nonEmptyString).optional(),
+});
+
+/** Stable book ID: frontmatter.id if set, else slug. Must be unique across collection. */
+export function getBookId(frontmatter: { id?: string; slug: string }): string {
+  return frontmatter.id ?? frontmatter.slug;
+}
+
 export type CaseStudyFrontmatter = z.infer<typeof caseStudyFrontmatterSchema>;
-export type PublicRecordFrontmatter = z.infer<typeof publicRecordFrontmatterSchema>;
-export type InstitutionalFrontmatter = z.infer<typeof institutionalFrontmatterSchema>;
+export type PublicRecordFrontmatter = z.infer<
+  typeof publicRecordFrontmatterSchema
+>;
+export type InstitutionalFrontmatter = z.infer<
+  typeof institutionalFrontmatterSchema
+>;
+export type BookFrontmatter = z.infer<typeof bookFrontmatterSchema>;

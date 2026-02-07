@@ -10,6 +10,11 @@ jobs:
       CI: true
       NX_CLOUD: 'false'
       PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+      # Deterministic values for SEO/sitemap/canonical and identity validators
+      NEXT_PUBLIC_SITE_URL: https://example.invalid
+      NEXT_PUBLIC_IDENTITY_SAME_AS: https://example.invalid/ci
+      # Do not enforce required artifacts/checksums in CI unless cutting a release
+      RELEASE_READY: '0'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -18,58 +23,40 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.19.0
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
           version: 10.28.2
+
       - name: Get pnpm store path
         id: pnpm-store
         run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
       - name: Cache pnpm store
         uses: actions/cache@v4
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/ms-playwright
           key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+
       - name: Versions
         run: |
           node -v
+          npm -v
           pnpm -v
           git --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Format check
-        run: NX_CLOUD=false pnpm nx format:check --all --verbose
-
-      - name: Lint web
-        run: NX_CLOUD=false pnpm nx run web:lint --verbose
-
-      - name: Validate content
-        run: NX_CLOUD=false pnpm nx run web:content-validate --verbose
-
-      - name: Validate i18n
-        run: NX_CLOUD=false pnpm nx run web:i18n-validate --verbose
-
-      - name: Test web
-        run: NX_CLOUD=false pnpm nx run web:test --verbose
-
-      - name: Build web
-        run: NX_CLOUD=false pnpm nx build web --verbose
-
-      - name: Install Playwright browsers
-        run: pnpm exec playwright install chromium
-
-      - name: A11y tests
-        run: NX_CLOUD=false pnpm nx run web:a11y --verbose
-
-      - name: E2E tests
-        run: NX_CLOUD=false pnpm nx e2e web-e2e --verbose
+      - name: Verify (lint, content, i18n, sitemap, seo, test, build, a11y)
+        run: pnpm nx run web:verify --verbose
 
       - name: Failure diagnostics
         if: failure()

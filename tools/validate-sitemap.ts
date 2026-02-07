@@ -4,6 +4,7 @@
  *   npx tsx --tsconfig tsconfig.base.json tools/validate-sitemap.ts
  */
 import {
+  getBookSlugsSync,
   getCaseStudySlugsSync,
   getPublicRecordSlugsSync,
 } from '@joelklemmer/content/validate';
@@ -17,6 +18,7 @@ const indexablePaths = [
   '/brief',
   '/work',
   '/publicrecord',
+  '/books',
   '/writing',
   '/contact',
   '/media-kit',
@@ -34,6 +36,7 @@ const errors: string[] = [];
 
 const publicRecordSlugs = getPublicRecordSlugsSync();
 const caseStudySlugs = getCaseStudySlugsSync();
+const bookSlugs = getBookSlugsSync();
 
 const entries = buildSitemapEntries({
   baseUrl,
@@ -41,6 +44,7 @@ const entries = buildSitemapEntries({
   indexablePaths,
   publicRecordSlugs,
   caseStudySlugs,
+  bookSlugs,
 });
 
 const urlSet = new Set(entries.map((e) => e.url));
@@ -53,7 +57,8 @@ if (urlSet.size !== entries.length) {
 const expectedPerLocale =
   indexablePaths.length +
   publicRecordSlugs.length +
-  caseStudySlugs.length;
+  caseStudySlugs.length +
+  bookSlugs.length;
 const expectedTotal = locales.length * expectedPerLocale;
 if (entries.length !== expectedTotal) {
   errors.push(
@@ -77,6 +82,12 @@ for (const locale of locales) {
   }
   for (const slug of caseStudySlugs) {
     const url = `${prefix}/casestudies/${slug}`;
+    if (!urlSet.has(url)) {
+      errors.push(`Missing sitemap URL: ${url}`);
+    }
+  }
+  for (const slug of bookSlugs) {
+    const url = `${prefix}/books/${slug}`;
     if (!urlSet.has(url)) {
       errors.push(`Missing sitemap URL: ${url}`);
     }

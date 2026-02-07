@@ -1,0 +1,26 @@
+{
+  "index": {
+    "title": "Книги",
+    "subtitle": "Опубліковані томи з посиланнями на верифікацію.",
+    "listTitle": "Публікації",
+    "empty": "Книги не опубліковані."
+  },
+  "entry": {
+    "sections": {
+      "metadata": "Метадані публікації",
+      "verifiedReferences": "Перевірені посилання",
+      "availability": "Доступність",
+      "excerpts": "Уривки"
+    },
+    "labels": {
+      "publicationDate": "Дата публікації",
+      "publisher": "Видавництво",
+      "author": "Автор",
+      "isbn10": "ISBN-10",
+      "isbn13": "ISBN-13",
+      "formats": "Формати",
+      "language": "Мова"
+    },
+    "verifiedReferencesEmpty": "Немає перевірених посилань."
+  }
+}

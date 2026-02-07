@@ -65,5 +65,9 @@
   "security": {
     "title": "Seguridad",
     "description": "Postura de seguridad y divulgacion."
+  },
+  "books": {
+    "title": "Libros",
+    "description": "Volumenes publicados con referencias de verificacion."
   }
 }

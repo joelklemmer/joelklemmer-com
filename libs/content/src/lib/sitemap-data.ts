@@ -59,3 +59,12 @@ export function getCaseStudySlugsSync(): string[] {
   const dir = path.join(contentRoot, 'case-studies');
   return Array.from(new Set(getSlugsFromDir(dir)));
 }
+
+/** Sync: slugs of book entries. */
+export function getBookSlugsSync(): string[] {
+  const dir = path.join(contentRoot, 'books');
+  if (!existsSync(dir)) {
+    return [];
+  }
+  return Array.from(new Set(getSlugsFromDir(dir)));
+}

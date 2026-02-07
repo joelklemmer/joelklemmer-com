@@ -6,7 +6,7 @@ export interface ClaimCardItem {
   id: string;
   label: string;
   summary: string;
-  supportingLinks: Array< { label: string; href: string } >;
+  supportingLinks: Array<{ label: string; href: string }>;
 }
 
 export interface BriefClaimsSectionProps {

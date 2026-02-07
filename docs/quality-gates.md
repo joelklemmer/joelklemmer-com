@@ -4,18 +4,18 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ## Overview
 
-| Gate | Nx target | What it checks |
-|------|-----------|----------------|
-| Format | `nx format:check` | Prettier / Nx format across the workspace |
-| Lint | `nx run web:lint` | ESLint for the web app |
-| Content validate | `nx run web:content-validate` | MDX frontmatter, proofRefs, claims, artifacts, media |
-| i18n validate | `nx run web:i18n-validate` | Translation completeness (chrome + meta + publicRecord) |
+| Gate             | Nx target                     | What it checks                                            |
+| ---------------- | ----------------------------- | --------------------------------------------------------- |
+| Format           | `nx format:check`             | Prettier / Nx format across the workspace                 |
+| Lint             | `nx run web:lint`             | ESLint for the web app                                    |
+| Content validate | `nx run web:content-validate` | MDX frontmatter, proofRefs, claims, artifacts, media      |
+| i18n validate    | `nx run web:i18n-validate`    | Translation completeness (chrome + meta + publicRecord)   |
 | Sitemap validate | `nx run web:sitemap-validate` | Dynamic public record and case study URLs for all locales |
-| SEO validate | `nx run web:seo-validate` | Canonical and hreflang for core routes |
-| Test | `nx run web:test` | Unit tests (currently a placeholder) |
-| Build | `nx run web:build` | Next.js production build |
-| A11y | `nx run web:a11y` | Playwright + axe-core accessibility scans |
-| E2E | `nx e2e web-e2e` | Playwright E2E tests |
+| SEO validate     | `nx run web:seo-validate`     | Canonical and hreflang for core routes                    |
+| Test             | `nx run web:test`             | Unit tests (currently a placeholder)                      |
+| Build            | `nx run web:build`            | Next.js production build                                  |
+| A11y             | `nx run web:a11y`             | Playwright + axe-core accessibility scans                 |
+| E2E              | `nx e2e web-e2e`              | Playwright E2E tests                                      |
 
 **Single command to run all web gates in order:** `nx run web:verify` (see [Dev workflow](dev-workflow.md)).
 
@@ -72,7 +72,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 ## 6. SEO validate
 
 - **Run:** `nx run web:seo-validate`
-- **Implementation:** Runs `tools/validate-seo.ts` via **tsx`. Calls `getCanonicalUrl` and `hreflangAlternates` from `@joelklemmer/seo` for core pathnames.
+- **Implementation:** Runs `tools/validate-seo.ts` via \*\*tsx`. Calls `getCanonicalUrl`and`hreflangAlternates`from`@joelklemmer/seo` for core pathnames.
 - **What it checks:** Canonical URL format for each locale; hreflang alternates include en/uk/es/he and x-default.
 - **Success:** Exit code 0 and stdout: `SEO validation passed: canonical and hreflang for N core routes.`
 
@@ -89,7 +89,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 ## 8. Build (web)
 
 - **Run:** `nx run web:build` or `nx build web`
-- **What it checks:** Next.js production build. Also enforces sameAs identity when `NEXT_PUBLIC_IDENTITY_SAME_AS` is set; can enforce artifact/media manifests in production.
+- **What it checks:** Next.js production build. Identity sameAs is required in production (set `NEXT_PUBLIC_IDENTITY_SAME_AS` in CI). Required artifact/media files and checksums are enforced only when `RELEASE_READY=1` (see [CI command sequence and env](#ci-command-sequence-and-env)).
 - **Success:** Exit code 0; build output under `dist/` (or configured output path).
 
 ---
@@ -115,16 +115,62 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 - **Run:** `nx run web:verify`
 - **What it does:** Runs the following in order; stops on first failure:
-  1. `nx run web:lint`
-  2. `nx run web:content-validate`
-  3. `nx run web:i18n-validate`
-  4. `nx run web:sitemap-validate`
-  5. `nx run web:seo-validate`
-  6. `nx run web:test`
-  7. `nx run web:build`
-  8. `nx run web:a11y`
+  1. `nx format:check --all`
+  2. `nx run web:lint`
+  3. `nx run web:content-validate`
+  4. `nx run web:i18n-validate`
+  5. `nx run web:sitemap-validate`
+  6. `nx run web:seo-validate`
+  7. `nx run web:test`
+  8. `nx run web:build`
+  9. `nx run web:a11y`
 
 No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed.
+
+---
+
+## CI Failure Root Cause
+
+When CI fails, paste the **exact failing command** and **error line(s)** from the GitHub Actions log below so we can track root causes.
+
+**Example (paste real failure here):**
+
+```
+# Failing step: Verify (lint, content, i18n, ...)
+# Error:
+#   Error: Invalid NEXT_PUBLIC_IDENTITY_SAME_AS: sameAs is empty
+#   at getIdentitySameAs (libs/seo/src/lib/identity.ts:27)
+```
+
+**Common causes addressed by this doc and CI config:**
+
+- **Missing env in CI:** `NEXT_PUBLIC_SITE_URL` or `NEXT_PUBLIC_IDENTITY_SAME_AS` not set in the workflow. CI now sets `NEXT_PUBLIC_SITE_URL=https://example.invalid` and `NEXT_PUBLIC_IDENTITY_SAME_AS=https://example.invalid/ci` so SEO/identity validators and the Next build do not fail.
+- **Artifact/media strict enforcement:** With `RELEASE_READY=0` (default in CI), missing required artifact files or checksum mismatches **warn** but do not fail. Only when `RELEASE_READY=1` (e.g. when cutting a release) are required artifacts and checksums enforced. Invalid manifest schema still fails in all environments.
+- **Install or version drift:** CI pins Node to 20.19.0 and uses `pnpm install --frozen-lockfile`. Run `pnpm ci:verify` locally to match CI (see [CI parity](ci-parity.md)).
+- **A11y timeouts:** Playwright a11y uses `waitUntil: 'domcontentloaded'` and a 3‑minute test timeout; CI retries once on failure. See [CI parity](ci-parity.md) for a11y assumptions.
+
+---
+
+## CI command sequence and env
+
+CI (`.github/workflows/ci.yml`) runs:
+
+1. Checkout, setup **Node 20.19.0**, pnpm, caches, **Versions** (node -v, npm -v, pnpm -v).
+2. **Install:** `pnpm install --frozen-lockfile`
+3. **Verify:** `pnpm nx run web:verify --verbose`
+
+**Required env vars for CI** (set in the workflow so validators and build do not fail):
+
+| Variable                       | CI value                     | Purpose                                                                                                                                                           |
+| ------------------------------ | ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `NEXT_PUBLIC_SITE_URL`         | `https://example.invalid`    | Sitemap and SEO canonical/hreflang validators; Next build.                                                                                                        |
+| `NEXT_PUBLIC_IDENTITY_SAME_AS` | `https://example.invalid/ci` | Identity JSON-LD; build fails in production if empty/invalid unless this is set.                                                                                  |
+| `RELEASE_READY`                | `0`                          | When `0` or unset: artifact/media missing or checksum mismatch only warns. When `1`: required artifacts and media are enforced (use only when cutting a release). |
+
+**RELEASE_READY usage:**
+
+- **CI / local dev:** Do not set `RELEASE_READY` or set `RELEASE_READY=0`. Content validate and build will not fail on missing optional/required artifact files or checksum mismatch; invalid manifest schema still fails.
+- **Production release:** Set `RELEASE_READY=1` in the release pipeline so that required artifacts must exist and checksums match.
 
 ---
 
@@ -160,21 +206,27 @@ Use this after making changes that affect quality gates (e.g. runner switch, new
 Run from repo root (Node v20+). Use PowerShell on Windows.
 
 1. **Install dependencies**
+
    ```bash
    pnpm install
    ```
+
    Success: exit 0; `tsx` appears in devDependencies.
 
 2. **Content validation**
+
    ```bash
    nx run web:content-validate
    ```
+
    Success: exit 0, stdout contains `Content validation passed.`
 
 3. **i18n validation**
+
    ```bash
    nx run web:i18n-validate
    ```
+
    Success: exit 0, stdout contains `i18n validation passed.`
 
 4. **Full verify** (lint → content-validate → i18n-validate → sitemap-validate → seo-validate → test → build → a11y)

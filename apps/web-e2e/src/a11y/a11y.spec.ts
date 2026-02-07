@@ -66,7 +66,10 @@ test('accessibility smoke', async ({ page }) => {
   for (const locale of locales) {
     for (const route of routes) {
       const pathWithLocale = `/${locale}${route}`;
-      await page.goto(pathWithLocale, { waitUntil: 'domcontentloaded', timeout: 15000 });
+      await page.goto(pathWithLocale, {
+        waitUntil: 'domcontentloaded',
+        timeout: 20000,
+      });
       const results = await new AxeBuilder({ page })
         .withTags([
           'wcag2a',

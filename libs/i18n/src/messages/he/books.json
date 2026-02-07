@@ -1,0 +1,26 @@
+{
+  "index": {
+    "title": "ספרים",
+    "subtitle": "כרכים שפורסמו עם קישורי אימות.",
+    "listTitle": "פרסומים",
+    "empty": "אין ספרים ברשימה."
+  },
+  "entry": {
+    "sections": {
+      "metadata": "מטא-דאטה של הפרסום",
+      "verifiedReferences": "הפניות מאומתות",
+      "availability": "זמינות",
+      "excerpts": "קטעים"
+    },
+    "labels": {
+      "publicationDate": "תאריך פרסום",
+      "publisher": "הוצאה לאור",
+      "author": "מחבר",
+      "isbn10": "ISBN-10",
+      "isbn13": "ISBN-13",
+      "formats": "פורמטים",
+      "language": "שפה"
+    },
+    "verifiedReferencesEmpty": "אין הפניות מאומתות."
+  }
+}

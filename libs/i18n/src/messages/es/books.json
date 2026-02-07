@@ -1,0 +1,26 @@
+{
+  "index": {
+    "title": "Libros",
+    "subtitle": "Volumenes publicados con referencias de verificacion.",
+    "listTitle": "Publicaciones",
+    "empty": "No hay libros listados."
+  },
+  "entry": {
+    "sections": {
+      "metadata": "Metadatos de publicacion",
+      "verifiedReferences": "Referencias verificadas",
+      "availability": "Disponibilidad",
+      "excerpts": "Extractos"
+    },
+    "labels": {
+      "publicationDate": "Fecha de publicacion",
+      "publisher": "Editorial",
+      "author": "Autor",
+      "isbn10": "ISBN-10",
+      "isbn13": "ISBN-13",
+      "formats": "Formatos",
+      "language": "Idioma"
+    },
+    "verifiedReferencesEmpty": "Sin referencias verificadas."
+  }
+}

@@ -13,11 +13,13 @@ Runs in order: lint → content-validate → i18n-validate → test → build �
 ## Individual gates
 
 - **Content validation** (MDX frontmatter, proofRefs, claims, artifacts, media):
+
   ```bash
   nx run web:content-validate
   ```
 
 - **A11y** (Playwright + axe-core):
+
   ```bash
   nx run web:a11y
   ```
@@ -35,6 +37,7 @@ Other useful targets: `nx run web:lint`, `nx run web:i18n-validate`, `nx run web
 ```bash
 nx dev web
 ```
+
 Or: `pnpm dev`.
 
 ## E2E and format

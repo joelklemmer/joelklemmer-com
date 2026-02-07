@@ -7,7 +7,11 @@ import {
 } from '@joelklemmer/i18n';
 import { getOperatingSystem, renderMdx } from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { FallbackNoticeSection, HeroSection, MdxSection } from '@joelklemmer/sections';
+import {
+  FallbackNoticeSection,
+  HeroSection,
+  MdxSection,
+} from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;

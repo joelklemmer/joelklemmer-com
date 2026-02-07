@@ -49,11 +49,31 @@
   "routes": {
     "title": "Rutas principales",
     "items": [
-      { "title": "Inicio", "description": "Sistema de orientación para evaluadores.", "path": "/" },
-      { "title": "Estudios de caso", "description": "Demostraciones de capacidad con contexto y resultados.", "path": "/work" },
-      { "title": "Libros", "description": "Volúmenes publicados y extractos oficiales.", "path": "/writing" },
-      { "title": "Registro público", "description": "Artefactos de verificación que respaldan afirmaciones.", "path": "/proof" },
-      { "title": "Contacto", "description": "Acceso controlado y coordinación.", "path": "/contact" }
+      {
+        "title": "Inicio",
+        "description": "Sistema de orientación para evaluadores.",
+        "path": "/"
+      },
+      {
+        "title": "Estudios de caso",
+        "description": "Demostraciones de capacidad con contexto y resultados.",
+        "path": "/work"
+      },
+      {
+        "title": "Libros",
+        "description": "Volúmenes publicados y extractos oficiales.",
+        "path": "/writing"
+      },
+      {
+        "title": "Registro público",
+        "description": "Artefactos de verificación que respaldan afirmaciones.",
+        "path": "/proof"
+      },
+      {
+        "title": "Contacto",
+        "description": "Acceso controlado y coordinación.",
+        "path": "/contact"
+      }
     ]
   },
   "artifacts": {
@@ -62,8 +82,16 @@
     "notPublished": "Artefacto aún no publicado.",
     "downloadLabel": "Descargar",
     "items": [
-      { "id": "executive-brief-pdf", "title": "Informe ejecutivo (PDF)", "description": "Artefacto canónico para revisión." },
-      { "id": "executive-bio", "title": "Biografía ejecutiva (PDF)", "description": "Biografía para distribución controlada." }
+      {
+        "id": "executive-brief-pdf",
+        "title": "Informe ejecutivo (PDF)",
+        "description": "Artefacto canónico para revisión."
+      },
+      {
+        "id": "executive-bio",
+        "title": "Biografía ejecutiva (PDF)",
+        "description": "Biografía para distribución controlada."
+      }
     ]
   },
   "contactPathway": {

@@ -7,6 +7,10 @@
     "heading": "Referenced by case studies",
     "empty": "No case studies reference this record."
   },
+  "referencedByBooks": {
+    "heading": "Referenced by books",
+    "empty": "No books reference this record."
+  },
   "metadata": {
     "title": "Artifact metadata",
     "labels": {

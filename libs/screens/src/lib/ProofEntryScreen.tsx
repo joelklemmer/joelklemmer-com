@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 import {
+  getBooksByRecordId,
   getCaseStudiesByRecordId,
   getClaimsSupportingRecord,
   getPublicRecordEntry,
@@ -70,6 +71,7 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
   const recordId = getPublicRecordId(entry.frontmatter);
   const supportingClaims = getClaimsSupportingRecord(recordId);
   const referencedByCaseStudies = await getCaseStudiesByRecordId(recordId);
+  const referencedByBooks = await getBooksByRecordId(recordId);
   const showFallbackNotice = entry.frontmatter.locale !== locale;
 
   return (
@@ -137,6 +139,14 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
           href: `/${locale}/casestudies/${cs.slug}`,
         }))}
         emptyMessage={t('referencedByCaseStudies.empty')}
+      />
+      <LinkListSection
+        title={t('referencedByBooks.heading')}
+        items={referencedByBooks.map((b) => ({
+          label: b.title,
+          href: `/${locale}/books/${b.slug}`,
+        }))}
+        emptyMessage={t('referencedByBooks.empty')}
       />
       <MdxSection>{await renderMdx(entry.content)}</MdxSection>
     </>

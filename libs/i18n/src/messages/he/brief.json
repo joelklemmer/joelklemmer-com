@@ -34,9 +34,7 @@
   },
   "selectedOutcomes": {
     "title": "תוצאות נבחרות",
-    "items": [
-      "תוכנית התאוששות נמסרה במסגרת שבועיים עם אימות בעלי עניין."
-    ]
+    "items": ["תוכנית התאוששות נמסרה במסגרת שבועיים עם אימות בעלי עניין."]
   },
   "caseStudies": {
     "title": "מחקרי מקרה נבחרים",
@@ -49,11 +47,31 @@
   "routes": {
     "title": "מסלולים מרכזיים",
     "items": [
-      { "title": "בית", "description": "מערכת התמצאות עבור מעריכים.", "path": "/" },
-      { "title": "מחקרי מקרה", "description": "הדגמות יכולת עם הקשר ותוצאות.", "path": "/work" },
-      { "title": "ספרים", "description": "כרכים שפורסמו וקטעים רשמיים.", "path": "/writing" },
-      { "title": "רישום ציבורי", "description": "ארטיפקטים לאימות התומכים בטענות.", "path": "/proof" },
-      { "title": "צור קשר", "description": "גישה מבוקרת ותיאום.", "path": "/contact" }
+      {
+        "title": "בית",
+        "description": "מערכת התמצאות עבור מעריכים.",
+        "path": "/"
+      },
+      {
+        "title": "מחקרי מקרה",
+        "description": "הדגמות יכולת עם הקשר ותוצאות.",
+        "path": "/work"
+      },
+      {
+        "title": "ספרים",
+        "description": "כרכים שפורסמו וקטעים רשמיים.",
+        "path": "/writing"
+      },
+      {
+        "title": "רישום ציבורי",
+        "description": "ארטיפקטים לאימות התומכים בטענות.",
+        "path": "/proof"
+      },
+      {
+        "title": "צור קשר",
+        "description": "גישה מבוקרת ותיאום.",
+        "path": "/contact"
+      }
     ]
   },
   "artifacts": {
@@ -62,8 +80,16 @@
     "notPublished": "הארטיפקט טרם פורסם.",
     "downloadLabel": "הורדה",
     "items": [
-      { "id": "executive-brief-pdf", "title": "בריף מנהלים (PDF)", "description": "ארטיפקט קנוני לסקירה." },
-      { "id": "executive-bio", "title": "ביוגרפיה מנהלים (PDF)", "description": "ביוגרפיה להפצה מבוקרת." }
+      {
+        "id": "executive-brief-pdf",
+        "title": "בריף מנהלים (PDF)",
+        "description": "ארטיפקט קנוני לסקירה."
+      },
+      {
+        "id": "executive-bio",
+        "title": "ביוגרפיה מנהלים (PDF)",
+        "description": "ביוגרפיה להפצה מבוקרת."
+      }
     ]
   },
   "contactPathway": {

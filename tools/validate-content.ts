@@ -3,9 +3,11 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import matter from 'gray-matter';
 import { z } from 'zod';
 import {
+  bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
   claimRegistry,
   getArtifactsManifest,
+  getBookId,
   getMediaManifest,
   getPublicRecordId,
   institutionalFrontmatterSchema,
@@ -56,7 +58,11 @@ const errors: string[] = [];
 const caseStudyDir = path.join(contentRoot, 'case-studies');
 const caseStudyEntries = getMdxFiles(caseStudyDir).map((filePath) => {
   const { content, data } = readMdx(filePath);
-  const parsed = validateFrontmatter(caseStudyFrontmatterSchema, data, filePath);
+  const parsed = validateFrontmatter(
+    caseStudyFrontmatterSchema,
+    data,
+    filePath,
+  );
   if (!parsed.ok) {
     errors.push(parsed.error);
     return null;
@@ -119,6 +125,42 @@ caseStudyEntries.filter(Boolean).forEach((entry) => {
     if (!publicRecordIds.has(ref)) {
       errors.push(
         `Case study ${entry.frontmatter.slug} references missing public record id: ${ref}`,
+      );
+    }
+  });
+});
+
+// Books: schema, unique bookId, proofRefs → Public Record
+const booksDir = path.join(contentRoot, 'books');
+const bookEntries = existsSync(booksDir)
+  ? getMdxFiles(booksDir).map((filePath) => {
+      const { content, data } = readMdx(filePath);
+      const parsed = validateFrontmatter(bookFrontmatterSchema, data, filePath);
+      if (!parsed.ok) {
+        errors.push(parsed.error);
+        return null;
+      }
+      return { frontmatter: parsed.data, content };
+    })
+  : [];
+const bookValidEntries = bookEntries.filter(
+  (e): e is NonNullable<typeof e> => e != null,
+);
+const bookIds = bookValidEntries.map((e) => getBookId(e.frontmatter));
+const bookIdCounts = new Map<string, number>();
+for (const id of bookIds) {
+  bookIdCounts.set(id, (bookIdCounts.get(id) ?? 0) + 1);
+}
+for (const [id, count] of bookIdCounts) {
+  if (count > 1) {
+    errors.push(`Duplicate book id: ${id} (used ${count} times)`);
+  }
+}
+bookValidEntries.forEach((entry) => {
+  entry.frontmatter.proofRefs.forEach((ref) => {
+    if (!publicRecordIds.has(ref)) {
+      errors.push(
+        `Book ${entry.frontmatter.slug} proofRef references missing public record id: ${ref}`,
       );
     }
   });

@@ -22,7 +22,9 @@ export const claimRegistry: ClaimRegistryEntry[] = [
 const MAX_CLAIMS = 12;
 const MAX_FEATURED = 9;
 
-export function getClaimsSupportingRecord(recordId: string): ClaimRegistryEntry[] {
+export function getClaimsSupportingRecord(
+  recordId: string,
+): ClaimRegistryEntry[] {
   return claimRegistry.filter((claim) => claim.recordIds.includes(recordId));
 }
 
@@ -56,7 +58,9 @@ export function validateClaimRegistry(publicRecordIdSet: Set<string>): void {
     }
   }
 
-  const featuredCount = claimRegistry.filter((c) => c.featured !== false).length;
+  const featuredCount = claimRegistry.filter(
+    (c) => c.featured !== false,
+  ).length;
   if (featuredCount > MAX_FEATURED) {
     const msg = `Claims registry: featured must be <= ${MAX_FEATURED}, got ${featuredCount}`;
     if (isProduction) {

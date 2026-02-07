@@ -79,10 +79,12 @@ export async function BriefScreen() {
     };
   });
 
-  const readPathRoutes = (t.raw('readPath.routes') as Array<{
-    label: string;
-    path: string;
-  }>).map((r) => ({ label: r.label, href: `/${locale}${r.path}` }));
+  const readPathRoutes = (
+    t.raw('readPath.routes') as Array<{
+      label: string;
+      path: string;
+    }>
+  ).map((r) => ({ label: r.label, href: `/${locale}${r.path}` }));
 
   const caseStudies = (await getCaseStudies(locale)).slice(0, CASE_STUDIES_MAX);
   const recordHighlights = publicRecords.slice(0, PUBLIC_RECORD_HIGHLIGHTS_MAX);
