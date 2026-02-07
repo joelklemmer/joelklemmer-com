@@ -1,0 +1,22 @@
+{
+  "items": [
+    {
+      "id": "executive-brief-pdf",
+      "title": "Executive brief (PDF)",
+      "filename": "executive-brief.pdf",
+      "version": "2026.02",
+      "date": "2026-02-01",
+      "sha256": "6340c8a7b908085c77443c89b84f4bfe8fdc61a1d9fb17669707620b6d0b4d94",
+      "required": true
+    },
+    {
+      "id": "executive-bio",
+      "title": "Executive bio (PDF)",
+      "filename": "executive-bio.pdf",
+      "version": "2026.02",
+      "date": "2026-02-01",
+      "sha256": "476257fe2263cba856a0c1d2254506b0781323f081545cc03c77b4a03a1bef38",
+      "required": true
+    }
+  ]
+}

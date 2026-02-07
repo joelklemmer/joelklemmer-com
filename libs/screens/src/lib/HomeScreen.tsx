@@ -4,9 +4,13 @@ import {
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { getProofList, getWritingPosts } from '@joelklemmer/content';
 import { createPageMetadata, PersonJsonLd } from '@joelklemmer/seo';
-import { CardGridSection, HeroSection } from '@joelklemmer/sections';
+import {
+  CardGridSection,
+  HeroSection,
+  ListSection,
+  StartHereSection,
+} from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -26,8 +30,12 @@ export async function HomeScreen() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['home']);
   const t = createScopedTranslator(locale, messages, 'home');
-  const proofEntries = (await getProofList(locale)).slice(0, 2);
-  const writingEntries = (await getWritingPosts(locale)).slice(0, 2);
+  const claimItems = t.raw('claims.items') as string[];
+  const routeItems = t.raw('routes.items') as Array<{
+    title: string;
+    description: string;
+    path: string;
+  }>;
 
   return (
     <>
@@ -37,30 +45,20 @@ export async function HomeScreen() {
         lede={t('hero.lede')}
         actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
       />
-      {proofEntries.length ? (
-        <CardGridSection
-          title={t('proof.title')}
-          lede={t('proof.lede')}
-          items={proofEntries.map((entry) => ({
-            title: entry.frontmatter.claim,
-            description: entry.frontmatter.summary,
-            meta: entry.frontmatter.evidenceType,
-          }))}
-        />
-      ) : null}
-      {writingEntries.length ? (
-        <CardGridSection
-          title={t('writing.title')}
-          lede={t('writing.lede')}
-          action={{ label: t('writing.cta'), href: `/${locale}/writing` }}
-          items={writingEntries.map((entry) => ({
-            title: entry.frontmatter.title,
-            description: entry.frontmatter.summary,
-            meta: entry.frontmatter.date,
-            href: `/${locale}/writing/${entry.frontmatter.slug}`,
-          }))}
-        />
-      ) : null}
+      <StartHereSection
+        sentence={t('startHere.sentence')}
+        linkLabel={t('startHere.linkLabel')}
+        href={`/${locale}/brief`}
+      />
+      <ListSection title={t('claims.title')} items={claimItems} />
+      <CardGridSection
+        title={t('routes.title')}
+        items={routeItems.map((item) => ({
+          title: item.title,
+          description: item.description,
+          href: `/${locale}${item.path}`,
+        }))}
+      />
     </>
   );
 }

@@ -1,12 +1,26 @@
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getLocale } from 'next-intl/server';
-import { locales, type AppLocale } from '@joelklemmer/i18n';
-import { getProofEntry, getProofSlugs, renderMdx } from '@joelklemmer/content';
+import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
+import {
+  getClaimsSupportingRecord,
+  getPublicRecordEntry,
+  getPublicRecordSlugs,
+  renderMdx,
+} from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { HeroSection, MdxSection } from '@joelklemmer/sections';
+import { createScopedTranslator, loadMessages } from '@joelklemmer/i18n';
+import { focusRingClass } from '@joelklemmer/a11y';
+import {
+  DefinitionListSection,
+  FallbackNoticeSection,
+  HeroSection,
+  LinkListSection,
+  MdxSection,
+} from '@joelklemmer/sections';
 
 export async function generateStaticParams() {
-  const slugs = await getProofSlugs();
+  const slugs = await getPublicRecordSlugs();
   return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })));
 }
 
@@ -15,19 +29,22 @@ export const proofEntryStaticParams = generateStaticParams;
 export async function generateMetadata({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
+  const { slug } = await params;
   const locale = (await getLocale()) as AppLocale;
-  const entry = await getProofEntry(locale, params.slug);
+  const entry = await getPublicRecordEntry(locale, slug);
   if (!entry) {
     notFound();
   }
 
   return createPageMetadata({
-    title: entry.frontmatter.claim,
-    description: entry.frontmatter.summary,
+    title: entry.frontmatter.title,
+    description: entry.frontmatter.claimSupported,
     locale,
-    pathname: `/proof/${entry.frontmatter.slug}`,
+    pathname: `/publicrecord/${entry.frontmatter.slug}`,
+    canonicalLocale: entry.frontmatter.locale,
+    canonicalOverride: entry.frontmatter.canonical,
   });
 }
 
@@ -35,16 +52,75 @@ export const proofEntryMetadata = generateMetadata;
 
 export async function ProofEntryScreen({ slug }: { slug: string }) {
   const locale = (await getLocale()) as AppLocale;
-  const entry = await getProofEntry(locale, slug);
+  const entry = await getPublicRecordEntry(locale, slug);
   if (!entry) {
     notFound();
   }
+  const messages = await loadMessages(locale, ['proof', 'brief', 'common']);
+  const t = createScopedTranslator(locale, messages, 'proof');
+  const tBrief = createScopedTranslator(locale, messages, 'brief');
+  const tCommon = createScopedTranslator(locale, messages, 'common');
+  const recordId = entry.frontmatter.id ?? entry.frontmatter.slug;
+  const supportingClaims = getClaimsSupportingRecord(recordId);
+  const showFallbackNotice = entry.frontmatter.locale !== locale;
 
   return (
     <>
+      {showFallbackNotice ? (
+        <FallbackNoticeSection
+          title={tCommon('fallbackNotice.title')}
+          body={tCommon('fallbackNotice.body')}
+          linkLabel={tCommon('fallbackNotice.linkLabel')}
+          href={`/${defaultLocale}/publicrecord/${entry.frontmatter.slug}`}
+        />
+      ) : null}
       <HeroSection
-        title={entry.frontmatter.claim}
-        lede={entry.frontmatter.summary}
+        title={entry.frontmatter.title}
+        lede={entry.frontmatter.claimSupported}
+      />
+      <DefinitionListSection
+        title={t('metadata.title')}
+        items={[
+          {
+            label: t('metadata.labels.claimSupported'),
+            value: entry.frontmatter.claimSupported,
+          },
+          {
+            label: t('metadata.labels.artifactType'),
+            value: entry.frontmatter.artifactType,
+          },
+          {
+            label: t('metadata.labels.date'),
+            value: entry.frontmatter.date,
+          },
+          {
+            label: t('metadata.labels.source'),
+            value: entry.frontmatter.source,
+          },
+          {
+            label: t('metadata.labels.verification'),
+            value: entry.frontmatter.verificationNotes,
+          },
+          {
+            label: t('metadata.labels.claimLink'),
+            value: (
+              <Link
+                href={`/${locale}/brief#claims`}
+                className={`${focusRingClass} rounded-sm underline underline-offset-4`}
+              >
+                {t('metadata.claimLinkAction')}
+              </Link>
+            ),
+          },
+        ]}
+      />
+      <LinkListSection
+        title={t('supportsClaims.title')}
+        items={supportingClaims.map((claim) => ({
+          label: tBrief(claim.labelKey),
+          href: `/${locale}/brief#claim-${claim.id}`,
+        }))}
+        emptyMessage={t('supportsClaims.empty')}
       />
       <MdxSection>{await renderMdx(entry.content)}</MdxSection>
     </>

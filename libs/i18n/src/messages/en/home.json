@@ -1,17 +1,38 @@
 {
   "hero": {
-    "title": "Quiet authority for complex work",
-    "lede": "Briefing room for strategy, security, and delivery.",
-    "cta": "Read the brief"
+    "title": "Joel Robert Klemmer",
+    "lede": "Authority verification ecosystem for executive evaluation, board review, and public record.",
+    "cta": "Open executive brief"
   },
-  "proof": {
-    "title": "Proof forward notes",
-    "lede": "Evidence first, short and direct.",
-    "cta": "View proof"
+  "startHere": {
+    "sentence": "Start here for evaluator review.",
+    "linkLabel": "Open executive brief"
   },
-  "writing": {
-    "title": "Selected writing",
-    "lede": "Field notes and operating updates.",
-    "cta": "View writing"
+  "claims": {
+    "title": "Claim summary",
+    "items": [
+      "Delivered a recovery plan within two weeks (Public Record).",
+      "Recovery plan summary reviewed by sponsor (Public Record)."
+    ]
+  },
+  "routes": {
+    "title": "Primary routes",
+    "items": [
+      {
+        "title": "Executive Brief",
+        "description": "Structured narrative, indexed claims, and artifact access.",
+        "path": "/brief"
+      },
+      {
+        "title": "Case Studies",
+        "description": "Context, constraints, actions, and outcomes with evidence links.",
+        "path": "/work"
+      },
+      {
+        "title": "Public Record",
+        "description": "Verification artifacts with dates, sources, and notes.",
+        "path": "/proof"
+      }
+    ]
   }
 }

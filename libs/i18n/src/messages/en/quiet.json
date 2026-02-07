@@ -1,22 +1,45 @@
 {
   "press": {
-    "title": "Press",
-    "lede": "Press kit and reference material."
+    "title": "Press kit",
+    "lede": "Press reference material and approved biography."
   },
-  "proof": {
-    "title": "Proof library",
-    "lede": "Evidence forward claims and artifacts."
+  "mediaKit": {
+    "title": "Media kit",
+    "lede": "Approved assets and usage terms.",
+    "assetsTitle": "Media assets",
+    "assetsLede": "Files published through the governed manifest.",
+    "assetsEmpty": "No media assets are published.",
+    "assetMeta": "{type} · v{version} · {date}"
   },
   "bio": {
-    "title": "Bio",
-    "lede": "Short professional biography."
+    "title": "Executive bio",
+    "lede": "Professional biography for institutional review.",
+    "artifactsTitle": "Biography artifact",
+    "artifactLabel": "Executive bio PDF",
+    "artifactLink": "Download executive bio"
   },
   "faq": {
     "title": "FAQ",
-    "lede": "Common questions with direct answers."
+    "lede": "Operational questions answered with restraint."
   },
   "now": {
     "title": "Now",
-    "lede": "Current focus and operating cadence."
+    "lede": "Current focus and verified commitments."
+  },
+  "privacy": {
+    "title": "Privacy",
+    "lede": "Privacy controls and data handling commitments."
+  },
+  "terms": {
+    "title": "Terms",
+    "lede": "Access terms and use limitations."
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "lede": "Accessibility targets, methods, and review cadence."
+  },
+  "security": {
+    "title": "Security",
+    "lede": "Security posture, reporting, and disclosure."
   }
 }

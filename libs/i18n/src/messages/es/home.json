@@ -1,17 +1,38 @@
 {
   "hero": {
-    "title": "Autoridad discreta para trabajo complejo",
-    "lede": "Briefing para estrategia, seguridad y entrega.",
-    "cta": "Leer el brief"
+    "title": "Joel Robert Klemmer",
+    "lede": "Ecosistema de verificación de autoridad para evaluación ejecutiva, revisión de consejo y registro público.",
+    "cta": "Abrir informe ejecutivo"
   },
-  "proof": {
-    "title": "Notas con pruebas",
-    "lede": "Evidencia primero, breve y directo.",
-    "cta": "Ver pruebas"
+  "startHere": {
+    "sentence": "Empiece aquí para la revisión por evaluadores.",
+    "linkLabel": "Abrir informe ejecutivo"
   },
-  "writing": {
-    "title": "Escritura seleccionada",
-    "lede": "Notas de campo y actualizaciones operativas.",
-    "cta": "Ver escritura"
+  "claims": {
+    "title": "Resumen de afirmaciones",
+    "items": [
+      "Plan de recuperación entregado en dos semanas (Registro público).",
+      "Resumen del plan de recuperación revisado por el patrocinador (Registro público)."
+    ]
+  },
+  "routes": {
+    "title": "Rutas principales",
+    "items": [
+      {
+        "title": "Informe ejecutivo",
+        "description": "Narrativa estructurada, afirmaciones indexadas y acceso a artefactos.",
+        "path": "/brief"
+      },
+      {
+        "title": "Estudios de caso",
+        "description": "Contexto, restricciones, acciones y resultados con evidencias.",
+        "path": "/work"
+      },
+      {
+        "title": "Registro público",
+        "description": "Artefactos de verificación con fechas, fuentes y notas.",
+        "path": "/proof"
+      }
+    ]
   }
 }

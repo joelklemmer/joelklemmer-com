@@ -7,10 +7,11 @@ import {
 export const generateMetadata = writingPostMetadata;
 export const generateStaticParams = writingPostStaticParams;
 
-export default function WritingPostPage({
+export default async function WritingPostPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  return <WritingPostScreen slug={params.slug} />;
+  const { slug } = await params;
+  return <WritingPostScreen slug={slug} />;
 }

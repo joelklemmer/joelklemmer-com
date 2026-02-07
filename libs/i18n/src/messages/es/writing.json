@@ -1,10 +1,20 @@
 {
   "hero": {
-    "title": "Escritura",
-    "lede": "Briefs breves y notas de campo."
+    "title": "Libros",
+    "lede": "Volúmenes publicados y extractos oficiales."
   },
   "list": {
-    "title": "Entradas recientes",
-    "empty": "No hay entradas disponibles."
+    "title": "Publicaciones",
+    "empty": "No hay publicaciones listadas públicamente."
+  },
+  "metadata": {
+    "title": "Metadatos de publicación",
+    "labels": {
+      "context": "Contexto de publicación",
+      "isbn": "ISBN",
+      "publisher": "Editorial",
+      "distribution": "Distribución",
+      "excerpt": "Extracto"
+    }
   }
 }

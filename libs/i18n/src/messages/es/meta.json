@@ -1,49 +1,69 @@
 {
   "siteName": "Joel R. Klemmer",
-  "defaultTitle": "Briefing de autoridad discreta",
-  "defaultDescription": "Briefing sobre trabajo verificado, sistema operativo y escritura.",
+  "defaultTitle": "Briefing de verificacion ejecutiva",
+  "defaultDescription": "Ecosistema de verificacion de autoridad para evaluacion ejecutiva y revision institucional.",
   "home": {
-    "title": "Sala de briefing",
-    "description": "Autoridad discreta y briefing con pruebas."
+    "title": "Inicio",
+    "description": "Sistema de orientacion para evaluacion institucional."
   },
   "brief": {
-    "title": "Brief ejecutivo",
-    "description": "Centro canonico para alcance, pruebas y trabajo actual."
+    "title": "Informe ejecutivo",
+    "description": "Centro de autoridad para revision estructurada y enrutamiento de evidencia."
   },
   "work": {
-    "title": "Trabajo",
-    "description": "Enfoques, metodos y encargos actuales."
+    "title": "Estudios de caso",
+    "description": "Demostraciones estructuradas con referencias de evidencia."
   },
   "operatingSystem": {
     "title": "Sistema operativo",
     "description": "Como se define, entrega y verifica el trabajo."
   },
   "writing": {
-    "title": "Escritura",
-    "description": "Notas sobre estrategia, entrega y practica."
+    "title": "Libros",
+    "description": "Volumenes publicados y extractos oficiales."
   },
   "contact": {
     "title": "Contacto",
-    "description": "Ingreso de brief y coordinacion."
+    "description": "Canal de acceso controlado para consultas verificadas."
   },
   "press": {
-    "title": "Prensa",
-    "description": "Kit de prensa y material de referencia."
+    "title": "Kit de prensa",
+    "description": "Material de referencia y biografia aprobada."
   },
   "proof": {
-    "title": "Pruebas",
-    "description": "Afirmaciones con evidencia y artefactos."
+    "title": "Registro publico",
+    "description": "Artefactos de verificacion que respaldan afirmaciones."
   },
   "bio": {
-    "title": "Bio",
-    "description": "Biografia profesional breve."
+    "title": "Biografia ejecutiva",
+    "description": "Biografia profesional para revision institucional."
   },
   "faq": {
     "title": "FAQ",
-    "description": "Respuestas a preguntas comunes."
+    "description": "Preguntas operativas con respuestas contenidas."
   },
   "now": {
     "title": "Ahora",
-    "description": "Enfoque actual y ritmo operativo."
+    "description": "Enfoque actual y compromisos verificados."
+  },
+  "mediaKit": {
+    "title": "Kit de medios",
+    "description": "Activos aprobados y terminos de uso."
+  },
+  "privacy": {
+    "title": "Privacidad",
+    "description": "Controles de privacidad y manejo de datos."
+  },
+  "terms": {
+    "title": "Terminos",
+    "description": "Terminos de acceso y limitaciones de uso."
+  },
+  "accessibility": {
+    "title": "Accesibilidad",
+    "description": "Objetivos de accesibilidad y cadencia de revision."
+  },
+  "security": {
+    "title": "Seguridad",
+    "description": "Postura de seguridad y divulgacion."
   }
 }

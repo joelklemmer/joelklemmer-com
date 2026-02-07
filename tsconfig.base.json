@@ -25,6 +25,7 @@
       "@joelklemmer/tokens": ["libs/tokens/src/index.ts"],
       "@joelklemmer/i18n": ["libs/i18n/src/index.ts"],
       "@joelklemmer/content": ["libs/content/src/index.ts"],
+      "@joelklemmer/content/validate": ["libs/content/src/validate.ts"],
       "@joelklemmer/seo": ["libs/seo/src/index.ts"],
       "@joelklemmer/a11y": ["libs/a11y/src/index.ts"],
       "@joelklemmer/screens": ["libs/screens/src/index.ts"],

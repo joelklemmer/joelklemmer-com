@@ -1,10 +1,14 @@
 {
-  "label": "Quiet links",
+  "label": "Quiet navigation",
   "links": {
-    "press": "Press",
-    "proof": "Proof",
-    "bio": "Bio",
+    "media-kit": "Media Kit",
+    "press": "Press Kit",
+    "bio": "Executive Bio",
     "faq": "FAQ",
-    "now": "Now"
+    "now": "Now",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "accessibility": "Accessibility",
+    "security": "Security"
   }
 }

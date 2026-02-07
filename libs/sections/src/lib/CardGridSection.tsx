@@ -10,6 +10,7 @@ export interface CardItem {
 }
 
 export interface CardGridSectionProps {
+  id?: string;
   title: string;
   lede?: string;
   items: CardItem[];
@@ -20,13 +21,14 @@ export interface CardGridSectionProps {
 }
 
 export function CardGridSection({
+  id,
   title,
   lede,
   items,
   action,
 }: CardGridSectionProps) {
   return (
-    <section className="section-shell">
+    <section id={id} className="section-shell">
       <Container className="section-shell">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="section-shell">

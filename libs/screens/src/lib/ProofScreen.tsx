@@ -4,9 +4,9 @@ import {
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { getProofList } from '@joelklemmer/content';
+import { getPublicRecordList } from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
-import { CardGridSection, HeroSection } from '@joelklemmer/sections';
+import { CardGridSection, HeroSection, ListSection } from '@joelklemmer/sections';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -16,7 +16,7 @@ export async function generateMetadata() {
     title: t('proof.title'),
     description: t('proof.description'),
     locale,
-    pathname: '/proof',
+    pathname: '/publicrecord',
   });
 }
 
@@ -24,22 +24,30 @@ export const proofMetadata = generateMetadata;
 
 export async function ProofScreen() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['quiet']);
-  const t = createScopedTranslator(locale, messages, 'quiet');
-  const entries = await getProofList(locale);
+  const messages = await loadMessages(locale, ['proof']);
+  const t = createScopedTranslator(locale, messages, 'proof');
+  const entries = await getPublicRecordList(locale);
 
   return (
     <>
-      <HeroSection title={t('proof.title')} lede={t('proof.lede')} />
-      <CardGridSection
-        title={t('proof.title')}
-        items={entries.map((entry) => ({
-          title: entry.frontmatter.claim,
-          description: entry.frontmatter.summary,
-          meta: entry.frontmatter.evidenceType,
-          href: `/${locale}/proof/${entry.frontmatter.slug}`,
-        }))}
-      />
+      <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
+      {entries.length ? (
+        <CardGridSection
+          title={t('list.title')}
+          lede={t('list.lede')}
+          items={entries.map((entry) => ({
+            title: entry.frontmatter.title,
+            description: entry.frontmatter.claimSupported,
+            meta: t('list.meta', {
+              date: entry.frontmatter.date,
+              source: entry.frontmatter.source,
+            }),
+            href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
+          }))}
+        />
+      ) : (
+        <ListSection title={t('list.title')} items={[t('list.empty')]} />
+      )}
     </>
   );
 }

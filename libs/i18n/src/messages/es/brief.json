@@ -1,33 +1,73 @@
 {
   "hero": {
-    "title": "Brief ejecutivo",
-    "lede": "Centro canonico para alcance, pruebas y trabajo actual."
+    "title": "Informe ejecutivo",
+    "lede": "Centro de autoridad para revisión estructurada y enrutamiento de evidencia."
   },
-  "focus": {
-    "title": "Enfoque actual",
-    "items": [
-      "Apoyo a decisiones en programas de alto impacto",
-      "Seguridad y resiliencia operativa",
-      "Rutas claras de entrega con verificacion"
+  "identityScope": "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas. Método: briefing basado en evidencia con restricciones y resultados claros. Verificación: artefactos del registro público vinculados a afirmaciones indexadas.",
+  "readPath": {
+    "title": "Ruta de lectura para evaluadores",
+    "lede": "Si está evaluando credibilidad o verificación, use estas rutas.",
+    "routes": [
+      { "label": "Ver índice de afirmaciones", "path": "/brief#claims" },
+      { "label": "Ver estudios de caso", "path": "/casestudies" },
+      { "label": "Ver registro público", "path": "/proof" }
     ]
   },
-  "links": {
-    "title": "Rutas principales",
-    "work": {
-      "label": "Trabajo",
-      "description": "Enfoques y encargos actuales."
-    },
-    "operatingSystem": {
-      "label": "Sistema operativo",
-      "description": "Como se define y verifica el trabajo."
-    },
-    "writing": {
-      "label": "Escritura",
-      "description": "Notas y briefs en curso."
-    },
-    "contact": {
-      "label": "Contacto",
-      "description": "Ingreso de brief y coordinacion."
+  "narrative": {
+    "title": "Narrativa ejecutiva",
+    "items": [
+      "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas.",
+      "Método: briefing basado en evidencia con restricciones y resultados claros.",
+      "Verificación: artefactos del registro público vinculados a afirmaciones indexadas."
+    ]
+  },
+  "claims": {
+    "title": "Afirmaciones indexadas",
+    "lede": "Las afirmaciones se vinculan directamente a artefactos del Registro público.",
+    "allClaimsExpander": "Todas las afirmaciones se listan arriba.",
+    "items": {
+      "recoveryPlan": {
+        "label": "Entregó un plan de recuperación en dos semanas",
+        "summary": "Plan de recuperación verificado entregado en un plazo de dos semanas."
+      }
     }
+  },
+  "selectedOutcomes": {
+    "title": "Resultados seleccionados",
+    "items": [
+      "Plan de recuperación entregado en plazo de dos semanas con validación de interesados."
+    ]
+  },
+  "caseStudies": {
+    "title": "Estudios de caso destacados",
+    "lede": "Demostraciones condensadas con referencias de evidencia."
+  },
+  "publicRecordHighlights": {
+    "title": "Destacados del registro público",
+    "lede": "Artefactos de verificación con fechas, fuentes y notas."
+  },
+  "routes": {
+    "title": "Rutas principales",
+    "items": [
+      { "title": "Inicio", "description": "Sistema de orientación para evaluadores.", "path": "/" },
+      { "title": "Estudios de caso", "description": "Demostraciones de capacidad con contexto y resultados.", "path": "/work" },
+      { "title": "Libros", "description": "Volúmenes publicados y extractos oficiales.", "path": "/writing" },
+      { "title": "Registro público", "description": "Artefactos de verificación que respaldan afirmaciones.", "path": "/proof" },
+      { "title": "Contacto", "description": "Acceso controlado y coordinación.", "path": "/contact" }
+    ]
+  },
+  "artifacts": {
+    "title": "Artefactos",
+    "lede": "PDF estables para informe y biografía ejecutiva.",
+    "notPublished": "Artefacto aún no publicado.",
+    "downloadLabel": "Descargar",
+    "items": [
+      { "id": "executive-brief-pdf", "title": "Informe ejecutivo (PDF)", "description": "Artefacto canónico para revisión." },
+      { "id": "executive-bio", "title": "Biografía ejecutiva (PDF)", "description": "Biografía para distribución controlada." }
+    ]
+  },
+  "contactPathway": {
+    "title": "Contacto",
+    "linkLabel": "Acceso controlado y coordinación."
   }
 }

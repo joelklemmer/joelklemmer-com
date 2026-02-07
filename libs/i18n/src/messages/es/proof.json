@@ -1,0 +1,29 @@
+{
+  "hero": {
+    "title": "Registro publico",
+    "lede": "Artefactos de verificacion con fechas, fuentes y notas."
+  },
+  "list": {
+    "title": "Artefactos",
+    "lede": "Las entradas se centran en evidencia y enlazan afirmaciones indexadas.",
+    "meta": "{date} · {source}",
+    "empty": "No hay entradas del registro publico disponibles."
+  },
+  "metadata": {
+    "title": "Metadatos del artefacto",
+    "missing": "No proporcionado",
+    "claimLinkAction": "Ver afirmacion vinculada",
+    "labels": {
+      "claimSupported": "Afirmacion respaldada",
+      "artifactType": "Tipo de artefacto",
+      "date": "Fecha",
+      "source": "Fuente",
+      "verification": "Nota de verificacion",
+      "claimLink": "Vinculo de afirmacion"
+    }
+  },
+  "supportsClaims": {
+    "title": "Respalda afirmaciones",
+    "empty": "No hay afirmaciones vinculadas registradas."
+  }
+}

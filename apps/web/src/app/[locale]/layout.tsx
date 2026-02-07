@@ -10,7 +10,10 @@ import {
   setRequestLocale,
 } from 'next-intl/server';
 
+/* Locale layout is the single composition point for shell; allowed to import i18n/ui. */
+// eslint-disable-next-line no-restricted-imports -- layout composes shell
 import { defaultLocale } from '@joelklemmer/i18n';
+// eslint-disable-next-line no-restricted-imports -- layout composes shell
 import { LanguageSwitcher, Shell } from '@joelklemmer/ui';
 import {
   FooterSection,
@@ -24,6 +27,7 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
+/* eslint-disable max-lines-per-function -- layout composes shell and sections in one place */
 export default async function LocaleLayout({
   children,
   params,
@@ -50,14 +54,21 @@ export default async function LocaleLayout({
     { href: `/${resolvedLocale}`, label: nav('home') },
     { href: `/${resolvedLocale}/brief`, label: nav('brief') },
     { href: `/${resolvedLocale}/work`, label: nav('work') },
-    {
-      href: `/${resolvedLocale}/operating-system`,
-      label: nav('operatingSystem'),
-    },
     { href: `/${resolvedLocale}/writing`, label: nav('writing') },
+    { href: `/${resolvedLocale}/proof`, label: nav('proof') },
     { href: `/${resolvedLocale}/contact`, label: nav('contact') },
   ];
-  const footerItems = ['press', 'proof', 'bio', 'faq', 'now'].map((slug) => ({
+  const footerItems = [
+    'media-kit',
+    'press',
+    'bio',
+    'faq',
+    'now',
+    'privacy',
+    'terms',
+    'accessibility',
+    'security',
+  ].map((slug) => ({
     href: `/${resolvedLocale}/${slug}`,
     label: footer(`links.${slug}`),
   }));

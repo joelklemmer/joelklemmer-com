@@ -1,33 +1,101 @@
 {
   "hero": {
     "title": "Executive brief",
-    "lede": "Canonical hub for scope, proof, and current work."
+    "lede": "Primary authority hub for structured review and evidence routing."
   },
-  "focus": {
-    "title": "Current focus",
-    "items": [
-      "Decision support for high stakes programs",
-      "Security and resilience for modern operations",
-      "Clear delivery paths with verifiable outcomes"
+  "identityScope": "Scope: executive evaluation, institutional review, and policy credibility. Method: evidence-led briefing with clear constraints and outcomes. Verification: public record artifacts linked to indexed claims.",
+  "readPath": {
+    "title": "Evaluator read path",
+    "lede": "If you are evaluating for credibility or verification, use these routes.",
+    "routes": [
+      { "label": "See Claims Index", "path": "/brief#claims" },
+      { "label": "See Case Studies", "path": "/casestudies" },
+      { "label": "See Public Record", "path": "/proof" }
     ]
   },
-  "links": {
-    "title": "Primary routes",
-    "work": {
-      "label": "Work",
-      "description": "Focus areas and current engagements."
-    },
-    "operatingSystem": {
-      "label": "Operating system",
-      "description": "How work is framed and verified."
-    },
-    "writing": {
-      "label": "Writing",
-      "description": "Notes and briefings in progress."
-    },
-    "contact": {
-      "label": "Contact",
-      "description": "Briefing intake and coordination."
+  "narrative": {
+    "title": "Executive narrative",
+    "items": [
+      "Scope: executive evaluation, institutional review, and policy credibility.",
+      "Method: evidence-led briefing with clear constraints and outcomes.",
+      "Verification: public record artifacts linked to indexed claims."
+    ]
+  },
+  "claims": {
+    "title": "Indexed claims",
+    "lede": "Claims are linked directly to Public Record artifacts.",
+    "allClaimsExpander": "All claims are listed above.",
+    "items": {
+      "recoveryPlan": {
+        "label": "Delivered a recovery plan within two weeks",
+        "summary": "Verified recovery plan delivered under a two-week constraint."
+      }
     }
+  },
+  "selectedOutcomes": {
+    "title": "Selected outcomes",
+    "items": [
+      "Recovery plan delivered under a two-week constraint with stakeholder validation."
+    ]
+  },
+  "caseStudies": {
+    "title": "Highlighted case studies",
+    "lede": "Condensed demonstrations with evidence references."
+  },
+  "publicRecordHighlights": {
+    "title": "Public record highlights",
+    "lede": "Verification artifacts with dates, sources, and notes."
+  },
+  "routes": {
+    "title": "Core routes",
+    "items": [
+      {
+        "title": "Home",
+        "description": "Orientation system for evaluator routing.",
+        "path": "/"
+      },
+      {
+        "title": "Case Studies",
+        "description": "Capability demonstrations with context and outcomes.",
+        "path": "/work"
+      },
+      {
+        "title": "Books",
+        "description": "Published volumes and official excerpts.",
+        "path": "/writing"
+      },
+      {
+        "title": "Public Record",
+        "description": "Verification artifacts supporting claims.",
+        "path": "/proof"
+      },
+      {
+        "title": "Contact",
+        "description": "Controlled access and coordination.",
+        "path": "/contact"
+      }
+    ]
+  },
+  "artifacts": {
+    "title": "Artifacts",
+    "lede": "Stable PDFs for brief and executive bio.",
+    "notPublished": "Artifact not published yet.",
+    "downloadLabel": "Download",
+    "items": [
+      {
+        "id": "executive-brief-pdf",
+        "title": "Executive brief (PDF)",
+        "description": "Canonical briefing artifact for review."
+      },
+      {
+        "id": "executive-bio",
+        "title": "Executive bio (PDF)",
+        "description": "Controlled distribution biography."
+      }
+    ]
+  },
+  "contactPathway": {
+    "title": "Contact",
+    "linkLabel": "Controlled access and coordination."
   }
 }

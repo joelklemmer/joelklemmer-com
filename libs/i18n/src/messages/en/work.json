@@ -1,14 +1,20 @@
 {
   "hero": {
-    "title": "Work",
-    "lede": "Quiet delivery for complex programs."
+    "title": "Case studies",
+    "lede": "Structured demonstrations with evidence-linked references."
   },
-  "areas": {
-    "title": "Focus areas",
-    "items": [
-      "Strategic planning and program recovery",
-      "Security posture and operational resilience",
-      "Executive alignment and decision clarity"
-    ]
+  "caseStudies": {
+    "title": "Case studies",
+    "detailTitle": "Case study details",
+    "detailLink": "View case study details",
+    "empty": "No case studies are published for public review.",
+    "meta": "Date: {date}",
+    "labels": {
+      "context": "Context",
+      "constraints": "Constraints",
+      "actions": "Actions",
+      "outcomes": "Outcomes",
+      "references": "Public Record references"
+    }
   }
 }

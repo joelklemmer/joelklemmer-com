@@ -1,10 +1,14 @@
 {
-  "label": "Enlaces discretos",
+  "label": "Navegación discreta",
   "links": {
-    "press": "Prensa",
-    "proof": "Pruebas",
-    "bio": "Bio",
-    "faq": "FAQ",
-    "now": "Ahora"
+    "media-kit": "Kit de medios",
+    "press": "Kit de prensa",
+    "bio": "Biografía ejecutiva",
+    "faq": "Preguntas frecuentes",
+    "now": "Ahora",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "accessibility": "Accesibilidad",
+    "security": "Seguridad"
   }
 }

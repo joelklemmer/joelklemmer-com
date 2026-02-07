@@ -14,5 +14,10 @@
     "footerLabel": "Нижній колонтитул",
     "languageSwitcherLabel": "Вибір мови",
     "languageSwitcherAction": "Змінити мову на {language}"
+  },
+  "fallbackNotice": {
+    "title": "Попередження про переклад",
+    "body": "Цю сторінку показано англійською, доки локалізовану версію не завершено.",
+    "linkLabel": "Переглянути англійську версію"
   }
 }

@@ -47,11 +47,26 @@ jobs:
       - name: Format check
         run: NX_CLOUD=false pnpm nx format:check --all --verbose
 
+      - name: Lint web
+        run: NX_CLOUD=false pnpm nx run web:lint --verbose
+
+      - name: Validate content
+        run: NX_CLOUD=false pnpm nx run web:content-validate --verbose
+
+      - name: Validate i18n
+        run: NX_CLOUD=false pnpm nx run web:i18n-validate --verbose
+
+      - name: Test web
+        run: NX_CLOUD=false pnpm nx run web:test --verbose
+
       - name: Build web
         run: NX_CLOUD=false pnpm nx build web --verbose
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install chromium
+
+      - name: A11y tests
+        run: NX_CLOUD=false pnpm nx run web:a11y --verbose
 
       - name: E2E tests
         run: NX_CLOUD=false pnpm nx e2e web-e2e --verbose

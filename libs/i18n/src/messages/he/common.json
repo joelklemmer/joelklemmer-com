@@ -14,5 +14,10 @@
     "footerLabel": "כותרת תחתונה",
     "languageSwitcherLabel": "אפשרויות שפה",
     "languageSwitcherAction": "החלף שפה ל {language}"
+  },
+  "fallbackNotice": {
+    "title": "התראת תרגום",
+    "body": "עמוד זה מוצג באנגלית עד להשלמת הגרסה המקומית.",
+    "linkLabel": "צפייה בגרסה באנגלית"
   }
 }

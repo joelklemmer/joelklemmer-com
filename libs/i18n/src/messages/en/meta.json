@@ -1,49 +1,69 @@
 {
   "siteName": "Joel R. Klemmer",
-  "defaultTitle": "Quiet authority briefing",
-  "defaultDescription": "Briefing room for verified work, operating system, and writing.",
+  "defaultTitle": "Executive verification briefing",
+  "defaultDescription": "Authority verification ecosystem for executive evaluation and institutional review.",
   "home": {
-    "title": "Briefing room",
-    "description": "Quiet authority and proof forward briefing."
+    "title": "Home",
+    "description": "Orientation system for institutional evaluation."
   },
   "brief": {
     "title": "Executive brief",
-    "description": "Canonical hub for scope, proof, and current work."
+    "description": "Primary authority hub for structured review and evidence routing."
   },
   "work": {
-    "title": "Work",
-    "description": "Focus areas, methods, and current engagements."
+    "title": "Case studies",
+    "description": "Structured demonstrations with evidence-linked references."
   },
   "operatingSystem": {
     "title": "Operating system",
     "description": "How work is framed, delivered, and verified."
   },
   "writing": {
-    "title": "Writing",
-    "description": "Notes on strategy, delivery, and operating practice."
+    "title": "Books",
+    "description": "Published volumes and official excerpts."
   },
   "contact": {
     "title": "Contact",
-    "description": "Briefing intake and coordination."
+    "description": "Controlled access channel for verified inquiries."
   },
   "press": {
-    "title": "Press",
-    "description": "Press kit and reference material."
+    "title": "Press kit",
+    "description": "Press reference material and approved biography."
   },
   "proof": {
-    "title": "Proof",
-    "description": "Evidence forward claims and artifacts."
+    "title": "Public record",
+    "description": "Verification artifacts supporting indexed claims."
   },
   "bio": {
-    "title": "Bio",
-    "description": "Short professional biography."
+    "title": "Executive bio",
+    "description": "Professional biography for institutional review."
   },
   "faq": {
     "title": "FAQ",
-    "description": "Answers to common questions."
+    "description": "Operational questions answered with restraint."
   },
   "now": {
     "title": "Now",
-    "description": "Current focus and operating cadence."
+    "description": "Current focus and verified commitments."
+  },
+  "mediaKit": {
+    "title": "Media kit",
+    "description": "Approved assets and usage terms."
+  },
+  "privacy": {
+    "title": "Privacy",
+    "description": "Privacy controls and data handling commitments."
+  },
+  "terms": {
+    "title": "Terms",
+    "description": "Access terms and use limitations."
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "description": "Accessibility targets, methods, and review cadence."
+  },
+  "security": {
+    "title": "Security",
+    "description": "Security posture, reporting, and disclosure."
   }
 }

@@ -1,10 +1,20 @@
 {
   "hero": {
-    "title": "Writing",
-    "lede": "Short briefings and field notes."
+    "title": "Books",
+    "lede": "Published volumes and official excerpts."
   },
   "list": {
-    "title": "Recent posts",
-    "empty": "No posts are available yet."
+    "title": "Publications",
+    "empty": "No publications are publicly listed."
+  },
+  "metadata": {
+    "title": "Publication metadata",
+    "labels": {
+      "context": "Publication context",
+      "isbn": "ISBN",
+      "publisher": "Publisher",
+      "distribution": "Distribution",
+      "excerpt": "Excerpt"
+    }
   }
 }

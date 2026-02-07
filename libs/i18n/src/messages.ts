@@ -12,6 +12,7 @@ export const messageNamespaces = [
   'operatingSystem',
   'writing',
   'contact',
+  'proof',
   'quiet',
 ] as const;
 

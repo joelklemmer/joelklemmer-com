@@ -1,14 +1,14 @@
 {
   "hero": {
     "title": "Contact",
-    "lede": "Briefing intake and coordination."
+    "lede": "Controlled access channel for verified inquiries."
   },
   "methods": {
-    "title": "How to start",
+    "title": "Access protocol",
     "items": [
-      "Review the brief to confirm alignment",
-      "Send a concise scope note by email",
-      "Request a secure channel if needed"
+      "Review the Executive Brief for scope alignment",
+      "Send a concise scope note with verified affiliation",
+      "Request a secure channel when required"
     ]
   }
 }

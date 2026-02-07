@@ -1,9 +1,9 @@
 import { createElement } from 'react';
 import type { Metadata } from 'next';
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
+import { getIdentitySameAs } from './identity';
 
 const DEFAULT_SITE_URL = 'http://localhost:3000';
-
 export interface CanonicalUrlOptions {
   baseUrl?: string;
   pathname?: string;
@@ -100,6 +100,8 @@ export interface PageMetadataInput {
   locale: AppLocale;
   pathname?: string;
   baseUrl?: string;
+  canonicalLocale?: AppLocale;
+  canonicalOverride?: string;
 }
 
 export function createPageMetadata({
@@ -108,8 +110,12 @@ export function createPageMetadata({
   locale,
   pathname = '/',
   baseUrl,
+  canonicalLocale,
+  canonicalOverride,
 }: PageMetadataInput): Metadata {
-  const canonical = canonicalUrl(locale, pathname, baseUrl);
+  const canonical =
+    canonicalOverride ??
+    canonicalUrl(canonicalLocale ?? locale, pathname, baseUrl);
   const languages = Object.fromEntries(
     hreflangAlternates(pathname, baseUrl).map((alt) => [
       alt.hrefLang,
@@ -137,9 +143,13 @@ export function createPageMetadata({
 
 export interface PersonJsonLdProps {
   baseUrl?: string;
+  sameAs?: string[];
 }
 
-export function getPersonJsonLd({ baseUrl }: PersonJsonLdProps = {}) {
+export function getPersonJsonLd({
+  baseUrl,
+  sameAs,
+}: PersonJsonLdProps = {}) {
   const url = normalizeBaseUrl(baseUrl);
   return {
     '@context': 'https://schema.org',
@@ -147,12 +157,12 @@ export function getPersonJsonLd({ baseUrl }: PersonJsonLdProps = {}) {
     name: 'Joel Robert Klemmer',
     alternateName: 'Joel R. Klemmer',
     url,
-    sameAs: [],
+    sameAs: sameAs ?? getIdentitySameAs(),
   };
 }
 
-export function PersonJsonLd({ baseUrl }: PersonJsonLdProps) {
-  const jsonLd = getPersonJsonLd({ baseUrl });
+export function PersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps) {
+  const jsonLd = getPersonJsonLd({ baseUrl, sameAs });
   return createElement('script', {
     type: 'application/ld+json',
     dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },

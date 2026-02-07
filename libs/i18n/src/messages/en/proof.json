@@ -1,0 +1,29 @@
+{
+  "hero": {
+    "title": "Public record",
+    "lede": "Verification artifacts with dates, sources, and notes."
+  },
+  "list": {
+    "title": "Artifacts",
+    "lede": "Entries are evidence-forward and link to indexed claims.",
+    "meta": "{date} · {source}",
+    "empty": "No public record entries are available."
+  },
+  "metadata": {
+    "title": "Artifact metadata",
+    "missing": "Not provided",
+    "claimLinkAction": "View linked claim",
+    "labels": {
+      "claimSupported": "Claim supported",
+      "artifactType": "Artifact type",
+      "date": "Date",
+      "source": "Source",
+      "verification": "Verification note",
+      "claimLink": "Claim linkage"
+    }
+  },
+  "supportsClaims": {
+    "title": "Supports claims",
+    "empty": "No linked claims are recorded."
+  }
+}

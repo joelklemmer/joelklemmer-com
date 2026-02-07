@@ -1,0 +1,308 @@
+{
+  "generatedAt": "2026-02-07T21:25:34.071Z",
+  "totalRoutes": 60,
+  "seriousCount": 0,
+  "routes": [
+    {
+      "locale": "en",
+      "path": "/",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/brief",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/casestudies",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/casestudies/program-recovery-plan",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/books",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/publicrecord",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/publicrecord/recovery-plan-two-weeks",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/contact",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/privacy",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/terms",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/accessibility",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/security",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/media",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/press",
+      "violations": []
+    },
+    {
+      "locale": "en",
+      "path": "/bio",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/brief",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/casestudies",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/casestudies/program-recovery-plan",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/books",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/publicrecord",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/publicrecord/recovery-plan-two-weeks",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/contact",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/privacy",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/terms",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/accessibility",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/security",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/media",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/press",
+      "violations": []
+    },
+    {
+      "locale": "uk",
+      "path": "/bio",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/brief",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/casestudies",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/casestudies/program-recovery-plan",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/books",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/publicrecord",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/publicrecord/recovery-plan-two-weeks",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/contact",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/privacy",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/terms",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/accessibility",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/security",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/media",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/press",
+      "violations": []
+    },
+    {
+      "locale": "es",
+      "path": "/bio",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/brief",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/casestudies",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/casestudies/program-recovery-plan",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/books",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/publicrecord",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/publicrecord/recovery-plan-two-weeks",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/contact",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/privacy",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/terms",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/accessibility",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/security",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/media",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/press",
+      "violations": []
+    },
+    {
+      "locale": "he",
+      "path": "/bio",
+      "violations": []
+    }
+  ],
+  "seriousFindings": []
+}

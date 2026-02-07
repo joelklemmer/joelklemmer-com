@@ -1,14 +1,20 @@
 {
   "hero": {
-    "title": "Trabajo",
-    "lede": "Entrega discreta para programas complejos."
+    "title": "Estudios de caso",
+    "lede": "Demostraciones estructuradas con referencias de evidencia."
   },
-  "areas": {
-    "title": "Areas de enfoque",
-    "items": [
-      "Planeacion estrategica y recuperacion de programas",
-      "Postura de seguridad y resiliencia operativa",
-      "Alineacion ejecutiva y claridad de decisiones"
-    ]
+  "caseStudies": {
+    "title": "Estudios de caso",
+    "detailTitle": "Detalles del estudio de caso",
+    "detailLink": "Ver detalles del estudio de caso",
+    "empty": "No hay estudios de caso publicados para revisión pública.",
+    "meta": "Fecha: {date}",
+    "labels": {
+      "context": "Contexto",
+      "constraints": "Restricciones",
+      "actions": "Acciones",
+      "outcomes": "Resultados",
+      "references": "Referencias del Registro público"
+    }
   }
 }

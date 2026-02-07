@@ -14,5 +14,10 @@
     "footerLabel": "Footer",
     "languageSwitcherLabel": "Language options",
     "languageSwitcherAction": "Switch language to {language}"
+  },
+  "fallbackNotice": {
+    "title": "Translation fallback",
+    "body": "This page is shown in English while the localized version is in progress.",
+    "linkLabel": "View English version"
   }
 }

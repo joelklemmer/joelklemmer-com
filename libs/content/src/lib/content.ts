@@ -3,7 +3,16 @@ import { existsSync } from 'node:fs';
 import { readdir, readFile } from 'node:fs/promises';
 import matter from 'gray-matter';
 import { compileMDX } from 'next-mdx-remote/rsc';
+import { z } from 'zod';
 import { defaultLocale, type AppLocale } from '@joelklemmer/i18n';
+import {
+  caseStudyFrontmatterSchema,
+  institutionalFrontmatterSchema,
+  publicRecordFrontmatterSchema,
+  type CaseStudyFrontmatter,
+  type InstitutionalFrontmatter,
+  type PublicRecordFrontmatter,
+} from './schemas';
 
 const contentRootCandidates = [
   path.join(process.cwd(), 'content'),
@@ -23,23 +32,26 @@ export interface WritingFrontmatter {
   tags?: string[];
   canonical?: string;
   featured?: boolean;
+  publicationContext?: string;
+  isbn?: string;
+  publisher?: string;
+  distribution?: Array<{ label: string; url: string }>;
+  excerpt?: string;
 }
 
-export interface ProofFrontmatter {
-  claim: string;
-  evidenceType: string;
-  date: string;
-  locale: AppLocale;
-  slug: string;
-  summary: string;
-  sourceLabel?: string;
-  sourceUrl?: string;
-  artifactRef?: string;
-  jurisdiction?: string;
-  verificationNotes?: string;
+export interface ProofFrontmatter extends PublicRecordFrontmatter {
+  summary?: string;
 }
 
 export interface PressFrontmatter {
+  title: string;
+  date: string;
+  summary: string;
+  locale: AppLocale;
+  slug: string;
+}
+
+export interface StaticPageFrontmatter {
   title: string;
   date: string;
   summary: string;
@@ -60,6 +72,10 @@ export interface ContentEntry<T> {
   content: string;
 }
 
+export interface LocalizedContentEntry<T> extends ContentEntry<T> {
+  isFallback: boolean;
+}
+
 async function getMdxFiles(dir: string) {
   const entries = await readdir(dir, { withFileTypes: true });
   return entries
@@ -76,6 +92,23 @@ async function readMdxFile<T>(filePath: string) {
   };
 }
 
+function resolveLocalizedEntry<T extends { locale: AppLocale }>(
+  entry: ContentEntry<T>,
+  locale: AppLocale,
+) {
+  if (
+    entry.frontmatter.locale !== locale &&
+    entry.frontmatter.locale !== defaultLocale
+  ) {
+    return null;
+  }
+
+  return {
+    ...entry,
+    isFallback: entry.frontmatter.locale !== locale,
+  } satisfies LocalizedContentEntry<T>;
+}
+
 function filterByLocale<T extends { locale: AppLocale }>(
   entries: ContentEntry<T>[],
   locale: AppLocale,
@@ -88,14 +121,37 @@ function filterByLocale<T extends { locale: AppLocale }>(
     : entries.filter((entry) => entry.frontmatter.locale === defaultLocale);
 }
 
-function sortByDateDesc<T extends { date: string }>(
+function sortByDateDesc<T extends { date?: string }>(
   entries: ContentEntry<T>[],
 ) {
   return [...entries].sort(
     (a, b) =>
-      new Date(b.frontmatter.date).getTime() -
-      new Date(a.frontmatter.date).getTime(),
+      new Date(b.frontmatter.date ?? 0).getTime() -
+      new Date(a.frontmatter.date ?? 0).getTime(),
   );
+}
+
+function validateFrontmatter<T>(
+  schema: z.ZodSchema<T>,
+  data: unknown,
+  filePath: string,
+) {
+  const parsed = schema.safeParse(data);
+  if (!parsed.success) {
+    const details = parsed.error.issues
+      .map((issue) => `${issue.path.join('.')}: ${issue.message}`)
+      .join('; ');
+    throw new Error(`Invalid frontmatter in ${filePath}: ${details}`);
+  }
+  return parsed.data;
+}
+
+function resolvePublicRecordDir() {
+  const preferred = path.join(contentRoot, 'public-record');
+  if (existsSync(preferred)) {
+    return preferred;
+  }
+  return path.join(contentRoot, 'proof');
 }
 
 export async function getWritingEntries() {
@@ -127,41 +183,70 @@ export async function getWritingSlugs() {
   return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
 }
 
-export async function getProofEntries() {
-  const dir = path.join(contentRoot, 'proof');
+export async function getPublicRecordEntries() {
+  const dir = resolvePublicRecordDir();
   const files = await getMdxFiles(dir);
   return Promise.all(
     files.map(async (filePath) => {
-      const { content, data } = await readMdxFile<ProofFrontmatter>(filePath);
-      return { frontmatter: data, content };
+      const { content, data } =
+        await readMdxFile<PublicRecordFrontmatter>(filePath);
+      const frontmatter = validateFrontmatter(
+        publicRecordFrontmatterSchema,
+        data,
+        filePath,
+      );
+      return { frontmatter, content };
     }),
   );
 }
 
-export async function getProofList(locale: AppLocale) {
-  const entries = await getProofEntries();
+export async function getPublicRecordList(locale: AppLocale) {
+  const entries = await getPublicRecordEntries();
   return sortByDateDesc(filterByLocale(entries, locale));
 }
 
-export async function getProofEntry(locale: AppLocale, slug: string) {
-  const entries = await getProofEntries();
+export async function getPublicRecordEntry(locale: AppLocale, slug: string) {
+  const entries = await getPublicRecordEntries();
   const localized = filterByLocale(entries, locale);
   return localized.find((entry) => entry.frontmatter.slug === slug) ?? null;
 }
 
-export async function getProofSlugs() {
-  const entries = await getProofEntries();
+export async function getPublicRecordSlugs() {
+  const entries = await getPublicRecordEntries();
   return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
 }
 
 export async function getPressKit(locale: AppLocale) {
   const filePath = path.join(contentRoot, 'press', 'press-kit.mdx');
   const { content, data } = await readMdxFile<PressFrontmatter>(filePath);
-  if (data.locale !== locale && data.locale !== defaultLocale) {
+  return resolveLocalizedEntry({ frontmatter: data, content }, locale);
+}
+
+export async function getMediaKit(locale: AppLocale) {
+  const filePath = path.join(contentRoot, 'press', 'media-kit.mdx');
+  try {
+    const { content, data } =
+      await readMdxFile<StaticPageFrontmatter>(filePath);
+    return resolveLocalizedEntry({ frontmatter: data, content }, locale);
+  } catch {
     return null;
   }
+}
 
-  return { frontmatter: data, content };
+export async function getInstitutionalPage(locale: AppLocale, slug: string) {
+  const filePath = path.join(contentRoot, 'institutional', `${slug}.mdx`);
+  try {
+    const { content, data } =
+      await readMdxFile<InstitutionalFrontmatter>(filePath);
+    const frontmatter = validateFrontmatter(
+      institutionalFrontmatterSchema,
+      data,
+      filePath,
+    );
+    return resolveLocalizedEntry({ frontmatter, content }, locale);
+  } catch {
+    return null;
+  }
 }
 
 export async function getOperatingSystem(locale: AppLocale) {
@@ -176,10 +261,45 @@ export async function getOperatingSystem(locale: AppLocale) {
     if (data.locale !== locale && data.locale !== defaultLocale) {
       return null;
     }
-    return { frontmatter: data, content };
+    return { frontmatter: data, content, isFallback: data.locale !== locale };
   } catch {
     return null;
   }
+}
+
+export async function getCaseStudyEntries() {
+  const dir = path.join(contentRoot, 'case-studies');
+  const files = await getMdxFiles(dir);
+  const entries = await Promise.all(
+    files.map(async (filePath) => {
+      const { content, data } =
+        await readMdxFile<CaseStudyFrontmatter>(filePath);
+      const frontmatter = validateFrontmatter(
+        caseStudyFrontmatterSchema,
+        data,
+        filePath,
+      );
+      return { frontmatter, content };
+    }),
+  );
+
+  return entries;
+}
+
+export async function getCaseStudies(locale: AppLocale) {
+  const entries = await getCaseStudyEntries();
+  return sortByDateDesc(filterByLocale(entries, locale));
+}
+
+export async function getCaseStudy(locale: AppLocale, slug: string) {
+  const entries = await getCaseStudyEntries();
+  const localized = filterByLocale(entries, locale);
+  return localized.find((entry) => entry.frontmatter.slug === slug) ?? null;
+}
+
+export async function getCaseStudySlugs() {
+  const entries = await getCaseStudyEntries();
+  return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
 }
 
 export async function renderMdx(source: string) {

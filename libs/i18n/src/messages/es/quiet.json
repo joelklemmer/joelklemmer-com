@@ -1,22 +1,45 @@
 {
   "press": {
-    "title": "Prensa",
-    "lede": "Kit de prensa y material de referencia."
+    "title": "Kit de prensa",
+    "lede": "Material de referencia y biografia aprobada."
   },
-  "proof": {
-    "title": "Biblioteca de pruebas",
-    "lede": "Afirmaciones con evidencia y artefactos."
+  "mediaKit": {
+    "title": "Kit de medios",
+    "lede": "Activos aprobados y términos de uso.",
+    "assetsTitle": "Activos de medios",
+    "assetsLede": "Archivos publicados mediante el manifiesto gobernado.",
+    "assetsEmpty": "No hay activos de medios publicados.",
+    "assetMeta": "{type} · v{version} · {date}"
   },
   "bio": {
-    "title": "Bio",
-    "lede": "Biografia profesional breve."
+    "title": "Biografía ejecutiva",
+    "lede": "Biografía profesional para revisión institucional.",
+    "artifactsTitle": "Artefacto biográfico",
+    "artifactLabel": "PDF de biografía ejecutiva",
+    "artifactLink": "Descargar biografía ejecutiva"
   },
   "faq": {
     "title": "FAQ",
-    "lede": "Preguntas comunes con respuestas directas."
+    "lede": "Preguntas operativas con respuestas contenidas."
   },
   "now": {
     "title": "Ahora",
-    "lede": "Enfoque actual y ritmo operativo."
+    "lede": "Enfoque actual y compromisos verificados."
+  },
+  "privacy": {
+    "title": "Privacidad",
+    "lede": "Controles de privacidad y manejo de datos."
+  },
+  "terms": {
+    "title": "Términos",
+    "lede": "Términos de acceso y limitaciones de uso."
+  },
+  "accessibility": {
+    "title": "Accesibilidad",
+    "lede": "Objetivos de accesibilidad y cadencia de revisión."
+  },
+  "security": {
+    "title": "Seguridad",
+    "lede": "Postura de seguridad y divulgación."
   }
 }

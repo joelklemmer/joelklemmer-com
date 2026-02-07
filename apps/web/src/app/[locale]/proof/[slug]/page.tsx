@@ -7,10 +7,11 @@ import {
 export const generateMetadata = proofEntryMetadata;
 export const generateStaticParams = proofEntryStaticParams;
 
-export default function ProofEntryPage({
+export default async function ProofEntryPage({
   params,
 }: {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }) {
-  return <ProofEntryScreen slug={params.slug} />;
+  const { slug } = await params;
+  return <ProofEntryScreen slug={slug} />;
 }
