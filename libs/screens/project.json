@@ -1,0 +1,9 @@
+{
+  "name": "screens",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/screens/src",
+  "projectType": "library",
+  "tags": ["type:screen"],
+  "// targets": "to see all targets run: nx show project screens --web",
+  "targets": {}
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@joelklemmer-com/source",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {},
+  "private": true,
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "@nx/devkit": "22.4.5",
+    "@nx/eslint": "22.4.5",
+    "@nx/eslint-plugin": "22.4.5",
+    "@nx/js": "22.4.5",
+    "@nx/next": "^22.4.5",
+    "@nx/playwright": "22.4.5",
+    "@nx/workspace": "22.4.5",
+    "@playwright/test": "^1.36.0",
+    "@swc-node/register": "~1.9.1",
+    "@swc/cli": "~0.6.0",
+    "@swc/core": "~1.5.7",
+    "@swc/helpers": "~0.5.11",
+    "@types/node": "20.19.9",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "autoprefixer": "10.4.13",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^10.0.0",
+    "nx": "22.4.5",
+    "postcss": "8.4.38",
+    "prettier": "~3.6.2",
+    "tailwindcss": "3.4.3",
+    "tslib": "^2.3.0",
+    "typescript": "~5.9.2",
+    "typescript-eslint": "^8.40.0"
+  },
+  "dependencies": {
+    "next": "~16.0.1",
+    "next-intl": "^4.8.2",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  }
+}

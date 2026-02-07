@@ -1,0 +1,9 @@
+{
+  "name": "sections",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/sections/src",
+  "projectType": "library",
+  "tags": ["type:section"],
+  "// targets": "to see all targets run: nx show project sections --web",
+  "targets": {}
+}

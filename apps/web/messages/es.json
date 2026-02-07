@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "title": "Bienvenido",
+    "description": "Next.js con internacionalización"
+  },
+  "home": {
+    "welcomeLead": "Hola,",
+    "welcomeTitle": "Bienvenido a web 👋"
+  },
+  "languageSwitcher": {
+    "label": "Idioma"
+  },
+  "languages": {
+    "en": "Inglés",
+    "uk": "Ucraniano",
+    "es": "Español",
+    "he": "Hebreo"
+  },
+  "routes": {
+    "brief": {
+      "title": "Resumen",
+      "body": "Una vista concisa y los puntos clave."
+    },
+    "work": {
+      "title": "Trabajo",
+      "body": "Proyectos seleccionados y colaboraciones."
+    },
+    "operating-system": {
+      "title": "Sistema operativo",
+      "body": "Principios, hábitos y herramientas que guían el trabajo."
+    },
+    "writing": {
+      "title": "Escritura",
+      "body": "Ensayos, notas y pensamiento en profundidad."
+    },
+    "contact": {
+      "title": "Contacto",
+      "body": "Formas de ponerse en contacto."
+    },
+    "press": {
+      "title": "Prensa",
+      "body": "Menciones, entrevistas y material de prensa."
+    },
+    "proof": {
+      "title": "Pruebas",
+      "body": "Evidencias, resultados y notas de credibilidad."
+    },
+    "bio": {
+      "title": "Bio",
+      "body": "Biografía breve y antecedentes."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "body": "Preguntas comunes y respuestas rápidas."
+    },
+    "now": {
+      "title": "Ahora",
+      "body": "En qué estoy enfocado en este momento."
+    }
+  },
+  "footer": {
+    "label": "Enlaces del pie",
+    "links": {
+      "press": "Prensa",
+      "proof": "Pruebas",
+      "bio": "Bio",
+      "faq": "FAQ",
+      "now": "Ahora"
+    }
+  }
+}

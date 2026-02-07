@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "title": "Welcome",
+    "description": "Next.js with internationalization"
+  },
+  "home": {
+    "welcomeLead": "Hello there,",
+    "welcomeTitle": "Welcome web 👋"
+  },
+  "languageSwitcher": {
+    "label": "Language"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Ukrainian",
+    "es": "Spanish",
+    "he": "Hebrew"
+  },
+  "routes": {
+    "brief": {
+      "title": "Brief",
+      "body": "A concise overview and highlights."
+    },
+    "work": {
+      "title": "Work",
+      "body": "Selected projects and collaborations."
+    },
+    "operating-system": {
+      "title": "Operating System",
+      "body": "Principles, habits, and tools that guide the work."
+    },
+    "writing": {
+      "title": "Writing",
+      "body": "Essays, notes, and long-form thinking."
+    },
+    "contact": {
+      "title": "Contact",
+      "body": "Ways to reach out and connect."
+    },
+    "press": {
+      "title": "Press",
+      "body": "Press mentions, interviews, and media kits."
+    },
+    "proof": {
+      "title": "Proof",
+      "body": "Evidence, outcomes, and credibility notes."
+    },
+    "bio": {
+      "title": "Bio",
+      "body": "Short biography and background."
+    },
+    "faq": {
+      "title": "FAQ",
+      "body": "Common questions and quick answers."
+    },
+    "now": {
+      "title": "Now",
+      "body": "What I am focused on right now."
+    }
+  },
+  "footer": {
+    "label": "Footer links",
+    "links": {
+      "press": "Press",
+      "proof": "Proof",
+      "bio": "Bio",
+      "faq": "FAQ",
+      "now": "Now"
+    }
+  }
+}
