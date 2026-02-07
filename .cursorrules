@@ -1,23 +1,189 @@
-Project: JoelKlemmer.com (quiet-authority, proof-forward briefing site)
+Project: JoelKlemmer.com
+Purpose: Quiet-authority, proof-forward authority verification site and private briefing room.
+Brand posture: Minimal surface, dense depth, no hype, short paragraphs, public-service professionalism.
 
-NON-NEGOTIABLES
-- apps/web route files must be thin: no page over 120 lines.
-- No hardcoded strings in UI. All copy must come from i18n messages or MDX content.
-- All reusable UI goes in libs/ui.
-- Design tokens go in libs/tokens.
-- Content pipeline in libs/content.
-- SEO utilities in libs/seo.
-- Accessibility utilities in libs/a11y.
-- Page composition in libs/screens and libs/sections.
+============================================================
+0) OPERATING PRINCIPLES
+============================================================
+- Prefer correctness and stability over novelty.
+- Build systems, not pages: reusable primitives, consistent contracts, typed boundaries.
+- Every change must preserve: accessibility, localization, and architecture boundaries.
+- Do not introduce new dependencies unless required and justified.
 
-REQUIRED FEATURES
-- next-intl locales: en, uk, es, he with RTL for he.
-- WCAG 2.2 AA: skip link, focus-visible, semantic landmarks, reduced motion.
-- Routes: /, /brief, /work, /operating-system, /writing, /contact
-- Quiet links (footer only): /press, /proof, /bio, /faq, /now
-- Executive Brief (/brief) is the canonical internal hub.
+============================================================
+1) NON-NEGOTIABLE ARCHITECTURE
+============================================================
+Monorepo structure (Nx):
+- apps/web: route composers only (thin files)
+- libs:
+  - ui: components and UI primitives (shadcn/ui + custom components)
+  - tokens: design tokens, theme, typography scale, spacing scale, z-index rules
+  - i18n: next-intl setup, message keys, locale routing helpers, language switch logic
+  - content: MDX loaders, schemas, typed frontmatter, content indexing
+  - seo: metadata helpers, JSON-LD helpers, canonical + hreflang helpers
+  - a11y: skip link, focus utilities, keyboard helpers, a11y test utilities
+  - screens: page-level compositions (one per route)
+  - sections: reusable page sections
 
-DO NOT
-- Do not create monolithic components in apps/web.
-- Do not inline styles outside Tailwind + tokens.
-- Do not add placeholder lorem ipsum. Use minimal real copy.
+Boundaries:
+- apps/web MUST NOT contain heavy components, business logic, or copy.
+- apps/web route files must:
+  - import exactly one Screen from libs/screens
+  - optionally import route metadata helpers from libs/seo
+  - remain under 120 lines (hard cap)
+- libs/ui MUST NOT import from libs/content (avoid UI-content coupling).
+- libs/content MUST NOT import from libs/ui (content stays presentation-agnostic).
+- libs/screens may import from libs/ui, libs/content, libs/seo, libs/a11y, libs/i18n.
+- libs/sections may import from libs/ui and libs/i18n; may receive content via props.
+
+File size limits:
+- apps/web route files: <= 120 lines
+- screens: <= 250 lines (split into sections above this)
+- ui components: <= 200 lines (split into subcomponents above this)
+
+============================================================
+2) ROUTING MAP (LOCKED)
+============================================================
+Primary routes:
+- / (Home)
+- /brief (Executive Brief) — canonical hub for internal linking
+- /work
+- /operating-system
+- /writing
+- /contact
+
+Footer-only quiet links:
+- /press
+- /proof
+- /bio (PDF page/link)
+- /faq
+- /now
+
+Rules:
+- Do not add routes without explicit instruction.
+- Do not change route slugs.
+- All routes must have locale variants via next-intl.
+
+============================================================
+3) INTERNATIONALIZATION AND RTL (LOCKED)
+============================================================
+Locales:
+- en, uk, es, he
+RTL:
+- he MUST render with dir="rtl" and lang="he" at the html element level.
+
+Rules:
+- No hardcoded strings in UI. All copy must come from next-intl messages or MDX content.
+- Navigation labels, headings, buttons, and aria-labels must be localized.
+- Provide locale-aware canonical + hreflang.
+- Language switcher must be accessible:
+  - keyboard operable
+  - has aria-label
+  - preserves current path when switching locales
+  - uses correct locale display names
+
+Translation contract:
+- Use stable message keys. Do not churn keys.
+- Prefer a single message namespace per screen and shared namespaces for nav/footer.
+
+============================================================
+4) ACCESSIBILITY (WCAG 2.2 AA BASELINE)
+============================================================
+Required in Shell layout:
+- Skip link to main content
+- Semantic landmarks: header/nav/main/footer
+- Correct heading hierarchy per screen
+- Focus visible (no removal)
+- Reduced motion support
+- Form labels + error messaging (where applicable)
+
+Rules:
+- All interactive elements must be reachable and operable by keyboard.
+- No div buttons. Use semantic buttons/links.
+- All images must have meaningful alt text or empty alt if decorative.
+- Do not introduce color-only meaning. Provide text/aria.
+
+============================================================
+5) DESIGN SYSTEM (TOKENS FIRST)
+============================================================
+- Tailwind is allowed, but must align with tokens.
+- No arbitrary values unless unavoidable.
+- Colors, spacing, and typography must be tokenized in libs/tokens.
+- Support light/dark mode and high-contrast behavior if present in tokens.
+- UI should feel like a minimal briefing room: restrained, clean, readable.
+
+UI libraries:
+- Prefer shadcn/ui (Radix) primitives, wrapped/customized via libs/ui.
+- Keep component APIs clean and typed.
+
+============================================================
+6) SEO AND ENTITY CLARITY (PERSON-FIRST)
+============================================================
+- Home and /brief MUST include Person JSON-LD:
+  - name: Joel Robert Klemmer
+  - alternateName: Joel R. Klemmer
+  - sameAs: include verified links only (no placeholders)
+- Provide stable metadata:
+  - title, description, canonical
+  - open graph basics (no noisy marketing copy)
+- /brief is the internal linking hub: ensure coherent link structure from it.
+
+Rules:
+- No fake awards, clients, or claims.
+- Proof Library entries must be evidence-forward and verifiable where possible.
+
+============================================================
+7) CONTENT SYSTEM (MDX + TYPED FRONTMATTER)
+============================================================
+Content types:
+A) Writing (MDX)
+- frontmatter required: title, date, summary, locale, slug, draft
+- optional: tags, canonical, featured
+
+B) Proof Library (MDX)
+- frontmatter required: claim, evidenceType, date, locale, slug, summary
+- optional: sourceLabel, sourceUrl, artifactRef, jurisdiction, verificationNotes
+
+Rules:
+- No lorem ipsum.
+- Minimal real copy only until full content is ready.
+- Content loading must be locale-aware and deterministic.
+- Build an index for Writing and Proof for listing screens.
+
+============================================================
+8) SECURITY AND PRIVACY BASELINE
+============================================================
+- Add security headers in Next config (HSTS, nosniff, referrer-policy, permissions-policy, baseline CSP).
+- Do not add invasive analytics or tracking.
+- If analytics added later, prefer privacy-forward tools and document event schema.
+
+============================================================
+9) DEPENDENCY AND CHANGE CONTROL
+============================================================
+- Do not add dependencies without clear necessity.
+- Prefer built-in platform features and existing stack.
+- Any new dependency must:
+  - be actively maintained
+  - be widely used
+  - not conflict with Next/Nx
+  - not degrade performance or accessibility
+
+============================================================
+10) TESTING AND QUALITY GATES (SOLO BUILDER)
+============================================================
+- Keep CI gates green:
+  - build
+  - e2e smoke (Playwright)
+  - a11y smoke (axe where configured)
+- Do not merge broken builds.
+
+============================================================
+11) DO NOT (HARD PROHIBITIONS)
+============================================================
+- Do not create monolithic pages in apps/web.
+- Do not bypass i18n with hardcoded strings.
+- Do not add placeholder lorem ipsum.
+- Do not add unverified claims or fake proof.
+- Do not change locked routes or locales.
+- Do not introduce inline styles outside Tailwind + tokens.
+- Do not degrade accessibility for aesthetics.

@@ -8,7 +8,22 @@
     "welcomeTitle": "Bienvenido a web 👋"
   },
   "languageSwitcher": {
-    "label": "Idioma"
+    "label": "Idioma",
+    "action": "Cambiar idioma a {language}"
+  },
+  "shell": {
+    "skipToContent": "Saltar al contenido",
+    "headerLabel": "Encabezado del sitio",
+    "navLabel": "Navegación principal",
+    "footerLabel": "Pie del sitio"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "brief": "Resumen",
+    "work": "Trabajo",
+    "operatingSystem": "Sistema operativo",
+    "writing": "Escritura",
+    "contact": "Contacto"
   },
   "languages": {
     "en": "Inglés",

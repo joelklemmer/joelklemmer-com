@@ -8,7 +8,22 @@
     "welcomeTitle": "ברוך הבא ל-web 👋"
   },
   "languageSwitcher": {
-    "label": "שפה"
+    "label": "שפה",
+    "action": "החלף שפה ל-{language}"
+  },
+  "shell": {
+    "skipToContent": "דלג לתוכן",
+    "headerLabel": "כותרת האתר",
+    "navLabel": "ניווט ראשי",
+    "footerLabel": "כותרת תחתונה של האתר"
+  },
+  "navigation": {
+    "home": "בית",
+    "brief": "תקציר",
+    "work": "עבודה",
+    "operatingSystem": "מערכת הפעלה",
+    "writing": "כתיבה",
+    "contact": "צור קשר"
   },
   "languages": {
     "en": "אנגלית",

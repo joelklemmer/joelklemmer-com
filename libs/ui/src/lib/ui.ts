@@ -3,3 +3,5 @@ export type { BoxProps } from './Box';
 export { Container } from './Container';
 export type { ContainerProps } from './Container';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { Shell } from './Shell';
+export type { ShellProps } from './Shell';

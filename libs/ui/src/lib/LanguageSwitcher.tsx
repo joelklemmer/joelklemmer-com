@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { locales } from '@i18n';
+import Link from 'next/link';
 
 function resolvePathname(pathname: string | null, currentLocale: string) {
   const safePathname = pathname ?? `/${currentLocale}`;
@@ -31,6 +31,7 @@ export function LanguageSwitcher() {
           const restPath = restSegments.length ? `/${restSegments.join('/')}` : '';
           const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
           const isCurrent = targetLocale === locale;
+          const languageLabel = t(`languages.${targetLocale}`);
 
           return (
             <li key={targetLocale}>
@@ -38,9 +39,10 @@ export function LanguageSwitcher() {
                 href={href}
                 lang={targetLocale}
                 aria-current={isCurrent ? 'page' : undefined}
+                aria-label={t('languageSwitcher.action', { language: languageLabel })}
                 className={isCurrent ? 'font-semibold underline' : undefined}
               >
-                {t(`languages.${targetLocale}`)}
+                {languageLabel}
               </Link>
             </li>
           );

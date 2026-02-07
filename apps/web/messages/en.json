@@ -8,7 +8,22 @@
     "welcomeTitle": "Welcome web 👋"
   },
   "languageSwitcher": {
-    "label": "Language"
+    "label": "Language",
+    "action": "Switch language to {language}"
+  },
+  "shell": {
+    "skipToContent": "Skip to content",
+    "headerLabel": "Site header",
+    "navLabel": "Primary navigation",
+    "footerLabel": "Site footer"
+  },
+  "navigation": {
+    "home": "Home",
+    "brief": "Brief",
+    "work": "Work",
+    "operatingSystem": "Operating System",
+    "writing": "Writing",
+    "contact": "Contact"
   },
   "languages": {
     "en": "English",

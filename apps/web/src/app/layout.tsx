@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale, getMessages, getTranslations } from 'next-intl/server';
+import { isRtlLocale } from '@i18n';
 
 export async function generateMetadata() {
   const t = await getTranslations('meta');
@@ -21,7 +22,7 @@ export default async function RootLayout({
 }) {
   const locale = await getLocale();
   const messages = await getMessages();
-  const dir = locale === 'he' ? 'rtl' : 'ltr';
+  const dir = isRtlLocale(locale) ? 'rtl' : 'ltr';
 
   return (
     <html lang={locale} dir={dir}>

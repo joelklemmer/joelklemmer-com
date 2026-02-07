@@ -2,8 +2,19 @@
   "name": "@joelklemmer-com/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev": "nx dev web",
+    "build": "nx build web",
+    "test:e2e": "nx e2e web-e2e",
+    "typecheck": "nx run web:build --skip-nx-cache --configuration=development",
+    "format": "nx format:write",
+    "format:check": "nx format:check"
+  },
   "private": true,
+  "packageManager": "pnpm@10.28.2",
+  "engines": {
+    "node": ">=20.19.0 <21"
+  },
   "devDependencies": {
     "@eslint/js": "^9.8.0",
     "@nx/devkit": "22.4.5",

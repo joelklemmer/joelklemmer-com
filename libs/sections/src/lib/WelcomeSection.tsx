@@ -1,4 +1,4 @@
-import { Box, LanguageSwitcher } from '@ui';
+import { Box } from '@ui';
 import { useTranslations } from 'next-intl';
 
 export function WelcomeSection() {
@@ -10,7 +10,6 @@ export function WelcomeSection() {
         <span>{t('welcomeLead')}</span>
         {t('welcomeTitle')}
       </h1>
-      <LanguageSwitcher />
     </Box>
   );
 }

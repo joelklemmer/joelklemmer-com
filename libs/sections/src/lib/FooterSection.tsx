@@ -10,7 +10,7 @@ export function FooterSection() {
   const t = useTranslations('footer');
 
   return (
-    <Box as="footer" className="footer">
+    <Box className="footer">
       <nav aria-label={t('label')}>
         <ul className="quiet-links">
           {footerLinks.map((slug) => (
