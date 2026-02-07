@@ -6,6 +6,8 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -14,24 +16,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.19.0
-      - name: Enable Corepack
-        run: corepack enable
-      - name: Activate pnpm
-        run: corepack prepare pnpm@10.28.2 --activate
-      - name: Print versions
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+      - name: Versions
         run: |
           node -v
-          corepack -v
           pnpm -v
+          git --version
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Format check
-        run: pnpm nx format:check --all
+        run: pnpm nx format:check --all --verbose
 
       - name: Build web
-        run: pnpm nx build web
+        run: pnpm nx build web --verbose
 
       - name: E2E tests
-        run: pnpm nx e2e web-e2e
+        run: pnpm nx e2e web-e2e --verbose
