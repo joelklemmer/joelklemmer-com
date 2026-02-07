@@ -1,0 +1,23 @@
+Project: JoelKlemmer.com (quiet-authority, proof-forward briefing site)
+
+NON-NEGOTIABLES
+- apps/web route files must be thin: no page over 120 lines.
+- No hardcoded strings in UI. All copy must come from i18n messages or MDX content.
+- All reusable UI goes in libs/ui.
+- Design tokens go in libs/tokens.
+- Content pipeline in libs/content.
+- SEO utilities in libs/seo.
+- Accessibility utilities in libs/a11y.
+- Page composition in libs/screens and libs/sections.
+
+REQUIRED FEATURES
+- next-intl locales: en, uk, es, he with RTL for he.
+- WCAG 2.2 AA: skip link, focus-visible, semantic landmarks, reduced motion.
+- Routes: /, /brief, /work, /operating-system, /writing, /contact
+- Quiet links (footer only): /press, /proof, /bio, /faq, /now
+- Executive Brief (/brief) is the canonical internal hub.
+
+DO NOT
+- Do not create monolithic components in apps/web.
+- Do not inline styles outside Tailwind + tokens.
+- Do not add placeholder lorem ipsum. Use minimal real copy.
