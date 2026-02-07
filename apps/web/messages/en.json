@@ -32,6 +32,10 @@
     "he": "Hebrew"
   },
   "routes": {
+    "home": {
+      "title": "Home",
+      "body": "Overview and updates."
+    },
     "brief": {
       "title": "Brief",
       "body": "A concise overview and highlights."

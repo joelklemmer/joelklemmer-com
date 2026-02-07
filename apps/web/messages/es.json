@@ -32,6 +32,10 @@
     "he": "Hebreo"
   },
   "routes": {
+    "home": {
+      "title": "Inicio",
+      "body": "Resumen y novedades."
+    },
     "brief": {
       "title": "Resumen",
       "body": "Una vista concisa y los puntos clave."

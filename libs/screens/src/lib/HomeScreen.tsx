@@ -1,12 +1,9 @@
-import { Container } from '@ui';
-import { WelcomeSection } from '@sections';
+import { useTranslations } from 'next-intl';
+
+import { PageScreen } from './PageScreen';
 
 export function HomeScreen() {
-  return (
-    <div>
-      <Container>
-        <WelcomeSection />
-      </Container>
-    </div>
-  );
+  const t = useTranslations('routes.home');
+
+  return <PageScreen title={t('title')} body={t('body')} />;
 }
