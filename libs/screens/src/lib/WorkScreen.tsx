@@ -4,7 +4,11 @@ import {
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { getCaseStudies, getPublicRecordList } from '@joelklemmer/content';
+import {
+  getCaseStudyList,
+  getPublicRecordId,
+  getPublicRecordList,
+} from '@joelklemmer/content';
 import { createPageMetadata } from '@joelklemmer/seo';
 import {
   CaseStudySection,
@@ -30,7 +34,7 @@ export async function WorkScreen() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['work']);
   const t = createScopedTranslator(locale, messages, 'work');
-  const caseStudies = await getCaseStudies(locale);
+  const caseStudies = await getCaseStudyList(locale);
   const publicRecords = await getPublicRecordList(locale);
   const labels = {
     context: t('caseStudies.labels.context'),
@@ -47,10 +51,8 @@ export async function WorkScreen() {
         caseStudies.map((study) => {
           const references =
             study.frontmatter.proofRefs?.map((recordId) => {
-              const entry = publicRecords.find((record) =>
-                [record.frontmatter.slug, record.frontmatter.id].includes(
-                  recordId,
-                ),
+              const entry = publicRecords.find(
+                (record) => getPublicRecordId(record.frontmatter) === recordId,
               );
               if (!entry) {
                 return null;
@@ -78,7 +80,11 @@ export async function WorkScreen() {
                 label: t('caseStudies.detailLink'),
                 href: `/${locale}/casestudies/${study.frontmatter.slug}`,
               }}
-              context={study.frontmatter.context}
+              context={
+                Array.isArray(study.frontmatter.context)
+                  ? study.frontmatter.context
+                  : [study.frontmatter.context]
+              }
               constraints={study.frontmatter.constraints}
               actions={study.frontmatter.actions}
               outcomes={study.frontmatter.outcomes}

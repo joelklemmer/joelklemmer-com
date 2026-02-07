@@ -9,12 +9,18 @@
     "detailLink": "Ver detalles del estudio de caso",
     "empty": "No hay estudios de caso publicados para revisión pública.",
     "meta": "Fecha: {date}",
+    "verificationCount": "{count} enlace(s) de verificación",
+    "verification": "Verificación",
+    "supportsClaims": "Respalda afirmaciones",
+    "narrativeNotes": "Notas narrativas",
     "labels": {
       "context": "Contexto",
       "constraints": "Restricciones",
       "actions": "Acciones",
       "outcomes": "Resultados",
-      "references": "Referencias del Registro público"
+      "references": "Referencias del Registro público",
+      "date": "Fecha",
+      "tags": "Etiquetas"
     }
   }
 }

@@ -9,12 +9,18 @@
     "detailLink": "View case study details",
     "empty": "No case studies are published for public review.",
     "meta": "Date: {date}",
+    "verificationCount": "{count} verification link(s)",
+    "verification": "Verification",
+    "supportsClaims": "Supports claims",
+    "narrativeNotes": "Narrative notes",
     "labels": {
       "context": "Context",
       "constraints": "Constraints",
       "actions": "Actions",
       "outcomes": "Outcomes",
-      "references": "Public Record references"
+      "references": "Public Record references",
+      "date": "Date",
+      "tags": "Tags"
     }
   }
 }

@@ -10,6 +10,7 @@ import {
   CONTACT_PATHWAY_IDS,
   getArtifactsManifest,
   getBookId,
+  getCaseStudyId,
   getMediaManifest,
   getPublicRecordId,
   institutionalPageFrontmatterSchema,
@@ -69,11 +70,24 @@ const caseStudyEntries = getMdxFiles(caseStudyDir).map((filePath) => {
     errors.push(parsed.error);
     return null;
   }
-  if (!content.trim()) {
-    errors.push(`${filePath}: body content is required`);
-  }
   return { frontmatter: parsed.data, content };
 });
+
+const caseStudyValidEntries = caseStudyEntries.filter(
+  (e): e is NonNullable<typeof e> => e != null,
+);
+const caseStudyIds = caseStudyValidEntries.map((e) =>
+  getCaseStudyId(e.frontmatter),
+);
+const caseStudyIdCounts = new Map<string, number>();
+for (const id of caseStudyIds) {
+  caseStudyIdCounts.set(id, (caseStudyIdCounts.get(id) ?? 0) + 1);
+}
+for (const [id, count] of caseStudyIdCounts) {
+  if (count > 1) {
+    errors.push(`Duplicate case study id: ${id} (used ${count} times)`);
+  }
+}
 
 const publicRecordDir = existsSync(path.join(contentRoot, 'public-record'))
   ? path.join(contentRoot, 'public-record')
@@ -157,14 +171,22 @@ for (const [id, count] of recordIdCounts) {
 }
 const publicRecordIds = new Set(recordIds);
 
-caseStudyEntries.filter(Boolean).forEach((entry) => {
-  entry?.frontmatter.proofRefs.forEach((ref) => {
+const claimIds = new Set(claimRegistry.map((c) => c.id));
+caseStudyValidEntries.forEach((entry) => {
+  for (const ref of entry.frontmatter.proofRefs) {
     if (!publicRecordIds.has(ref)) {
       errors.push(
-        `Case study ${entry.frontmatter.slug} references missing public record id: ${ref}`,
+        `Case study ${entry.frontmatter.slug} proofRef references missing public record id: ${ref}`,
       );
     }
-  });
+  }
+  for (const ref of entry.frontmatter.claimRefs ?? []) {
+    if (!claimIds.has(ref)) {
+      errors.push(
+        `Case study ${entry.frontmatter.slug} claimRef references missing claim id: ${ref}`,
+      );
+    }
+  }
 });
 
 // Books: schema, unique bookId, proofRefs → Public Record

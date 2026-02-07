@@ -5,20 +5,35 @@ const localeSchema = z.enum(locales);
 
 const nonEmptyString = z.string().min(1);
 const nonEmptyStringArray = z.array(nonEmptyString).min(1);
+const dateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD');
 
+/** Case study frontmatter: institutional evidence with proofRefs and optional claimRefs. */
 export const caseStudyFrontmatterSchema = z.object({
+  id: nonEmptyString.optional(),
   title: nonEmptyString,
-  context: nonEmptyStringArray,
+  date: dateStringSchema,
+  locale: localeSchema.default('en'),
+  slug: nonEmptyString,
+  summary: nonEmptyString,
+  context: nonEmptyString,
   constraints: nonEmptyStringArray,
   actions: nonEmptyStringArray,
   outcomes: nonEmptyStringArray,
   proofRefs: nonEmptyStringArray,
-  date: nonEmptyString.optional(),
-  locale: localeSchema,
-  slug: nonEmptyString,
-  summary: nonEmptyString.optional(),
+  claimRefs: z.array(nonEmptyString).optional(),
+  tags: z.array(nonEmptyString).max(6).optional(),
+  featured: z.boolean().optional(),
+  order: z.number().optional(),
   canonical: nonEmptyString.optional(),
 });
+
+/** Stable case study ID: frontmatter.id if set, else slug. Must be unique across collection. */
+export function getCaseStudyId(frontmatter: {
+  id?: string;
+  slug: string;
+}): string {
+  return frontmatter.id ?? frontmatter.slug;
+}
 
 const artifactTypeLike = z.string().min(1); // enum-like: Recovery plan summary, Report, etc.
 export const publicRecordFrontmatterSchema = z.object({
@@ -41,8 +56,6 @@ export function getPublicRecordId(frontmatter: {
 }): string {
   return frontmatter.id ?? frontmatter.slug;
 }
-
-const dateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD');
 
 /** Governed institutional page frontmatter (privacy, terms, accessibility, security). */
 export const institutionalPageFrontmatterSchema = z

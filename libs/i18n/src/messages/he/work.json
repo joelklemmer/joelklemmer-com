@@ -9,12 +9,18 @@
     "detailLink": "צפייה בפרטי מחקר מקרה",
     "empty": "אין מחקרי מקרה זמינים לסקירה ציבורית.",
     "meta": "תאריך: {date}",
+    "verificationCount": "{count} קישור(ים) לאימות",
+    "verification": "אימות",
+    "supportsClaims": "תומך בטענות",
+    "narrativeNotes": "הערות נרטיביות",
     "labels": {
       "context": "הקשר",
       "constraints": "מגבלות",
       "actions": "פעולות",
       "outcomes": "תוצאות",
-      "references": "הפניות לרישום הציבורי"
+      "references": "הפניות לרישום הציבורי",
+      "date": "תאריך",
+      "tags": "תגיות"
     }
   }
 }

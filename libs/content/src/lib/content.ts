@@ -9,6 +9,7 @@ import {
   bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
   getBookId,
+  getCaseStudyId,
   getPublicRecordId,
   institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
@@ -334,20 +335,51 @@ export async function getCaseStudyEntries() {
   return entries;
 }
 
-export async function getCaseStudies(locale: AppLocale) {
+export async function getCaseStudyList(locale: AppLocale) {
   const entries = await getCaseStudyEntries();
   return sortByDateDesc(filterByLocale(entries, locale));
 }
 
-export async function getCaseStudy(locale: AppLocale, slug: string) {
+/** @deprecated Use getCaseStudyList. */
+export async function getCaseStudies(locale: AppLocale) {
+  return getCaseStudyList(locale);
+}
+
+export async function getCaseStudyEntry(locale: AppLocale, slug: string) {
   const entries = await getCaseStudyEntries();
   const localized = filterByLocale(entries, locale);
   return localized.find((entry) => entry.frontmatter.slug === slug) ?? null;
 }
 
+/** @deprecated Use getCaseStudyEntry. */
+export async function getCaseStudy(locale: AppLocale, slug: string) {
+  return getCaseStudyEntry(locale, slug);
+}
+
+export async function getCaseStudyByIdOrSlug(
+  locale: AppLocale,
+  idOrSlug: string,
+) {
+  const entries = await getCaseStudyEntries();
+  const localized = filterByLocale(entries, locale);
+  return (
+    localized.find(
+      (entry) =>
+        entry.frontmatter.slug === idOrSlug ||
+        getCaseStudyId(entry.frontmatter) === idOrSlug,
+    ) ?? null
+  );
+}
+
 export async function getCaseStudySlugs() {
   const entries = await getCaseStudyEntries();
   return Array.from(new Set(entries.map((entry) => entry.frontmatter.slug)));
+}
+
+/** All stable case study IDs (id ?? slug) across the collection, for integrity checks. */
+export async function getAllCaseStudyIds(): Promise<string[]> {
+  const entries = await getCaseStudyEntries();
+  return entries.map((e) => getCaseStudyId(e.frontmatter));
 }
 
 /** Case studies that reference this public record (proofRefs). Returns up to 6 for display. */
@@ -358,6 +390,21 @@ export async function getCaseStudiesByRecordId(
   const entries = await getCaseStudyEntries();
   const referring = entries.filter((e) =>
     e.frontmatter.proofRefs.includes(recordId),
+  );
+  return referring.slice(0, limit).map((e) => ({
+    slug: e.frontmatter.slug,
+    title: e.frontmatter.title,
+  }));
+}
+
+/** Case studies that reference this claim (claimRefs). Returns up to 6 for display. */
+export async function getCaseStudiesByClaimId(
+  claimId: string,
+  limit = 6,
+): Promise<Array<{ slug: string; title: string }>> {
+  const entries = await getCaseStudyEntries();
+  const referring = entries.filter((e) =>
+    e.frontmatter.claimRefs?.includes(claimId),
   );
   return referring.slice(0, limit).map((e) => ({
     slug: e.frontmatter.slug,

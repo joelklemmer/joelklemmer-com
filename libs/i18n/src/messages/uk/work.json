@@ -9,12 +9,18 @@
     "detailLink": "Переглянути деталі кейс-стаді",
     "empty": "Публічні кейс-стаді ще не опубліковано.",
     "meta": "Дата: {date}",
+    "verificationCount": "{count} посилань на верифікацію",
+    "verification": "Верифікація",
+    "supportsClaims": "Підтримує твердження",
+    "narrativeNotes": "Наративні примітки",
     "labels": {
       "context": "Контекст",
       "constraints": "Обмеження",
       "actions": "Дії",
       "outcomes": "Результати",
-      "references": "Посилання на Публічний реєстр"
+      "references": "Посилання на Публічний реєстр",
+      "date": "Дата",
+      "tags": "Теги"
     }
   }
 }
