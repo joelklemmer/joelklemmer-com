@@ -1,14 +1,65 @@
 {
-  "hero": {
-    "title": "Contacto",
-    "lede": "Canal de acceso controlado para consultas verificadas."
+  "title": "Contacto",
+  "lede": "Intake controlado para solicitudes de rol, medios y registro público.",
+  "pathwaySelectorLabel": "Seleccione un motivo de contacto",
+  "pathways": {
+    "recruiting": {
+      "label": "Reclutamiento ejecutivo / roles CPO",
+      "description": "Consultas sobre oportunidades ejecutivas o de CPO.",
+      "subjectTemplate": "Consulta de rol - Empresa - Su nombre",
+      "cta": "Enviar consulta de rol por correo"
+    },
+    "board": {
+      "label": "Consejo / asesoría",
+      "description": "Consultas sobre roles en consejos o asesoría.",
+      "subjectTemplate": "Consulta consejo o asesoría - Org - Su nombre",
+      "cta": "Enviar consulta de consejo por correo"
+    },
+    "media": {
+      "label": "Medios / prensa",
+      "description": "Solicitudes de medios y prensa.",
+      "subjectTemplate": "Solicitud de medios - Medio - Tema",
+      "cta": "Enviar solicitud de medios por correo"
+    },
+    "publicRecord": {
+      "label": "Corrección de registro público / solicitud de verificación",
+      "description": "Solicitud de corrección o verificación de un registro público. Incluya la URL del registro y la corrección propuesta con evidencia.",
+      "subjectTemplate": "Corrección de registro público - Slug del registro - Su nombre",
+      "cta": "Enviar solicitud de corrección por correo"
+    },
+    "general": {
+      "label": "General",
+      "description": "Otras consultas.",
+      "subjectTemplate": "Contacto - Tema - Su nombre",
+      "cta": "Enviar mensaje por correo"
+    }
   },
-  "methods": {
-    "title": "Protocolo de acceso",
-    "items": [
-      "Revise el Informe ejecutivo para alinear alcance",
-      "Envie una nota de alcance concisa con afiliacion verificada",
-      "Solicite un canal seguro cuando sea necesario"
+  "guidance": {
+    "heading": "Cómo escribir un buen mensaje",
+    "bullets": [
+      "Indique su nombre y afiliación",
+      "Elija la vía que mejor coincida con su solicitud",
+      "Incluya enlaces o referencias cuando sea relevante",
+      "Para correcciones de registro público: incluya URL del registro, corrección propuesta y evidencia"
     ]
+  },
+  "mailto": {
+    "heading": "Contactar por correo",
+    "buttonLabel": "Abrir correo",
+    "bodyTemplateLabel": "Campos sugeridos para incluir en su mensaje"
+  },
+  "requiredInfo": {
+    "name": "Su nombre",
+    "organization": "Organización",
+    "role": "Rol",
+    "reason": "Motivo del contacto",
+    "links": "Enlaces relevantes",
+    "outlet": "Medio o publicación",
+    "topic": "Tema",
+    "deadline": "Fecha límite si aplica",
+    "recordUrl": "URL del registro",
+    "proposedCorrection": "Corrección propuesta",
+    "evidence": "Evidencia",
+    "message": "Mensaje"
   }
 }

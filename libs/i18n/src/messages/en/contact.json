@@ -1,14 +1,65 @@
 {
-  "hero": {
-    "title": "Contact",
-    "lede": "Controlled access channel for verified inquiries."
+  "title": "Contact",
+  "lede": "Controlled intake for role, media, and public record requests.",
+  "pathwaySelectorLabel": "Select a contact reason",
+  "pathways": {
+    "recruiting": {
+      "label": "Executive recruiting / CPO roles",
+      "description": "Inquiries about executive or CPO opportunities.",
+      "subjectTemplate": "Role inquiry - Company - Your name",
+      "cta": "Send role inquiry by email"
+    },
+    "board": {
+      "label": "Board / advisory",
+      "description": "Board or advisory role inquiries.",
+      "subjectTemplate": "Board or advisory inquiry - Org - Your name",
+      "cta": "Send board inquiry by email"
+    },
+    "media": {
+      "label": "Media / press",
+      "description": "Media and press requests.",
+      "subjectTemplate": "Media request - Outlet - Topic",
+      "cta": "Send media request by email"
+    },
+    "publicRecord": {
+      "label": "Public record correction / verification request",
+      "description": "Request a correction or verification of a public record. Include the record URL and proposed correction with evidence.",
+      "subjectTemplate": "Public record correction - Record slug - Your name",
+      "cta": "Send correction request by email"
+    },
+    "general": {
+      "label": "General",
+      "description": "Other inquiries.",
+      "subjectTemplate": "Contact - Topic - Your name",
+      "cta": "Send message by email"
+    }
   },
-  "methods": {
-    "title": "Access protocol",
-    "items": [
-      "Review the Executive Brief for scope alignment",
-      "Send a concise scope note with verified affiliation",
-      "Request a secure channel when required"
+  "guidance": {
+    "heading": "How to write a good message",
+    "bullets": [
+      "State your name and affiliation",
+      "Choose the pathway that best matches your request",
+      "Include links or references where relevant",
+      "For public record corrections: include record URL, proposed correction, and evidence"
     ]
+  },
+  "mailto": {
+    "heading": "Contact by email",
+    "buttonLabel": "Open email",
+    "bodyTemplateLabel": "Suggested fields to include in your message"
+  },
+  "requiredInfo": {
+    "name": "Your name",
+    "organization": "Organization",
+    "role": "Role",
+    "reason": "Reason for contact",
+    "links": "Relevant links",
+    "outlet": "Outlet or publication",
+    "topic": "Topic",
+    "deadline": "Deadline if applicable",
+    "recordUrl": "Record URL",
+    "proposedCorrection": "Proposed correction",
+    "evidence": "Evidence",
+    "message": "Message"
   }
 }

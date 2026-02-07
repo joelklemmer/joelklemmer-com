@@ -2,7 +2,7 @@ import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 import { locales } from '@joelklemmer/i18n';
-import { claimRegistry } from '@joelklemmer/content/validate';
+import { claimRegistry, contactPathways } from '@joelklemmer/content/validate';
 
 const pageSchema = z.object({
   title: z.string().min(1),
@@ -219,6 +219,51 @@ const institutionalSchema = z
   })
   .passthrough();
 
+const pathwayKeysSchema = z.object({
+  label: z.string().min(1),
+  description: z.string().min(1),
+  subjectTemplate: z.string().min(1),
+  cta: z.string().min(1),
+});
+
+const contactSchema = z
+  .object({
+    title: z.string().min(1),
+    lede: z.string().min(1),
+    pathwaySelectorLabel: z.string().min(1),
+    pathways: z.object({
+      recruiting: pathwayKeysSchema,
+      board: pathwayKeysSchema,
+      media: pathwayKeysSchema,
+      publicRecord: pathwayKeysSchema,
+      general: pathwayKeysSchema,
+    }),
+    guidance: z.object({
+      heading: z.string().min(1),
+      bullets: z.array(z.string().min(1)),
+    }),
+    mailto: z.object({
+      heading: z.string().min(1),
+      buttonLabel: z.string().min(1),
+      bodyTemplateLabel: z.string().min(1),
+    }),
+    requiredInfo: z.object({
+      name: z.string().min(1),
+      organization: z.string().min(1),
+      role: z.string().min(1),
+      reason: z.string().min(1),
+      links: z.string().min(1),
+      outlet: z.string().min(1),
+      topic: z.string().min(1),
+      deadline: z.string().min(1),
+      recordUrl: z.string().min(1),
+      proposedCorrection: z.string().min(1),
+      evidence: z.string().min(1),
+      message: z.string().min(1),
+    }),
+  })
+  .passthrough();
+
 const errors: string[] = [];
 const messagesRoot = path.join(
   process.cwd(),
@@ -278,6 +323,28 @@ function validateBriefClaimKeys() {
   }
 }
 
+function validateContactPathwayKeys() {
+  for (const locale of locales) {
+    const filePath = path.join(messagesRoot, locale, 'contact.json');
+    const contact = readJson(filePath) as Record<string, unknown>;
+    for (const pathway of contactPathways) {
+      for (const key of [
+        pathway.labelKey,
+        pathway.descriptionKey,
+        pathway.subjectTemplateKey,
+        pathway.ctaKey,
+      ]) {
+        const value = getByPath(contact, key);
+        if (typeof value !== 'string' || !value.trim()) {
+          errors.push(
+            `${filePath}: missing or empty contact.${key} for pathway ${pathway.id}`,
+          );
+        }
+      }
+    }
+  }
+}
+
 locales.forEach((locale) => {
   validateNamespace(locale, 'common', commonSchema);
   validateNamespace(locale, 'nav', navSchema);
@@ -287,8 +354,10 @@ locales.forEach((locale) => {
   validateNamespace(locale, 'books', booksSchema);
   validateNamespace(locale, 'publicRecord', publicRecordSchema);
   validateNamespace(locale, 'institutional', institutionalSchema);
+  validateNamespace(locale, 'contact', contactSchema);
 });
 validateBriefClaimKeys();
+validateContactPathwayKeys();
 
 if (errors.length) {
   throw new Error(`i18n validation failed:\n- ${errors.join('\n- ')}`);

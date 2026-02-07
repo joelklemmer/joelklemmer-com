@@ -6,6 +6,8 @@ import {
   bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
   claimRegistry,
+  contactPathways,
+  CONTACT_PATHWAY_IDS,
   getArtifactsManifest,
   getBookId,
   getMediaManifest,
@@ -217,6 +219,36 @@ try {
   getMediaManifest();
 } catch (error) {
   errors.push((error as Error).message);
+}
+
+// Contact pathways: exact ids, unique, sorted by priorityOrder (i18n keys validated in i18n-validate)
+const pathwayIds = contactPathways.map((p) => p.id);
+const expectedIds = [...CONTACT_PATHWAY_IDS].sort();
+if (pathwayIds.length !== expectedIds.length) {
+  errors.push(
+    `Contact pathways: expected ${expectedIds.length} entries, got ${pathwayIds.length}`,
+  );
+}
+const uniqueIds = new Set(pathwayIds);
+if (uniqueIds.size !== pathwayIds.length) {
+  errors.push('Contact pathways: duplicate ids');
+}
+for (const id of expectedIds) {
+  if (!pathwayIds.includes(id)) {
+    errors.push(`Contact pathways: missing required id: ${id}`);
+  }
+}
+const sortedByIds = [...contactPathways]
+  .sort((a, b) => a.priorityOrder - b.priorityOrder)
+  .map((p) => p.id);
+const expectedOrder = [...CONTACT_PATHWAY_IDS];
+if (
+  sortedByIds.length !== expectedOrder.length ||
+  sortedByIds.some((id, i) => id !== expectedOrder[i])
+) {
+  errors.push(
+    'Contact pathways: registry must be sorted by priorityOrder and match CONTACT_PATHWAY_IDS order',
+  );
 }
 
 if (errors.length) {

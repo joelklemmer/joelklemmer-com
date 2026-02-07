@@ -146,6 +146,25 @@ export interface PersonJsonLdProps {
   sameAs?: string[];
 }
 
+/**
+ * Build a mailto URL with encoded subject and optional body.
+ * Uses encodeURIComponent for subject and body. Safe for use in links; no external services.
+ */
+export function buildMailtoUrl(
+  email: string | undefined,
+  subject: string,
+  body?: string,
+): string {
+  const params = new URLSearchParams();
+  params.set('subject', subject);
+  if (body) {
+    params.set('body', body);
+  }
+  const query = params.toString();
+  const base = email ? `mailto:${email}` : 'mailto:';
+  return query ? `${base}?${query}` : base;
+}
+
 export function getPersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps = {}) {
   const url = normalizeBaseUrl(baseUrl);
   return {
