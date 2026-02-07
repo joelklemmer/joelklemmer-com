@@ -15,7 +15,7 @@ export function Shell({
   headerContent,
   navContent,
   footerContent,
-  mainId = 'content',
+  mainId = 'main-content',
 }: ShellProps) {
   const a11y = useTranslations('a11y');
 

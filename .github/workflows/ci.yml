@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
+      NX_CLOUD: "false"
+      PLAYWRIGHT_BROWSERS_PATH: "0"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,16 +40,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Format check
-        run: pnpm nx format:check --all --verbose
+        run: NX_CLOUD=false pnpm nx format:check --all --verbose
 
       - name: Build web
-        run: pnpm nx build web --verbose
+        run: NX_CLOUD=false pnpm nx build web --verbose
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
       - name: E2E tests
-        run: pnpm nx e2e web-e2e --verbose
+        run: NX_CLOUD=false pnpm nx e2e web-e2e --verbose
 
       - name: Failure diagnostics
         if: failure()
