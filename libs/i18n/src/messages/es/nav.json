@@ -1,16 +1,8 @@
 {
   "home": "Inicio",
-  "brief": "Resumen",
+  "brief": "Brief",
   "work": "Trabajo",
   "operatingSystem": "Sistema operativo",
   "writing": "Escritura",
-  "contact": "Contacto",
-  "quietLinks": {
-    "label": "Enlaces del pie",
-    "press": "Prensa",
-    "proof": "Pruebas",
-    "bio": "Bio",
-    "faq": "FAQ",
-    "now": "Ahora"
-  }
+  "contact": "Contacto"
 }

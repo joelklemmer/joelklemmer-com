@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "title": "Trabajo",
+    "lede": "Entrega discreta para programas complejos."
+  },
+  "areas": {
+    "title": "Areas de enfoque",
+    "items": [
+      "Planeacion estrategica y recuperacion de programas",
+      "Postura de seguridad y resiliencia operativa",
+      "Alineacion ejecutiva y claridad de decisiones"
+    ]
+  }
+}

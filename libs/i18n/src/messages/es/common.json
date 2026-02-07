@@ -1,12 +1,18 @@
 {
-  "meta": {
-    "title": "Bienvenido",
-    "description": "Next.js con internacionalización"
-  },
+  "wordmark": "Joel R. Klemmer",
+  "tagline": "Autoridad discreta y briefing con pruebas",
   "languages": {
     "en": "English",
-    "uk": "Українська",
+    "uk": "Ukrainian",
     "es": "Español",
-    "he": "עברית"
+    "he": "Hebrew"
+  },
+  "a11y": {
+    "skipToContent": "Saltar al contenido principal",
+    "headerLabel": "Encabezado del sitio",
+    "navLabel": "Navegacion principal",
+    "footerLabel": "Pie de pagina",
+    "languageSwitcherLabel": "Opciones de idioma",
+    "languageSwitcherAction": "Cambiar idioma a {language}"
   }
 }

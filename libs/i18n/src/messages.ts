@@ -1,17 +1,60 @@
+import { createTranslator } from 'next-intl';
 import type { AppLocale } from './locales';
 
-export async function loadMessages(locale: AppLocale) {
-  const [nav, a11y, routes, common] = await Promise.all([
-    import(`./messages/${locale}/nav.json`),
-    import(`./messages/${locale}/a11y.json`),
-    import(`./messages/${locale}/routes.json`),
-    import(`./messages/${locale}/common.json`),
-  ]);
+export const messageNamespaces = [
+  'common',
+  'nav',
+  'footer',
+  'meta',
+  'home',
+  'brief',
+  'work',
+  'operatingSystem',
+  'writing',
+  'contact',
+  'quiet',
+] as const;
 
-  return {
-    nav: nav.default,
-    a11y: a11y.default,
-    routes: routes.default,
-    common: common.default,
-  };
+export type MessageNamespace = (typeof messageNamespaces)[number];
+
+export async function loadMessages(
+  locale: AppLocale,
+  namespaces: readonly MessageNamespace[],
+) {
+  const imports = await Promise.all(
+    namespaces.map(
+      (namespace) => import(`./messages/${locale}/${namespace}.json`),
+    ),
+  );
+
+  return Object.fromEntries(
+    namespaces.map((namespace, index) => [
+      namespace,
+      imports[index]?.default ?? {},
+    ]),
+  ) as Record<MessageNamespace, Record<string, unknown>>;
+}
+
+export function mergeMessages(
+  ...messageSets: Array<Record<string, Record<string, unknown>>>
+) {
+  return messageSets.reduce(
+    (acc, messages) => ({
+      ...acc,
+      ...messages,
+    }),
+    {},
+  );
+}
+
+export function createScopedTranslator(
+  locale: AppLocale,
+  messages: Record<string, Record<string, unknown>>,
+  namespace: string,
+) {
+  return createTranslator({
+    locale,
+    messages: messages as Record<string, any>,
+    namespace,
+  });
 }

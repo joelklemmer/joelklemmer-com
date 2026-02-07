@@ -1,25 +1,31 @@
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { focusRingClass } from '@joelklemmer/a11y';
 
-import { Box } from '@ui';
+export interface FooterLinkItem {
+  href: string;
+  label: string;
+}
 
-const footerLinks = ['press', 'proof', 'bio', 'faq', 'now'] as const;
+export interface FooterSectionProps {
+  label: string;
+  links: FooterLinkItem[];
+}
 
-export function FooterSection() {
-  const locale = useLocale();
-  const t = useTranslations('nav');
-
+export function FooterSection({ label, links }: FooterSectionProps) {
   return (
-    <Box className="footer">
-      <nav aria-label={t('quietLinks.label')}>
-        <ul className="quiet-links">
-          {footerLinks.map((slug) => (
-            <li key={slug}>
-              <Link href={`/${locale}/${slug}`}>{t(`quietLinks.${slug}`)}</Link>
-            </li>
-          ))}
-        </ul>
-      </nav>
-    </Box>
+    <nav aria-label={label}>
+      <ul className="flex flex-wrap gap-4 text-sm text-muted">
+        {links.map((link) => (
+          <li key={link.href}>
+            <Link
+              href={link.href}
+              className={`${focusRingClass} rounded-sm px-1 py-0.5 hover:text-text`}
+            >
+              {link.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

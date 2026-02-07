@@ -1,0 +1,22 @@
+{
+  "press": {
+    "title": "Prensa",
+    "lede": "Kit de prensa y material de referencia."
+  },
+  "proof": {
+    "title": "Biblioteca de pruebas",
+    "lede": "Afirmaciones con evidencia y artefactos."
+  },
+  "bio": {
+    "title": "Bio",
+    "lede": "Biografia profesional breve."
+  },
+  "faq": {
+    "title": "FAQ",
+    "lede": "Preguntas comunes con respuestas directas."
+  },
+  "now": {
+    "title": "Ahora",
+    "lede": "Enfoque actual y ritmo operativo."
+  }
+}

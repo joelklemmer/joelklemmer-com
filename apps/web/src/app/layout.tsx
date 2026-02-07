@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 
 import { getLocale } from 'next-intl/server';
 
-import { isRtlLocale } from '@i18n';
+import { isRtlLocale } from '@joelklemmer/i18n';
 
 export default async function RootLayout({
   children,

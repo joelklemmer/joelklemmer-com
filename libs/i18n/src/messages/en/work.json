@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "title": "Work",
+    "lede": "Quiet delivery for complex programs."
+  },
+  "areas": {
+    "title": "Focus areas",
+    "items": [
+      "Strategic planning and program recovery",
+      "Security posture and operational resilience",
+      "Executive alignment and decision clarity"
+    ]
+  }
+}

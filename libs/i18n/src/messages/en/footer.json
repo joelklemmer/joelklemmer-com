@@ -1,0 +1,10 @@
+{
+  "label": "Quiet links",
+  "links": {
+    "press": "Press",
+    "proof": "Proof",
+    "bio": "Bio",
+    "faq": "FAQ",
+    "now": "Now"
+  }
+}

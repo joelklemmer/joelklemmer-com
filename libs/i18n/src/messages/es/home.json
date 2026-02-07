@@ -1,0 +1,17 @@
+{
+  "hero": {
+    "title": "Autoridad discreta para trabajo complejo",
+    "lede": "Briefing para estrategia, seguridad y entrega.",
+    "cta": "Leer el brief"
+  },
+  "proof": {
+    "title": "Notas con pruebas",
+    "lede": "Evidencia primero, breve y directo.",
+    "cta": "Ver pruebas"
+  },
+  "writing": {
+    "title": "Escritura seleccionada",
+    "lede": "Notas de campo y actualizaciones operativas.",
+    "cta": "Ver escritura"
+  }
+}

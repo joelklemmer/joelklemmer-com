@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "title": "Contacto",
+    "lede": "Ingreso de brief y coordinacion."
+  },
+  "methods": {
+    "title": "Como empezar",
+    "items": [
+      "Revise el brief para confirmar alineacion",
+      "Envie un resumen de alcance por correo",
+      "Solicite un canal seguro si es necesario"
+    ]
+  }
+}

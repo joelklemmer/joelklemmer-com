@@ -1,14 +1,18 @@
-import { useTranslations } from 'next-intl';
+import { getLocale } from 'next-intl/server';
+import { type AppLocale } from '@joelklemmer/i18n';
+import { getPressKit, renderMdx } from '@joelklemmer/content';
+import { QuietScreen, createQuietMetadata } from './QuietScreen';
 
-import { PageScreen } from './PageScreen';
+export async function generateMetadata() {
+  return createQuietMetadata('press');
+}
 
-export function PressScreen() {
-  const t = useTranslations('routes');
+export const pressMetadata = generateMetadata;
 
-  return (
-    <PageScreen
-      title={t('screens.press.title')}
-      body={t('screens.press.lede')}
-    />
-  );
+export async function PressScreen() {
+  const locale = (await getLocale()) as AppLocale;
+  const entry = await getPressKit(locale);
+  const content = entry ? await renderMdx(entry.content) : null;
+
+  return <QuietScreen pageKey="press" content={content} />;
 }

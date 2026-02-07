@@ -1,4 +1,6 @@
-import { defaultLocale, locales, type AppLocale } from '@i18n';
+import { createElement } from 'react';
+import type { Metadata } from 'next';
+import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 
 const DEFAULT_SITE_URL = 'http://localhost:3000';
 
@@ -84,10 +86,75 @@ export function hreflangAlternates(
     pathname,
     locales: supportedLocales,
     defaultLocale: fallbackLocale,
-  });
+  }) as Record<string, string>;
 
   return Object.entries(hrefLangs).map(([hrefLang, href]) => ({
     hrefLang: hrefLang as HreflangAlternate['hrefLang'],
     href,
   }));
+}
+
+export interface PageMetadataInput {
+  title: string;
+  description: string;
+  locale: AppLocale;
+  pathname?: string;
+  baseUrl?: string;
+}
+
+export function createPageMetadata({
+  title,
+  description,
+  locale,
+  pathname = '/',
+  baseUrl,
+}: PageMetadataInput): Metadata {
+  const canonical = canonicalUrl(locale, pathname, baseUrl);
+  const languages = Object.fromEntries(
+    hreflangAlternates(pathname, baseUrl).map((alt) => [
+      alt.hrefLang,
+      alt.href,
+    ]),
+  );
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical,
+      languages,
+    },
+    openGraph: {
+      title,
+      description,
+      url: canonical,
+      siteName: title,
+      locale,
+      type: 'website',
+    },
+  };
+}
+
+export interface PersonJsonLdProps {
+  baseUrl?: string;
+}
+
+export function getPersonJsonLd({ baseUrl }: PersonJsonLdProps = {}) {
+  const url = normalizeBaseUrl(baseUrl);
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Joel Robert Klemmer',
+    alternateName: 'Joel R. Klemmer',
+    url,
+    sameAs: [],
+  };
+}
+
+export function PersonJsonLd({ baseUrl }: PersonJsonLdProps) {
+  const jsonLd = getPersonJsonLd({ baseUrl });
+  return createElement('script', {
+    type: 'application/ld+json',
+    dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },
+  });
 }

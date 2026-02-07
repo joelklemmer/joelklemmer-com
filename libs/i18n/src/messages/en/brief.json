@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "title": "Executive brief",
+    "lede": "Canonical hub for scope, proof, and current work."
+  },
+  "focus": {
+    "title": "Current focus",
+    "items": [
+      "Decision support for high stakes programs",
+      "Security and resilience for modern operations",
+      "Clear delivery paths with verifiable outcomes"
+    ]
+  },
+  "links": {
+    "title": "Primary routes",
+    "work": {
+      "label": "Work",
+      "description": "Focus areas and current engagements."
+    },
+    "operatingSystem": {
+      "label": "Operating system",
+      "description": "How work is framed and verified."
+    },
+    "writing": {
+      "label": "Writing",
+      "description": "Notes and briefings in progress."
+    },
+    "contact": {
+      "label": "Contact",
+      "description": "Briefing intake and coordination."
+    }
+  }
+}

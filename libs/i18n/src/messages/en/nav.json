@@ -2,15 +2,7 @@
   "home": "Home",
   "brief": "Brief",
   "work": "Work",
-  "operatingSystem": "Operating System",
+  "operatingSystem": "Operating system",
   "writing": "Writing",
-  "contact": "Contact",
-  "quietLinks": {
-    "label": "Footer links",
-    "press": "Press",
-    "proof": "Proof",
-    "bio": "Bio",
-    "faq": "FAQ",
-    "now": "Now"
-  }
+  "contact": "Contact"
 }

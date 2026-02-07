@@ -1,0 +1,14 @@
+{
+  "hero": {
+    "title": "Contact",
+    "lede": "Briefing intake and coordination."
+  },
+  "methods": {
+    "title": "How to start",
+    "items": [
+      "Review the brief to confirm alignment",
+      "Send a concise scope note by email",
+      "Request a secure channel if needed"
+    ]
+  }
+}

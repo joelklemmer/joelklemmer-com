@@ -1,0 +1,33 @@
+{
+  "hero": {
+    "title": "Brief ejecutivo",
+    "lede": "Centro canonico para alcance, pruebas y trabajo actual."
+  },
+  "focus": {
+    "title": "Enfoque actual",
+    "items": [
+      "Apoyo a decisiones en programas de alto impacto",
+      "Seguridad y resiliencia operativa",
+      "Rutas claras de entrega con verificacion"
+    ]
+  },
+  "links": {
+    "title": "Rutas principales",
+    "work": {
+      "label": "Trabajo",
+      "description": "Enfoques y encargos actuales."
+    },
+    "operatingSystem": {
+      "label": "Sistema operativo",
+      "description": "Como se define y verifica el trabajo."
+    },
+    "writing": {
+      "label": "Escritura",
+      "description": "Notas y briefs en curso."
+    },
+    "contact": {
+      "label": "Contacto",
+      "description": "Ingreso de brief y coordinacion."
+    }
+  }
+}

@@ -1,16 +1,8 @@
 {
   "home": "Головна",
-  "brief": "Коротко",
+  "brief": "Бриф",
   "work": "Робота",
   "operatingSystem": "Операційна система",
-  "writing": "Писання",
-  "contact": "Контакти",
-  "quietLinks": {
-    "label": "Посилання внизу",
-    "press": "Преса",
-    "proof": "Докази",
-    "bio": "Біо",
-    "faq": "FAQ",
-    "now": "Зараз"
-  }
+  "writing": "Тексти",
+  "contact": "Контакти"
 }

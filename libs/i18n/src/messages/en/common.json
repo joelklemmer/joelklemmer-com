@@ -1,12 +1,18 @@
 {
-  "meta": {
-    "title": "Welcome",
-    "description": "Next.js with internationalization"
-  },
+  "wordmark": "Joel R. Klemmer",
+  "tagline": "Quiet authority and proof forward briefing",
   "languages": {
     "en": "English",
-    "uk": "Українська",
-    "es": "Español",
-    "he": "עברית"
+    "uk": "Ukrainian",
+    "es": "Spanish",
+    "he": "Hebrew"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "headerLabel": "Site header",
+    "navLabel": "Primary navigation",
+    "footerLabel": "Footer",
+    "languageSwitcherLabel": "Language options",
+    "languageSwitcherAction": "Switch language to {language}"
   }
 }

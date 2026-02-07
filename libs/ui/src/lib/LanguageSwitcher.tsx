@@ -2,7 +2,8 @@
 
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
-import { locales } from '@i18n';
+import { locales } from '@joelklemmer/i18n';
+import { focusRingClass } from '@joelklemmer/a11y';
 import Link from 'next/link';
 
 function resolvePathname(pathname: string | null, currentLocale: string) {
@@ -17,7 +18,6 @@ function resolvePathname(pathname: string | null, currentLocale: string) {
 }
 
 export function LanguageSwitcher() {
-  const a11y = useTranslations('a11y');
   const common = useTranslations('common');
   const locale = useLocale();
   const pathname = usePathname();
@@ -26,8 +26,8 @@ export function LanguageSwitcher() {
   const queryString = searchParams?.toString();
 
   return (
-    <nav aria-label={a11y('languageSwitcherLabel')}>
-      <ul className="flex gap-3">
+    <nav aria-label={common('a11y.languageSwitcherLabel')}>
+      <ul className="flex gap-3 text-sm text-muted">
         {locales.map((targetLocale) => {
           const restPath = restSegments.length
             ? `/${restSegments.join('/')}`
@@ -42,10 +42,14 @@ export function LanguageSwitcher() {
                 href={href}
                 lang={targetLocale}
                 aria-current={isCurrent ? 'page' : undefined}
-                aria-label={a11y('languageSwitcherAction', {
+                aria-label={common('a11y.languageSwitcherAction', {
                   language: languageLabel,
                 })}
-                className={isCurrent ? 'font-semibold underline' : undefined}
+                className={`${focusRingClass} ${
+                  isCurrent
+                    ? 'font-semibold text-text underline'
+                    : 'hover:text-text'
+                }`}
               >
                 {languageLabel}
               </Link>

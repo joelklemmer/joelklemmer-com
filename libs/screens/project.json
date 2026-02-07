@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/screens/src",
   "projectType": "library",
-  "tags": ["type:screen"],
+  "tags": ["type:screen", "type:lib"],
   "// targets": "to see all targets run: nx show project screens --web",
   "targets": {}
 }

@@ -1,0 +1,10 @@
+{
+  "hero": {
+    "title": "Writing",
+    "lede": "Short briefings and field notes."
+  },
+  "list": {
+    "title": "Recent posts",
+    "empty": "No posts are available yet."
+  }
+}

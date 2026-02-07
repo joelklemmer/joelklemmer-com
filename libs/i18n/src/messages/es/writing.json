@@ -1,0 +1,10 @@
+{
+  "hero": {
+    "title": "Escritura",
+    "lede": "Briefs breves y notas de campo."
+  },
+  "list": {
+    "title": "Entradas recientes",
+    "empty": "No hay entradas disponibles."
+  }
+}

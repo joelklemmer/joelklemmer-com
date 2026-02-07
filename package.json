@@ -45,8 +45,10 @@
     "typescript-eslint": "^8.40.0"
   },
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "next": "~16.0.1",
     "next-intl": "^4.8.2",
+    "next-mdx-remote": "^5.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   }

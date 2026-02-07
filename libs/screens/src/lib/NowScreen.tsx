@@ -1,11 +1,11 @@
-import { useTranslations } from 'next-intl';
+import { QuietScreen, createQuietMetadata } from './QuietScreen';
 
-import { PageScreen } from './PageScreen';
+export async function generateMetadata() {
+  return createQuietMetadata('now');
+}
 
-export function NowScreen() {
-  const t = useTranslations('routes');
+export const nowMetadata = generateMetadata;
 
-  return (
-    <PageScreen title={t('screens.now.title')} body={t('screens.now.lede')} />
-  );
+export async function NowScreen() {
+  return <QuietScreen pageKey="now" />;
 }

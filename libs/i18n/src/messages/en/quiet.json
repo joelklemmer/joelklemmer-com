@@ -1,0 +1,22 @@
+{
+  "press": {
+    "title": "Press",
+    "lede": "Press kit and reference material."
+  },
+  "proof": {
+    "title": "Proof library",
+    "lede": "Evidence forward claims and artifacts."
+  },
+  "bio": {
+    "title": "Bio",
+    "lede": "Short professional biography."
+  },
+  "faq": {
+    "title": "FAQ",
+    "lede": "Common questions with direct answers."
+  },
+  "now": {
+    "title": "Now",
+    "lede": "Current focus and operating cadence."
+  }
+}

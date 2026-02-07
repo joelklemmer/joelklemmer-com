@@ -1,3 +1,13 @@
+<!--
+Checklist
+- dev: pnpm dev
+- build: pnpm build
+- e2e: pnpm test:e2e
+- content: content/
+- messages: libs/i18n/messages/
+- routes: /, /brief, /work, /operating-system, /writing, /writing/[slug], /contact, /press, /proof, /proof/[slug], /bio, /faq, /now
+-->
+
 # JoelklemmerCom
 
 <a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
@@ -5,6 +15,13 @@
 ✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
 
 [Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+
+## Guardrails
+
+- Route files in `apps/web/src/app/**/page.tsx` stay thin: under 120 lines, no heavy JSX.
+- User-facing strings in `apps/web` and `libs/ui` must come from `next-intl` or MDX.
+- Import boundaries: apps may only import from `libs/*` and local files, libs do not import from apps.
+- No deep cross-lib imports. Use each library public API.
 
 ## Finish your remote caching setup
 

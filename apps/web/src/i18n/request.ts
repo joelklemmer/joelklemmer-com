@@ -1,5 +1,5 @@
 import { getRequestConfig } from 'next-intl/server';
-import { loadMessages, type AppLocale } from '@i18n';
+import { loadMessages, type AppLocale } from '@joelklemmer/i18n';
 
 import { routing } from './routing';
 
@@ -13,6 +13,11 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale: resolvedLocale,
-    messages: await loadMessages(resolvedLocale),
+    messages: await loadMessages(resolvedLocale, [
+      'common',
+      'nav',
+      'footer',
+      'meta',
+    ]),
   };
 });

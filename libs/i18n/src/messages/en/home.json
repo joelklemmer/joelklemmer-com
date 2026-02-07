@@ -1,0 +1,17 @@
+{
+  "hero": {
+    "title": "Quiet authority for complex work",
+    "lede": "Briefing room for strategy, security, and delivery.",
+    "cta": "Read the brief"
+  },
+  "proof": {
+    "title": "Proof forward notes",
+    "lede": "Evidence first, short and direct.",
+    "cta": "View proof"
+  },
+  "writing": {
+    "title": "Selected writing",
+    "lede": "Field notes and operating updates.",
+    "cta": "View writing"
+  }
+}

@@ -1,12 +1,18 @@
 {
-  "meta": {
-    "title": "Ласкаво просимо",
-    "description": "Next.js з інтернаціоналізацією"
-  },
+  "wordmark": "Joel R. Klemmer",
+  "tagline": "Тиха авторитетність і доказовий брифінг",
   "languages": {
     "en": "English",
     "uk": "Українська",
-    "es": "Español",
-    "he": "עברית"
+    "es": "Spanish",
+    "he": "Hebrew"
+  },
+  "a11y": {
+    "skipToContent": "Перейти до основного змісту",
+    "headerLabel": "Заголовок сайту",
+    "navLabel": "Основна навігація",
+    "footerLabel": "Нижній колонтитул",
+    "languageSwitcherLabel": "Вибір мови",
+    "languageSwitcherAction": "Змінити мову на {language}"
   }
 }

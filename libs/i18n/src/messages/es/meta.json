@@ -1,0 +1,49 @@
+{
+  "siteName": "Joel R. Klemmer",
+  "defaultTitle": "Briefing de autoridad discreta",
+  "defaultDescription": "Briefing sobre trabajo verificado, sistema operativo y escritura.",
+  "home": {
+    "title": "Sala de briefing",
+    "description": "Autoridad discreta y briefing con pruebas."
+  },
+  "brief": {
+    "title": "Brief ejecutivo",
+    "description": "Centro canonico para alcance, pruebas y trabajo actual."
+  },
+  "work": {
+    "title": "Trabajo",
+    "description": "Enfoques, metodos y encargos actuales."
+  },
+  "operatingSystem": {
+    "title": "Sistema operativo",
+    "description": "Como se define, entrega y verifica el trabajo."
+  },
+  "writing": {
+    "title": "Escritura",
+    "description": "Notas sobre estrategia, entrega y practica."
+  },
+  "contact": {
+    "title": "Contacto",
+    "description": "Ingreso de brief y coordinacion."
+  },
+  "press": {
+    "title": "Prensa",
+    "description": "Kit de prensa y material de referencia."
+  },
+  "proof": {
+    "title": "Pruebas",
+    "description": "Afirmaciones con evidencia y artefactos."
+  },
+  "bio": {
+    "title": "Bio",
+    "description": "Biografia profesional breve."
+  },
+  "faq": {
+    "title": "FAQ",
+    "description": "Respuestas a preguntas comunes."
+  },
+  "now": {
+    "title": "Ahora",
+    "description": "Enfoque actual y ritmo operativo."
+  }
+}
