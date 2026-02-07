@@ -1,0 +1,28 @@
+{
+  "privacy": {
+    "title": "פרטיות",
+    "lede": "בקרות פרטיות ומחויבויות טיפול בנתונים."
+  },
+  "terms": {
+    "title": "תנאים",
+    "lede": "תנאי גישה ומגבלות שימוש."
+  },
+  "accessibility": {
+    "title": "נגישות",
+    "lede": "יעדי נגישות, שיטות ומחזור סקירה."
+  },
+  "security": {
+    "title": "אבטחה",
+    "lede": "עמדת אבטחה, דיווח וגילוי."
+  },
+  "governance": {
+    "heading": "ממשל",
+    "version": "גרסה",
+    "effectiveDate": "תאריך תחילה",
+    "lastReviewedDate": "סקירה אחרונה",
+    "nextReviewDate": "סקירה הבאה",
+    "owner": "אחראי",
+    "jurisdiction": "סמכות שיפוט",
+    "scope": "היקף"
+  }
+}

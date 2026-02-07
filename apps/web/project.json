@@ -18,6 +18,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content.ts"
       }
     },
+    "governance-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-governance.ts"
+      }
+    },
     "i18n-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -55,6 +61,7 @@
           "nx format:check --all",
           "nx run web:lint",
           "nx run web:content-validate",
+          "nx run web:governance-validate",
           "nx run web:i18n-validate",
           "nx run web:sitemap-validate",
           "nx run web:seo-validate",

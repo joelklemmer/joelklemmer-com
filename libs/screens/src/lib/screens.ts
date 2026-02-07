@@ -26,6 +26,7 @@ export { FaqScreen } from './FaqScreen';
 export { faqMetadata } from './FaqScreen';
 export { NowScreen } from './NowScreen';
 export { nowMetadata } from './NowScreen';
+export { InstitutionalScreen } from './InstitutionalScreen';
 export { PrivacyScreen } from './PrivacyScreen';
 export { privacyMetadata } from './PrivacyScreen';
 export { TermsScreen } from './TermsScreen';

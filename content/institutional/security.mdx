@@ -1,19 +1,36 @@
 ---
-title: 'Security'
+id: security
+titleKey: security
+descriptionKey: security
+version: '1.0'
+effectiveDate: '2026-02-01'
 lastReviewedDate: '2026-02-01'
-locale: 'en'
+nextReviewDate: '2027-02-01'
+owner: Joel R. Klemmer
+jurisdiction: New Mexico, United States
+scope: Security posture and vulnerability disclosure for this site.
 ---
 
 ## Security posture
 
-This property maintains baseline security controls, strict headers, and minimal data
-collection to reduce risk.
+This site maintains baseline security controls: strict transport and content security headers, minimal data collection, and no unnecessary client-side scripting. We do not overstate our posture; these are operational principles, not certifications.
 
-## Reporting
+## Vulnerability disclosure
 
-Security issues should be reported through the Contact channel with sufficient detail
-to reproduce the issue. Verified reports are reviewed promptly.
+We welcome good-faith reports of security issues.
 
-## Disclosure
+- **How to report:** Use the [Contact](/contact) page with a subject line that includes "Security" or "Vulnerability" so the report is routed appropriately.
+- **What to include:** Describe the issue, steps to reproduce, and affected URL or component. Do not include active exploit code in the initial report.
+- **Safe harbor:** We will not pursue legal action against researchers who report in good faith, do not access or modify data beyond what is needed to demonstrate the issue, and avoid privacy harm or disruption. We do not offer a bug bounty at this time.
 
-Confirmed issues are remediated and documented as appropriate for institutional review.
+## Data security scope
+
+Security commitments apply to this site and its hosting pipeline. We do not claim to secure data processed entirely by third-party services beyond our contractual expectations.
+
+## Dependencies and updates
+
+We keep dependencies up to date within our release cycle and address known vulnerabilities in a timely manner. We do not guarantee zero-day coverage.
+
+## Contact
+
+For security concerns, use the [Contact](/contact) page with a clear subject line. If you have a dedicated security contact address, you may use it; otherwise the Contact page is the designated channel.

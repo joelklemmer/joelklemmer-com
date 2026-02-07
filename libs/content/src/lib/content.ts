@@ -10,11 +10,11 @@ import {
   caseStudyFrontmatterSchema,
   getBookId,
   getPublicRecordId,
-  institutionalFrontmatterSchema,
+  institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
   type BookFrontmatter,
   type CaseStudyFrontmatter,
-  type InstitutionalFrontmatter,
+  type InstitutionalPageFrontmatter,
   type PublicRecordFrontmatter,
 } from './schemas';
 
@@ -259,17 +259,39 @@ export async function getMediaKit(locale: AppLocale) {
   }
 }
 
-export async function getInstitutionalPage(locale: AppLocale, slug: string) {
-  const filePath = path.join(contentRoot, 'institutional', `${slug}.mdx`);
+const INSTITUTIONAL_IDS = [
+  'privacy',
+  'terms',
+  'accessibility',
+  'security',
+] as const;
+
+export function getInstitutionalPageIds(): readonly string[] {
+  return INSTITUTIONAL_IDS;
+}
+
+export async function getInstitutionalPages(locale: AppLocale) {
+  const entries = await Promise.all(
+    INSTITUTIONAL_IDS.map((id) => getInstitutionalPage(locale, id)),
+  );
+  return entries.filter((e): e is NonNullable<typeof e> => e != null);
+}
+
+export async function getInstitutionalPage(
+  locale: AppLocale,
+  id: string,
+): Promise<LocalizedContentEntry<InstitutionalPageFrontmatter> | null> {
+  const filePath = path.join(contentRoot, 'institutional', `${id}.mdx`);
   try {
     const { content, data } =
-      await readMdxFile<InstitutionalFrontmatter>(filePath);
+      await readMdxFile<InstitutionalPageFrontmatter>(filePath);
     const frontmatter = validateFrontmatter(
-      institutionalFrontmatterSchema,
+      institutionalPageFrontmatterSchema,
       data,
       filePath,
     );
-    return resolveLocalizedEntry({ frontmatter, content }, locale);
+    const isFallback = locale !== defaultLocale;
+    return { frontmatter, content, isFallback };
   } catch {
     return null;
   }

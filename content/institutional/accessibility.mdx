@@ -1,25 +1,39 @@
 ---
-title: 'Accessibility'
+id: accessibility
+titleKey: accessibility
+descriptionKey: accessibility
+version: '1.0'
+effectiveDate: '2026-02-01'
 lastReviewedDate: '2026-02-01'
-locale: 'en'
+nextReviewDate: '2027-02-01'
+owner: Joel R. Klemmer
+jurisdiction: New Mexico, United States
+scope: Accessibility commitment and practices for this site.
 ---
 
-## Commitment
+## WCAG target
 
-This site targets WCAG 2.2 AA conformance for public content and navigation.
+This site targets **WCAG 2.2 Level AA** conformance for public content and navigation, with AA+ operational practices where feasible.
 
-## Methods
+## Compatibility
 
-- Semantic landmarks, headings, and keyboard navigation.
-- Visible focus states and reduced-motion support.
-- Language switching with locale and direction support.
+- Full keyboard navigation is supported.
+- Content is structured for screen readers (semantic landmarks, headings, and labels).
+- Visible focus states and reduced-motion support are provided.
+- Language and direction are declared; locale switching is available.
 
-## Review cadence
+## Known limitations
 
-Last review: 2026-02-01  
-Next review: 2026-08-01
+Some third-party or embedded content may not meet the same level. We work to minimize gaps. If you encounter a barrier, please report it.
+
+## Response time
+
+We aim to acknowledge accessibility feedback within a reasonable period. We do not promise specific SLAs. Remediation depends on severity and resources.
+
+## Testing practices
+
+Accessibility is tested with automated and manual methods, including axe, Playwright accessibility checks, and Lighthouse, aligned with this repository’s tooling.
 
 ## Feedback
 
-Accessibility feedback should be submitted through the Contact channel with a clear
-description of the issue and the affected page.
+Report accessibility issues via the [Contact](/contact) page. Include the affected page and a clear description of the issue so we can reproduce and address it.

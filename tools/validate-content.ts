@@ -10,7 +10,7 @@ import {
   getBookId,
   getMediaManifest,
   getPublicRecordId,
-  institutionalFrontmatterSchema,
+  institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
   validateClaimRegistry,
 } from '@joelklemmer/content/validate';
@@ -90,18 +90,53 @@ const publicRecordEntries = getMdxFiles(publicRecordDir).map((filePath) => {
   return { frontmatter: parsed.data, content };
 });
 
+const GOVERNED_INSTITUTIONAL_IDS = [
+  'privacy',
+  'terms',
+  'accessibility',
+  'security',
+];
 const institutionalDir = path.join(contentRoot, 'institutional');
-getMdxFiles(institutionalDir).forEach((filePath) => {
-  const { data } = readMdx(filePath);
+for (const id of GOVERNED_INSTITUTIONAL_IDS) {
+  const filePath = path.join(institutionalDir, `${id}.mdx`);
+  if (!existsSync(filePath)) {
+    errors.push(`Missing governed institutional page: ${filePath}`);
+    continue;
+  }
+  const { content, data } = readMdx(filePath);
   const parsed = validateFrontmatter(
-    institutionalFrontmatterSchema,
+    institutionalPageFrontmatterSchema,
     data,
     filePath,
   );
   if (!parsed.ok) {
     errors.push(parsed.error);
+  } else {
+    if (parsed.data.id !== id) {
+      errors.push(
+        `${filePath}: frontmatter id "${parsed.data.id}" must match filename "${id}"`,
+      );
+    }
+    if (!content.trim()) {
+      errors.push(`${filePath}: body content is required`);
+    }
   }
-});
+}
+const releaseReady = process.env.RELEASE_READY === '1';
+if (releaseReady) {
+  const now = new Date();
+  for (const id of GOVERNED_INSTITUTIONAL_IDS) {
+    const filePath = path.join(institutionalDir, `${id}.mdx`);
+    if (!existsSync(filePath)) continue;
+    const { data } = readMdx(filePath);
+    const parsed = institutionalPageFrontmatterSchema.safeParse(data);
+    if (parsed.success && new Date(parsed.data.nextReviewDate) < now) {
+      errors.push(
+        `${filePath}: nextReviewDate ${parsed.data.nextReviewDate} is in the past (RELEASE_READY=1)`,
+      );
+    }
+  }
+}
 
 const publicRecordValidEntries = publicRecordEntries.filter(
   (e): e is NonNullable<typeof e> => e != null,

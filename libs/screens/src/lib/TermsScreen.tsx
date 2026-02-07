@@ -7,7 +7,8 @@ import {
 } from '@joelklemmer/i18n';
 import { getInstitutionalPage, renderMdx } from '@joelklemmer/content';
 import { FallbackNoticeSection } from '@joelklemmer/sections';
-import { QuietScreen, createQuietMetadata } from './QuietScreen';
+import { createQuietMetadata } from './QuietScreen';
+import { InstitutionalScreen } from './InstitutionalScreen';
 
 export async function generateMetadata() {
   return createQuietMetadata('terms');
@@ -29,5 +30,13 @@ export async function TermsScreen() {
       href={`/${defaultLocale}/terms`}
     />
   ) : null;
-  return <QuietScreen pageKey="terms" content={content} notice={notice} />;
+  if (!entry) return null;
+  return (
+    <InstitutionalScreen
+      pageKey="terms"
+      frontmatter={entry.frontmatter}
+      content={content}
+      notice={notice}
+    />
+  );
 }

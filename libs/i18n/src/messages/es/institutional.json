@@ -1,0 +1,28 @@
+{
+  "privacy": {
+    "title": "Privacidad",
+    "lede": "Controles de privacidad y compromisos de tratamiento de datos."
+  },
+  "terms": {
+    "title": "Términos",
+    "lede": "Términos de acceso y limitaciones de uso."
+  },
+  "accessibility": {
+    "title": "Accesibilidad",
+    "lede": "Objetivos, métodos y periodicidad de revisión de accesibilidad."
+  },
+  "security": {
+    "title": "Seguridad",
+    "lede": "Postura de seguridad, reporte y divulgación."
+  },
+  "governance": {
+    "heading": "Gobernanza",
+    "version": "Versión",
+    "effectiveDate": "Fecha de vigencia",
+    "lastReviewedDate": "Última revisión",
+    "nextReviewDate": "Próxima revisión",
+    "owner": "Responsable",
+    "jurisdiction": "Jurisdicción",
+    "scope": "Alcance"
+  }
+}

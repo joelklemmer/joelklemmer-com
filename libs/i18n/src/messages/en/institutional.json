@@ -1,0 +1,28 @@
+{
+  "privacy": {
+    "title": "Privacy",
+    "lede": "Privacy controls and data handling commitments."
+  },
+  "terms": {
+    "title": "Terms",
+    "lede": "Access terms and use limitations."
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "lede": "Accessibility targets, methods, and review cadence."
+  },
+  "security": {
+    "title": "Security",
+    "lede": "Security posture, reporting, and disclosure."
+  },
+  "governance": {
+    "heading": "Governance",
+    "version": "Version",
+    "effectiveDate": "Effective date",
+    "lastReviewedDate": "Last reviewed",
+    "nextReviewDate": "Next review",
+    "owner": "Owner",
+    "jurisdiction": "Jurisdiction",
+    "scope": "Scope"
+  }
+}

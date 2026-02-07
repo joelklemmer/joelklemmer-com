@@ -42,6 +42,41 @@ export function getPublicRecordId(frontmatter: {
   return frontmatter.id ?? frontmatter.slug;
 }
 
+const dateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'YYYY-MM-DD');
+
+/** Governed institutional page frontmatter (privacy, terms, accessibility, security). */
+export const institutionalPageFrontmatterSchema = z
+  .object({
+    id: nonEmptyString,
+    titleKey: nonEmptyString,
+    descriptionKey: nonEmptyString,
+    version: nonEmptyString,
+    effectiveDate: dateStringSchema,
+    lastReviewedDate: dateStringSchema,
+    nextReviewDate: dateStringSchema,
+    owner: nonEmptyString,
+    jurisdiction: nonEmptyString,
+    scope: nonEmptyString,
+    contactEmail: nonEmptyString.optional(),
+    accessibilityContactEmail: nonEmptyString.optional(),
+    securityContactEmail: nonEmptyString.optional(),
+    vulnerabilityDisclosureUrl: nonEmptyString.optional(),
+    changelog: z.array(nonEmptyString).optional(),
+  })
+  .refine((d) => new Date(d.nextReviewDate) >= new Date(d.lastReviewedDate), {
+    message: 'nextReviewDate must be >= lastReviewedDate',
+    path: ['nextReviewDate'],
+  })
+  .refine((d) => new Date(d.effectiveDate) <= new Date(d.lastReviewedDate), {
+    message: 'effectiveDate must be <= lastReviewedDate',
+    path: ['effectiveDate'],
+  });
+
+export type InstitutionalPageFrontmatter = z.infer<
+  typeof institutionalPageFrontmatterSchema
+>;
+
+/** @deprecated Use institutionalPageFrontmatterSchema for governed institutional pages. */
 export const institutionalFrontmatterSchema = z.object({
   title: nonEmptyString,
   lastReviewedDate: nonEmptyString,

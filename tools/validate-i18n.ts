@@ -188,6 +188,37 @@ const publicRecordSchema = z
   })
   .passthrough();
 
+const institutionalSchema = z
+  .object({
+    privacy: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    terms: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    accessibility: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    security: z.object({
+      title: z.string().min(1),
+      lede: z.string().min(1),
+    }),
+    governance: z.object({
+      heading: z.string().min(1),
+      version: z.string().min(1),
+      effectiveDate: z.string().min(1),
+      lastReviewedDate: z.string().min(1),
+      nextReviewDate: z.string().min(1),
+      owner: z.string().min(1),
+      jurisdiction: z.string().min(1),
+      scope: z.string().min(1),
+    }),
+  })
+  .passthrough();
+
 const errors: string[] = [];
 const messagesRoot = path.join(
   process.cwd(),
@@ -255,6 +286,7 @@ locales.forEach((locale) => {
   validateNamespace(locale, 'brief', briefSchema);
   validateNamespace(locale, 'books', booksSchema);
   validateNamespace(locale, 'publicRecord', publicRecordSchema);
+  validateNamespace(locale, 'institutional', institutionalSchema);
 });
 validateBriefClaimKeys();
 

@@ -7,7 +7,8 @@ import {
 } from '@joelklemmer/i18n';
 import { getInstitutionalPage, renderMdx } from '@joelklemmer/content';
 import { FallbackNoticeSection } from '@joelklemmer/sections';
-import { QuietScreen, createQuietMetadata } from './QuietScreen';
+import { createQuietMetadata } from './QuietScreen';
+import { InstitutionalScreen } from './InstitutionalScreen';
 
 export async function generateMetadata() {
   return createQuietMetadata('security');
@@ -29,5 +30,13 @@ export async function SecurityScreen() {
       href={`/${defaultLocale}/security`}
     />
   ) : null;
-  return <QuietScreen pageKey="security" content={content} notice={notice} />;
+  if (!entry) return null;
+  return (
+    <InstitutionalScreen
+      pageKey="security"
+      frontmatter={entry.frontmatter}
+      content={content}
+      notice={notice}
+    />
+  );
 }

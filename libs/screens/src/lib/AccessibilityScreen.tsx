@@ -7,7 +7,8 @@ import {
 } from '@joelklemmer/i18n';
 import { getInstitutionalPage, renderMdx } from '@joelklemmer/content';
 import { FallbackNoticeSection } from '@joelklemmer/sections';
-import { QuietScreen, createQuietMetadata } from './QuietScreen';
+import { createQuietMetadata } from './QuietScreen';
+import { InstitutionalScreen } from './InstitutionalScreen';
 
 export async function generateMetadata() {
   return createQuietMetadata('accessibility');
@@ -29,7 +30,13 @@ export async function AccessibilityScreen() {
       href={`/${defaultLocale}/accessibility`}
     />
   ) : null;
+  if (!entry) return null;
   return (
-    <QuietScreen pageKey="accessibility" content={content} notice={notice} />
+    <InstitutionalScreen
+      pageKey="accessibility"
+      frontmatter={entry.frontmatter}
+      content={content}
+      notice={notice}
+    />
   );
 }
