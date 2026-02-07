@@ -1,0 +1,102 @@
+/**
+ * Collision-proof a11y runner: picks a free port, starts the web server on it,
+ * runs Playwright a11y tests with BASE_URL set, then cleans up.
+ * Run with: npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts
+ */
+import { spawn } from 'node:child_process';
+import getPort from 'get-port';
+
+const workspaceRoot = process.cwd();
+const isCi = process.env['CI'] === 'true';
+
+async function waitForServer(url: string, timeoutMs: number): Promise<boolean> {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(url, { method: 'GET' });
+      if (res.ok) return true;
+    } catch {
+      // not ready yet
+    }
+    await new Promise((r) => setTimeout(r, 500));
+  }
+  return false;
+}
+
+async function main(): Promise<number> {
+  const port = await getPort({ port: 4300 });
+  const baseURL = `http://127.0.0.1:${port}`;
+
+  // Always use production server (build + start) to avoid Next dev lock and port
+  // collision; same as CI and deterministic.
+  const serverCommand = `pnpm nx build web && pnpm nx start web --port=${port}`;
+
+  const server = spawn(serverCommand, [], {
+    cwd: workspaceRoot,
+    stdio: 'pipe',
+    env: { ...process.env, PORT: String(port) },
+    shell: true,
+  });
+
+  let serverExited = false;
+  let serverExitCode: number | null = null;
+  server.on('exit', (code) => {
+    serverExited = true;
+    serverExitCode = code ?? null;
+  });
+  server.stderr?.on('data', (chunk: Buffer) => process.stderr.write(chunk));
+  server.stdout?.on('data', (chunk: Buffer) => process.stdout.write(chunk));
+
+  const cleanup = () => {
+    if (!serverExited && server.kill) {
+      server.kill('SIGTERM');
+    }
+  };
+  process.on('SIGINT', cleanup);
+  process.on('SIGTERM', cleanup);
+
+  const ready = await waitForServer(baseURL, 120_000);
+  if (!ready) {
+    cleanup();
+    throw new Error(`Server at ${baseURL} did not become ready within 120s`);
+  }
+
+  const playwright = spawn(
+    'npx',
+    ['playwright', 'test', '--config=apps/web-e2e/playwright.a11y.config.ts'],
+    {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: { ...process.env, BASE_URL: baseURL, PORT: String(port) },
+      shell: true,
+    },
+  );
+
+  const playExit = await new Promise<number>((resolve) => {
+    playwright.on('exit', (code, signal) => {
+      resolve(code ?? (signal ? 1 : 0));
+    });
+  });
+
+  cleanup();
+  await new Promise<void>((r) => {
+    if (serverExited) return r();
+    const t = setTimeout(() => {
+      if (server.kill) server.kill('SIGKILL');
+      r();
+    }, 5000);
+    server.on('exit', () => {
+      clearTimeout(t);
+      r();
+    });
+  });
+
+  return playExit;
+}
+
+main()
+  .then((code) => process.exit(code))
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

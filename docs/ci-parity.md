@@ -62,7 +62,8 @@ pnpm run ci:verify
 
 ## A11y execution assumptions
 
-- **Config:** `apps/web-e2e/playwright.a11y.config.ts`. In CI, web server runs `pnpm nx build web && pnpm nx start web --port=3000`; timeout 120s. In non-CI, `pnpm nx dev web --port=3000`.
+- **Runner:** `nx run web:a11y` runs `tools/run-a11y.ts`, which picks a **free port** (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL=http://127.0.0.1:<port>`, runs Playwright a11y with that `BASE_URL`, then cleans up. No manual port management; port 3000 can be occupied without failing a11y.
+- **Config:** `apps/web-e2e/playwright.a11y.config.ts`. When `BASE_URL` is set, Playwright uses it as `baseURL` and `reuseExistingServer: true` (server was already started by the runner). When not set, Playwright starts the server itself on port 3000 (legacy fallback).
 - **Test timeout:** 180 seconds (3 min) for the full a11y smoke (all locales × routes).
 - **Navigation:** `page.goto(..., { waitUntil: 'domcontentloaded', timeout: 15000 })`.
 - **Retries:** In CI, Playwright retries the a11y spec up to 2 times on failure (config `retries: isCi ? 2 : 0`). Use only for transient failures (e.g. navigation timeouts); real a11y violations should be fixed, not relied on retries.
