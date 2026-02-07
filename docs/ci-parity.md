@@ -7,7 +7,7 @@ Run locally **exactly** what CI runs so failures are reproducible and fixable be
 1. **Versions** (for logs): `node -v`, `npm -v`, `pnpm -v`, `git --version`
 2. **Install:** `pnpm install --frozen-lockfile`
 3. **Verify:** `pnpm nx run web:verify --verbose`
-4. **Restore next-env.d.ts:** `git checkout -- apps/web/next-env.d.ts` (so Next build overwrites do not dirty the tree)
+4. **Restore generated typings (hygiene only):** `git checkout -- apps/web/next-env.d.ts` so Next build overwrites do not dirty the tree. This step does **not** fix format-check failures; format stability is ensured by excluding the file from formatting (see below).
 5. **Repo must be clean:** `git status --porcelain` must be empty; otherwise CI fails with the list of changed files.
 6. **Upload a11y report:** The a11y JSON report is uploaded as a workflow artifact (`tmp/reports/a11y.json` → artifact name `a11y-report`). Download it from the job summary if needed.
 
@@ -16,6 +16,10 @@ The verify target runs, in order: format check, lint, content-validate, i18n-val
 ### Repo must remain clean in CI
 
 Verify must not create uncommitted changes. After verify, CI runs `git status --porcelain`. If any file is modified or untracked (in tracked dirs), the job fails. This keeps CI deterministic and prevents generators (e.g. a11y report, Next typegen) from slipping in. The a11y report is written to `tmp/reports/a11y.json` (gitignored) and is available as a workflow artifact; it is not committed.
+
+### next-env.d.ts is excluded from format checks
+
+`apps/web/next-env.d.ts` is **tool-generated** by Next.js (regenerated on `next dev` / `next build`). Its content or whitespace can vary by environment (e.g. optional `import "./.next/dev/types/routes.d.ts"`, line endings, or trailing newlines). So `nx format:check --all` would otherwise fail in CI when the file on disk differs from what Prettier would output. To keep CI deterministic without weakening quality gates, this file is listed in **`.prettierignore`** at the repo root. Nx format check uses Prettier and respects `.prettierignore`, so the file is not formatted or checked. The committed version is minimal (reference directives only; no dynamic imports). `.gitattributes` enforces `eol=lf` for `*.d.ts` to avoid line-ending churn.
 
 ## Run locally (PowerShell)
 

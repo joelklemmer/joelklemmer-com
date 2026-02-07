@@ -58,7 +58,7 @@ jobs:
       - name: Verify (lint, content, i18n, sitemap, seo, test, build, a11y)
         run: pnpm nx run web:verify --verbose
 
-      - name: Restore next-env.d.ts
+      - name: Restore generated typings (hygiene only; does not fix format)
         run: git checkout -- apps/web/next-env.d.ts
 
       - name: Repo must be clean (no generated diffs)

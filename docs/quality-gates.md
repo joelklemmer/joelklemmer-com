@@ -24,7 +24,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 ## 1. Format check
 
 - **Run:** `nx format:check --all` or `pnpm format:check`
-- **What it checks:** Nx format (e.g. Prettier) across the workspace. Fails if any file is not formatted.
+- **What it checks:** Nx format (Prettier) across the workspace. Fails if any file is not formatted. Uses `.prettierignore`; tool-generated typing files (e.g. `apps/web/next-env.d.ts`) are excluded so format check does not fail when their content varies by environment.
 - **Success:** Exit code 0, no diff output.
 
 ---
@@ -124,7 +124,8 @@ This document describes every quality gate in the repo: how to run it, what it c
   6. `nx run web:seo-validate`
   7. `nx run web:test`
   8. `nx run web:build`
-  9. `nx run web:a11y`
+  9. `nx run web:restore-generated-typings` (hygiene: restores `next-env.d.ts`; does not affect format)
+  10. `nx run web:a11y`
 
 No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed. Verify must not create uncommitted changes; see [CI parity](ci-parity.md) (repo must remain clean in CI).
 
