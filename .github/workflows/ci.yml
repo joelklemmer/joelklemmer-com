@@ -43,7 +43,8 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          key: ${{ runner.os }}-ms-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-ms-playwright-
 
       - name: Versions
         run: |
@@ -54,6 +55,9 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
 
       - name: Verify (lint, content, i18n, sitemap, seo, test, build, a11y)
         run: pnpm nx run web:verify --verbose

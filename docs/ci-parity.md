@@ -6,10 +6,11 @@ Run locally **exactly** what CI runs so failures are reproducible and fixable be
 
 1. **Versions** (for logs): `node -v`, `npm -v`, `pnpm -v`, `git --version`
 2. **Install:** `pnpm install --frozen-lockfile`
-3. **Verify:** `pnpm nx run web:verify --verbose`
-4. **Restore generated typings (hygiene only):** `git checkout -- apps/web/next-env.d.ts` so Next build overwrites do not dirty the tree. This step does **not** fix format-check failures; format stability is ensured by excluding the file from formatting (see below).
-5. **Repo must be clean:** `git status --porcelain` must be empty; otherwise CI fails with the list of changed files.
-6. **Upload a11y report:** The a11y JSON report is uploaded as a workflow artifact (`tmp/reports/a11y.json` → artifact name `a11y-report`). Download it from the job summary if needed.
+3. **Install Playwright browsers:** `pnpm exec playwright install --with-deps chromium` — GitHub runners do not ship browsers; this installs Chromium and Linux system deps so `web:a11y` can run. CI caches `~/.cache/ms-playwright` (keyed by `pnpm-lock.yaml`) to speed subsequent runs.
+4. **Verify:** `pnpm nx run web:verify --verbose`
+5. **Restore generated typings (hygiene only):** `git checkout -- apps/web/next-env.d.ts` so Next build overwrites do not dirty the tree. This step does **not** fix format-check failures; format stability is ensured by excluding the file from formatting (see below).
+6. **Repo must be clean:** `git status --porcelain` must be empty; otherwise CI fails with the list of changed files.
+7. **Upload a11y report:** The a11y JSON report is uploaded as a workflow artifact (`tmp/reports/a11y.json` → artifact name `a11y-report`). Download it from the job summary if needed.
 
 The verify target runs, in order: format check, lint, content-validate, i18n-validate, sitemap-validate, seo-validate, test, build, a11y. See [Quality gates](quality-gates.md).
 
@@ -85,3 +86,5 @@ If a job fails only in CI with "module not found" or similar, check that the pat
 ## Caching
 
 CI caches pnpm store and Playwright browsers. Cache keys use `pnpm-lock.yaml` hash. If dependencies or Playwright versions change, the next run may be slower; failures should not be caused by cache unless the cache is corrupted (then disable or clear cache for that job).
+
+- **Playwright:** Path `~/.cache/ms-playwright` (on the runner: `/home/runner/.cache/ms-playwright`). Key: `${{ runner.os }}-ms-playwright-${{ hashFiles('pnpm-lock.yaml') }}` with restore-keys `${{ runner.os }}-ms-playwright-`. The workflow sets `PLAYWRIGHT_BROWSERS_PATH` to this path so the "Install Playwright browsers" step populates it and a11y uses it. Cache restores on hit; on miss, `pnpm exec playwright install --with-deps chromium` runs and the cache is saved at job end. This avoids re-downloading Chromium every run while keeping installs deterministic (lockfile-based key).

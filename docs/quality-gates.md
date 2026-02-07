@@ -146,6 +146,7 @@ When CI fails, paste the **exact failing command** and **error line(s)** from th
 
 **Common causes addressed by this doc and CI config:**
 
+- **Playwright browsers missing in CI:** Error `browserType.launch: Executable doesn't exist` occurs because GitHub-hosted runners do not ship browser binaries. CI now runs `pnpm exec playwright install --with-deps chromium` after `pnpm install` and before `web:verify`, and caches `~/.cache/ms-playwright` so subsequent runs reuse the install. See [CI parity](ci-parity.md).
 - **Missing env in CI:** `NEXT_PUBLIC_SITE_URL` or `NEXT_PUBLIC_IDENTITY_SAME_AS` not set in the workflow. CI now sets `NEXT_PUBLIC_SITE_URL=https://example.invalid` and `NEXT_PUBLIC_IDENTITY_SAME_AS=https://example.invalid/ci` so SEO/identity validators and the Next build do not fail.
 - **Artifact/media strict enforcement:** With `RELEASE_READY=0` (default in CI), missing required artifact files or checksum mismatches **warn** but do not fail. Only when `RELEASE_READY=1` (e.g. when cutting a release) are required artifacts and checksums enforced. Invalid manifest schema still fails in all environments.
 - **Install or version drift:** CI pins Node to 20.19.0 and uses `pnpm install --frozen-lockfile`. Run `pnpm ci:verify` locally to match CI (see [CI parity](ci-parity.md)).
@@ -159,7 +160,8 @@ CI (`.github/workflows/ci.yml`) runs:
 
 1. Checkout, setup **Node 20.19.0**, pnpm, caches, **Versions** (node -v, npm -v, pnpm -v).
 2. **Install:** `pnpm install --frozen-lockfile`
-3. **Verify:** `pnpm nx run web:verify --verbose`
+3. **Install Playwright browsers:** `pnpm exec playwright install --with-deps chromium` — runners do not ship browsers; CI caches `~/.cache/ms-playwright` (keyed by `pnpm-lock.yaml`) to speed subsequent runs.
+4. **Verify:** `pnpm nx run web:verify --verbose`
 
 **Required env vars for CI** (set in the workflow so validators and build do not fail):
 
