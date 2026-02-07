@@ -1,0 +1,16 @@
+{
+  "home": "Home",
+  "brief": "Brief",
+  "work": "Work",
+  "operatingSystem": "Operating System",
+  "writing": "Writing",
+  "contact": "Contact",
+  "quietLinks": {
+    "label": "Footer links",
+    "press": "Press",
+    "proof": "Proof",
+    "bio": "Bio",
+    "faq": "FAQ",
+    "now": "Now"
+  }
+}

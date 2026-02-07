@@ -1,8 +1,16 @@
+import '../global.css';
+
 import type { ReactNode } from 'react';
 
 import { notFound } from 'next/navigation';
-import { getTranslations, setRequestLocale } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
+import {
+  getMessages,
+  getTranslations,
+  setRequestLocale,
+} from 'next-intl/server';
 
+import { defaultLocale } from '@i18n';
 import { LanguageSwitcher, Shell } from '@ui';
 import { FooterSection, PrimaryNavSection } from '@sections';
 
@@ -10,6 +18,15 @@ import { routing } from '../../i18n/routing';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata() {
+  const t = await getTranslations('common');
+
+  return {
+    title: t('meta.title'),
+    description: t('meta.description'),
+  };
 }
 
 export default async function LocaleLayout({
@@ -20,35 +37,39 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = await getTranslations('shell');
-  const nav = await getTranslations('navigation');
-
   if (!routing.locales.includes(locale as never)) {
     notFound();
   }
 
-  setRequestLocale(locale);
+  const resolvedLocale = routing.locales.includes(locale as never)
+    ? (locale as typeof defaultLocale)
+    : defaultLocale;
+
+  setRequestLocale(resolvedLocale);
+  const nav = await getTranslations('nav');
+  const messages = await getMessages();
 
   const navItems = [
-    { href: `/${locale}`, label: nav('home') },
-    { href: `/${locale}/brief`, label: nav('brief') },
-    { href: `/${locale}/work`, label: nav('work') },
-    { href: `/${locale}/operating-system`, label: nav('operatingSystem') },
-    { href: `/${locale}/writing`, label: nav('writing') },
-    { href: `/${locale}/contact`, label: nav('contact') },
+    { href: `/${resolvedLocale}`, label: nav('home') },
+    { href: `/${resolvedLocale}/brief`, label: nav('brief') },
+    { href: `/${resolvedLocale}/work`, label: nav('work') },
+    {
+      href: `/${resolvedLocale}/operating-system`,
+      label: nav('operatingSystem'),
+    },
+    { href: `/${resolvedLocale}/writing`, label: nav('writing') },
+    { href: `/${resolvedLocale}/contact`, label: nav('contact') },
   ];
 
   return (
-    <Shell
-      skipToContentLabel={t('skipToContent')}
-      headerLabel={t('headerLabel')}
-      navLabel={t('navLabel')}
-      footerLabel={t('footerLabel')}
-      headerContent={<LanguageSwitcher />}
-      navContent={<PrimaryNavSection items={navItems} />}
-      footerContent={<FooterSection />}
-    >
-      {children}
-    </Shell>
+    <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
+      <Shell
+        headerContent={<LanguageSwitcher />}
+        navContent={<PrimaryNavSection items={navItems} />}
+        footerContent={<FooterSection />}
+      >
+        {children}
+      </Shell>
+    </NextIntlClientProvider>
   );
 }

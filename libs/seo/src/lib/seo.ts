@@ -59,3 +59,35 @@ export function getHrefLangs({
     ['x-default', `${siteUrl}/${fallbackLocale}${normalizedPath}`],
   ]);
 }
+
+export function canonicalUrl(
+  locale: AppLocale,
+  pathname = '/',
+  baseUrl?: string,
+) {
+  return getCanonicalUrl({ locale, pathname, baseUrl });
+}
+
+export type HreflangAlternate = {
+  hrefLang: AppLocale | 'x-default';
+  href: string;
+};
+
+export function hreflangAlternates(
+  pathname = '/',
+  baseUrl?: string,
+  supportedLocales: readonly AppLocale[] = locales,
+  fallbackLocale: AppLocale = defaultLocale,
+): HreflangAlternate[] {
+  const hrefLangs = getHrefLangs({
+    baseUrl,
+    pathname,
+    locales: supportedLocales,
+    defaultLocale: fallbackLocale,
+  });
+
+  return Object.entries(hrefLangs).map(([hrefLang, href]) => ({
+    hrefLang: hrefLang as HreflangAlternate['hrefLang'],
+    href,
+  }));
+}

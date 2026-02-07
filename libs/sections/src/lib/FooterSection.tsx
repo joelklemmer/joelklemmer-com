@@ -7,15 +7,15 @@ const footerLinks = ['press', 'proof', 'bio', 'faq', 'now'] as const;
 
 export function FooterSection() {
   const locale = useLocale();
-  const t = useTranslations('footer');
+  const t = useTranslations('nav');
 
   return (
     <Box className="footer">
-      <nav aria-label={t('label')}>
+      <nav aria-label={t('quietLinks.label')}>
         <ul className="quiet-links">
           {footerLinks.map((slug) => (
             <li key={slug}>
-              <Link href={`/${locale}/${slug}`}>{t(`links.${slug}`)}</Link>
+              <Link href={`/${locale}/${slug}`}>{t(`quietLinks.${slug}`)}</Link>
             </li>
           ))}
         </ul>

@@ -3,7 +3,12 @@ import { useTranslations } from 'next-intl';
 import { PageScreen } from './PageScreen';
 
 export function WritingScreen() {
-  const t = useTranslations('routes.writing');
+  const t = useTranslations('routes');
 
-  return <PageScreen title={t('title')} body={t('body')} />;
+  return (
+    <PageScreen
+      title={t('screens.writing.title')}
+      body={t('screens.writing.lede')}
+    />
+  );
 }

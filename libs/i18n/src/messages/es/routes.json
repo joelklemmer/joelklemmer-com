@@ -1,0 +1,48 @@
+{
+  "screens": {
+    "home": {
+      "title": "Inicio",
+      "lede": "Resumen y novedades."
+    },
+    "brief": {
+      "title": "Resumen",
+      "lede": "Una vista concisa y los puntos clave."
+    },
+    "work": {
+      "title": "Trabajo",
+      "lede": "Proyectos seleccionados y colaboraciones."
+    },
+    "operating-system": {
+      "title": "Sistema operativo",
+      "lede": "Principios, hábitos y herramientas que guían el trabajo."
+    },
+    "writing": {
+      "title": "Escritura",
+      "lede": "Ensayos, notas y pensamiento en profundidad."
+    },
+    "contact": {
+      "title": "Contacto",
+      "lede": "Formas de ponerse en contacto."
+    },
+    "press": {
+      "title": "Prensa",
+      "lede": "Menciones, entrevistas y material de prensa."
+    },
+    "proof": {
+      "title": "Pruebas",
+      "lede": "Evidencias, resultados y notas de credibilidad."
+    },
+    "bio": {
+      "title": "Bio",
+      "lede": "Biografía breve y antecedentes."
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "lede": "Preguntas comunes y respuestas rápidas."
+    },
+    "now": {
+      "title": "Ahora",
+      "lede": "En qué estoy enfocado en este momento."
+    }
+  }
+}

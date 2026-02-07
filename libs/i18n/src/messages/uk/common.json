@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "Ласкаво просимо",
+    "description": "Next.js з інтернаціоналізацією"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська",
+    "es": "Español",
+    "he": "עברית"
+  }
+}

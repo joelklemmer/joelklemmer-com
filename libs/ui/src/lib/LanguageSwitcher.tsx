@@ -17,7 +17,8 @@ function resolvePathname(pathname: string | null, currentLocale: string) {
 }
 
 export function LanguageSwitcher() {
-  const t = useTranslations();
+  const a11y = useTranslations('a11y');
+  const common = useTranslations('common');
   const locale = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,7 +26,7 @@ export function LanguageSwitcher() {
   const queryString = searchParams?.toString();
 
   return (
-    <nav aria-label={t('languageSwitcher.label')}>
+    <nav aria-label={a11y('languageSwitcherLabel')}>
       <ul className="flex gap-3">
         {locales.map((targetLocale) => {
           const restPath = restSegments.length
@@ -33,7 +34,7 @@ export function LanguageSwitcher() {
             : '';
           const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
           const isCurrent = targetLocale === locale;
-          const languageLabel = t(`languages.${targetLocale}`);
+          const languageLabel = common(`languages.${targetLocale}`);
 
           return (
             <li key={targetLocale}>
@@ -41,7 +42,7 @@ export function LanguageSwitcher() {
                 href={href}
                 lang={targetLocale}
                 aria-current={isCurrent ? 'page' : undefined}
-                aria-label={t('languageSwitcher.action', {
+                aria-label={a11y('languageSwitcherAction', {
                   language: languageLabel,
                 })}
                 className={isCurrent ? 'font-semibold underline' : undefined}

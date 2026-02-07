@@ -1,0 +1,8 @@
+{
+  "skipToContent": "Saltar al contenido",
+  "languageSwitcherLabel": "Selector de idioma",
+  "languageSwitcherAction": "Cambiar idioma a {language}",
+  "headerLabel": "Encabezado del sitio",
+  "navLabel": "Navegación principal",
+  "footerLabel": "Pie del sitio"
+}

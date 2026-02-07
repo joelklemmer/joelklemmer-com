@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "Welcome",
+    "description": "Next.js with internationalization"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська",
+    "es": "Español",
+    "he": "עברית"
+  }
+}

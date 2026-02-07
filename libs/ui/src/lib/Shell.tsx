@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 export interface ShellProps {
   children: ReactNode;
-  skipToContentLabel: string;
-  headerLabel: string;
-  navLabel: string;
-  footerLabel: string;
   headerContent?: ReactNode;
   navContent?: ReactNode;
   footerContent?: ReactNode;
@@ -14,22 +12,20 @@ export interface ShellProps {
 
 export function Shell({
   children,
-  skipToContentLabel,
-  headerLabel,
-  navLabel,
-  footerLabel,
   headerContent,
   navContent,
   footerContent,
   mainId = 'content',
 }: ShellProps) {
+  const a11y = useTranslations('a11y');
+
   return (
     <div>
-      <a href={`#${mainId}`}>{skipToContentLabel}</a>
-      <header aria-label={headerLabel}>{headerContent}</header>
-      <nav aria-label={navLabel}>{navContent}</nav>
+      <a href={`#${mainId}`}>{a11y('skipToContent')}</a>
+      <header aria-label={a11y('headerLabel')}>{headerContent}</header>
+      <nav aria-label={a11y('navLabel')}>{navContent}</nav>
       <main id={mainId}>{children}</main>
-      <footer aria-label={footerLabel}>{footerContent}</footer>
+      <footer aria-label={a11y('footerLabel')}>{footerContent}</footer>
     </div>
   );
 }

@@ -1,0 +1,48 @@
+{
+  "screens": {
+    "home": {
+      "title": "Home",
+      "lede": "Overview and updates."
+    },
+    "brief": {
+      "title": "Brief",
+      "lede": "A concise overview and highlights."
+    },
+    "work": {
+      "title": "Work",
+      "lede": "Selected projects and collaborations."
+    },
+    "operating-system": {
+      "title": "Operating System",
+      "lede": "Principles, habits, and tools that guide the work."
+    },
+    "writing": {
+      "title": "Writing",
+      "lede": "Essays, notes, and long-form thinking."
+    },
+    "contact": {
+      "title": "Contact",
+      "lede": "Ways to reach out and connect."
+    },
+    "press": {
+      "title": "Press",
+      "lede": "Press mentions, interviews, and media kits."
+    },
+    "proof": {
+      "title": "Proof",
+      "lede": "Evidence, outcomes, and credibility notes."
+    },
+    "bio": {
+      "title": "Bio",
+      "lede": "Short biography and background."
+    },
+    "faq": {
+      "title": "FAQ",
+      "lede": "Common questions and quick answers."
+    },
+    "now": {
+      "title": "Now",
+      "lede": "What I am focused on right now."
+    }
+  }
+}

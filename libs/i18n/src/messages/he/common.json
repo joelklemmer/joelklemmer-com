@@ -1,0 +1,12 @@
+{
+  "meta": {
+    "title": "ברוך הבא",
+    "description": "Next.js עם בינאום"
+  },
+  "languages": {
+    "en": "English",
+    "uk": "Українська",
+    "es": "Español",
+    "he": "עברית"
+  }
+}

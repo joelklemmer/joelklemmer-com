@@ -1,0 +1,8 @@
+{
+  "skipToContent": "Перейти до вмісту",
+  "languageSwitcherLabel": "Перемикач мови",
+  "languageSwitcherAction": "Змінити мову на {language}",
+  "headerLabel": "Заголовок сайту",
+  "navLabel": "Основна навігація",
+  "footerLabel": "Нижній колонтитул сайту"
+}

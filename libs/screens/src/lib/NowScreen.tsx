@@ -3,7 +3,9 @@ import { useTranslations } from 'next-intl';
 import { PageScreen } from './PageScreen';
 
 export function NowScreen() {
-  const t = useTranslations('routes.now');
+  const t = useTranslations('routes');
 
-  return <PageScreen title={t('title')} body={t('body')} />;
+  return (
+    <PageScreen title={t('screens.now.title')} body={t('screens.now.lede')} />
+  );
 }
