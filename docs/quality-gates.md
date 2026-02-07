@@ -97,7 +97,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 ## 9. A11y
 
 - **Run:** `nx run web:a11y`
-- **Implementation:** Runs `tools/run-a11y.ts` (tsx). The script allocates a free port (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL`, then runs Playwright a11y (`apps/web-e2e/playwright.a11y.config.ts`). Playwright reads `BASE_URL` and uses `reuseExistingServer: true`, so no port collision with an existing dev server. No manual freeing of port 3000 required.
+- **Implementation:** Runs `tools/run-a11y.ts` (tsx). The script **injects safe placeholder env vars only when missing** (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS`, `RELEASE_READY`) so the gate is deterministic without requiring CI or local env. Production identity enforcement in `libs/seo` is unchanged; only the a11y runner supplies these defaults for the spawned build/start process. The script allocates a free port (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL` and `PORT` for Playwright, then runs Playwright a11y (`apps/web-e2e/playwright.a11y.config.ts`). Playwright reads `BASE_URL` and uses `reuseExistingServer: true`, so no port collision with an existing dev server. No manual freeing of port 3000 required.
 - **What it checks:** axe-core accessibility scans across required routes/locales (see `apps/web-e2e/src/a11y/`).
 - **Success:** Exit code 0; no a11y violations reported.
 - **Report path:** The a11y JSON report is written to `tmp/reports/a11y.json` (gitignored). In CI it is uploaded as the `a11y-report` artifact. Verify must not create tracked diffs; this path is outside the repo tree for commit purposes.

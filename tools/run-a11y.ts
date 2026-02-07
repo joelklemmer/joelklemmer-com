@@ -1,13 +1,21 @@
 /**
  * Collision-proof a11y runner: picks a free port, starts the web server on it,
  * runs Playwright a11y tests with BASE_URL set, then cleans up.
+ * Injects safe placeholder env vars only when missing so the gate is deterministic
+ * without requiring local or CI env; production deploys still enforce real identity.
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts
  */
 import { spawn } from 'node:child_process';
 import getPort from 'get-port';
 
 const workspaceRoot = process.cwd();
-const isCi = process.env['CI'] === 'true';
+
+/** Safe defaults for a11y run only; applied only when env vars are not already set. */
+function applyA11yEnvDefaults(): void {
+  process.env.NEXT_PUBLIC_SITE_URL ??= 'https://example.invalid';
+  process.env.NEXT_PUBLIC_IDENTITY_SAME_AS ??= 'https://example.invalid/ci';
+  process.env.RELEASE_READY ??= '0';
+}
 
 async function waitForServer(url: string, timeoutMs: number): Promise<boolean> {
   const deadline = Date.now() + timeoutMs;
@@ -24,11 +32,13 @@ async function waitForServer(url: string, timeoutMs: number): Promise<boolean> {
 }
 
 async function main(): Promise<number> {
+  applyA11yEnvDefaults();
+
   const port = await getPort({ port: 4300 });
   const baseURL = `http://127.0.0.1:${port}`;
 
   // Always use production server (build + start) to avoid Next dev lock and port
-  // collision; same as CI and deterministic.
+  // collision; same as CI and deterministic. Spawn inherits process.env (with a11y defaults).
   const serverCommand = `pnpm nx build web && pnpm nx start web --port=${port}`;
 
   const server = spawn(serverCommand, [], {

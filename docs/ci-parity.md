@@ -43,7 +43,9 @@ This runs `pnpm install --frozen-lockfile` then `pnpm nx run web:verify --verbos
 
 ## Env vars (match CI when needed)
 
-To avoid drift with CI, set the same env when running verify locally if your build or validators depend on them:
+CI sets `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS`, and `RELEASE_READY` in the workflow so validators and the Next build do not fail. **The a11y runner (`tools/run-a11y.ts`) also sets these as safe placeholders when missing** so `nx run web:a11y` (and thus `web:verify`) is deterministic locally and in CI without relying on ambient env.
+
+To avoid drift with CI when running verify or build **outside** the a11y step, set the same env locally if needed:
 
 | Variable                       | CI value                     | Local (optional)                                                           |
 | ------------------------------ | ---------------------------- | -------------------------------------------------------------------------- |
@@ -62,7 +64,7 @@ pnpm run ci:verify
 
 ## A11y execution assumptions
 
-- **Runner:** `nx run web:a11y` runs `tools/run-a11y.ts`, which picks a **free port** (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL=http://127.0.0.1:<port>`, runs Playwright a11y with that `BASE_URL`, then cleans up. No manual port management; port 3000 can be occupied without failing a11y.
+- **Runner:** `nx run web:a11y` runs `tools/run-a11y.ts`, which injects safe placeholder env vars when missing (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS`, `RELEASE_READY`), picks a **free port** (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL=http://127.0.0.1:<port>` and `PORT` for Playwright, runs Playwright a11y with that `BASE_URL`, then cleans up. No manual port management; port 3000 can be occupied without failing a11y. CI sets the same env in the workflow; local a11y runner sets placeholders if not set so the gate is self-sufficient.
 - **Config:** `apps/web-e2e/playwright.a11y.config.ts`. When `BASE_URL` is set, Playwright uses it as `baseURL` and `reuseExistingServer: true` (server was already started by the runner). When not set, Playwright starts the server itself on port 3000 (legacy fallback).
 - **Test timeout:** 180 seconds (3 min) for the full a11y smoke (all locales × routes).
 - **Navigation:** `page.goto(..., { waitUntil: 'domcontentloaded', timeout: 15000 })`.
