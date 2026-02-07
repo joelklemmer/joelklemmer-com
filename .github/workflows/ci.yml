@@ -9,7 +9,7 @@ jobs:
     env:
       CI: true
       NX_CLOUD: 'false'
-      PLAYWRIGHT_BROWSERS_PATH: '0'
+      PLAYWRIGHT_BROWSERS_PATH: ~/.cache/ms-playwright
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +30,11 @@ jobs:
         with:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ hashFiles('pnpm-lock.yaml') }}
       - name: Versions
         run: |
           node -v
@@ -46,7 +51,7 @@ jobs:
         run: NX_CLOUD=false pnpm nx build web --verbose
 
       - name: Install Playwright browsers
-        run: pnpm exec playwright install --with-deps chromium
+        run: pnpm exec playwright install chromium
 
       - name: E2E tests
         run: NX_CLOUD=false pnpm nx e2e web-e2e --verbose
