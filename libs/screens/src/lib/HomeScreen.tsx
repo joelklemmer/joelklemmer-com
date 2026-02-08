@@ -7,7 +7,11 @@ import {
   type AppLocale,
 } from '@joelklemmer/i18n';
 import type { SectionId } from '@joelklemmer/authority-orchestration';
-import { createPageMetadata, PersonJsonLd } from '@joelklemmer/seo';
+import {
+  createPageMetadata,
+  PersonJsonLd,
+  WebSiteJsonLd,
+} from '@joelklemmer/seo';
 import {
   CardGridSection,
   FrameworkCard,
@@ -134,6 +138,7 @@ export async function HomeScreen() {
 
   return (
     <>
+      <WebSiteJsonLd locale={locale} />
       <PersonJsonLd />
       <div className="content-lane content-lane-grid">
         {HOME_IA_ORDER.filter((id) => HOME_SECTION_IDS.includes(id)).map(

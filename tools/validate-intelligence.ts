@@ -3,6 +3,9 @@
  * semantic index generation succeeds. Uses content/validate and intelligence/validate only
  * so next-mdx-remote is never loaded under tsx.
  */
+if (typeof process.setMaxListeners === 'function') {
+  process.setMaxListeners(20);
+}
 import path from 'node:path';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import matter from 'gray-matter';

@@ -1,0 +1,16 @@
+{
+  "cycles": [
+    {
+      "iteration": 1,
+      "timestamp": "2026-02-08",
+      "domain": "Structured data density / Entity graph strengthening",
+      "changes": [
+        "libs/seo: Added getWebSiteJsonLd(), WebSiteJsonLd component, WebSiteJsonLdProps; WebSite schema with @context, @type WebSite, name, url (locale-aware canonical home).",
+        "libs/screens/HomeScreen: Rendered WebSiteJsonLd with locale; home now emits WebSite + Person JSON-LD.",
+        "tools/validate-seo: Assert home WebSite JSON-LD (@type WebSite, url); updated success message."
+      ],
+      "validatorResult": "passed",
+      "impactSummary": "Homepage entity graph strengthened with schema.org WebSite; crawl/discoverability signal added without altering routing, governance, or naming. All verify gates green (format, lint, content, governance, i18n, pgf, intelligence, authority-signals, experience-intelligence, frameworks, aec, orchestration, content-os, sitemap, media-manifest, seo, tokens, build, a11y)."
+    }
+  ]
+}

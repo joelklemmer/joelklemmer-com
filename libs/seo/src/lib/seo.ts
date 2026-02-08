@@ -212,6 +212,47 @@ export function PersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps) {
   });
 }
 
+export interface WebSiteJsonLdProps {
+  baseUrl?: string;
+  locale?: AppLocale;
+  pathname?: string;
+  /** Site name for schema.org WebSite; defaults to authority name. */
+  name?: string;
+}
+
+const WEB_SITE_JSON_LD_NAME = 'Joel R. Klemmer';
+
+/**
+ * JSON-LD for the site root: WebSite with url and name for entity graph and discoverability.
+ */
+export function getWebSiteJsonLd({
+  baseUrl,
+  locale = defaultLocale,
+  pathname = '/',
+  name = WEB_SITE_JSON_LD_NAME,
+}: WebSiteJsonLdProps = {}) {
+  const siteUrl = normalizeBaseUrl(baseUrl);
+  const url = getCanonicalUrl({
+    baseUrl: siteUrl,
+    pathname: pathname.startsWith('/') ? pathname : `/${pathname}`,
+    locale,
+  });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name,
+    url,
+  };
+}
+
+export function WebSiteJsonLd(props: WebSiteJsonLdProps) {
+  const jsonLd = getWebSiteJsonLd(props);
+  return createElement('script', {
+    type: 'application/ld+json',
+    dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },
+  });
+}
+
 export interface BriefPageJsonLdProps {
   baseUrl?: string;
   locale: AppLocale;

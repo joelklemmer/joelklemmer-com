@@ -9,6 +9,7 @@ import {
   getCanonicalUrl,
   getHrefLangs,
   getPersonJsonLd,
+  getWebSiteJsonLd,
   hreflangAlternates,
 } from '@joelklemmer/seo';
 
@@ -96,6 +97,21 @@ for (const key of expectedKeys) {
   }
 }
 
+// Home must emit WebSite JSON-LD (entity graph, discoverability)
+const webSiteLd = getWebSiteJsonLd({
+  baseUrl,
+  locale: defaultLocale as AppLocale,
+  pathname: '/',
+});
+if (webSiteLd['@type'] !== 'WebSite') {
+  errors.push(
+    `Home WebSite JSON-LD: expected @type "WebSite", got ${webSiteLd['@type']}`,
+  );
+}
+if (!webSiteLd.url || typeof webSiteLd.url !== 'string') {
+  errors.push('Home WebSite JSON-LD: must include url');
+}
+
 // /brief must emit both Person and Report JSON-LD (author identity + entity graph)
 const personLd = getPersonJsonLd({ baseUrl });
 if (personLd['@type'] !== 'Person') {
@@ -136,5 +152,5 @@ if (errors.length) {
 }
 
 console.log(
-  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; /brief Person + Report JSON-LD.`,
+  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite JSON-LD; /brief Person + Report JSON-LD.`,
 );

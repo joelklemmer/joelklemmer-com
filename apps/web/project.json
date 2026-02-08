@@ -90,6 +90,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts"
       }
     },
+    "tokens-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-tokens.ts"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
@@ -122,6 +128,7 @@
           "nx run web:sitemap-validate",
           "nx run web:media-manifest-validate",
           "nx run web:seo-validate",
+          "nx run web:tokens-validate",
           "nx run web:test",
           "nx run web:build",
           "nx run web:restore-generated-typings",

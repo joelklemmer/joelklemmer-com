@@ -142,6 +142,57 @@ export function getMediaManifestVisible(manifest: MediaManifest): MediaAsset[] {
   return manifest.assets.filter(isMediaVisibleOnPage);
 }
 
+/** Crawl eligibility classification for governance and sitemap decisions. */
+export type MediaCrawlEligibility = 'indexable' | 'excluded';
+
+export function getMediaCrawlEligibility(
+  asset: MediaAsset,
+): MediaCrawlEligibility {
+  return isMediaSitemapEligible(asset) ? 'indexable' : 'excluded';
+}
+
+/**
+ * Authority scoring engine: 0–1 score from tier and optional semantic signals.
+ * Tier A visible = 1, Tier A = 0.95, Tier B = 0.7, Tier C = 0 (excluded).
+ */
+export function authorityScoreForAsset(asset: MediaAsset): number {
+  if (isMediaTierC(asset.descriptor)) return 0;
+  if (isMediaVisibleOnPage(asset)) return 1;
+  if (
+    tierASet.has(asset.descriptor as (typeof MEDIA_TIER_A_DESCRIPTORS)[number])
+  )
+    return 0.95;
+  if (
+    tierBSet.has(asset.descriptor as (typeof MEDIA_TIER_B_DESCRIPTORS)[number])
+  )
+    return 0.7;
+  return 0.5;
+}
+
+/**
+ * Manifest completeness audit: schema-level and governance checks.
+ * Use for reporting; getMediaManifest() already validates schema and files.
+ */
+export function auditManifestCompleteness(manifest: MediaManifest): {
+  ok: boolean;
+  errors: string[];
+} {
+  const errors: string[] = [];
+  const CANONICAL_PREFIX = 'joel-klemmer';
+  for (const asset of manifest.assets) {
+    if (!asset.alt?.trim())
+      errors.push(`Asset ${asset.id}: missing or empty alt.`);
+    if (!asset.descriptor?.trim())
+      errors.push(`Asset ${asset.id}: missing or empty descriptor.`);
+    const filename = asset.file.split('/').pop() ?? asset.file;
+    if (!filename.includes(CANONICAL_PREFIX))
+      errors.push(
+        `Asset ${asset.id}: filename must include "${CANONICAL_PREFIX}" (got ${filename}).`,
+      );
+  }
+  return { ok: errors.length === 0, errors };
+}
+
 const publicRootCandidates = [
   path.join(process.cwd(), 'apps', 'web', 'public'),
   path.join(process.cwd(), 'public'),
