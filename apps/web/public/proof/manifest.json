@@ -1,1 +1,68 @@
-{ "items": [] }
+{
+  "items": [
+    {
+      "id": "executive-brief-scope-evaluation-scope",
+      "filename": "executive-brief-scope-evaluation.txt",
+      "sha256": "0eda156edeb60c8d515b6ed64f003d258513de8a0e8dadee37a54925134f7c8d",
+      "labelKey": "scope",
+      "recordIds": ["executive-brief-scope-evaluation"],
+      "kind": "public-record"
+    },
+    {
+      "id": "procurement-governance-artifact-artifact",
+      "filename": "procurement-governance-artifact.txt",
+      "sha256": "ff6e25e90561df463ac5f1a9786ea911949fd46e10bdbde6df123f1c96e919b0",
+      "labelKey": "artifact",
+      "recordIds": ["procurement-governance-artifact"],
+      "kind": "public-record"
+    },
+    {
+      "id": "recovery-plan-two-weeks-summary",
+      "filename": "recovery-plan-two-weeks.txt",
+      "sha256": "f8e805702626c98f837c22beada779b4774338761e8d20e834e01a525c36534c",
+      "labelKey": "summary",
+      "recordIds": ["recovery-plan-two-weeks"],
+      "kind": "public-record"
+    },
+    {
+      "id": "accessibility-compliance-evidence-evidence",
+      "filename": "accessibility-compliance-evidence.txt",
+      "sha256": "2e02aa7e3f49cceb39d5fe1b39d7d9975c4efac2c46ea00e02aa7d6ab1a90764",
+      "labelKey": "evidence",
+      "recordIds": ["accessibility-compliance-evidence"],
+      "kind": "public-record"
+    },
+    {
+      "id": "security-disclosure-process-disclosure",
+      "filename": "security-disclosure-process.txt",
+      "sha256": "ed3872714adec6f0a6c30b9a488770958a3f5780a02d1c3cd878f84ffc53569a",
+      "labelKey": "disclosure",
+      "recordIds": ["security-disclosure-process"],
+      "kind": "public-record"
+    },
+    {
+      "id": "content-os-pgf-adoption-adoption",
+      "filename": "content-os-pgf-adoption.txt",
+      "sha256": "4d00c42ce9e613aaf1940f82e985d7cb3431705f99e1b0e9b6c609ec3cb99fd1",
+      "labelKey": "adoption",
+      "recordIds": ["content-os-pgf-adoption"],
+      "kind": "public-record"
+    },
+    {
+      "id": "intelligence-layer-graph-record-graph",
+      "filename": "intelligence-layer-graph-record.txt",
+      "sha256": "31d657608229dd3e8517fa8b2626ad65cabbac8e39f50563f8dc053fe0d22e25",
+      "labelKey": "graph",
+      "recordIds": ["intelligence-layer-graph-record"],
+      "kind": "public-record"
+    },
+    {
+      "id": "case-study-evidence-bundle-bundle",
+      "filename": "case-study-evidence-bundle.txt",
+      "sha256": "f31a37d9ec6365b0f69bba8d3207a49812baeb1c61bcc444afc114c847370404",
+      "labelKey": "bundle",
+      "recordIds": ["case-study-evidence-bundle"],
+      "kind": "public-record"
+    }
+  ]
+}

@@ -19,6 +19,7 @@ import {
   publicRecordFrontmatterSchema,
   validateClaimRegistry,
 } from '@joelklemmer/content/validate';
+import { runVerifyProofAttachments } from './verify-proof-attachments';
 
 const contentRootCandidates = [
   path.join(process.cwd(), 'content'),
@@ -290,6 +291,11 @@ if (proofManifest) {
         );
       }
     }
+  }
+  try {
+    runVerifyProofAttachments();
+  } catch (error) {
+    errors.push((error as Error).message);
   }
 }
 

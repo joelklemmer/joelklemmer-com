@@ -167,14 +167,18 @@ export function buildMailtoUrl(
 
 export function getPersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps = {}) {
   const url = normalizeBaseUrl(baseUrl);
-  return {
+  const sameAsUrls = sameAs ?? getIdentitySameAs();
+  const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Person',
     name: 'Joel Robert Klemmer',
     alternateName: 'Joel R. Klemmer',
     url,
-    sameAs: sameAs ?? getIdentitySameAs(),
   };
+  if (sameAsUrls.length > 0) {
+    jsonLd.sameAs = sameAsUrls;
+  }
+  return jsonLd;
 }
 
 export function PersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps) {

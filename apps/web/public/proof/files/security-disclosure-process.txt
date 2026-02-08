@@ -1,0 +1,10 @@
+Security Posture and Vulnerability Disclosure Process
+
+Scope
+Security posture and vulnerability disclosure are governed by the institutional security page. Scope, owner, and contact (including optional vulnerabilityDisclosureUrl) are stated. Review dates are maintained.
+
+Evidence
+Governed page includes effectiveDate, lastReviewedDate, nextReviewDate. No unverified security claims. Disclosure process is documented for evaluators.
+
+Outcome
+Stable reference for security review. Process is auditable from published policy.

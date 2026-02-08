@@ -61,6 +61,16 @@
     "heading": "קבצים מצורפים",
     "missing": "הקובץ המצורף טרם פורסם",
     "copyHash": "העתק hash מלא",
-    "labels": {}
+    "download": "הורד",
+    "labels": {
+      "scope": "היקף ושיטה",
+      "artifact": "חפץ",
+      "summary": "סיכום",
+      "evidence": "ראיה",
+      "disclosure": "תהליך גילוי",
+      "adoption": "רישום אימוץ",
+      "graph": "רישום גרף",
+      "bundle": "מקבץ ראיות"
+    }
   }
 }

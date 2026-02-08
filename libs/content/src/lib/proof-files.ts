@@ -10,7 +10,9 @@ const proofManifestItemSchema = z.object({
     .string()
     .length(64)
     .regex(/^[a-f0-9]{64}$/i, '64 hex chars'),
-  kind: z.literal('public-record'),
+  labelKey: z.string().min(1).optional(),
+  recordIds: z.array(z.string().min(1)).optional(),
+  kind: z.literal('public-record').optional(),
 });
 
 const proofManifestSchema = z.object({

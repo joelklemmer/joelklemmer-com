@@ -61,6 +61,16 @@
     "heading": "Attachments",
     "missing": "Attachment not published yet",
     "copyHash": "Copy full hash",
-    "labels": {}
+    "download": "Download",
+    "labels": {
+      "scope": "Scope and method",
+      "artifact": "Artifact",
+      "summary": "Summary",
+      "evidence": "Evidence",
+      "disclosure": "Disclosure process",
+      "adoption": "Adoption record",
+      "graph": "Graph record",
+      "bundle": "Evidence bundle"
+    }
   }
 }

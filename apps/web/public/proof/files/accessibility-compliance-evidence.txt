@@ -1,0 +1,10 @@
+Accessibility Compliance Posture and Test Evidence
+
+Scope
+Accessibility compliance is governed by the institutional accessibility page. Test evidence is produced by automated a11y runs (e.g. Playwright a11y config). Contact and review cadence are stated.
+
+Evidence
+Governed page includes effectiveDate, lastReviewedDate, nextReviewDate. CI runs a11y validation. No claim of certification without a separate dated record.
+
+Outcome
+Evaluators can confirm posture and test approach from published policy and CI evidence.

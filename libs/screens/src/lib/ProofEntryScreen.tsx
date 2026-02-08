@@ -244,7 +244,9 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
                   <dd className="text-base text-muted">
                     <Link
                       href={`/proof/files/${att.filename}`}
+                      download={att.filename}
                       className={`${focusRingClass} rounded-sm underline underline-offset-4`}
+                      aria-label={`${t('attachments.download')}: ${att.filename}`}
                     >
                       {att.filename}
                     </Link>

@@ -61,6 +61,16 @@
     "heading": "Adjuntos",
     "missing": "Adjunto aún no publicado",
     "copyHash": "Copiar hash completo",
-    "labels": {}
+    "download": "Descargar",
+    "labels": {
+      "scope": "Alcance y método",
+      "artifact": "Artefacto",
+      "summary": "Resumen",
+      "evidence": "Evidencia",
+      "disclosure": "Proceso de divulgación",
+      "adoption": "Registro de adopción",
+      "graph": "Registro de grafo",
+      "bundle": "Paquete de evidencia"
+    }
   }
 }

@@ -1,0 +1,10 @@
+Intelligence Layer Validation and Graph Model Record
+
+Scope
+The intelligence layer builds a graph from content: records, case studies, books, claims. Validation ensures node and edge counts and reference integrity. No code changes required for content-only updates when bindings are correct.
+
+Evidence
+validate-intelligence runs against public record, case studies, books, and claim registry. Graph model is documented in intelligence-layer.md. Failures indicate missing references; fixes are in content bindings, not the validator.
+
+Outcome
+Graph growth and integrity are verifiable in CI. Evaluators can rely on documented model and validation output.

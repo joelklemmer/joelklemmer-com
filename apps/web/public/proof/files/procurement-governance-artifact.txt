@@ -1,0 +1,10 @@
+Procurement and Governance Operating System Artifact
+
+Scope
+Governance operating system content describes method and constraints for program and procurement transformation. Deliverables are documented as artifacts with dates and verification notes.
+
+Evidence
+Operating system page defines scope and read path. Procurement and transformation outcomes are linked to public record where evidence exists. No unverified claims.
+
+Outcome
+Stable reference for evaluators reviewing governance and procurement capability. All assertions tied to dated records.
