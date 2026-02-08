@@ -1,0 +1,4 @@
+/* 40-utilities: small helpers not worth components */
+.text-muted {
+  color: hsl(var(--color-muted));
+}

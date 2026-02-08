@@ -1,14 +1,11 @@
 import type { ReactNode } from 'react';
 import { Fragment } from 'react';
 import { getLocale } from 'next-intl/server';
-import { cookies } from 'next/headers';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
-import { getHomeSectionOrder } from '@joelklemmer/authority-orchestration';
 import type { SectionId } from '@joelklemmer/authority-orchestration';
 import { createPageMetadata, PersonJsonLd } from '@joelklemmer/seo';
 import {
@@ -44,6 +41,15 @@ const HOME_SECTION_IDS: SectionId[] = [
   'routes',
 ];
 
+/** Fixed IA order: Hero first, then Start Here / Primary routes, Claim summary, Frameworks & doctrine. */
+const HOME_IA_ORDER: SectionId[] = [
+  'hero',
+  'startHere',
+  'routes',
+  'claims',
+  'doctrine',
+];
+
 export async function HomeScreen() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['home', 'frameworks']);
@@ -58,26 +64,13 @@ export async function HomeScreen() {
   const frameworks = (await getFrameworkList()).slice(0, 3);
   const briefDoctrineAnchor = `/${locale}/brief#doctrine`;
 
-  const cookieStore = await cookies();
-  const evaluatorMode = resolveEvaluatorMode({
-    cookies: cookieStore.toString(),
-    isDev: process.env.NODE_ENV !== 'production',
-  });
-  const sectionOrder = getHomeSectionOrder(evaluatorMode).filter((id) =>
-    HOME_SECTION_IDS.includes(id),
-  );
-  const orderMap = new Map(sectionOrder.map((id, i) => [id, i]));
-  const orderedIds = [...HOME_SECTION_IDS].sort(
-    (a, b) => (orderMap.get(a) ?? 99) - (orderMap.get(b) ?? 99),
-  );
-
   const hero = (
     <HeroSection
       title={t('hero.title')}
       lede={t('hero.lede')}
       actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
       visual={{
-        src: '/media/portrait.webp',
+        src: '/media/portraits/jrk-portrait-studio-2026-01.webp',
         alt: 'Portrait of Joel R. Klemmer',
         width: 1200,
         height: 1500,
@@ -141,10 +134,14 @@ export async function HomeScreen() {
   return (
     <>
       <PersonJsonLd />
-      {orderedIds.map((id) => {
-        const node = byId[id];
-        return node != null ? <Fragment key={id}>{node}</Fragment> : null;
-      })}
+      <div className="content-lane content-lane-grid">
+        {HOME_IA_ORDER.filter((id) => HOME_SECTION_IDS.includes(id)).map(
+          (id) => {
+            const node = byId[id];
+            return node != null ? <Fragment key={id}>{node}</Fragment> : null;
+          },
+        )}
+      </div>
     </>
   );
 }

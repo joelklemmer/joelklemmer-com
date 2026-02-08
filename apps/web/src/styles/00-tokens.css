@@ -1,0 +1,5 @@
+/* App-layer tokens only. Do not duplicate libs/tokens. Overrides for layout/readability. */
+:root {
+  --content-lane-max-width: 52rem;
+  --readable-line-length-app: var(--content-lane-max-width);
+}

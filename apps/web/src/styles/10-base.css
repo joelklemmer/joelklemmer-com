@@ -1,0 +1,89 @@
+/* 10-base: html/body defaults, typography primitives, focus, selection */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: var(--font-sans);
+  line-height: var(--leading-normal);
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  font-optical-sizing: auto;
+}
+
+body {
+  margin: 0;
+  background: var(--authority-atmosphere-subtle);
+  color: hsl(var(--color-text));
+  font-size: var(--body-analytical-size);
+  line-height: var(--body-analytical-line);
+  letter-spacing: var(--body-analytical-spacing);
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: var(--authority-ambient-radial);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+main.vacel-main {
+  box-shadow: var(--authority-depth-illusion);
+}
+
+html[dir='rtl'],
+html[dir='rtl'] body {
+  direction: rtl;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p,
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+
+::selection {
+  background: hsl(var(--color-accent) / 0.2);
+}
+
+:focus-visible {
+  outline: 2px solid hsl(var(--color-focus));
+  outline-offset: 2px;
+  transition:
+    outline-color var(--transition-duration-fast) var(--ease-authority),
+    outline-offset var(--transition-duration-fast) var(--ease-authority);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-authority-inner {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

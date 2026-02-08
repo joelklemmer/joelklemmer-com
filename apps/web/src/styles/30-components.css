@@ -1,0 +1,103 @@
+/* 30-components: authority-card, authority-glass, panel patterns, mdx-content */
+.mdx-content {
+  display: grid;
+  gap: var(--section-inner-gap);
+  font-size: var(--body-analytical-size);
+  line-height: var(--body-analytical-line);
+}
+
+.mdx-content h1 {
+  font-size: var(--display-heading-size);
+  line-height: var(--display-heading-line);
+  letter-spacing: var(--display-heading-spacing);
+  font-weight: var(--display-heading-weight);
+}
+
+.mdx-content h2 {
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-line);
+  letter-spacing: var(--section-heading-letter-spacing);
+  font-weight: var(--section-heading-weight);
+  margin-block-end: var(--section-heading-margin-block-end);
+}
+
+.mdx-content h3 {
+  font-size: var(--text-lg);
+  line-height: var(--leading-tight);
+  font-weight: 600;
+}
+
+.mdx-content p {
+  color: hsl(var(--color-text));
+}
+
+.mdx-content a {
+  color: hsl(var(--color-accent));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color var(--transition-duration-fast) var(--ease-authority);
+}
+
+.mdx-content ul {
+  display: grid;
+  gap: var(--space-2);
+  padding-left: var(--space-5);
+}
+
+.mdx-content li {
+  color: hsl(var(--color-text));
+}
+
+.section-visual-anchor {
+  min-height: var(--section-anchor-min-height);
+  background: var(--section-anchor-bg);
+  border: 1px solid var(--section-anchor-border);
+  border-radius: var(--section-anchor-radius);
+  box-shadow: var(--section-anchor-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.authority-glass {
+  background: var(--authority-glass-bg);
+  backdrop-filter: blur(var(--authority-glass-blur));
+  -webkit-backdrop-filter: blur(var(--authority-glass-blur));
+  box-shadow:
+    var(--authority-depth-layer1),
+    0 0 0 1px var(--authority-glass-border),
+    var(--authority-soft-light);
+}
+
+.authority-panel {
+  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
+  box-shadow:
+    var(--authority-depth-layer1), var(--authority-soft-glow),
+    var(--authority-soft-light);
+}
+
+.authority-card {
+  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
+  box-shadow:
+    var(--authority-card-elevation), var(--authority-card-glow),
+    var(--authority-controlled-glow);
+  transition:
+    box-shadow var(--transition-duration-normal) var(--ease-authority),
+    background-color var(--transition-duration-fast) var(--ease-authority);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .authority-card {
+    transition: none;
+  }
+}
+
+.authority-card:focus-within {
+  box-shadow:
+    var(--authority-card-elevation), var(--authority-surface-layer2),
+    var(--authority-card-glow);
+}
+
+[data-density='on'] .authority-card {
+  box-shadow: var(--authority-surface-depth), var(--authority-card-glow);
+}
