@@ -174,5 +174,21 @@
   "contactPathway": {
     "title": "Контакти",
     "linkLabel": "Контрольований доступ і координація."
+  },
+  "aec": {
+    "title": "Помічник для брифінгу",
+    "placeholder": "Оберіть тип запиту",
+    "intents": {
+      "summarize_framework": "Підсумувати фреймворк",
+      "trace_evidence_chain": "Прослідкувати ланцюжок доказів",
+      "compare_claims": "Порівняти твердження",
+      "explore_domain": "Дослідити домен",
+      "extract_decision_model": "Витягнути модель рішень"
+    },
+    "submitLabel": "Запит",
+    "collapseLabel": "Згорнути",
+    "expandLabel": "Розгорнути",
+    "loadingLabel": "Завантаження…",
+    "linksLabel": "Пов’язані сутності"
   }
 }

@@ -135,6 +135,22 @@ const briefSchema = z
       title: z.string().min(1),
       linkLabel: z.string().min(1),
     }),
+    aec: z.object({
+      title: z.string().min(1),
+      placeholder: z.string().min(1),
+      intents: z.object({
+        summarize_framework: z.string().min(1),
+        trace_evidence_chain: z.string().min(1),
+        compare_claims: z.string().min(1),
+        explore_domain: z.string().min(1),
+        extract_decision_model: z.string().min(1),
+      }),
+      submitLabel: z.string().min(1),
+      collapseLabel: z.string().min(1),
+      expandLabel: z.string().min(1),
+      loadingLabel: z.string().min(1),
+      linksLabel: z.string().min(1),
+    }),
   })
   .passthrough();
 

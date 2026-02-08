@@ -46,7 +46,10 @@ import {
   FrameworkDetailSection,
   HeroSection,
   EvidenceGraphSection,
+  AECBriefingPanel,
 } from '@joelklemmer/sections';
+import type { AECFormattedResult } from '@joelklemmer/aec';
+import { AEC_QUERY_INTENTS } from '@joelklemmer/aec';
 import { getEntityGraph } from '@joelklemmer/intelligence';
 import type { EntityGraph } from '@joelklemmer/intelligence';
 import { Container } from '@joelklemmer/ui';
@@ -67,11 +70,17 @@ export async function generateMetadata() {
 
 export const briefMetadata = generateMetadata;
 
+export interface BriefScreenProps {
+  /** When provided, AEC briefing panel is rendered and uses this action. */
+  queryBriefingAction?: (formData: FormData) => Promise<AECFormattedResult>;
+}
+
 const CLAIMS_DEFAULT_COUNT = 9;
 const CASE_STUDIES_MAX = 3;
 const PUBLIC_RECORD_HIGHLIGHTS_MAX = 10;
 
-export async function BriefScreen() {
+export async function BriefScreen(props?: BriefScreenProps) {
+  const { queryBriefingAction } = props ?? {};
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, [
     'brief',
@@ -355,6 +364,23 @@ export async function BriefScreen() {
           title={t('verificationGuidance.title')}
           body={t('verificationGuidance.body')}
         />
+
+        {queryBriefingAction ? (
+          <AECBriefingPanel
+            title={t('aec.title')}
+            placeholder={t('aec.placeholder')}
+            intentOptions={AEC_QUERY_INTENTS.map((value) => ({
+              value,
+              label: t(`aec.intents.${value}`),
+            }))}
+            submitLabel={t('aec.submitLabel')}
+            collapseLabel={t('aec.collapseLabel')}
+            expandLabel={t('aec.expandLabel')}
+            loadingLabel={t('aec.loadingLabel')}
+            linksLabel={t('aec.linksLabel')}
+            queryAction={queryBriefingAction}
+          />
+        ) : null}
 
         <section id="claims" className="section-shell">
           <Container className="section-shell">

@@ -1,6 +1,6 @@
 export { HomeScreen } from './HomeScreen';
 export { homeMetadata } from './HomeScreen';
-export { BriefScreen } from './BriefScreen';
+export { BriefScreen, type BriefScreenProps } from './BriefScreen';
 export { briefMetadata } from './BriefScreen';
 export { WorkScreen } from './WorkScreen';
 export { workMetadata } from './WorkScreen';

@@ -174,5 +174,21 @@
   "contactPathway": {
     "title": "Contact",
     "linkLabel": "Controlled access and coordination."
+  },
+  "aec": {
+    "title": "Briefing assistant",
+    "placeholder": "Select query intent",
+    "intents": {
+      "summarize_framework": "Summarize framework",
+      "trace_evidence_chain": "Trace evidence chain",
+      "compare_claims": "Compare claims",
+      "explore_domain": "Explore domain",
+      "extract_decision_model": "Extract decision model"
+    },
+    "submitLabel": "Query",
+    "collapseLabel": "Collapse",
+    "expandLabel": "Expand",
+    "loadingLabel": "Loading…",
+    "linksLabel": "Related entities"
   }
 }

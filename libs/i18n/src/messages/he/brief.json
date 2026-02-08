@@ -172,5 +172,21 @@
   "contactPathway": {
     "title": "צור קשר",
     "linkLabel": "גישה מבוקרת ותיאום."
+  },
+  "aec": {
+    "title": "עוזר תדרוך",
+    "placeholder": "בחר כוונת שאילתה",
+    "intents": {
+      "summarize_framework": "סכם מסגרת",
+      "trace_evidence_chain": "עקוב אחר שרשרת ראיות",
+      "compare_claims": "השווה טענות",
+      "explore_domain": "חקור תחום",
+      "extract_decision_model": "חלץ מודל החלטות"
+    },
+    "submitLabel": "שאילתה",
+    "collapseLabel": "כווץ",
+    "expandLabel": "הרחב",
+    "loadingLabel": "טוען…",
+    "linksLabel": "ישויות קשורות"
   }
 }

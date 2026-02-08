@@ -34,3 +34,8 @@ export { QuantifiedOutcomesSection } from './QuantifiedOutcomesSection';
 export { ReadPathSection } from './ReadPathSection';
 export { StartHereSection } from './StartHereSection';
 export { VerificationGuidanceSection } from './VerificationGuidanceSection';
+export { AECBriefingPanel } from './AECBriefingPanel.client';
+export type {
+  AECBriefingPanelProps,
+  AECIntentOption,
+} from './AECBriefingPanel.client';

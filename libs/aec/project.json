@@ -1,0 +1,7 @@
+{
+  "name": "aec",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/aec/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:aec"]
+}

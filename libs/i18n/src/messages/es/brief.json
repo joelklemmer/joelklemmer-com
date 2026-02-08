@@ -174,5 +174,21 @@
   "contactPathway": {
     "title": "Contacto",
     "linkLabel": "Acceso controlado y coordinación."
+  },
+  "aec": {
+    "title": "Asistente de briefing",
+    "placeholder": "Seleccionar intención de consulta",
+    "intents": {
+      "summarize_framework": "Resumir marco",
+      "trace_evidence_chain": "Rastrear cadena de evidencia",
+      "compare_claims": "Comparar afirmaciones",
+      "explore_domain": "Explorar dominio",
+      "extract_decision_model": "Extraer modelo de decisión"
+    },
+    "submitLabel": "Consultar",
+    "collapseLabel": "Contraer",
+    "expandLabel": "Expandir",
+    "loadingLabel": "Cargando…",
+    "linksLabel": "Entidades relacionadas"
   }
 }
