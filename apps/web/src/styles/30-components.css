@@ -1,4 +1,30 @@
 /* 30-components: authority-card, authority-glass, panel patterns, mdx-content */
+/* CALC: Authority composition anchors — hero, section headings, route list, claims, doctrine; consistent card material */
+
+.calc-card-material {
+  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
+  box-shadow:
+    var(--authority-card-elevation), var(--authority-card-glow),
+    var(--authority-controlled-glow);
+  transition:
+    box-shadow var(--transition-duration-normal) var(--ease-authority),
+    background-color var(--transition-duration-fast) var(--ease-authority);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .calc-card-material {
+    transition: none;
+  }
+}
+
+.calc-section-heading {
+  font-size: var(--section-heading-size);
+  line-height: var(--section-heading-line);
+  letter-spacing: var(--section-heading-letter-spacing);
+  font-weight: var(--section-heading-weight);
+  margin-block-end: var(--section-heading-margin-block-end);
+}
+
 .mdx-content {
   display: grid;
   gap: var(--section-inner-gap);

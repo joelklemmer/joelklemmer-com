@@ -1,146 +1,11 @@
 /**
  * Phase II: Individual reclassification (disallowed → semantic descriptors) and manifest enrichment.
- * Run from repo root: npx tsx --tsconfig tsconfig.base.json tools/reclassify-and-enrich-manifest.ts
+ * Uses Media Authority Classifier (MAC). Run: npx tsx --tsconfig tsconfig.base.json tools/reclassify-and-enrich-manifest.ts
  * NO permanent delete; NO filename changes; NO bulk descriptor assignment (per-asset mapping).
  */
 import * as fs from 'fs';
 import * as path from 'path';
-
-const ROOT = path.resolve(__dirname, '..');
-const MANIFEST_PATH = path.join(
-  ROOT,
-  'apps',
-  'web',
-  'public',
-  'media',
-  'manifest.json',
-);
-
-const TIER_A_VISIBLE = new Set([
-  'executive-studio',
-  'formal-board',
-  'institutional-identity',
-  'statesman-portrait',
-  'policy-profile',
-  'press-headshot',
-  'leadership-profile',
-  'speaking-address',
-  'author-environment',
-]);
-const TIER_A_OTHER = new Set([
-  'startup-founder',
-  'city-vogue',
-  'luxury-hotel',
-  'fine-dining',
-]);
-const TIER_B = new Set([
-  'outdoor-adventure',
-  'winter',
-  'luxury',
-  'hot-air-balloon',
-]);
-const TIER_C = new Set([
-  'cozy-home',
-  'easter',
-  'glamour-photos',
-  'modeling',
-  'luxury-cruise',
-  'casual',
-  'party',
-  'social',
-]);
-
-function getAuthorityTier(descriptor: string): 'A' | 'B' | 'C' {
-  if (TIER_A_VISIBLE.has(descriptor) || TIER_A_OTHER.has(descriptor))
-    return 'A';
-  if (TIER_B.has(descriptor)) return 'B';
-  return 'C';
-}
-
-function getPersonaSignal(
-  descriptor: string,
-): 'executive' | 'statesman' | 'author' | 'speaker' | 'institutional' {
-  switch (descriptor) {
-    case 'executive-studio':
-    case 'formal-board':
-    case 'leadership-profile':
-      return 'executive';
-    case 'statesman-portrait':
-    case 'policy-profile':
-      return 'statesman';
-    case 'author-environment':
-      return 'author';
-    case 'speaking-address':
-      return 'speaker';
-    case 'institutional-identity':
-    case 'press-headshot':
-      return 'institutional';
-    default:
-      return 'executive';
-  }
-}
-
-function getEnvironmentSignal(
-  descriptor: string,
-): 'studio' | 'podium' | 'office' | 'architectural' | 'literary' {
-  if (descriptor === 'speaking-address') return 'podium';
-  if (descriptor === 'author-environment') return 'literary';
-  if (
-    [
-      'executive-studio',
-      'formal-board',
-      'institutional-identity',
-      'press-headshot',
-      'leadership-profile',
-      'statesman-portrait',
-      'policy-profile',
-    ].includes(descriptor)
-  )
-    return 'studio';
-  return 'studio';
-}
-
-function getFormalityLevel(
-  descriptor: string,
-): 'high' | 'elevated' | 'moderate' {
-  if (
-    ['formal-board', 'press-headshot', 'institutional-identity'].includes(
-      descriptor,
-    )
-  )
-    return 'high';
-  if (
-    [
-      'executive-studio',
-      'statesman-portrait',
-      'leadership-profile',
-      'policy-profile',
-    ].includes(descriptor)
-  )
-    return 'elevated';
-  return 'moderate';
-}
-
-function getVisualTone(
-  descriptor: string,
-): 'commanding' | 'approachable' | 'scholarly' | 'strategic' | 'decisive' {
-  switch (descriptor) {
-    case 'formal-board':
-      return 'commanding';
-    case 'author-environment':
-      return 'approachable';
-    case 'statesman-portrait':
-    case 'policy-profile':
-      return 'scholarly';
-    case 'leadership-profile':
-      return 'strategic';
-    case 'executive-studio':
-    case 'press-headshot':
-      return 'decisive';
-    default:
-      return 'commanding';
-  }
-}
+import { classifyByDescriptor } from './media-authority-classifier';
 
 function getSeoKeywords(descriptor: string, kind: string): string[] {
   const sets: Record<string, string[]> = {
@@ -201,6 +66,7 @@ interface RawAsset {
   visualTone?: string;
   caption?: string;
   seoKeywords?: string[];
+  descriptorDisplayLabel?: string;
 }
 
 function reclassifyDescriptor(
@@ -235,11 +101,13 @@ function main() {
 
   for (const asset of manifest.assets) {
     asset.descriptor = reclassifyDescriptor(asset, indexByDescriptor);
-    asset.authorityTier = getAuthorityTier(asset.descriptor);
-    asset.personaSignal = getPersonaSignal(asset.descriptor);
-    asset.environmentSignal = getEnvironmentSignal(asset.descriptor);
-    asset.formalityLevel = getFormalityLevel(asset.descriptor);
-    asset.visualTone = getVisualTone(asset.descriptor);
+    const mac = classifyByDescriptor(asset.descriptor);
+    asset.authorityTier = mac.authorityTier;
+    asset.personaSignal = mac.personaSignal;
+    asset.environmentSignal = mac.environmentSignal;
+    asset.formalityLevel = mac.formalityLevel;
+    asset.visualTone = mac.visualTone;
+    asset.descriptorDisplayLabel = mac.descriptorDisplayLabel;
     asset.caption = asset.alt;
     asset.seoKeywords = getSeoKeywords(asset.descriptor, asset.kind);
   }

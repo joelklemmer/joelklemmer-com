@@ -20,7 +20,11 @@
     "copySha256": "Copy",
     "viewImage": "View image",
     "copyLink": "Copy link",
-    "noResults": "No assets match the selected filter."
+    "noResults": "No assets match the selected filter.",
+    "authorityDetails": "Authority details",
+    "pressUsageTitle": "Press and media use",
+    "pressUsageBody": "Assets in this archive are available for editorial and press use. License terms, attribution, and permitted use are set out in the site terms.",
+    "pressUsageTermsLink": "Terms of use"
   },
   "mediaKit": {
     "title": "Media kit",

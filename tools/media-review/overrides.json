@@ -1,0 +1,4 @@
+{
+  "_comment": "Approved overrides for media manifest. Key = asset id. Run apply-media-overrides.ts after editing.",
+  "overrides": {}
+}

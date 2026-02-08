@@ -1,0 +1,804 @@
+{
+  "generatedAt": "2026-02-08T19:37:20.382Z",
+  "count": 38,
+  "items": [
+    {
+      "id": "portrait-casual-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__01.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-casual-2026-01-02",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__02.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-casual-2026-01-03",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__03.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-casual-2026-01-04",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__04.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-casual-2026-01-05",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__05.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-casual-2026-01-06",
+      "file": "/media/portraits/joel-klemmer__portrait__casual__2026-01__06.webp",
+      "descriptor": "casual",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Casual"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Casual portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__01.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-02",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__02.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-03",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__03.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-04",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__04.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-05",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__05.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-cozy-home-2026-01-06",
+      "file": "/media/portraits/joel-klemmer__portrait__cozy-home__2026-01__06.webp",
+      "descriptor": "cozy-home",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Cozy Home"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer in a casual indoor setting."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__01.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-02",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__02.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-03",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__03.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-04",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__04.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-05",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__05.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-06",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__06.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-easter-2026-01-07",
+      "file": "/media/portraits/joel-klemmer__portrait__easter__2026-01__07.webp",
+      "descriptor": "easter",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Easter"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__01.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-02",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__02.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-03",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__03.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-04",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__04.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-05",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__05.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-06",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__06.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-07",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__07.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-08",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__08.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-09",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__09.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-10",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__10.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-glamour-photos-2026-01-11",
+      "file": "/media/portraits/joel-klemmer__portrait__glamour-photos__2026-01__11.webp",
+      "descriptor": "glamour-photos",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Glamour Photos"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Joel Klemmer in glamour photos context."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__01.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-02",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__02.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-03",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__03.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-04",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__04.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-05",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__05.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-06",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__06.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-luxury-cruise-2026-01-07",
+      "file": "/media/portraits/joel-klemmer__portrait__luxury-cruise__2026-01__07.webp",
+      "descriptor": "luxury-cruise",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Luxury Cruise"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    },
+    {
+      "id": "portrait-modeling-2026-01-01",
+      "file": "/media/portraits/joel-klemmer__portrait__modeling__2026-01__01.webp",
+      "descriptor": "modeling",
+      "reason": "tier_c",
+      "suggested": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "environmentSignal": "studio",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "descriptorDisplayLabel": "Modeling"
+      },
+      "current": {
+        "authorityTier": "C",
+        "personaSignal": "executive",
+        "formalityLevel": "moderate",
+        "visualTone": "commanding",
+        "caption": "Portrait of Joel Klemmer."
+      }
+    }
+  ]
+}

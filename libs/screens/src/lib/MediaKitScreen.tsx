@@ -5,7 +5,12 @@ import {
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { getMediaKit, getMediaManifest, renderMdx } from '@joelklemmer/content';
+import {
+  getMediaKit,
+  getMediaManifest,
+  getMediaManifestVisible,
+  renderMdx,
+} from '@joelklemmer/content';
 import {
   CardGridSection,
   FallbackNoticeSection,
@@ -36,11 +41,12 @@ export async function MediaKitScreen() {
   ) : null;
 
   const manifest = await getMediaManifest();
-  const assetsSection = manifest.assets.length ? (
+  const tierAVisible = getMediaManifestVisible(manifest);
+  const assetsSection = tierAVisible.length ? (
     <CardGridSection
       title={t('mediaKit.assetsTitle')}
       lede={t('mediaKit.assetsLede')}
-      items={manifest.assets.map((asset) => ({
+      items={tierAVisible.map((asset) => ({
         title: asset.descriptor.replace(/-/g, ' '),
         description: asset.alt,
         meta: t('mediaKit.assetMeta', {

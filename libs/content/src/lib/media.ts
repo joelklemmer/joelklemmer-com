@@ -51,6 +51,8 @@ const mediaAssetSchema = z.object({
   visualTone: visualToneSchema.optional(),
   caption: z.string().optional(),
   seoKeywords: z.array(z.string()).optional(),
+  /** UI-facing label from Media Authority Classifier (MAC). */
+  descriptorDisplayLabel: z.string().optional(),
 });
 
 const mediaManifestSchema = z.object({
@@ -112,6 +114,13 @@ export function isMediaTierC(descriptor: string): boolean {
   return tierCSet.has(descriptor as (typeof MEDIA_TIER_C_DESCRIPTORS)[number]);
 }
 
+export function isMediaTierA(asset: MediaAsset): boolean {
+  return (
+    asset.authorityTier === 'A' ||
+    tierASet.has(asset.descriptor as (typeof MEDIA_TIER_A_DESCRIPTORS)[number])
+  );
+}
+
 export function isMediaSitemapEligible(asset: MediaAsset): boolean {
   return !isMediaTierC(asset.descriptor);
 }
@@ -140,6 +149,20 @@ export function getMediaManifestSitemapEligible(
 /** Filter manifest to assets visible on the media archive page (visible descriptors only). */
 export function getMediaManifestVisible(manifest: MediaManifest): MediaAsset[] {
   return manifest.assets.filter(isMediaVisibleOnPage);
+}
+
+/** Filter manifest to Tier A only (for structured data / no dilution). */
+export function getMediaManifestTierAOnly(
+  manifest: MediaManifest,
+): MediaAsset[] {
+  return manifest.assets.filter(
+    (a) =>
+      !isMediaTierC(a.descriptor) &&
+      (a.authorityTier === 'A' ||
+        tierASet.has(
+          a.descriptor as (typeof MEDIA_TIER_A_DESCRIPTORS)[number],
+        )),
+  );
 }
 
 /** Crawl eligibility classification for governance and sitemap decisions. */

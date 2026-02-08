@@ -20,7 +20,11 @@
     "copySha256": "Copiar",
     "viewImage": "Ver imagen",
     "copyLink": "Copiar enlace",
-    "noResults": "Ningún activo coincide con el filtro."
+    "noResults": "Ningún activo coincide con el filtro.",
+    "authorityDetails": "Detalles de autoridad",
+    "pressUsageTitle": "Uso en prensa y medios",
+    "pressUsageBody": "Los activos de este archivo están disponibles para uso editorial y de prensa. Los términos de licencia, atribución y uso permitido se establecen en los términos del sitio.",
+    "pressUsageTermsLink": "Términos de uso"
   },
   "mediaKit": {
     "title": "Kit de medios",
