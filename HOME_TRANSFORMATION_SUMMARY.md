@@ -1,17 +1,20 @@
 # Home Page Transformation Summary
 
 ## Overview
+
 Transformed Home page into a 2026+ elite "executive briefing room" interface with Apple-level craft, McKinsey-level clarity, and institutional statesmanship.
 
 ## Files Changed
 
 ### New Components Created
+
 1. **libs/ui/src/lib/LanguageSwitcherPopover.tsx** - Accessible language switcher with popover menu
 2. **libs/ui/src/lib/ThemeProvider.tsx** - Theme context provider (Light/Dark/System)
 3. **libs/ui/src/lib/ThemeToggle.tsx** - Theme toggle button component
 4. **libs/ui/src/lib/AccessibilityPanel.tsx** - Accessibility control panel (theme, contrast, motion, text size)
 
 ### Modified Files
+
 1. **apps/web/src/app/layout.tsx** - Added inline script to prevent FOUC for theme/accessibility settings
 2. **apps/web/src/app/[locale]/layout.tsx** - Integrated ThemeProvider and new header controls
 3. **libs/sections/src/lib/HeaderSection.tsx** - Updated to accept `headerControls` prop instead of `languageSwitcher`
@@ -26,6 +29,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## Systems Added
 
 ### 1. Language Switcher Popover (Phase 1)
+
 - **Component**: `LanguageSwitcherPopover`
 - **Features**:
   - Single icon/button in header (replaces noisy inline links)
@@ -36,6 +40,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
   - Preserves pathname and query params when switching locales
 
 ### 2. Theme System (Phase 2)
+
 - **Components**: `ThemeProvider`, `ThemeToggle`
 - **Features**:
   - Three modes: Light / Dark / System (respects `prefers-color-scheme`)
@@ -46,6 +51,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
   - Token-driven (uses existing `:root[data-theme='dark']` tokens)
 
 ### 3. Accessibility Control Panel (Phase 3)
+
 - **Component**: `AccessibilityPanel`
 - **Features**:
   - Theme control (Light/Dark/System) - integrated with ThemeProvider
@@ -57,24 +63,28 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
   - RTL-safe positioning
 
 ### 4. Content Lane Width Fix (Phase 5)
+
 - **Change**: Updated `--content-lane-max-width` from `52rem` to `var(--container-max-width)` (56rem)
 - **Impact**: Home sections now use consistent width with hero and other pages
 
 ## Accessibility Features
 
 ### Keyboard Navigation
+
 - ✅ Language switcher: Enter/Space opens, Esc closes, Arrow keys navigate
 - ✅ Theme toggle: Enter/Space cycles through themes
 - ✅ A11y panel: Enter/Space opens, Esc closes, Tab navigates controls
 - ✅ All controls have proper `aria-label`, `aria-expanded`, `aria-controls`
 
 ### Screen Reader Support
+
 - ✅ All interactive elements have descriptive labels
 - ✅ Menu state announced (`aria-expanded`)
 - ✅ Current language indicated (`aria-current="page"`)
 - ✅ Skip link to main content (existing)
 
 ### RTL Support
+
 - ✅ Language switcher popover uses `end-0` (logical property)
 - ✅ A11y panel uses `end-0` for positioning
 - ✅ All text direction respects `dir="rtl"` from root layout
@@ -82,11 +92,13 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## Performance Improvements
 
 ### FOUC Prevention
+
 - ✅ Inline script in `<head>` applies theme/contrast/motion/text-size before first paint
 - ✅ Script reads localStorage and applies attributes synchronously
 - ✅ No flash of wrong theme or settings
 
 ### Image Optimization
+
 - ✅ Hero portrait uses Next/Image with proper `sizes` attribute
 - ✅ Explicit width/height prevents layout shift
 - ✅ Priority loading for hero image
@@ -94,6 +106,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## SEO & Entity Signals (Phase 7)
 
 ### Verified Correct
+
 - ✅ Person JSON-LD: `name: "Joel Robert Klemmer"`, `alternateName: "Joel R. Klemmer"`
 - ✅ WebSite JSON-LD: Correct locale and canonical URLs
 - ✅ Metadata: Title, description, OG image, canonical, hreflang all correct
@@ -101,12 +114,14 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## CSS Token System
 
 ### New Data Attributes
+
 - `data-theme="light|dark"` - Theme control (existing tokens, now UI-controlled)
 - `data-contrast="high"` - High contrast mode (existing tokens, now UI-controlled)
 - `data-motion="reduced"` - Reduced motion (new CSS rules disable animations/transitions)
 - `data-text-size="large"` - Large text (new CSS rules increase font sizes)
 
 ### Token Alignment
+
 - All new features use existing token system
 - No arbitrary values or inline styles
 - Respects WCAG 2.2 AA+ standards
@@ -114,6 +129,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## Internationalization
 
 ### New Translation Keys Added
+
 - `a11y.themeLight`, `a11y.themeDark`, `a11y.themeSystem`
 - `a11y.themeLabel`
 - `a11y.contrastLabel`, `a11y.contrastDefault`, `a11y.contrastHigh`
@@ -122,6 +138,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 - `a11y.accessibilityPanelLabel`
 
 ### Locales Updated
+
 - ✅ English (en)
 - ✅ Ukrainian (uk)
 - ✅ Spanish (es)
@@ -130,6 +147,7 @@ Transformed Home page into a 2026+ elite "executive briefing room" interface wit
 ## Architecture Preserved
 
 ### Non-Negotiables Maintained
+
 - ✅ Nx monorepo structure
 - ✅ Next.js App Router
 - ✅ Existing libs structure

@@ -14,7 +14,6 @@
     "footerLabel": "Нижній колонтитул",
     "languageSwitcherLabel": "Вибір мови",
     "languageSwitcherAction": "Змінити мову на {language}",
-<<<<<<< Current (Your changes)
     "accessibilityPanelLabel": "Налаштування доступності",
     "themeLabel": "Тема",
     "themeLight": "Світла",
@@ -26,38 +25,8 @@
     "motionLabel": "Зменшити рух",
     "textSizeLabel": "Розмір тексту",
     "textSizeDefault": "За замовчуванням",
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-    "textSizeLarge": "Великий"
-=======
-    "themeLight": "Світла тема",
-    "themeDark": "Темна тема",
-    "themeSystem": "Системна тема",
-    "themeLabel": "Тема",
-    "contrastLabel": "Контраст",
-    "contrastDefault": "За замовчуванням",
-    "contrastHigh": "Високий",
-    "motionLabel": "Рух",
-    "motionDefault": "За замовчуванням",
-    "motionReduced": "Зменшений",
-    "textSizeLabel": "Розмір тексту",
-    "textSizeDefault": "За замовчуванням",
-    "textSizeLarge": "Великий",
-    "accessibilityPanelLabel": "Налаштування доступності"
->>>>>>> Incoming (Background Agent changes)
-=======
     "textSizeLarge": "Великий",
     "underlineLinksLabel": "Підкреслювати посилання"
->>>>>>> Incoming (Background Agent changes)
-=======
-    "textSizeLarge": "Великий",
-    "underlineLinksLabel": "Підкреслювати посилання"
->>>>>>> Incoming (Background Agent changes)
-=======
-    "textSizeLarge": "Великий",
-    "underlineLinksLabel": "Підкреслювати посилання"
->>>>>>> Incoming (Background Agent changes)
   },
   "fallbackNotice": {
     "title": "Попередження про переклад",
@@ -66,29 +35,5 @@
   },
   "density": {
     "toggleLabel": "Режим щільності"
-  },
-  "a11y": {
-    "panelLabel": "Налаштування доступності",
-    "theme": {
-      "label": "Тема",
-      "light": "Світла",
-      "dark": "Темна",
-      "system": "Системна"
-    },
-    "contrast": {
-      "label": "Контраст",
-      "default": "За замовчуванням",
-      "high": "Високий"
-    },
-    "motion": {
-      "label": "Рух",
-      "default": "За замовчуванням",
-      "reduced": "Зменшений"
-    },
-    "textSize": {
-      "label": "Розмір тексту",
-      "default": "За замовчуванням",
-      "large": "Великий"
-    }
   }
 }

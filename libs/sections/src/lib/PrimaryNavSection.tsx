@@ -49,7 +49,11 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
         const currentIndex =
-          focusedIndex !== null ? focusedIndex : e.key === 'ArrowDown' ? -1 : items.length;
+          focusedIndex !== null
+            ? focusedIndex
+            : e.key === 'ArrowDown'
+              ? -1
+              : items.length;
         const nextIndex =
           e.key === 'ArrowDown'
             ? (currentIndex + 1) % items.length
@@ -105,9 +109,7 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
             <Link
               href={item.href}
               className={`${focusRingClass} rounded-sm px-1 py-0.5 transition-colors motion-reduce:transition-none ${
-                isActive
-                  ? 'text-text font-semibold'
-                  : 'hover:text-text'
+                isActive ? 'text-text font-semibold' : 'hover:text-text'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >

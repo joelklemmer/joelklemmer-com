@@ -14,7 +14,6 @@
     "footerLabel": "כותרת תחתונה",
     "languageSwitcherLabel": "אפשרויות שפה",
     "languageSwitcherAction": "החלף שפה ל {language}",
-<<<<<<< Current (Your changes)
     "accessibilityPanelLabel": "הגדרות נגישות",
     "themeLabel": "ערכת נושא",
     "themeLight": "בהיר",
@@ -26,38 +25,8 @@
     "motionLabel": "הפחתת תנועה",
     "textSizeLabel": "גודל טקסט",
     "textSizeDefault": "ברירת מחדל",
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-    "textSizeLarge": "גדול"
-=======
-    "themeLight": "ערכת נושא בהירה",
-    "themeDark": "ערכת נושא כהה",
-    "themeSystem": "ערכת נושא של המערכת",
-    "themeLabel": "ערכת נושא",
-    "contrastLabel": "ניגודיות",
-    "contrastDefault": "ברירת מחדל",
-    "contrastHigh": "גבוה",
-    "motionLabel": "תנועה",
-    "motionDefault": "ברירת מחדל",
-    "motionReduced": "מופחת",
-    "textSizeLabel": "גודל טקסט",
-    "textSizeDefault": "ברירת מחדל",
-    "textSizeLarge": "גדול",
-    "accessibilityPanelLabel": "הגדרות נגישות"
->>>>>>> Incoming (Background Agent changes)
-=======
-    "textSizeLarge": "גדול",
-    "underlineLinksLabel": "להדגיש קישורים"
->>>>>>> Incoming (Background Agent changes)
-=======
-    "textSizeLarge": "גדול",
-    "underlineLinksLabel": "להדגיש קישורים"
->>>>>>> Incoming (Background Agent changes)
-=======
     "textSizeLarge": "גדול",
     "underlineLinksLabel": "הדגשת קישורים"
->>>>>>> Incoming (Background Agent changes)
   },
   "fallbackNotice": {
     "title": "התראת תרגום",
@@ -66,29 +35,5 @@
   },
   "density": {
     "toggleLabel": "תצוגת צפיפות"
-  },
-  "a11y": {
-    "panelLabel": "הגדרות נגישות",
-    "theme": {
-      "label": "ערכת נושא",
-      "light": "בהיר",
-      "dark": "כהה",
-      "system": "מערכת"
-    },
-    "contrast": {
-      "label": "ניגודיות",
-      "default": "ברירת מחדל",
-      "high": "גבוה"
-    },
-    "motion": {
-      "label": "תנועה",
-      "default": "ברירת מחדל",
-      "reduced": "מופחת"
-    },
-    "textSize": {
-      "label": "גודל טקסט",
-      "default": "ברירת מחדל",
-      "large": "גדול"
-    }
   }
 }

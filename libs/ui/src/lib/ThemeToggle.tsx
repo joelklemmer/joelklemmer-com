@@ -103,11 +103,7 @@ export function ThemeToggle() {
       aria-label={getLabel()}
       className={`${focusRingClass} flex items-center justify-center rounded-sm p-1.5 text-muted hover:text-text`}
     >
-<<<<<<< Current (Your changes)
       {getIcon()}
-=======
-      <span aria-hidden="true">{resolvedTheme === 'dark' ? '🌙' : '☀️'}</span>
->>>>>>> Incoming (Background Agent changes)
       <span className="sr-only">{getLabel()}</span>
     </button>
   );

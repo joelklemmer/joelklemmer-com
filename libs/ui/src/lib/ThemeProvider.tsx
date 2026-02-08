@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -16,16 +22,20 @@ const THEME_STORAGE_KEY = 'joelklemmer-theme';
 
 function getSystemTheme(): 'light' | 'dark' {
   if (typeof window === 'undefined') return 'light';
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+    ? 'dark'
+    : 'light';
 }
 
 function getStoredTheme(): Theme {
   if (typeof window === 'undefined') return 'system';
   try {
     const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    return (stored === 'light' || stored === 'dark' || stored === 'system'
-      ? stored
-      : 'system') as Theme;
+    return (
+      stored === 'light' || stored === 'dark' || stored === 'system'
+        ? stored
+        : 'system'
+    ) as Theme;
   } catch {
     return 'system';
   }

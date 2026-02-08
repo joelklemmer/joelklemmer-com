@@ -1,6 +1,12 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from 'react';
 
 type ContrastMode = 'default' | 'high';
 
@@ -9,7 +15,9 @@ interface ContrastContextValue {
   setContrast: (contrast: ContrastMode) => void;
 }
 
-const ContrastContext = createContext<ContrastContextValue | undefined>(undefined);
+const ContrastContext = createContext<ContrastContextValue | undefined>(
+  undefined,
+);
 
 const CONTRAST_STORAGE_KEY = 'joelklemmer-contrast';
 
@@ -48,13 +56,14 @@ export function ContrastProvider({ children }: { children: ReactNode }) {
     setMounted(true);
     const stored = getStoredContrast();
     // If no stored preference, respect system preference
-    const initial = stored === 'default' && typeof window !== 'undefined' 
-      ? getSystemContrast() 
-      : stored;
+    const initial =
+      stored === 'default' && typeof window !== 'undefined'
+        ? getSystemContrast()
+        : stored;
     setContrastState(initial);
     applyContrast(initial);
   }, []);
-  
+
   // Listen for system contrast changes when contrast is 'default'
   useEffect(() => {
     if (!mounted || contrast !== 'default') return;

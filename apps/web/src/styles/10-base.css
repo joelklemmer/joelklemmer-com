@@ -48,29 +48,10 @@ a {
   text-decoration: none;
 }
 
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-<<<<<<< Current (Your changes)
-/* Underline links when data-underline-links is set */
-html[data-underline-links='true'] a:not([class*='no-underline']) {
-  text-decoration: underline;
-  text-underline-offset: 0.25em;
-=======
-:root[data-underline-links='true'] a:not([class*='no-underline']) {
-  text-decoration: underline;
-  text-underline-offset: 2px;
->>>>>>> Incoming (Background Agent changes)
-=======
-html[data-underline-links='true'] a:not([class*='no-underline']) {
-  text-decoration: underline;
-  text-underline-offset: 2px;
->>>>>>> Incoming (Background Agent changes)
-=======
 /* Underline links toggle */
-:root[data-underline-links='true'] a:not([class*='no-underline']) {
+html[data-underline-links='true'] a:not([class*='no-underline']) {
   text-decoration: underline;
   text-underline-offset: 2px;
->>>>>>> Incoming (Background Agent changes)
 }
 
 p,
@@ -93,8 +74,7 @@ h4 {
     outline-offset var(--transition-duration-fast) var(--ease-authority);
 }
 
-@media (prefers-reduced-motion: reduce),
-       html[data-motion='reduced'] {
+@media (prefers-reduced-motion: reduce), html[data-motion='reduced'] {
   html {
     scroll-behavior: auto;
   }

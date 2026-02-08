@@ -53,11 +53,15 @@ export function CardGridSection({
                     {item.title}
                   </h3>
                   {item.description ? (
-                    <p className="text-sm text-muted leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-muted leading-relaxed">
+                      {item.description}
+                    </p>
                   ) : null}
                 </div>
                 {item.meta ? (
-                  <p className="text-xs text-muted mt-4 pt-4 border-t border-border">{item.meta}</p>
+                  <p className="text-xs text-muted mt-4 pt-4 border-t border-border">
+                    {item.meta}
+                  </p>
                 ) : null}
               </div>
             );

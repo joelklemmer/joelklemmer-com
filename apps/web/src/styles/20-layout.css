@@ -231,7 +231,7 @@ section.section-shell:last-child {
     max-width: min(320px, 100%);
     margin-inline: auto;
   }
-  
+
   .hero-portrait-wrapper {
     max-height: min(400px, 50vh);
   }

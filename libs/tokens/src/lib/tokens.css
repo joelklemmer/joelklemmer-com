@@ -66,26 +66,26 @@
   --meta-label-size: 0.75rem;
   --meta-label-line: 1.4;
   --meta-label-spacing: 0.05em;
-  
+
   /* Typography scale tokens (H1/H2/H3/body/small) */
   --typography-h1-size: var(--display-heading-size);
   --typography-h1-line: var(--display-heading-line);
   --typography-h1-spacing: var(--display-heading-spacing);
   --typography-h1-weight: var(--display-heading-weight);
-  
+
   --typography-h2-size: var(--section-heading-size);
   --typography-h2-line: var(--section-heading-line);
   --typography-h2-spacing: var(--section-heading-letter-spacing);
   --typography-h2-weight: var(--section-heading-weight);
-  
+
   --typography-h3-size: var(--text-lg);
   --typography-h3-line: var(--leading-tight);
   --typography-h3-weight: 600;
-  
+
   --typography-body-size: var(--body-analytical-size);
   --typography-body-line: var(--body-analytical-line);
   --typography-body-spacing: var(--body-analytical-spacing);
-  
+
   --typography-small-size: var(--text-sm);
   --typography-small-line: var(--leading-normal);
 
@@ -104,7 +104,7 @@
   --readable-max-width: 42rem;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 200ms;
-  
+
   /* Focus ring token (high visibility, theme-aware) */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -122,10 +122,10 @@
   --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.06);
   --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.5);
   --authority-contrast-balance: hsl(var(--color-surface));
-  
+
   /* Elevation tokens for cards/hero plates (subtle, premium) */
   --elevation-subtle: 0 1px 2px hsl(var(--color-border) / 0.08);
-  --elevation-premium: 
+  --elevation-premium:
     0 2px 8px hsl(var(--color-text) / 0.06),
     0 1px 3px hsl(var(--color-text) / 0.04);
 
@@ -193,7 +193,7 @@
   /* VACEL C) Motion: eased transitions, focus reinforcement (respects reduced-motion). */
   --ease-authority: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-authority-out: cubic-bezier(0.33, 1, 0.68, 1);
-  
+
   /* Motion tokens with reduced-motion support */
   --motion-duration-fast: var(--transition-duration-fast);
   --motion-duration-normal: var(--transition-duration-normal);
@@ -217,7 +217,7 @@
   --section-block-margin: var(--space-8);
   --section-inner-gap: var(--space-4);
   --section-heading-margin: var(--space-2);
-  
+
   /* Spacing scale and section rhythm (vertical cadence) */
   --spacing-scale-xs: var(--space-1);
   --spacing-scale-sm: var(--space-2);

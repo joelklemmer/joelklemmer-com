@@ -38,7 +38,9 @@ export function Shell({
           aria-label={a11y('a11y.navLabel')}
           className="border-t border-border relative"
         >
-          <Container className="py-3 flex items-center justify-between">{navContent}</Container>
+          <Container className="py-3 flex items-center justify-between">
+            {navContent}
+          </Container>
         </nav>
       </header>
       <main id={mainId} className="vacel-main py-8">

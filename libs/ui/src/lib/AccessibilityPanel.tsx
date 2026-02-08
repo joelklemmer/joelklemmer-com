@@ -61,10 +61,16 @@ export function AccessibilityPanel() {
 
   // Initialize stored preferences
   useEffect(() => {
-    const storedMotion = typeof document !== 'undefined' && document.documentElement.classList.contains('motion-reduce-force');
-    const storedTextSize = typeof document !== 'undefined' && document.documentElement.getAttribute('data-text-size') === 'large' ? 'large' : 'default';
+    const storedMotion =
+      typeof document !== 'undefined' &&
+      document.documentElement.classList.contains('motion-reduce-force');
+    const storedTextSize =
+      typeof document !== 'undefined' &&
+      document.documentElement.getAttribute('data-text-size') === 'large'
+        ? 'large'
+        : 'default';
     const storedUnderline = getStoredUnderlineLinks();
-    
+
     setMotionReduced(storedMotion);
     setTextSize(storedTextSize);
     setUnderlineLinks(storedUnderline);
@@ -131,12 +137,14 @@ export function AccessibilityPanel() {
       if (e.key !== 'Tab') return;
 
       const focusableElements = panelRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
       );
       if (!focusableElements || focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+      const lastElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
 
       if (e.shiftKey) {
         if (document.activeElement === firstElement) {
@@ -159,7 +167,9 @@ export function AccessibilityPanel() {
   useEffect(() => {
     if (isOpen && panelRef.current) {
       requestAnimationFrame(() => {
-        const firstControl = panelRef.current?.querySelector('button, select, input');
+        const firstControl = panelRef.current?.querySelector(
+          'button, select, input',
+        );
         if (firstControl instanceof HTMLElement) {
           firstControl.focus();
         }
@@ -182,7 +192,9 @@ export function AccessibilityPanel() {
         title={common('a11y.accessibilityPanelLabel')}
       >
         ♿
-        <span className="sr-only">{common('a11y.accessibilityPanelLabel')}</span>
+        <span className="sr-only">
+          {common('a11y.accessibilityPanelLabel')}
+        </span>
       </button>
 
       {isOpen && (
@@ -194,7 +206,9 @@ export function AccessibilityPanel() {
           aria-modal="true"
           className="absolute end-0 top-full mt-1 w-64 rounded-md border border-border bg-surface shadow-lg z-50 p-4"
         >
-          <h2 className={visuallyHiddenClass}>{common('a11y.accessibilityPanelLabel')}</h2>
+          <h2 className={visuallyHiddenClass}>
+            {common('a11y.accessibilityPanelLabel')}
+          </h2>
 
           <div className="space-y-4">
             {/* Theme */}
@@ -208,7 +222,9 @@ export function AccessibilityPanel() {
               <select
                 id="a11y-theme"
                 value={theme}
-                onChange={(e) => setTheme(e.target.value as 'light' | 'dark' | 'system')}
+                onChange={(e) =>
+                  setTheme(e.target.value as 'light' | 'dark' | 'system')
+                }
                 className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
                 aria-label={common('a11y.themeLabel')}
               >
@@ -229,11 +245,15 @@ export function AccessibilityPanel() {
               <select
                 id="a11y-contrast"
                 value={contrast}
-                onChange={(e) => setContrast(e.target.value as 'default' | 'high')}
+                onChange={(e) =>
+                  setContrast(e.target.value as 'default' | 'high')
+                }
                 className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
                 aria-label={common('a11y.contrastLabel')}
               >
-                <option value="default">{common('a11y.contrastDefault')}</option>
+                <option value="default">
+                  {common('a11y.contrastDefault')}
+                </option>
                 <option value="high">{common('a11y.contrastHigh')}</option>
               </select>
             </div>
@@ -263,11 +283,15 @@ export function AccessibilityPanel() {
               <select
                 id="a11y-text-size"
                 value={textSize}
-                onChange={(e) => setTextSize(e.target.value as 'default' | 'large')}
+                onChange={(e) =>
+                  setTextSize(e.target.value as 'default' | 'large')
+                }
                 className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
                 aria-label={common('a11y.textSizeLabel')}
               >
-                <option value="default">{common('a11y.textSizeDefault')}</option>
+                <option value="default">
+                  {common('a11y.textSizeDefault')}
+                </option>
                 <option value="large">{common('a11y.textSizeLarge')}</option>
               </select>
             </div>

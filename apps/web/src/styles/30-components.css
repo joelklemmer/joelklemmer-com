@@ -11,8 +11,7 @@
     background-color var(--transition-duration-fast) var(--ease-authority);
 }
 
-@media (prefers-reduced-motion: reduce),
-       html[data-motion='reduced'] {
+@media (prefers-reduced-motion: reduce), html[data-motion='reduced'] {
   .calc-card-material {
     transition: none;
   }
