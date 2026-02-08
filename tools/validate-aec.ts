@@ -3,9 +3,7 @@
  * no external model calls, only graph/index retrieval used.
  * Additive verify stage: run after frameworks-validate.
  */
-if (typeof process.setMaxListeners === 'function') {
-  process.setMaxListeners(20);
-}
+import './bootstrap-max-listeners';
 import path from 'node:path';
 import { readFileSync, readdirSync } from 'node:fs';
 
