@@ -12,13 +12,25 @@ import {
   getCaseStudyId,
   getPublicRecordId,
 } from '@joelklemmer/content';
-import type { EntityGraph, GraphEdge, GraphNode } from './types';
+import type {
+  EntityGraph,
+  GraphEdge,
+  GraphNode,
+  SignalVectorResolver,
+} from './types';
+
+export interface BuildEntityGraphOptions {
+  /** If provided, attach authority signal vectors to each node (UASIL). */
+  getSignalVector?: SignalVectorResolver;
+}
 
 /**
  * Constructs the normalized entity graph from content loaders.
  * Edges: Claim → Record, Claim → Case Study, Record → Case Study, Book → Record.
  */
-export async function buildEntityGraph(): Promise<EntityGraph> {
+export async function buildEntityGraph(
+  options?: BuildEntityGraphOptions,
+): Promise<EntityGraph> {
   const [claims, records, caseStudies, books] = await Promise.all([
     Promise.resolve(getAllClaims()),
     getPublicRecordEntries(),
@@ -26,19 +38,23 @@ export async function buildEntityGraph(): Promise<EntityGraph> {
     getBookEntries(),
   ]);
 
+  const getVector = options?.getSignalVector;
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
 
   // Claim nodes and Claim → Record (supports)
   for (const c of claims) {
-    nodes.push({
+    const node: GraphNode = {
       kind: 'claim',
       id: c.id,
       labelKey: c.labelKey,
       summaryKey: c.summaryKey,
       category: c.category,
       recordIds: [...c.recordIds],
-    });
+    };
+    const vec = getVector?.('claim', c.id);
+    if (vec) node.signalVector = vec;
+    nodes.push(node);
     for (const recordId of c.recordIds) {
       edges.push({ fromId: c.id, toId: recordId, kind: 'supports' });
     }
@@ -47,20 +63,23 @@ export async function buildEntityGraph(): Promise<EntityGraph> {
   // Record nodes
   for (const r of records) {
     const id = getPublicRecordId(r.frontmatter);
-    nodes.push({
+    const node: GraphNode = {
       kind: 'record',
       id,
       title: r.frontmatter.title,
       slug: r.frontmatter.slug,
       artifactType: r.frontmatter.artifactType,
       date: r.frontmatter.date,
-    });
+    };
+    const vec = getVector?.('record', id);
+    if (vec) node.signalVector = vec;
+    nodes.push(node);
   }
 
   // Case study nodes; Record → Case Study (references) and Claim → Case Study (references via claimRefs)
   for (const cs of caseStudies) {
     const id = getCaseStudyId(cs.frontmatter);
-    nodes.push({
+    const node: GraphNode = {
       kind: 'caseStudy',
       id,
       title: cs.frontmatter.title,
@@ -69,7 +88,10 @@ export async function buildEntityGraph(): Promise<EntityGraph> {
       date: cs.frontmatter.date,
       proofRefs: [...(cs.frontmatter.proofRefs ?? [])],
       claimRefs: [...(cs.frontmatter.claimRefs ?? [])],
-    });
+    };
+    const vec = getVector?.('caseStudy', id);
+    if (vec) node.signalVector = vec;
+    nodes.push(node);
     for (const recordId of cs.frontmatter.proofRefs ?? []) {
       edges.push({ fromId: recordId, toId: id, kind: 'references' });
     }
@@ -81,7 +103,7 @@ export async function buildEntityGraph(): Promise<EntityGraph> {
   // Book nodes; Book → Record (references)
   for (const b of books) {
     const id = getBookId(b.frontmatter);
-    nodes.push({
+    const node: GraphNode = {
       kind: 'book',
       id,
       title: b.frontmatter.title,
@@ -89,7 +111,10 @@ export async function buildEntityGraph(): Promise<EntityGraph> {
       summary: b.frontmatter.summary,
       publicationDate: b.frontmatter.publicationDate,
       proofRefs: [...b.frontmatter.proofRefs],
-    });
+    };
+    const vec = getVector?.('book', id);
+    if (vec) node.signalVector = vec;
+    nodes.push(node);
     for (const recordId of b.frontmatter.proofRefs) {
       edges.push({ fromId: id, toId: recordId, kind: 'references' });
     }

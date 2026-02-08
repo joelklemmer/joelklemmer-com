@@ -19,6 +19,8 @@ export interface BriefNavigatorClaimCard {
   supportingCaseStudiesLabel: string;
   verificationConnectionsLabel: string;
   lastVerifiedLabel: string;
+  /** Dominant authority signal for structural clustering (UASIL). Not displayed. */
+  dominantSignalId?: string;
 }
 
 export interface BriefNavigatorLabels {
@@ -222,6 +224,9 @@ export function BriefNavigator({
                 key={claim.id}
                 id={`claim-${claim.id}`}
                 className="section-shell rounded-card border border-border bg-surface overflow-hidden"
+                {...(claim.dominantSignalId
+                  ? { 'data-dominant-signal': claim.dominantSignalId }
+                  : {})}
               >
                 <button
                   type="button"
@@ -366,6 +371,9 @@ export function BriefNavigator({
               key={claim.id}
               role="listitem"
               className="border-b border-border last:border-b-0"
+              {...(claim.dominantSignalId
+                ? { 'data-dominant-signal': claim.dominantSignalId }
+                : {})}
             >
               <div className="grid grid-cols-1 sm:grid-cols-[1fr_1fr] gap-2 sm:gap-4 p-4">
                 <div className="flex items-start gap-2">

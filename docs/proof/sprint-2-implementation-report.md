@@ -19,12 +19,12 @@ Proof Attachments Pipeline is implemented end-to-end. All 8 Public Record entrie
 - **libs/screens/src/lib/ProofEntryScreen.tsx** — Attachment link: added `download={att.filename}` and `aria-label={t('attachments.download')}: ${att.filename}` for download affordance and WCAG.
 - **libs/seo/src/lib/seo.ts** — `getPersonJsonLd`: build object without `sameAs` when `getIdentitySameAs()` returns empty; only add `sameAs` when array length > 0 so JSON-LD omits it when absent.
 - **libs/i18n/src/messages/{en,uk,es,he}/publicRecord.json** — `attachments.download` and `attachments.labels.{scope,artifact,summary,evidence,disclosure,adoption,graph,bundle}` in all four locales.
-- **content/public-record/*.mdx** (8 files) — Each has an `attachments` array with one item: id, filename, sha256, labelKey.
+- **content/public-record/\*.mdx** (8 files) — Each has an `attachments` array with one item: id, filename, sha256, labelKey.
 
 ### New content and config
 
 - **apps/web/public/proof/manifest.json** — Populated with 8 items (id, filename, sha256, labelKey, recordIds, kind). Source of truth for attachment index.
-- **apps/web/public/proof/files/*.txt** — Eight starter primary artifacts (TXT), one per record; defensible, quiet authority, no placeholders.
+- **apps/web/public/proof/files/\*.txt** — Eight starter primary artifacts (TXT), one per record; defensible, quiet authority, no placeholders.
 - **docs/proof/attachments-standard.md** — Accepted file types, redaction rules, provenance metadata, naming and integrity rules, reviewer checklist.
 - **.env.example** — Documents `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS` (e.g. LinkedIn), `RELEASE_READY`.
 

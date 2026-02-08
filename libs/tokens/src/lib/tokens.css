@@ -39,6 +39,12 @@
   --readable-max-width: 42rem;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 200ms;
+
+  /* UASIL: authority signal hooks (restrained; no visible labels). */
+  --authority-spacing-density: 1;
+  --authority-hierarchy-emphasis: 1;
+  --authority-motion-restraint: 0;
+  --authority-depth-layer: 0;
 }
 
 @media (prefers-color-scheme: dark) {

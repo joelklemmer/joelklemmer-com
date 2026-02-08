@@ -33,7 +33,9 @@
       "@joelklemmer/intelligence": ["libs/intelligence/src/index.ts"],
       "@joelklemmer/intelligence/validate": [
         "libs/intelligence/src/validate.ts"
-      ]
+      ],
+      "@joelklemmer/authority-signals": ["libs/authority-signals/src/index.ts"],
+      "@joelklemmer/authority-mapping": ["libs/authority-mapping/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

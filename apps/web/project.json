@@ -42,6 +42,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-intelligence.ts"
       }
     },
+    "authority-signals-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-signals.ts"
+      }
+    },
     "content-os-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -83,6 +89,7 @@
           "nx run web:i18n-validate",
           "nx run web:pgf-validate",
           "nx run web:intelligence-validate",
+          "nx run web:authority-signals-validate",
           "nx run web:content-os-validate",
           "nx run web:sitemap-validate",
           "nx run web:seo-validate",

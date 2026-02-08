@@ -16,6 +16,14 @@ import {
   getExecutiveBriefArtifact,
 } from '@joelklemmer/content';
 import {
+  populateRegistryFromConfig,
+  getEntitySignalVector,
+} from '@joelklemmer/authority-mapping';
+import {
+  getDominantSignalId,
+  AUTHORITY_SIGNAL_IDS,
+} from '@joelklemmer/authority-signals';
+import {
   createPageMetadata,
   PersonJsonLd,
   BriefPageJsonLd,
@@ -79,11 +87,13 @@ export async function BriefScreen() {
     }
   }
 
+  populateRegistryFromConfig();
   const featuredClaims = getFeaturedClaims();
   const caseStudiesByClaim = await getCaseStudiesByClaimIdMap(
     featuredClaims.map((c) => c.id),
   );
-  const claimCards = featuredClaims.map((claim) => {
+  const signalOrder = new Map(AUTHORITY_SIGNAL_IDS.map((id, i) => [id, i]));
+  const claimCardsUnsorted = featuredClaims.map((claim) => {
     const supportingLinks = claim.recordIds
       .map((recordId) => {
         const entry = recordLookup.get(recordId);
@@ -99,6 +109,8 @@ export async function BriefScreen() {
       claim.recordIds,
       recordIdToDate,
     );
+    const vector = getEntitySignalVector('claim', claim.id);
+    const dominantSignalId = vector ? getDominantSignalId(vector) : undefined;
     return {
       id: claim.id,
       label: t(claim.labelKey),
@@ -114,7 +126,18 @@ export async function BriefScreen() {
       supportingCaseStudiesLabel: t('claims.supportingCaseStudies'),
       verificationConnectionsLabel: t('claims.verificationConnections'),
       lastVerifiedLabel: t('claims.lastVerified'),
+      dominantSignalId,
     };
+  });
+  const claimCards = [...claimCardsUnsorted].sort((a, b) => {
+    const orderA = a.dominantSignalId
+      ? (signalOrder.get(a.dominantSignalId) ?? 99)
+      : 99;
+    const orderB = b.dominantSignalId
+      ? (signalOrder.get(b.dominantSignalId) ?? 99)
+      : 99;
+    if (orderA !== orderB) return orderA - orderB;
+    return a.id.localeCompare(b.id);
   });
 
   const categoryOptions = CLAIM_CATEGORIES.map((id) => ({

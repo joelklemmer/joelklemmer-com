@@ -4,6 +4,8 @@
  * evidence aggregation, and future graph visualization.
  */
 
+import type { SignalWeightVector } from '@joelklemmer/authority-signals';
+
 /** Node type discriminator for graph entities. */
 export type GraphNodeKind = 'claim' | 'record' | 'caseStudy' | 'book';
 
@@ -22,6 +24,8 @@ export interface ClaimNode {
   summaryKey: string;
   category: string;
   recordIds: string[];
+  /** Authority signal weights for ranking/traversal (UASIL). */
+  signalVector?: SignalWeightVector;
 }
 
 /** Public record (proof) entity node. */
@@ -32,6 +36,8 @@ export interface RecordNode {
   slug: string;
   artifactType: string;
   date: string;
+  /** Authority signal weights for ranking/traversal (UASIL). */
+  signalVector?: SignalWeightVector;
 }
 
 /** Case study entity node. */
@@ -44,6 +50,8 @@ export interface CaseStudyNode {
   date: string;
   proofRefs: string[];
   claimRefs: string[];
+  /** Authority signal weights for ranking/traversal (UASIL). */
+  signalVector?: SignalWeightVector;
 }
 
 /** Book entity node. */
@@ -55,6 +63,8 @@ export interface BookNode {
   summary: string;
   publicationDate: string;
   proofRefs: string[];
+  /** Authority signal weights for ranking/traversal (UASIL). */
+  signalVector?: SignalWeightVector;
 }
 
 /** Union of all entity node types. */
@@ -82,4 +92,12 @@ export interface SemanticIndexEntry {
   type: SemanticEntryType;
   text: string;
   url: string;
+  /** Authority signal weights for search ranking / AI context (UASIL). */
+  signalVector?: SignalWeightVector;
 }
+
+/** Resolver for attaching authority signal vectors to graph/index entities (UASIL). */
+export type SignalVectorResolver = (
+  kind: GraphNodeKind,
+  id: string,
+) => SignalWeightVector | undefined;

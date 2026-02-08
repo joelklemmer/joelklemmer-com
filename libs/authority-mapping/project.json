@@ -1,0 +1,7 @@
+{
+  "name": "authority-mapping",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/authority-mapping/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:authority-mapping"]
+}

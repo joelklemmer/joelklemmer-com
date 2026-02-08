@@ -13,12 +13,21 @@ import {
   getCaseStudyId,
   getPublicRecordId,
 } from '@joelklemmer/content';
-import type { SemanticIndexEntry, SemanticEntryType } from './types';
+import type {
+  SemanticIndexEntry,
+  SemanticEntryType,
+  SignalVectorResolver,
+} from './types';
 
 export type { SemanticIndexEntry, SemanticEntryType };
 
 /** Default locale for URL paths in the index. */
 const DEFAULT_LOCALE = 'en';
+
+export interface BuildSemanticIndexOptions {
+  /** If provided, attach authority signal vectors to each entry (UASIL). */
+  getSignalVector?: SignalVectorResolver;
+}
 
 /**
  * Generates the searchable text corpus: claim summaries, case study summaries,
@@ -27,6 +36,7 @@ const DEFAULT_LOCALE = 'en';
  */
 export async function buildSemanticIndex(
   locale: string = DEFAULT_LOCALE,
+  options?: BuildSemanticIndexOptions,
 ): Promise<SemanticIndexEntry[]> {
   const [claims, records, caseStudies, books] = await Promise.all([
     Promise.resolve(getAllClaims()),
@@ -35,49 +45,62 @@ export async function buildSemanticIndex(
     getBookEntries(),
   ]);
 
+  const getVector = options?.getSignalVector;
   const entries: SemanticIndexEntry[] = [];
 
   for (const c of claims) {
-    entries.push({
+    const entry: SemanticIndexEntry = {
       id: c.id,
       type: 'claim',
       text: [c.labelKey, c.summaryKey].filter(Boolean).join(' '),
       url: `/${locale}/brief`,
-    });
+    };
+    const vec = getVector?.('claim', c.id);
+    if (vec) entry.signalVector = vec;
+    entries.push(entry);
   }
 
   for (const r of records) {
     const id = getPublicRecordId(r.frontmatter);
-    entries.push({
+    const entry: SemanticIndexEntry = {
       id,
       type: 'record',
       text: r.frontmatter.title,
       url: `/${locale}/proof/${r.frontmatter.slug}`,
-    });
+    };
+    const vec = getVector?.('record', id);
+    if (vec) entry.signalVector = vec;
+    entries.push(entry);
   }
 
   for (const cs of caseStudies) {
     const id = getCaseStudyId(cs.frontmatter);
-    entries.push({
+    const entry: SemanticIndexEntry = {
       id,
       type: 'caseStudy',
       text: [cs.frontmatter.title, cs.frontmatter.summary]
         .filter(Boolean)
         .join(' '),
       url: `/${locale}/casestudies/${cs.frontmatter.slug}`,
-    });
+    };
+    const vec = getVector?.('caseStudy', id);
+    if (vec) entry.signalVector = vec;
+    entries.push(entry);
   }
 
   for (const b of books) {
     const id = getBookId(b.frontmatter);
-    entries.push({
+    const entry: SemanticIndexEntry = {
       id,
       type: 'book',
       text: [b.frontmatter.title, b.frontmatter.summary]
         .filter(Boolean)
         .join(' '),
       url: `/${locale}/books/${b.frontmatter.slug}`,
-    });
+    };
+    const vec = getVector?.('book', id);
+    if (vec) entry.signalVector = vec;
+    entries.push(entry);
   }
 
   return entries.sort((a, b) => {
