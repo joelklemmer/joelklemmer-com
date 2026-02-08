@@ -22,7 +22,7 @@ The `/brief` page is built from these sections in order:
 
 2. **Evaluator Read Path** – A compact block: "If you are evaluating for credibility or verification, use these routes." Three links: See Claims Index, See Case Studies, See Public Record. Keeps evaluators on a 30-second path.
 
-3. **Claims Index** – Rendered **only** from the claims registry. Each claim shows: label, one-line summary, and links to supporting Public Record artifacts. Default view shows the "featured" set (up to 9); if the registry has more claims, the "All claims" expander note can be shown.
+3. **Claims Index (Interactive Brief Navigator)** – Rendered **only** from the claims registry. The Interactive Brief Navigator provides a featured claims grid (6–9), filtering, and an optional verification-graph view. See [Interactive Brief Navigator](#interactive-brief-navigator) below.
 
 4. **Selected Outcomes** – Only provable outcomes. If something is unprovable, omit it or qualify it. Short list from i18n; no fluff.
 
@@ -102,6 +102,40 @@ Each entry has:
 4. Run `nx run web:content-validate` and `nx run web:i18n-validate` to confirm.
 
 Public record entry pages show a "Supports Claims" section that lists any claims referencing that entry, with links to `/brief#claim-<id>`.
+
+## Interactive Brief Navigator
+
+The Claims Index is implemented as an **Interactive Brief Navigator** within `libs/screens/src/lib/BriefScreen.tsx`. It uses the same claim registry data; no new routes or slugs are introduced.
+
+### Behaviour
+
+- **Default view:** Featured claims grid (6–9 claims). Each claim card shows: category label, supporting record count, case study count, and last verified date (derived from linked Public Record dates).
+- **Filters (no external state library):** Filter by claim category (all six categories) and by verification strength (record-count thresholds). Controls use `<fieldset>` / `<legend>` and `aria-label` for accessibility.
+- **View toggle:** Switch between “Grid view” and “Verification graph”. The graph view is a two-column list with CSS-only visual connectors (no canvas); it is readable with reduced motion and high contrast.
+- **Expandable panel:** Activate a claim (Enter or Space) to expand a “Verification connections” panel below the card. The panel lists:
+  - A “View in brief” link to `/brief#claim-<id>`
+  - Supporting records (links to `/publicrecord/[slug]` and, where applicable, brief anchors)
+  - Case studies (links to `/casestudies/[slug]`)
+    A close control collapses the panel.
+
+### Keyboard and focus
+
+- **Enter or Space** on a claim card: expand or collapse the Verification connections panel for that claim.
+- **Escape** when focused on an expanded panel (or its close control): collapse the panel and return focus to the claim card.
+- When a panel opens, focus moves to the panel’s close button. When the panel closes, focus returns to the card that was expanded.
+- All interactive elements are keyboard-accessible and use visible focus styles (`focusRingClass` from `@joelklemmer/a11y`).
+
+### i18n and a11y
+
+- All navigator UI strings live in the **brief** namespace under `navigator.*` (e.g. `navigator.viewGrid`, `navigator.closePanel`). All locales (en, uk, es, he) must define these keys; `tools/validate-i18n.ts` enforces the navigator schema.
+- The implementation is WCAG 2.2 AA–oriented: semantic structure, legend/aria for filters, no reliance on motion for meaning. Transitions use `motion-reduce:transition-none` where applicable.
+
+### Extending filters
+
+- **Category filter:** Options are driven by `CLAIM_CATEGORIES` in `libs/content/src/lib/claims.ts`. Adding a new category requires adding it to that enum, to the claim registry entries, and to `claims.categories.<id>` in every locale’s `brief.json`.
+- **Verification strength filter:** Strength options are derived from the current set of featured claims (minimum 1, maximum the highest `recordIds.length` among those claims). To add fixed thresholds (e.g. “3+ records”), extend the `strengthOptions` logic in `BriefNavigator.client.tsx` and add any new labels to the `navigator.*` i18n keys.
+
+The navigator is implemented as a client component (`BriefNavigator.client.tsx`) so that filtering, view toggle, and expand/collapse run in the browser; the rest of the brief page remains server-rendered.
 
 ## How to publish or replace the Executive Brief PDF (manifest + file)
 

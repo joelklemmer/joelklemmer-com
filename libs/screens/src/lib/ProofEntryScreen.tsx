@@ -21,6 +21,8 @@ import {
   LinkListSection,
   MdxSection,
 } from '@joelklemmer/sections';
+import { Container } from '@joelklemmer/ui';
+import { CopySha256Button } from './CopySha256Button';
 
 export async function generateStaticParams() {
   const slugs = await getPublicRecordSlugs();
@@ -73,6 +75,28 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
   const referencedByCaseStudies = await getCaseStudiesByRecordId(recordId);
   const referencedByBooks = await getBooksByRecordId(recordId);
   const showFallbackNotice = entry.frontmatter.locale !== locale;
+  const source = entry.frontmatter.source;
+  const sourceDisplay =
+    typeof source === 'string' ? (
+      source
+    ) : (
+      <>
+        {source.sourceUrl ? (
+          <Link
+            href={source.sourceUrl}
+            className={`${focusRingClass} rounded-sm underline underline-offset-4`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {source.sourceName}
+          </Link>
+        ) : (
+          source.sourceName
+        )}
+      </>
+    );
+  const verification = entry.frontmatter.verification;
+  const attachments = entry.frontmatter.attachments ?? [];
 
   return (
     <>
@@ -105,7 +129,7 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
           },
           {
             label: t('metadata.labels.source'),
-            value: entry.frontmatter.source,
+            value: sourceDisplay,
           },
           {
             label: t('metadata.labels.verification'),
@@ -124,6 +148,60 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
           },
         ]}
       />
+      {verification ? (
+        <DefinitionListSection
+          title={t('verification.heading')}
+          items={[
+            {
+              label: t('verification.method'),
+              value: t(`verification.methodValue.${verification.method}`),
+            },
+            {
+              label: t('verification.confidence'),
+              value: t(
+                `verification.confidenceValue.${verification.confidence}`,
+              ),
+            },
+            ...(verification.verifiedDate
+              ? [
+                  {
+                    label: t('verification.verifiedDate'),
+                    value: verification.verifiedDate,
+                  },
+                ]
+              : []),
+          ]}
+        />
+      ) : null}
+      {typeof source === 'object' ? (
+        <DefinitionListSection
+          title={t('source.heading')}
+          items={[
+            {
+              label: t('source.type'),
+              value: t(`source.typeValue.${source.sourceType}`),
+            },
+            { label: t('source.name'), value: source.sourceName },
+            ...(source.sourceUrl
+              ? [
+                  {
+                    label: t('source.url'),
+                    value: (
+                      <Link
+                        href={source.sourceUrl}
+                        className={`${focusRingClass} rounded-sm underline underline-offset-4`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {source.sourceUrl}
+                      </Link>
+                    ),
+                  },
+                ]
+              : []),
+          ]}
+        />
+      ) : null}
       <LinkListSection
         title={t('supportsClaims.heading')}
         items={supportingClaims.map((claim) => ({
@@ -148,6 +226,42 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
         }))}
         emptyMessage={t('referencedByBooks.empty')}
       />
+      {attachments.length > 0 ? (
+        <section
+          className="section-shell"
+          aria-labelledby="attachments-heading"
+        >
+          <Container className="section-shell">
+            <h2 id="attachments-heading" className="text-title font-semibold">
+              {t('attachments.heading')}
+            </h2>
+            <dl className="grid gap-4 text-sm text-muted md:grid-cols-2">
+              {attachments.map((att) => (
+                <div key={att.id} className="section-shell">
+                  <dt className="text-xs font-semibold uppercase tracking-wide text-text">
+                    {t(`attachments.labels.${att.labelKey}`)}
+                  </dt>
+                  <dd className="text-base text-muted">
+                    <Link
+                      href={`/proof/files/${att.filename}`}
+                      className={`${focusRingClass} rounded-sm underline underline-offset-4`}
+                    >
+                      {att.filename}
+                    </Link>
+                    <span className="ml-2 font-mono text-xs">
+                      {att.sha256.slice(0, 8)}…
+                    </span>
+                    <CopySha256Button
+                      sha256={att.sha256}
+                      copyLabel={t('attachments.copyHash')}
+                    />
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Container>
+        </section>
+      ) : null}
       <MdxSection>{await renderMdx(entry.content)}</MdxSection>
     </>
   );

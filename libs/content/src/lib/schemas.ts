@@ -36,18 +36,74 @@ export function getCaseStudyId(frontmatter: {
 }
 
 const artifactTypeLike = z.string().min(1); // enum-like: Recovery plan summary, Report, etc.
-export const publicRecordFrontmatterSchema = z.object({
-  id: nonEmptyString.optional(),
-  title: nonEmptyString,
-  artifactType: artifactTypeLike,
-  source: nonEmptyString,
-  date: nonEmptyString,
-  verificationNotes: nonEmptyString,
-  claimSupported: nonEmptyString, // human-readable pointer label; linkage is via claim registry
-  locale: localeSchema,
-  slug: nonEmptyString,
-  canonical: nonEmptyString.optional(),
+
+const verificationMethodEnum = z.enum([
+  'observation',
+  'correspondence',
+  'deliverable',
+  'policy',
+  'audit',
+  'record',
+]);
+const verificationConfidenceEnum = z.enum(['low', 'medium', 'high']);
+const verificationBlockSchema = z
+  .object({
+    method: verificationMethodEnum,
+    confidence: verificationConfidenceEnum,
+    verifiedDate: dateStringSchema.optional(),
+  })
+  .refine(
+    (d) =>
+      d.verifiedDate == null ||
+      new Date(d.verifiedDate) <=
+        new Date(new Date().toISOString().slice(0, 10)),
+    { message: 'verifiedDate must be <= today', path: ['verifiedDate'] },
+  );
+
+const sourceTypeEnum = z.enum(['internal', 'external', 'public', 'media']);
+const sourceBlockSchema = z.object({
+  sourceType: sourceTypeEnum,
+  sourceName: nonEmptyString,
+  sourceUrl: z.string().url().optional(),
 });
+
+const sha256HexSchema = z
+  .string()
+  .length(64)
+  .regex(/^[a-f0-9]{64}$/i, '64 hex chars');
+const attachmentEntrySchema = z.object({
+  id: nonEmptyString,
+  filename: nonEmptyString,
+  sha256: sha256HexSchema,
+  labelKey: nonEmptyString,
+});
+
+export const publicRecordFrontmatterSchema = z
+  .object({
+    id: nonEmptyString.optional(),
+    title: nonEmptyString,
+    artifactType: artifactTypeLike,
+    source: z.union([nonEmptyString, sourceBlockSchema]),
+    date: nonEmptyString,
+    verificationNotes: nonEmptyString,
+    claimSupported: nonEmptyString, // human-readable pointer label; linkage is via claim registry
+    locale: localeSchema,
+    slug: nonEmptyString,
+    canonical: nonEmptyString.optional(),
+    verification: verificationBlockSchema.optional(),
+    attachments: z.array(attachmentEntrySchema).optional(),
+  })
+  .refine(
+    (d) => {
+      if (!d.attachments?.length) return true;
+      const ids = d.attachments.map((a) => a.id);
+      return new Set(ids).size === ids.length;
+    },
+    {
+      message: 'attachment ids must be unique within entry',
+      path: ['attachments'],
+    },
+  );
 
 /** Stable record ID: frontmatter.id if set, else slug. Must be unique across collection. */
 export function getPublicRecordId(frontmatter: {

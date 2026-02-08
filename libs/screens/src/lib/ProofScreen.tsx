@@ -44,7 +44,10 @@ export async function ProofScreen() {
             description: entry.frontmatter.claimSupported,
             meta: t('list.meta', {
               date: entry.frontmatter.date,
-              source: entry.frontmatter.source,
+              source:
+                typeof entry.frontmatter.source === 'string'
+                  ? entry.frontmatter.source
+                  : entry.frontmatter.source.sourceName,
             }),
             href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
           }))}

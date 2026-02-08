@@ -13,6 +13,7 @@ import {
   getBookId,
   getCaseStudyId,
   getMediaManifest,
+  getProofManifest,
   getPublicRecordId,
   institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
@@ -253,6 +254,43 @@ try {
   getMediaManifest();
 } catch (error) {
   errors.push((error as Error).message);
+}
+
+let proofManifest: {
+  items: Array<{ id: string; filename: string; sha256: string }>;
+} | null = null;
+try {
+  proofManifest = getProofManifest();
+} catch (error) {
+  errors.push((error as Error).message);
+}
+
+if (proofManifest) {
+  const manifestById = new Map(
+    proofManifest.items.map((item) => [item.id, item]),
+  );
+  for (const entry of publicRecordValidEntries) {
+    const attachments = entry.frontmatter.attachments ?? [];
+    for (const att of attachments) {
+      const manifestItem = manifestById.get(att.id);
+      if (!manifestItem) {
+        errors.push(
+          `Public record ${entry.frontmatter.slug} attachment id "${att.id}" not found in proof manifest`,
+        );
+        continue;
+      }
+      if (manifestItem.filename !== att.filename) {
+        errors.push(
+          `Public record ${entry.frontmatter.slug} attachment ${att.id}: filename "${att.filename}" does not match manifest "${manifestItem.filename}"`,
+        );
+      }
+      if (manifestItem.sha256 !== att.sha256) {
+        errors.push(
+          `Public record ${entry.frontmatter.slug} attachment ${att.id}: sha256 does not match manifest`,
+        );
+      }
+    }
+  }
 }
 
 // Contact pathways: exact ids, unique, sorted by priorityOrder (i18n keys validated in i18n-validate)

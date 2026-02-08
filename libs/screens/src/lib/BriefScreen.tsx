@@ -5,6 +5,7 @@ import {
   type AppLocale,
 } from '@joelklemmer/i18n';
 import {
+  CLAIM_CATEGORIES,
   claimRegistry,
   getFeaturedClaims,
   getCaseStudies,
@@ -23,7 +24,6 @@ import {
   IdentityScopeSection,
   ReadPathSection,
   VerificationGuidanceSection,
-  BriefClaimsSection,
   ListSection,
   QuantifiedOutcomesSection,
   CardGridSection,
@@ -31,6 +31,8 @@ import {
   ContactPathwaySection,
   HeroSection,
 } from '@joelklemmer/sections';
+import { Container } from '@joelklemmer/ui';
+import { BriefNavigator } from './BriefNavigator.client';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -102,18 +104,55 @@ export async function BriefScreen() {
       label: t(claim.labelKey),
       summary: t(claim.summaryKey),
       category: t(`claims.categories.${claim.category}`),
+      categoryId: claim.category,
       verificationStrength: claim.recordIds.length,
       lastVerified,
       supportingLinks,
       caseStudies,
       casestudiesBasePath: `/${locale}/casestudies`,
-      publicrecordBasePath: `/${locale}/proof`,
       supportingRecordsLabel: t('claims.supportingRecords'),
       supportingCaseStudiesLabel: t('claims.supportingCaseStudies'),
       verificationConnectionsLabel: t('claims.verificationConnections'),
       lastVerifiedLabel: t('claims.lastVerified'),
     };
   });
+
+  const categoryOptions = CLAIM_CATEGORIES.map((id) => ({
+    id,
+    label: t(`claims.categories.${id}`),
+  }));
+  const maxStrength = claimCards.length
+    ? Math.max(...claimCards.map((c) => c.verificationStrength), 1)
+    : 1;
+  const maxCaseStudies = claimCards.length
+    ? Math.max(...claimCards.map((c) => c.caseStudies.length), 0)
+    : 0;
+  const strengthMinByCount: Record<number, string> = {};
+  for (let n = 1; n <= maxStrength; n++) {
+    strengthMinByCount[n] = t('navigator.strengthMin', { count: n });
+  }
+  const recordCountByCount: Record<number, string> = {};
+  for (let n = 0; n <= maxStrength; n++) {
+    recordCountByCount[n] = t('navigator.recordCount', { count: n });
+  }
+  const caseStudyCountByCount: Record<number, string> = {};
+  for (let n = 0; n <= maxCaseStudies; n++) {
+    caseStudyCountByCount[n] = t('navigator.caseStudyCount', { count: n });
+  }
+  const navigatorLabels = {
+    viewGrid: t('navigator.viewGrid'),
+    viewGraph: t('navigator.viewGraph'),
+    viewModeLabel: t('navigator.viewModeLabel'),
+    filterCategoryLegend: t('navigator.filterCategoryLegend'),
+    filterStrengthLegend: t('navigator.filterStrengthLegend'),
+    categoryAll: t('navigator.categoryAll'),
+    strengthAll: t('navigator.strengthAll'),
+    strengthMinByCount,
+    closePanel: t('navigator.closePanel'),
+    viewInBrief: t('navigator.viewInBrief'),
+    recordCountByCount,
+    caseStudyCountByCount,
+  };
 
   const readPathRoutes = (
     t.raw('readPath.routes') as Array<{
@@ -178,14 +217,25 @@ export async function BriefScreen() {
         body={t('verificationGuidance.body')}
       />
 
-      <BriefClaimsSection
-        id="claims"
-        title={t('claims.title')}
-        lede={t('claims.lede')}
-        claims={claimCards}
-        showAllExpander={hasMoreClaims}
-        allClaimsExpanderLabel={t('claims.allClaimsExpander')}
-      />
+      <section id="claims" className="section-shell">
+        <Container className="section-shell">
+          <div className="section-shell">
+            <h2 className="text-title font-semibold">{t('claims.title')}</h2>
+            <p className="text-base text-muted">{t('claims.lede')}</p>
+          </div>
+          <BriefNavigator
+            claimCards={claimCards}
+            briefAnchorBase={`/${locale}/brief`}
+            categoryOptions={categoryOptions}
+            labels={navigatorLabels}
+          />
+          {hasMoreClaims ? (
+            <p className="mt-3 text-sm text-muted">
+              {t('claims.allClaimsExpander')}
+            </p>
+          ) : null}
+        </Container>
+      </section>
 
       <ListSection
         title={t('selectedOutcomes.title')}

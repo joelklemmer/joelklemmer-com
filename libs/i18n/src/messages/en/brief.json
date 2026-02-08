@@ -25,6 +25,20 @@
       "Verification: public record artifacts linked to indexed claims."
     ]
   },
+  "navigator": {
+    "viewGrid": "Grid view",
+    "viewGraph": "Verification graph",
+    "viewModeLabel": "View",
+    "filterCategoryLegend": "Filter by category",
+    "filterStrengthLegend": "Filter by verification strength",
+    "categoryAll": "All categories",
+    "strengthAll": "All",
+    "strengthMin": "{count}+ records",
+    "closePanel": "Close verification connections",
+    "viewInBrief": "View in brief",
+    "recordCount": "{count, plural, one {# record} other {# records}}",
+    "caseStudyCount": "{count, plural, one {# case study} other {# case studies}}"
+  },
   "claims": {
     "title": "Indexed claims",
     "lede": "Claims are linked directly to Public Record artifacts.",

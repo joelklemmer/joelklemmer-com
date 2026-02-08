@@ -46,7 +46,10 @@ export async function PublicRecordScreen() {
             meta: tIndex('index.meta', {
               type: entry.frontmatter.artifactType,
               date: entry.frontmatter.date,
-              source: entry.frontmatter.source,
+              source:
+                typeof entry.frontmatter.source === 'string'
+                  ? entry.frontmatter.source
+                  : entry.frontmatter.source.sourceName,
             }),
             href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
           }))}

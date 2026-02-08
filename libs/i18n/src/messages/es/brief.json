@@ -25,6 +25,20 @@
       "Verificación: artefactos del registro público vinculados a afirmaciones indexadas."
     ]
   },
+  "navigator": {
+    "viewGrid": "Vista de cuadrícula",
+    "viewGraph": "Grafo de verificación",
+    "viewModeLabel": "Vista",
+    "filterCategoryLegend": "Filtrar por categoría",
+    "filterStrengthLegend": "Filtrar por fuerza de verificación",
+    "categoryAll": "Todas las categorías",
+    "strengthAll": "Todas",
+    "strengthMin": "{count}+ registros",
+    "closePanel": "Cerrar conexiones de verificación",
+    "viewInBrief": "Ver en informe",
+    "recordCount": "{count, plural, one {# registro} other {# registros}}",
+    "caseStudyCount": "{count, plural, one {# estudio de caso} other {# estudios de caso}}"
+  },
   "claims": {
     "title": "Afirmaciones indexadas",
     "lede": "Las afirmaciones se vinculan directamente a artefactos del Registro público.",

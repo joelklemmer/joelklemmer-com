@@ -1,5 +1,6 @@
 import path from 'node:path';
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import matter from 'gray-matter';
 import { z } from 'zod';
 import { locales } from '@joelklemmer/i18n';
 import { claimRegistry, contactPathways } from '@joelklemmer/content/validate';
@@ -98,6 +99,20 @@ const briefSchema = z
         z.object({ label: z.string().min(1), path: z.string().min(1) }),
       ),
     }),
+    navigator: z.object({
+      viewGrid: z.string().min(1),
+      viewGraph: z.string().min(1),
+      viewModeLabel: z.string().min(1),
+      filterCategoryLegend: z.string().min(1),
+      filterStrengthLegend: z.string().min(1),
+      categoryAll: z.string().min(1),
+      strengthAll: z.string().min(1),
+      strengthMin: z.string().min(1),
+      closePanel: z.string().min(1),
+      viewInBrief: z.string().min(1),
+      recordCount: z.string().min(1),
+      caseStudyCount: z.string().min(1),
+    }),
     claims: z.object({ title: z.string().min(1), lede: z.string().min(1) }),
     selectedOutcomes: z.object({
       title: z.string().min(1),
@@ -184,6 +199,28 @@ const publicRecordSchema = z
       source: z.string().min(1),
       verification: z.string().min(1),
       meta: z.string().min(1),
+    }),
+    verification: z
+      .object({
+        heading: z.string().min(1),
+        method: z.string().min(1),
+        confidence: z.string().min(1),
+        verifiedDate: z.string().min(1),
+      })
+      .passthrough(),
+    source: z
+      .object({
+        heading: z.string().min(1),
+        type: z.string().min(1),
+        name: z.string().min(1),
+        url: z.string().min(1),
+      })
+      .passthrough(),
+    attachments: z.object({
+      heading: z.string().min(1),
+      missing: z.string().min(1),
+      copyHash: z.string().min(1),
+      labels: z.object({}).passthrough(),
     }),
   })
   .passthrough();
@@ -354,6 +391,60 @@ function validateContactPathwayKeys() {
   }
 }
 
+function getPublicRecordAttachmentLabelKeys(): Set<string> {
+  const contentRootCandidates = [
+    path.join(process.cwd(), 'content'),
+    path.join(process.cwd(), '..', '..', 'content'),
+  ];
+  const contentRoot =
+    contentRootCandidates.find((c) => existsSync(c)) ??
+    contentRootCandidates[0];
+  const publicRecordDir = existsSync(path.join(contentRoot, 'public-record'))
+    ? path.join(contentRoot, 'public-record')
+    : path.join(contentRoot, 'proof');
+  if (!existsSync(publicRecordDir)) return new Set();
+  const files = readdirSync(publicRecordDir)
+    .filter((e) => e.endsWith('.mdx'))
+    .map((e) => path.join(publicRecordDir, e));
+  const labelKeys = new Set<string>();
+  for (const filePath of files) {
+    const raw = readFileSync(filePath, 'utf-8');
+    const { data } = matter(raw);
+    const attachments = (data as { attachments?: Array<{ labelKey?: string }> })
+      .attachments;
+    if (Array.isArray(attachments)) {
+      for (const att of attachments) {
+        if (typeof att?.labelKey === 'string' && att.labelKey.trim()) {
+          labelKeys.add(att.labelKey.trim());
+        }
+      }
+    }
+  }
+  return labelKeys;
+}
+
+function validatePublicRecordAttachmentLabelKeys() {
+  const labelKeys = getPublicRecordAttachmentLabelKeys();
+  if (labelKeys.size === 0) return;
+  for (const locale of locales) {
+    const filePath = path.join(messagesRoot, locale, 'publicRecord.json');
+    const publicRecord = readJson(filePath) as Record<string, unknown>;
+    const labels = getByPath(publicRecord, 'attachments.labels');
+    const labelsObj =
+      labels != null && typeof labels === 'object' && !Array.isArray(labels)
+        ? (labels as Record<string, unknown>)
+        : {};
+    for (const key of labelKeys) {
+      const value = labelsObj[key];
+      if (typeof value !== 'string' || !value.trim()) {
+        errors.push(
+          `${filePath}: missing or empty publicRecord.attachments.labels.${key} (used by a public record entry)`,
+        );
+      }
+    }
+  }
+}
+
 locales.forEach((locale) => {
   validateNamespace(locale, 'common', commonSchema);
   validateNamespace(locale, 'nav', navSchema);
@@ -367,6 +458,7 @@ locales.forEach((locale) => {
 });
 validateBriefClaimKeys();
 validateContactPathwayKeys();
+validatePublicRecordAttachmentLabelKeys();
 
 if (errors.length) {
   throw new Error(`i18n validation failed:\n- ${errors.join('\n- ')}`);

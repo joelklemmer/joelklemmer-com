@@ -25,6 +25,20 @@
       "אימות: ארטיפקטים מהרישום הציבורי המקושרים לטענות ממופות."
     ]
   },
+  "navigator": {
+    "viewGrid": "תצוגת רשת",
+    "viewGraph": "גרף אימות",
+    "viewModeLabel": "תצוגה",
+    "filterCategoryLegend": "סנן לפי קטגוריה",
+    "filterStrengthLegend": "סנן לפי חוזק אימות",
+    "categoryAll": "כל הקטגוריות",
+    "strengthAll": "הכל",
+    "strengthMin": "{count}+ רישומים",
+    "closePanel": "סגור חיבורי אימות",
+    "viewInBrief": "צפה בבריף",
+    "recordCount": "{count, plural, one {# רישום} other {# רישומים}}",
+    "caseStudyCount": "{count, plural, one {# מחקר מקרה} other {# מחקרי מקרה}}"
+  },
   "claims": {
     "title": "טענות ממופות",
     "lede": "הטענות מקושרות ישירות לארטיפקטים ברישום הציבורי.",

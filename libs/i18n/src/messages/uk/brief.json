@@ -25,6 +25,20 @@
       "Верифікація: артефакти публічного реєстру, пов'язані з індексованими твердженнями."
     ]
   },
+  "navigator": {
+    "viewGrid": "Вигляд сіткою",
+    "viewGraph": "Граф верифікації",
+    "viewModeLabel": "Вигляд",
+    "filterCategoryLegend": "Фільтр за категорією",
+    "filterStrengthLegend": "Фільтр за силою верифікації",
+    "categoryAll": "Усі категорії",
+    "strengthAll": "Усі",
+    "strengthMin": "{count}+ записів",
+    "closePanel": "Закрити зв'язки верифікації",
+    "viewInBrief": "Переглянути в брифі",
+    "recordCount": "{count, plural, one {# запис} few {# записи} other {# записів}}",
+    "caseStudyCount": "{count, plural, one {# кейс-стаді} few {# кейс-стаді} other {# кейс-стаді}}"
+  },
   "claims": {
     "title": "Індексовані твердження",
     "lede": "Твердження пов'язано безпосередньо з артефактами Публічного реєстру.",

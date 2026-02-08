@@ -29,5 +29,38 @@
     "source": "Source",
     "verification": "Verification",
     "meta": "{type} · {date} · {source}"
+  },
+  "verification": {
+    "heading": "Verification",
+    "method": "Method",
+    "confidence": "Confidence",
+    "verifiedDate": "Verified date",
+    "methodValue": {
+      "observation": "Observation",
+      "correspondence": "Correspondence",
+      "deliverable": "Deliverable",
+      "policy": "Policy",
+      "audit": "Audit",
+      "record": "Record"
+    },
+    "confidenceValue": { "low": "Low", "medium": "Medium", "high": "High" }
+  },
+  "source": {
+    "heading": "Source",
+    "type": "Type",
+    "name": "Name",
+    "url": "URL",
+    "typeValue": {
+      "internal": "Internal",
+      "external": "External",
+      "public": "Public",
+      "media": "Media"
+    }
+  },
+  "attachments": {
+    "heading": "Attachments",
+    "missing": "Attachment not published yet",
+    "copyHash": "Copy full hash",
+    "labels": {}
   }
 }

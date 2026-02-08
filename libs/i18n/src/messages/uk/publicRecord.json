@@ -29,5 +29,42 @@
     "source": "Джерело",
     "verification": "Перевірка",
     "meta": "{type} · {date} · {source}"
+  },
+  "verification": {
+    "heading": "Перевірка",
+    "method": "Метод",
+    "confidence": "Впевненість",
+    "verifiedDate": "Дата перевірки",
+    "methodValue": {
+      "observation": "Спостереження",
+      "correspondence": "Листування",
+      "deliverable": "Результат",
+      "policy": "Політика",
+      "audit": "Аудит",
+      "record": "Запис"
+    },
+    "confidenceValue": {
+      "low": "Низька",
+      "medium": "Середня",
+      "high": "Висока"
+    }
+  },
+  "source": {
+    "heading": "Джерело",
+    "type": "Тип",
+    "name": "Назва",
+    "url": "URL",
+    "typeValue": {
+      "internal": "Внутрішнє",
+      "external": "Зовнішнє",
+      "public": "Публічне",
+      "media": "Медіа"
+    }
+  },
+  "attachments": {
+    "heading": "Додатки",
+    "missing": "Додаток ще не опубліковано",
+    "copyHash": "Копіювати повний хеш",
+    "labels": {}
   }
 }

@@ -29,5 +29,38 @@
     "source": "Fuente",
     "verification": "Verificación",
     "meta": "{type} · {date} · {source}"
+  },
+  "verification": {
+    "heading": "Verificación",
+    "method": "Método",
+    "confidence": "Confianza",
+    "verifiedDate": "Fecha de verificación",
+    "methodValue": {
+      "observation": "Observación",
+      "correspondence": "Correspondencia",
+      "deliverable": "Entregable",
+      "policy": "Política",
+      "audit": "Auditoría",
+      "record": "Registro"
+    },
+    "confidenceValue": { "low": "Baja", "medium": "Media", "high": "Alta" }
+  },
+  "source": {
+    "heading": "Fuente",
+    "type": "Tipo",
+    "name": "Nombre",
+    "url": "URL",
+    "typeValue": {
+      "internal": "Interna",
+      "external": "Externa",
+      "public": "Pública",
+      "media": "Medios"
+    }
+  },
+  "attachments": {
+    "heading": "Adjuntos",
+    "missing": "Adjunto aún no publicado",
+    "copyHash": "Copiar hash completo",
+    "labels": {}
   }
 }

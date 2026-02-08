@@ -29,5 +29,38 @@
     "source": "מקור",
     "verification": "אימות",
     "meta": "{type} · {date} · {source}"
+  },
+  "verification": {
+    "heading": "אימות",
+    "method": "שיטה",
+    "confidence": "רמת ביטחון",
+    "verifiedDate": "תאריך אימות",
+    "methodValue": {
+      "observation": "תצפית",
+      "correspondence": "התכתבות",
+      "deliverable": "מסירה",
+      "policy": "מדיניות",
+      "audit": "ביקורת",
+      "record": "רישום"
+    },
+    "confidenceValue": { "low": "נמוכה", "medium": "בינונית", "high": "גבוהה" }
+  },
+  "source": {
+    "heading": "מקור",
+    "type": "סוג",
+    "name": "שם",
+    "url": "כתובת",
+    "typeValue": {
+      "internal": "פנימי",
+      "external": "חיצוני",
+      "public": "ציבורי",
+      "media": "מדיה"
+    }
+  },
+  "attachments": {
+    "heading": "קבצים מצורפים",
+    "missing": "הקובץ המצורף טרם פורסם",
+    "copyHash": "העתק hash מלא",
+    "labels": {}
   }
 }

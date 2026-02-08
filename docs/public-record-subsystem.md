@@ -33,6 +33,35 @@ The Public Record is a **verification-only** evidence system. It is not narrativ
 | `id`                | No       | Stable record ID; if omitted, `slug` is used. Must be unique across the collection. |
 | `canonical`         | No       | Override canonical URL if needed.                                                   |
 
+### Optional evidence metadata (frontmatter)
+
+When present, these blocks must validate strictly. Omit them for backward compatibility.
+
+**`verification`** (object, optional):
+
+| Field          | Required | Description                                                                                 |
+| -------------- | -------- | ------------------------------------------------------------------------------------------- |
+| `method`       | Yes      | Enum: `observation` \| `correspondence` \| `deliverable` \| `policy` \| `audit` \| `record` |
+| `confidence`   | Yes      | Enum: `low` \| `medium` \| `high`                                                           |
+| `verifiedDate` | No       | ISO date (YYYY-MM-DD); must be ≤ today.                                                     |
+
+**`source`** (when an object instead of a string): can be used in addition to or instead of the legacy `source` string. If provided as object:
+
+| Field        | Required | Description                                           |
+| ------------ | -------- | ----------------------------------------------------- |
+| `sourceType` | Yes      | Enum: `internal` \| `external` \| `public` \| `media` |
+| `sourceName` | Yes      | Name of the source.                                   |
+| `sourceUrl`  | No       | Valid URL.                                            |
+
+**`attachments`** (array, optional): governed by `apps/web/public/proof/manifest.json`. Each item:
+
+| Field      | Required | Description                                                                         |
+| ---------- | -------- | ----------------------------------------------------------------------------------- |
+| `id`       | Yes      | Unique within the entry; must exist in proof manifest.                              |
+| `filename` | Yes      | Must match manifest; file must live in `apps/web/public/proof/files/`.              |
+| `sha256`   | Yes      | 64 hex chars; must match file contents.                                             |
+| `labelKey` | Yes      | i18n key under `publicRecord.attachments.labels.<key>` (must exist in all locales). |
+
 ### Example frontmatter
 
 ```yaml
@@ -71,6 +100,29 @@ The entry page will then show:
 - **Supports claims**: claims that list this record in `recordIds`.
 - **Referenced by case studies**: case studies that list this record in `proofRefs` (up to 6).
 
+## How to add an attachment
+
+1. Place the file in `apps/web/public/proof/files/` (e.g. `summary.pdf`).
+2. Compute SHA-256 on Windows PowerShell:
+
+   ```powershell
+   Get-FileHash -Path "apps\web\public\proof\files\summary.pdf" -Algorithm SHA256 | Select-Object -ExpandProperty Hash
+   ```
+
+   Use the **lowercase** hex string in both the manifest and the entry frontmatter.
+
+3. Add an item to `apps/web/public/proof/manifest.json` under `items`:
+   `{"id": "my-entry-summary", "filename": "summary.pdf", "sha256": "<64 hex>", "kind": "public-record"}`.
+4. In the Public Record entry frontmatter, add an `attachments` array (or append to it):
+   `- id: my-entry-summary`, `filename: summary.pdf`, `sha256: <same 64 hex>`, `labelKey: summary` (or another key you add to `publicRecord.attachments.labels` in all locales).
+5. Add the label in all locale files: `libs/i18n/src/messages/{en,uk,es,he}/publicRecord.json` under `attachments.labels.<labelKey>` (e.g. `"summary": "Summary (PDF)"`).
+6. Run `nx run web:content-validate` and `nx run web:i18n-validate`.
+
+## RELEASE_READY behavior (proof files)
+
+- **`RELEASE_READY=0`** (default, e.g. local dev and most CI): Missing proof files or checksum mismatch **warn** only; content validation still passes.
+- **`RELEASE_READY=1`** (e.g. release build): Missing proof files or checksum mismatch **fail** content validation. Proof manifest schema and entry–manifest consistency (attachment ids, filename/sha256 match) are always validated.
+
 ## How sitemap inclusion works
 
 - The app sitemap includes **all locales** (`en`, `uk`, `es`, `he`).
@@ -85,7 +137,7 @@ Sitemap integrity is checked at build time by `nx run web:sitemap-validate`.
 
 Run these to validate content, i18n, sitemap, SEO, and full pipeline:
 
-- `nx run web:content-validate` — frontmatter, proofRefs, claim registry, artifacts, media.
+- `nx run web:content-validate` — frontmatter, proofRefs, claim registry, artifacts, media, proof manifest and attachment consistency.
 - `nx run web:i18n-validate` — translation keys including `publicRecord` namespace.
 - `nx run web:sitemap-validate` — dynamic URLs and locale coverage.
 - `nx run web:seo-validate` — canonical and hreflang for core routes.
@@ -105,3 +157,5 @@ See [Quality gates](quality-gates.md) for details.
   ```
 
   Use the lowercase hex string in the manifest.
+
+- **Proof attachments**: `apps/web/public/proof/manifest.json` lists proof files; each item has `id`, `filename`, `sha256`, `kind: "public-record"`. Files live in `apps/web/public/proof/files/`. See [RELEASE_READY behavior](#release_ready-behavior-proof-files) and [How to add an attachment](#how-to-add-an-attachment).
