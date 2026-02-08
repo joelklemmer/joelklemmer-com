@@ -58,6 +58,10 @@ const REQUIRED_TOKEN_GROUPS: { name: string; vars: string[] }[] = [
     name: 'motion',
     vars: ['--transition-duration-fast', '--transition-duration-normal'],
   },
+  {
+    name: 'media list thumb',
+    vars: ['--media-thumb-size'],
+  },
 ];
 
 const errors: string[] = [];

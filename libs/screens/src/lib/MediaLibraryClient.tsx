@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useSearchParams, useRouter } from 'next/navigation';
@@ -13,11 +13,6 @@ import { CopySha256Button } from './CopySha256Button';
 const MEDIA_KINDS = ['portrait', 'speaking', 'author', 'identity'] as const;
 type MediaKind = (typeof MEDIA_KINDS)[number];
 
-function filterByKind(assets: MediaAsset[], kind: string | null): MediaAsset[] {
-  if (!kind || !MEDIA_KINDS.includes(kind as MediaKind)) return assets;
-  return assets.filter((a) => a.kind === kind);
-}
-
 function getDescriptorDisplayLabel(
   asset: MediaAsset,
   labels: Record<string, string>,
@@ -26,13 +21,14 @@ function getDescriptorDisplayLabel(
   return labels[asset.descriptor] ?? asset.descriptor.replace(/-/g, ' ');
 }
 
-const THUMB_W = 96;
-const THUMB_H = 125;
-
-/** Thumb path convention: base.webp → base__thumb.webp. Client-safe (no Node). */
+/** Thumb path convention: base.webp → base__thumb.webp. List uses thumb ONLY; master only on error. */
 function getThumbPath(asset: MediaAsset): string {
   return asset.file.replace(/\.webp$/, '__thumb.webp');
 }
+
+/** Token default 56px; responsive 64/72. Used for Next/Image width/height (pixels). */
+const THUMB_SIZE_PX = 56;
+const THUMB_ASPECT = 125 / 96;
 
 export interface MediaLibraryClientLabels {
   filterByKind: string;
@@ -54,6 +50,8 @@ export interface MediaLibraryClientLabels {
 
 export interface MediaLibraryClientProps {
   assets: MediaAsset[];
+  initialKind?: string | null;
+  manifestSize?: number;
   basePath: string;
   siteBase: string;
   labels: MediaLibraryClientLabels;
@@ -61,15 +59,34 @@ export interface MediaLibraryClientProps {
 
 export function MediaLibraryClient({
   assets,
+  initialKind = null,
+  manifestSize = 0,
   basePath,
   siteBase,
   labels,
 }: MediaLibraryClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const kind = searchParams.get('kind');
-  const filtered = useMemo(() => filterByKind(assets, kind), [assets, kind]);
+  const kind = searchParams.get('kind') ?? initialKind;
   const [thumbFallback, setThumbFallback] = useState<Set<string>>(new Set());
+  const renderStartRef = useRef<number>(
+    typeof performance !== 'undefined' ? performance.now() : 0,
+  );
+
+  useEffect(() => {
+    if (process.env.NODE_ENV !== 'development') return;
+    const ttfRender =
+      (performance?.now?.() ?? Date.now()) - renderStartRef.current;
+    console.log(
+      '[media-library]',
+      'manifestSize:',
+      manifestSize,
+      'renderedCount:',
+      assets.length,
+      'timeToFirstRender:',
+      `${ttfRender.toFixed(1)}ms`,
+    );
+  }, [manifestSize, assets.length]);
 
   const setKind = useCallback(
     (newKind: string | null) => {
@@ -139,7 +156,7 @@ export function MediaLibraryClient({
           ))}
         </nav>
         <ul className="space-y-8 list-none p-0 m-0" role="list">
-          {filtered.map((asset, index) => {
+          {assets.map((asset, index) => {
             const thumbPath = getThumbPath(asset);
             const useMaster = thumbFallback.has(asset.id);
             const src = useMaster ? asset.file : thumbPath;
@@ -150,7 +167,7 @@ export function MediaLibraryClient({
                 id={asset.id}
                 className="flex flex-col sm:flex-row gap-6 sm:gap-8 border-b border-border pb-8 last:border-0 [content-visibility:auto] [contain-intrinsic-size:auto_180px]"
               >
-                <div className="shrink-0 w-full sm:w-[96px] h-[125px] sm:h-[125px] relative rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 media-thumb-frame">
+                <div className="shrink-0 relative rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 media-thumb-frame">
                   <Link
                     href={asset.file}
                     className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg`}
@@ -159,10 +176,10 @@ export function MediaLibraryClient({
                     <Image
                       src={src}
                       alt={asset.alt}
-                      width={THUMB_W}
-                      height={THUMB_H}
+                      width={THUMB_SIZE_PX}
+                      height={Math.round(THUMB_SIZE_PX * THUMB_ASPECT)}
                       className="object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none"
-                      sizes="96px"
+                      sizes="56px"
                       loading={isFirstViewport ? 'eager' : 'lazy'}
                       decoding="async"
                       priority={isFirstViewport}
@@ -267,7 +284,7 @@ export function MediaLibraryClient({
             );
           })}
         </ul>
-        {filtered.length === 0 && (
+        {assets.length === 0 && (
           <p className="text-muted text-sm">{labels.noResults}</p>
         )}
       </Container>

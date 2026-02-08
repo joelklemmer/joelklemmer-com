@@ -84,6 +84,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-sitemap.ts"
       }
     },
+    "image-sitemap-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-image-sitemap.ts"
+      }
+    },
     "seo-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -126,11 +132,13 @@
           "nx run web:orchestration-validate",
           "nx run web:content-os-validate",
           "nx run web:sitemap-validate",
+          "nx run web:image-sitemap-validate",
           "nx run web:media-manifest-validate",
           "nx run web:media-authority-validate",
           "nx run web:visual-contract-validate",
           "nx run web:seo-validate",
           "nx run web:tokens-validate",
+          "nx run web:authority-program-validate",
           "nx run web:test",
           "nx run web:build",
           "nx run web:restore-generated-typings",
@@ -155,6 +163,18 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-visual-contract.ts"
+      }
+    },
+    "authority-program-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-program.ts"
+      }
+    },
+    "lighthouse-budget": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/lighthouse-budget-stub.ts"
       }
     }
   }

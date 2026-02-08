@@ -3,11 +3,12 @@ import {
   getMediaManifest,
   getMediaManifestSitemapEligible,
 } from '@joelklemmer/content';
+import { defaultLocale } from '@joelklemmer/i18n';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 const siteBase = baseUrl.replace(/\/+$/, '');
 const IMAGE_SITEMAP_MAX = 50000;
-const LICENSE_URL = `${siteBase}/en/terms`;
+const LICENSE_URL = `${siteBase}/${defaultLocale}/terms`;
 const CREDIT_TEXT = 'Joel R. Klemmer';
 const CREATOR_NAME = 'Joel R. Klemmer';
 
@@ -29,7 +30,7 @@ export async function GET() {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
   );
   const limit = Math.min(eligible.length, IMAGE_SITEMAP_MAX);
-  const mediaPageUrl = `${siteBase}/en/media`;
+  const mediaPageUrl = `${siteBase}/${defaultLocale}/media`;
   for (let i = 0; i < limit; i++) {
     const asset = eligible[i];
     const imageUrl = asset.file.startsWith('http')

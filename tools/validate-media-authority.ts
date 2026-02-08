@@ -10,6 +10,7 @@ import {
   getMediaManifestSitemapEligible,
   getMediaThumbPath,
   isMediaTierA,
+  isMediaTierB,
   isMediaTierC,
 } from '@joelklemmer/content/validate';
 
@@ -31,34 +32,58 @@ function main() {
   const errors: string[] = [];
 
   for (const asset of manifest.assets) {
-    if (!isMediaTierA(asset)) continue;
+    const tierA = isMediaTierA(asset);
+    const tierB = isMediaTierB(asset);
+    if (!tierA && !tierB) continue;
 
-    if (!asset.alt?.trim())
-      errors.push(`[Tier A] ${asset.id}: missing or empty alt.`);
-    const caption = (asset.caption ?? asset.alt ?? '').trim();
-    if (!caption)
-      errors.push(`[Tier A] ${asset.id}: missing or empty caption.`);
-    if (!asset.personaSignal?.trim())
-      errors.push(`[Tier A] ${asset.id}: missing personaSignal.`);
-    if (!asset.formalityLevel?.trim())
-      errors.push(`[Tier A] ${asset.id}: missing formalityLevel.`);
-    if (!asset.visualTone?.trim())
-      errors.push(`[Tier A] ${asset.id}: missing visualTone.`);
+    if (tierA) {
+      if (!asset.alt?.trim())
+        errors.push(`[Tier A] ${asset.id}: missing or empty alt.`);
+      const caption = (asset.caption ?? asset.alt ?? '').trim();
+      if (!caption)
+        errors.push(`[Tier A] ${asset.id}: missing or empty caption.`);
+      if (!asset.personaSignal?.trim())
+        errors.push(`[Tier A] ${asset.id}: missing personaSignal.`);
+      if (!asset.formalityLevel?.trim())
+        errors.push(`[Tier A] ${asset.id}: missing formalityLevel.`);
+      if (!asset.visualTone?.trim())
+        errors.push(`[Tier A] ${asset.id}: missing visualTone.`);
 
-    const publicRoot = resolvePublicRoot();
-    const thumbPath = getMediaThumbPath(asset);
-    const relativeThumb = thumbPath.startsWith('/')
-      ? thumbPath.slice(1)
-      : thumbPath;
-    const absoluteThumb = path.join(publicRoot, relativeThumb);
-    const masterRelative = asset.file.startsWith('/')
-      ? asset.file.slice(1)
-      : asset.file;
-    const absoluteMaster = path.join(publicRoot, masterRelative);
-    if (!existsSync(absoluteThumb) && !existsSync(absoluteMaster)) {
-      errors.push(
-        `[Tier A] ${asset.id}: thumb and master missing on disk (${relativeThumb}).`,
-      );
+      const publicRoot = resolvePublicRoot();
+      const thumbPath = getMediaThumbPath(asset);
+      const relativeThumb = thumbPath.startsWith('/')
+        ? thumbPath.slice(1)
+        : thumbPath;
+      const absoluteThumb = path.join(publicRoot, relativeThumb);
+      const masterRelative = asset.file.startsWith('/')
+        ? asset.file.slice(1)
+        : asset.file;
+      const absoluteMaster = path.join(publicRoot, masterRelative);
+      if (!existsSync(absoluteThumb) && !existsSync(absoluteMaster)) {
+        errors.push(
+          `[Tier A] ${asset.id}: thumb and master missing on disk (${relativeThumb}).`,
+        );
+      }
+    }
+
+    if (tierA || tierB) {
+      const sig = asset.signals;
+      if (!sig)
+        errors.push(
+          `[Tier ${tierA ? 'A' : 'B'}] ${asset.id}: missing signals object.`,
+        );
+      else {
+        if (!sig.attire?.trim())
+          errors.push(`[Tier A/B] ${asset.id}: signals.attire required.`);
+        if (!sig.framing?.trim())
+          errors.push(`[Tier A/B] ${asset.id}: signals.framing required.`);
+        if (!sig.background?.trim())
+          errors.push(`[Tier A/B] ${asset.id}: signals.background required.`);
+        if (!sig.expression?.trim())
+          errors.push(`[Tier A/B] ${asset.id}: signals.expression required.`);
+        if (!sig.purpose?.trim())
+          errors.push(`[Tier A/B] ${asset.id}: signals.purpose required.`);
+      }
     }
   }
 

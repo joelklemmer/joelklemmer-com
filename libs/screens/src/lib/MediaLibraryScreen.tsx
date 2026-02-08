@@ -32,6 +32,8 @@ export async function createMediaLibraryMetadata() {
 
 export const mediaLibraryMetadata = createMediaLibraryMetadata;
 
+const MEDIA_KINDS = ['portrait', 'speaking', 'author', 'identity'] as const;
+
 export interface MediaLibraryScreenProps {
   kind?: string | null;
 }
@@ -66,6 +68,11 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
   const tQuiet = createScopedTranslator(locale, messages, 'quiet');
   const manifest = getMediaManifest();
   const visible = getMediaManifestVisible(manifest);
+  const kind = _props.kind ?? null;
+  const filtered =
+    kind && MEDIA_KINDS.includes(kind as (typeof MEDIA_KINDS)[number])
+      ? visible.filter((a) => a.kind === kind)
+      : visible;
   const basePath = `/${locale}`;
   const baseUrl =
     (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SITE_URL) ||
@@ -121,7 +128,9 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
         }
       >
         <MediaLibraryClient
-          assets={visible}
+          assets={filtered}
+          initialKind={kind}
+          manifestSize={manifest.assets.length}
           basePath={basePath}
           siteBase={siteBase}
           labels={labels}

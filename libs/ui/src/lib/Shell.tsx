@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { skipLinkClass } from '@joelklemmer/a11y';
 import { Container } from './Container';
+import { PageFrame } from './PageFrame';
 
 export interface ShellProps {
   children: ReactNode;
@@ -41,7 +42,7 @@ export function Shell({
         </nav>
       </header>
       <main id={mainId} className="vacel-main py-8">
-        {children}
+        <PageFrame contentStage>{children}</PageFrame>
       </main>
       <footer
         aria-label={a11y('a11y.footerLabel')}

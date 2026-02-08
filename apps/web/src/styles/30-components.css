@@ -127,3 +127,10 @@
 [data-density='on'] .authority-card {
   box-shadow: var(--authority-surface-depth), var(--authority-card-glow);
 }
+
+/* Media list: thumb derivative only; size from token (56px / 64px / 72px). */
+.media-thumb-frame {
+  width: var(--media-thumb-size);
+  min-width: var(--media-thumb-size);
+  height: calc(var(--media-thumb-size) * 125 / 96);
+}

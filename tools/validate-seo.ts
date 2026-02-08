@@ -8,10 +8,15 @@ import {
   getBriefPageJsonLd,
   getCanonicalUrl,
   getHrefLangs,
+  getMediaPageJsonLd,
   getPersonJsonLd,
   getWebSiteJsonLd,
   hreflangAlternates,
 } from '@joelklemmer/seo';
+import {
+  getMediaManifest,
+  getMediaManifestTierAOnly,
+} from '@joelklemmer/content/validate';
 
 const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 const base = baseUrl.replace(/\/+$/, '');
@@ -147,10 +152,46 @@ if (
   );
 }
 
+// /media must emit CollectionPage JSON-LD with ItemList (structured-data clean, indexable)
+const mediaManifest = getMediaManifest();
+const tierAForMedia = getMediaManifestTierAOnly(mediaManifest);
+const mediaLd = getMediaPageJsonLd({
+  baseUrl,
+  locale: defaultLocale as AppLocale,
+  pathname: '/media',
+  assets: tierAForMedia.map((a) => ({
+    id: a.id,
+    file: a.file,
+    alt: a.alt,
+    descriptor: a.descriptor,
+    width: a.width,
+    height: a.height,
+    caption: a.caption,
+    seoKeywords: a.seoKeywords,
+  })),
+});
+if (mediaLd['@type'] !== 'CollectionPage') {
+  errors.push(
+    `Media page JSON-LD: expected @type "CollectionPage", got ${mediaLd['@type']}`,
+  );
+}
+if (
+  !mediaLd.mainEntity ||
+  (mediaLd.mainEntity as { '@type'?: string })['@type'] !== 'ItemList'
+) {
+  errors.push('Media page JSON-LD: must include mainEntity of type ItemList');
+}
+if (
+  typeof (mediaLd.mainEntity as { numberOfItems?: number })?.numberOfItems !==
+  'number'
+) {
+  errors.push('Media page JSON-LD: ItemList must include numberOfItems');
+}
+
 if (errors.length) {
   throw new Error(`SEO validation failed:\n- ${errors.join('\n- ')}`);
 }
 
 console.log(
-  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite JSON-LD; /brief Person + Report JSON-LD.`,
+  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite JSON-LD; /brief Person + Report JSON-LD; /media CollectionPage + ItemList JSON-LD.`,
 );

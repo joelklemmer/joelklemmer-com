@@ -32,6 +32,32 @@ const visualToneSchema = z.enum([
   'strategic',
   'decisive',
 ]);
+
+/** Deterministic descriptor refinement: required for Tier A and Tier B. */
+export const signalsAttireSchema = z.enum(['suit', 'business', 'casual']);
+export const signalsFramingSchema = z.enum(['headshot', 'half', 'full']);
+export const signalsBackgroundSchema = z.enum([
+  'studio',
+  'stage',
+  'environment',
+]);
+export const signalsExpressionSchema = z.enum(['neutral', 'speaking']);
+export const signalsPurposeSchema = z.enum([
+  'press',
+  'bio',
+  'hero',
+  'card',
+  'identity',
+]);
+export const mediaSignalsSchema = z.object({
+  attire: signalsAttireSchema,
+  framing: signalsFramingSchema,
+  background: signalsBackgroundSchema,
+  expression: signalsExpressionSchema,
+  purpose: signalsPurposeSchema,
+});
+export type MediaSignals = z.infer<typeof mediaSignalsSchema>;
+
 const mediaAssetSchema = z.object({
   id: z.string().min(1),
   file: z.string().min(1),
@@ -53,6 +79,8 @@ const mediaAssetSchema = z.object({
   seoKeywords: z.array(z.string()).optional(),
   /** UI-facing label from Media Authority Classifier (MAC). */
   descriptorDisplayLabel: z.string().optional(),
+  /** Deterministic refinement: attire, framing, background, expression, purpose. Required for Tier A and Tier B. */
+  signals: mediaSignalsSchema.optional(),
 });
 
 const mediaManifestSchema = z.object({
@@ -121,6 +149,13 @@ export function isMediaTierA(asset: MediaAsset): boolean {
   );
 }
 
+export function isMediaTierB(asset: MediaAsset): boolean {
+  return (
+    asset.authorityTier === 'B' ||
+    tierBSet.has(asset.descriptor as (typeof MEDIA_TIER_B_DESCRIPTORS)[number])
+  );
+}
+
 export function isMediaSitemapEligible(asset: MediaAsset): boolean {
   return !isMediaTierC(asset.descriptor);
 }
@@ -146,9 +181,11 @@ export function getMediaManifestSitemapEligible(
   return manifest.assets.filter(isMediaSitemapEligible);
 }
 
-/** Filter manifest to assets visible on the media archive page (visible descriptors only). */
+/** Filter manifest to assets visible on the media archive page (Tier A visible only; Tier B must not render). */
 export function getMediaManifestVisible(manifest: MediaManifest): MediaAsset[] {
-  return manifest.assets.filter(isMediaVisibleOnPage);
+  return manifest.assets.filter(
+    (a) => isMediaVisibleOnPage(a) && isMediaTierA(a) && !isMediaTierB(a),
+  );
 }
 
 /** Filter manifest to Tier A only (for structured data / no dilution). */

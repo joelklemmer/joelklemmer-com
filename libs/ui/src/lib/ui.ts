@@ -5,5 +5,7 @@ export type { AuthoritySurfaceProps } from './AuthoritySurface';
 export { Container } from './Container';
 export type { ContainerProps } from './Container';
 export { LanguageSwitcher } from './LanguageSwitcher';
+export { PageFrame } from './PageFrame';
+export type { PageFrameProps } from './PageFrame';
 export { Shell } from './Shell';
 export type { ShellProps } from './Shell';

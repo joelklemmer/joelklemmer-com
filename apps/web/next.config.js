@@ -57,8 +57,31 @@ const nextConfig = {
         ],
       },
     ];
+    const sitemapCacheHeaders = [
+      {
+        source: '/sitemap.xml',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value:
+              'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+      {
+        source: '/sitemap-images',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value:
+              'public, max-age=3600, s-maxage=3600, stale-while-revalidate=86400',
+          },
+        ],
+      },
+    ];
     return [
       ...mediaCacheHeaders,
+      ...sitemapCacheHeaders,
       {
         source: '/(.*)',
         headers: securityHeaders,
