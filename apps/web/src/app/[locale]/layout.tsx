@@ -16,12 +16,10 @@ import {
 import { defaultLocale } from '@joelklemmer/i18n';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import {
-  LanguageMenu,
-  Shell,
-  ThemeProvider,
+  LanguageSwitcherPopover,
   ThemeToggle,
-  ContrastProvider,
   AccessibilityPanel,
+  Shell,
 } from '@joelklemmer/ui';
 import {
   EvaluatorModeProvider,
@@ -94,31 +92,27 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
-      <ThemeProvider>
-        <ContrastProvider>
-          <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
-            <DensityViewProvider syncWithHash>
-              <Shell
-                headerContent={
-                  <HeaderSection
-                    wordmark={common('wordmark')}
-                    homeHref={`/${resolvedLocale}`}
-                    languageSwitcher={<LanguageMenu />}
-                    themeToggle={<ThemeToggle />}
-                    accessibilityPanel={<AccessibilityPanel />}
-                  />
-                }
-                navContent={<PrimaryNavSection items={navItems} />}
-                footerContent={
-                  <FooterSection label={footer('label')} links={footerItems} />
-                }
-              >
-                {children}
-              </Shell>
-            </DensityViewProvider>
-          </EvaluatorModeProvider>
-        </ContrastProvider>
-      </ThemeProvider>
+      <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
+        <DensityViewProvider syncWithHash>
+          <Shell
+            headerContent={
+              <HeaderSection
+                wordmark={common('wordmark')}
+                homeHref={`/${resolvedLocale}`}
+                languageSwitcher={<LanguageSwitcherPopover />}
+                themeToggle={<ThemeToggle />}
+                accessibilityPanel={<AccessibilityPanel />}
+              />
+            }
+            navContent={<PrimaryNavSection items={navItems} />}
+            footerContent={
+              <FooterSection label={footer('label')} links={footerItems} />
+            }
+          >
+            {children}
+          </Shell>
+        </DensityViewProvider>
+      </EvaluatorModeProvider>
     </NextIntlClientProvider>
   );
 }

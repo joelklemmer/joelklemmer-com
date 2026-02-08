@@ -26,9 +26,15 @@ export function HeaderSection({
         {wordmark}
       </Link>
       <div className="flex items-center gap-2">
+<<<<<<< Current (Your changes)
         {languageSwitcher}
         {themeToggle}
         {accessibilityPanel}
+=======
+        {themeToggle}
+        {accessibilityPanel}
+        {languageSwitcher}
+>>>>>>> Incoming (Background Agent changes)
       </div>
     </div>
   );

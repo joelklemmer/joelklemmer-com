@@ -6,6 +6,8 @@ import { getLocale } from 'next-intl/server';
 // eslint-disable-next-line no-restricted-imports -- root layout
 import { isRtlLocale } from '@joelklemmer/i18n';
 
+import { themeScript } from './theme-script';
+
 export default async function RootLayout({
   children,
 }: {
@@ -15,7 +17,13 @@ export default async function RootLayout({
   const dir = isRtlLocale(locale) ? 'rtl' : 'ltr';
 
   return (
-    <html lang={locale} dir={dir}>
+    <html lang={locale} dir={dir} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+          suppressHydrationWarning
+        />
+      </head>
       <body>{children}</body>
     </html>
   );
