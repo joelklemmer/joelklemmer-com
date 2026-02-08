@@ -3,7 +3,7 @@
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { locales } from '@joelklemmer/i18n';
+import { locales, type AppLocale } from '@joelklemmer/i18n';
 import { focusRingClass } from '@joelklemmer/a11y';
 import Link from 'next/link';
 
@@ -18,6 +18,14 @@ function resolvePathname(pathname: string | null, currentLocale: string) {
   };
 }
 
+// Native language names (always displayed in their native form)
+const nativeLanguageNames: Record<AppLocale, string> = {
+  en: 'English',
+  uk: 'Українська',
+  es: 'Español',
+  he: 'עברית',
+};
+
 export function LanguageSwitcherPopover() {
   const common = useTranslations('common');
   const locale = useLocale();
@@ -31,7 +39,7 @@ export function LanguageSwitcherPopover() {
   const { restSegments } = resolvePathname(pathname, locale);
   const queryString = searchParams?.toString();
 
-  const currentLanguageLabel = common(`languages.${locale}`);
+  const currentLanguageLabel = nativeLanguageNames[locale as AppLocale];
 
   const handleToggle = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -47,6 +55,7 @@ export function LanguageSwitcherPopover() {
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
+        e.preventDefault();
         handleClose();
         return;
       }
@@ -98,6 +107,40 @@ export function LanguageSwitcherPopover() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClose]);
 
+  // Focus trap: keep focus within menu when open
+  useEffect(() => {
+    if (!isOpen || !menuRef.current) return;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = menuRef.current?.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusableElements || focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[
+        focusableElements.length - 1
+      ] as HTMLElement;
+
+      if (e.shiftKey) {
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, [isOpen]);
+
   // Focus first item when opened
   useEffect(() => {
     if (isOpen && menuRef.current) {
@@ -108,18 +151,23 @@ export function LanguageSwitcherPopover() {
     }
   }, [isOpen]);
 
+  const menuId = 'language-menu';
+  const triggerId = 'language-menu-trigger';
+
   return (
     <div className="relative">
       <button
         ref={buttonRef}
+        id={triggerId}
         type="button"
         onClick={handleToggle}
         onKeyDown={handleKeyDown}
         aria-expanded={isOpen}
-        aria-controls="language-menu"
+        aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
         aria-haspopup="true"
-        className={`${focusRingClass} flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-muted hover:text-text`}
+        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -133,25 +181,20 @@ export function LanguageSwitcherPopover() {
           strokeLinejoin="round"
           aria-hidden="true"
         >
-          <path d="M5 8l6 6" />
-          <path d="M4 14l6-6 2-3" />
-          <path d="M2 5h12" />
-          <path d="M7 2h1" />
-          <path d="M22 22l-5-10-5 10" />
-          <path d="M14 18h6" />
+          <circle cx="12" cy="12" r="10" />
+          <path d="M2 12h20" />
+          <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>
         <span className="sr-only">{currentLanguageLabel}</span>
-        <span aria-hidden="true" className="hidden sm:inline">
-          {currentLanguageLabel}
-        </span>
       </button>
 
       {isOpen && (
         <div
           ref={menuRef}
-          id="language-menu"
+          id={menuId}
           role="menu"
-          className="absolute end-0 top-full z-50 mt-2 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg"
+          aria-labelledby={triggerId}
+          className="absolute end-0 top-full z-50 mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg"
           onKeyDown={handleKeyDown}
         >
           <div className="py-1" role="none">
@@ -161,7 +204,7 @@ export function LanguageSwitcherPopover() {
                 : '';
               const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
               const isCurrent = targetLocale === locale;
-              const languageLabel = common(`languages.${targetLocale}`);
+              const languageLabel = nativeLanguageNames[targetLocale];
 
               return (
                 <Link
@@ -180,10 +223,10 @@ export function LanguageSwitcherPopover() {
                   aria-label={common('a11y.languageSwitcherAction', {
                     language: languageLabel,
                   })}
-                  className={`${focusRingClass} block w-full px-4 py-2 text-left text-sm ${
+                  className={`${focusRingClass} block w-full px-4 py-2 text-sm text-left transition-colors motion-reduce:transition-none ${
                     isCurrent
-                      ? 'bg-neutral-100 font-semibold text-text'
-                      : 'text-muted hover:bg-neutral-50 hover:text-text'
+                      ? 'bg-accent/10 text-accent font-semibold'
+                      : 'text-text hover:bg-muted/50'
                   }`}
                   onClick={handleClose}
                 >

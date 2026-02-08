@@ -1,6 +1,6 @@
 import '../global.css';
 
-import type { ReactNode } from 'react';
+import { Suspense, type ReactNode } from 'react';
 
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -20,6 +20,7 @@ import {
   Shell,
   ThemeProvider,
   ThemeToggle,
+  ContrastProvider,
   AccessibilityPanel,
 } from '@joelklemmer/ui';
 import {
@@ -94,31 +95,39 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
       <ThemeProvider>
-        <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
-          <DensityViewProvider syncWithHash>
-            <Shell
-              headerContent={
-                <HeaderSection
-                  wordmark={common('wordmark')}
-                  homeHref={`/${resolvedLocale}`}
-                  headerControls={
-                    <>
-                      <LanguageSwitcherPopover />
-                      <ThemeToggle />
-                      <AccessibilityPanel />
-                    </>
-                  }
-                />
-              }
-              navContent={<PrimaryNavSection items={navItems} />}
-              footerContent={
-                <FooterSection label={footer('label')} links={footerItems} />
-              }
-            >
-              {children}
-            </Shell>
-          </DensityViewProvider>
-        </EvaluatorModeProvider>
+        <ContrastProvider>
+          <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
+            <DensityViewProvider syncWithHash>
+              <Shell
+                headerContent={
+                  <HeaderSection
+                    wordmark={common('wordmark')}
+                    homeHref={`/${resolvedLocale}`}
+                    headerControls={
+                      <>
+                        <Suspense fallback={<div className="w-8 h-8" />}>
+                          <LanguageSwitcherPopover />
+                        </Suspense>
+                        <ThemeToggle />
+                        <AccessibilityPanel />
+                      </>
+                    }
+                  />
+                }
+                navContent={
+                  <Suspense fallback={null}>
+                    <PrimaryNavSection items={navItems} />
+                  </Suspense>
+                }
+                footerContent={
+                  <FooterSection label={footer('label')} links={footerItems} />
+                }
+              >
+                {children}
+              </Shell>
+            </DensityViewProvider>
+          </EvaluatorModeProvider>
+        </ContrastProvider>
       </ThemeProvider>
     </NextIntlClientProvider>
   );

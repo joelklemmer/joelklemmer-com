@@ -12,4 +12,5 @@ export { Shell } from './Shell';
 export type { ShellProps } from './Shell';
 export { ThemeProvider, useTheme } from './ThemeProvider';
 export { ThemeToggle } from './ThemeToggle';
+export { ContrastProvider, useContrast } from './ContrastProvider';
 export { AccessibilityPanel } from './AccessibilityPanel';

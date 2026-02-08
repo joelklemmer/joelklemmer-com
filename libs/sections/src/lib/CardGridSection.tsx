@@ -47,7 +47,7 @@ export function CardGridSection({
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => {
             const content = (
-              <div className="authority-card section-shell rounded-lg border border-border p-6 h-full flex flex-col">
+              <div className="authority-card section-shell rounded-lg border border-border h-full flex flex-col">
                 <div className="section-shell flex-1">
                   <h3 className="text-lg font-semibold text-text mb-2">
                     {item.title}

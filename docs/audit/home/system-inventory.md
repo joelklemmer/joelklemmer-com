@@ -14,12 +14,14 @@
 **Purpose:** Provides light/dark theme switching with system preference support and SSR-safe hydration to prevent FOUC.
 
 **Entry Points:**
+
 - `libs/ui/src/lib/ThemeProvider.tsx` - Theme context provider
 - `libs/ui/src/lib/ThemeToggle.tsx` - Theme toggle button
 - `apps/web/src/app/layout.tsx` - Inline script for FOUC prevention
 - `apps/web/src/app/[locale]/layout.tsx` - ThemeProvider wrapper
 
 **Features:**
+
 - Three modes: Light / Dark / System (respects `prefers-color-scheme`)
 - localStorage persistence
 - Inline script prevents FOUC (Flash of Unstyled Content)
@@ -38,11 +40,13 @@
 **Purpose:** Provides high-contrast mode and other accessibility preferences (motion, text size) with WCAG AA+ compliance.
 
 **Entry Points:**
+
 - `libs/ui/src/lib/AccessibilityPanel.tsx` - Accessibility control panel
 - `libs/ui/src/lib/ContrastProvider.tsx` - Contrast context provider (if exists)
 - `apps/web/src/app/[locale]/layout.tsx` - AccessibilityPanel in header
 
 **Features:**
+
 - Contrast control (Default/High) - applies `data-contrast="high"`
 - Motion control (Default/Reduced) - applies `data-motion="reduced"`
 - Text size control (Default/Large) - applies `data-text-size="large"`
@@ -61,10 +65,12 @@
 **Purpose:** Provides accessible language switching via popover menu instead of inline links.
 
 **Entry Points:**
+
 - `libs/ui/src/lib/LanguageSwitcherPopover.tsx` - Language switcher popover component
 - `apps/web/src/app/[locale]/layout.tsx` - LanguageSwitcherPopover in header
 
 **Features:**
+
 - Single icon/button in header (replaces noisy inline links)
 - Accessible popover menu with keyboard navigation (Arrow keys, Esc)
 - Focus management (focus trap, returns focus on close)
@@ -84,10 +90,12 @@
 **Purpose:** Provides skip link to main content and semantic landmarks for screen reader navigation.
 
 **Entry Points:**
+
 - `libs/ui/src/lib/Shell.tsx` - Skip link and landmark structure
 - `libs/a11y/src/lib/a11y.ts` - `skipLinkClass` utility
 
 **Features:**
+
 - Skip link to main content (`#main-content`)
 - Semantic landmarks: `<header>`, `<nav>`, `<main>`, `<footer>`
 - ARIA labels for landmarks (`aria-label` via i18n)
@@ -104,10 +112,12 @@
 **Purpose:** Defines hero image handling, responsive sizes, and CLS prevention.
 
 **Entry Points:**
+
 - `libs/sections/src/lib/HeroSection.tsx` - Hero image component
 - `apps/web/src/styles/20-layout.css` - Hero image CSS
 
 **Features:**
+
 - Aspect ratio calculated from width/height to prevent CLS
 - Responsive sizes: `(max-width: 768px) 100vw, min(380px, 40vw)`
 - Next.js Image optimization with `priority` prop
@@ -126,10 +136,12 @@
 **Purpose:** Ensures Home page loads without layout shift and images don't block rendering.
 
 **Entry Points:**
+
 - `libs/sections/src/lib/HeroSection.tsx` - Image optimization
 - `apps/web/src/styles/20-layout.css` - Layout CSS
 
 **Features:**
+
 - Aspect ratio wrapper prevents CLS
 - Next.js Image with `priority` for hero (above-fold)
 - Proper `sizes` attribute for responsive loading
@@ -161,6 +173,7 @@
 **Purpose:** Documents Home page structure, intent, and modification guidelines.
 
 **Entry Points:**
+
 - `docs/page-intent-map.md` - Home intent (10s/60s outcomes)
 - `docs/content-operating-system.md` - Content OS rules
 - `docs/audit/home/agent1-ux-ui-ax.md` - UX/UI/AX audit
@@ -169,6 +182,7 @@
 - `docs/audit/home/FINAL_REPORT.md` - Final completion report
 
 **Features:**
+
 - Intent map defines 10s/60s outcomes
 - Content OS rules define tone and proof binding
 - Audit reports document current state
@@ -185,6 +199,7 @@
 **Purpose:** Defines visual design tokens for spacing, typography, and shadows.
 
 **Entry Points:**
+
 - `libs/tokens/src/lib/tokens.css` - Design tokens
 - `apps/web/src/styles/00-tokens.css` - App-layer token overrides
 - `apps/web/src/styles/10-base.css` - Base typography
@@ -192,6 +207,7 @@
 - `apps/web/src/styles/30-components.css` - Component tokens
 
 **Features:**
+
 - CSS custom properties (CSS variables)
 - Typography scale (`--hero-display-size`, `--section-heading-size`, etc.)
 - Spacing scale (`--space-*`, `--section-block-margin`, etc.)

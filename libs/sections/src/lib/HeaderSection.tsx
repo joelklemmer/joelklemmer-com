@@ -14,7 +14,7 @@ export function HeaderSection({
   headerControls,
 }: HeaderSectionProps) {
   return (
-    <div className="flex items-center justify-between gap-4">
+    <div className="flex items-baseline justify-between gap-4 w-full">
       <Link
         href={homeHref}
         className={`${focusRingClass} rounded-sm text-base font-semibold tracking-tight`}
@@ -22,7 +22,9 @@ export function HeaderSection({
         {wordmark}
       </Link>
       {headerControls && (
-        <div className="flex items-center gap-2">{headerControls}</div>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          {headerControls}
+        </div>
       )}
     </div>
   );

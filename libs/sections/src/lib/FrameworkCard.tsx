@@ -24,7 +24,7 @@ export function FrameworkCard({
 }: FrameworkCardProps) {
   const description = intent10 ?? summary;
   const content = (
-    <div className="authority-card section-shell rounded-lg border border-border p-6 h-full flex flex-col">
+    <div className="authority-card section-shell rounded-lg border border-border h-full flex flex-col">
       <div className="section-shell flex-1">
         <h3 className="text-lg font-semibold text-text mb-3">{title}</h3>
         {description ? (

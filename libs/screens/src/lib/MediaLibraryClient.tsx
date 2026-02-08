@@ -42,7 +42,7 @@ function getMediaThumbPath(asset: MediaAsset): string {
   return asset.file.replace(/\.webp$/, '__thumb.webp');
 }
 
-const THUMB_SIZE_PX = 56;
+const THUMB_SIZE_PX = 48;
 
 export interface MediaLibraryClientLabels {
   filterByKind: string;
@@ -69,6 +69,9 @@ export interface MediaLibraryClientProps {
   basePath: string;
   siteBase: string;
   labels: MediaLibraryClientLabels;
+  currentPage?: number;
+  totalPages?: number;
+  totalItems?: number;
 }
 
 export function MediaLibraryClient({
@@ -78,10 +81,15 @@ export function MediaLibraryClient({
   basePath,
   siteBase,
   labels,
+  currentPage = 1,
+  totalPages = 1,
+  totalItems = 0,
 }: MediaLibraryClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const kind = searchParams.get('kind') ?? initialKind;
+  const pageParam = searchParams.get('page');
+  const currentPageFromUrl = pageParam ? parseInt(pageParam, 10) : currentPage;
   const [missingThumb, setMissingThumb] = useState<Set<string>>(new Set());
   const renderStartRef = useRef<number>(
     typeof performance !== 'undefined' ? performance.now() : 0,
@@ -108,6 +116,18 @@ export function MediaLibraryClient({
       router.replace(path, { scroll: false });
     },
     [basePath, router],
+  );
+
+  const setPage = useCallback(
+    (newPage: number) => {
+      const params = new URLSearchParams();
+      if (kind) params.set('kind', kind);
+      if (newPage > 1) params.set('page', newPage.toString());
+      const queryString = params.toString();
+      const path = `${basePath}/media${queryString ? `?${queryString}` : ''}`;
+      router.replace(path, { scroll: false });
+    },
+    [basePath, router, kind],
   );
 
   const handleThumbError = useCallback((assetId: string) => {
@@ -200,7 +220,7 @@ export function MediaLibraryClient({
                           width={THUMB_SIZE_PX}
                           height={THUMB_SIZE_PX}
                           className="media-thumb-img object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none"
-                          sizes="(min-width: 768px) 72px, (min-width: 640px) 64px, 56px"
+                          sizes="(min-width: 768px) 64px, (min-width: 640px) 56px, 48px"
                           loading={isFirstViewport ? 'eager' : 'lazy'}
                           decoding="async"
                           priority={isFirstViewport}
@@ -223,12 +243,6 @@ export function MediaLibraryClient({
                     </dt>
                     <dd className="text-text">
                       {`${asset.width} × ${asset.height}`}
-                    </dd>
-                    <dt className="text-muted font-medium">
-                      {labels.recommendedUse}
-                    </dt>
-                    <dd className="text-text">
-                      {getRecommendedUseDisplay(asset.recommendedUse)}
                     </dd>
                   </dl>
                   <details className="mt-1 media-authority-details">
@@ -268,6 +282,15 @@ export function MediaLibraryClient({
                           <span>{asset.visualTone}</span>
                         </>
                       )}
+                      {asset.recommendedUse &&
+                        asset.recommendedUse.length > 0 && (
+                          <>
+                            <span>{labels.recommendedUse}</span>
+                            <span>
+                              {getRecommendedUseDisplay(asset.recommendedUse)}
+                            </span>
+                          </>
+                        )}
                     </div>
                   </details>
                   <details className="mt-1">
@@ -309,6 +332,42 @@ export function MediaLibraryClient({
         </ul>
         {assets.length === 0 && (
           <p className="text-muted text-sm">{labels.noResults}</p>
+        )}
+        {totalPages > 1 && (
+          <nav
+            className="mt-8 flex items-center justify-center gap-2"
+            aria-label="Pagination"
+          >
+            <button
+              type="button"
+              onClick={() => setPage(currentPageFromUrl - 1)}
+              disabled={currentPageFromUrl === 1}
+              className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
+                currentPageFromUrl === 1
+                  ? 'border-border text-muted opacity-50 cursor-not-allowed'
+                  : 'border-border text-muted hover:text-text'
+              }`}
+              aria-label="Previous page"
+            >
+              Previous
+            </button>
+            <span className="text-sm text-muted">
+              Page {currentPageFromUrl} of {totalPages} ({totalItems} total)
+            </span>
+            <button
+              type="button"
+              onClick={() => setPage(currentPageFromUrl + 1)}
+              disabled={currentPageFromUrl >= totalPages}
+              className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
+                currentPageFromUrl >= totalPages
+                  ? 'border-border text-muted opacity-50 cursor-not-allowed'
+                  : 'border-border text-muted hover:text-text'
+              }`}
+              aria-label="Next page"
+            >
+              Next
+            </button>
+          </nav>
         )}
       </Container>
     </section>

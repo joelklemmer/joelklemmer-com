@@ -9,7 +9,7 @@ export function ListSection({ title, items }: ListSectionProps) {
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <div className="authority-card rounded-lg border border-border p-6">
+        <div className="authority-card rounded-lg border border-border">
           <h2 className="text-section-heading font-semibold mb-4">{title}</h2>
           <ul className="grid gap-3 text-base text-muted">
             {items.map((item) => (

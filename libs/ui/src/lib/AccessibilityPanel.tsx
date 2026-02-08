@@ -86,6 +86,10 @@ export function AccessibilityPanel() {
     } else {
       root.removeAttribute('data-text-size');
     }
+    // Persist to localStorage
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('joelklemmer-text-size', textSize);
+    }
   }, [textSize]);
 
   // Apply underline links

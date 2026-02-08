@@ -67,14 +67,29 @@ h4 {
 }
 
 :focus-visible {
-  outline: 2px solid hsl(var(--color-focus));
-  outline-offset: 2px;
+  outline: var(--focus-ring-width, 2px) solid hsl(var(--color-focus));
+  outline-offset: var(--focus-ring-offset, 2px);
   transition:
     outline-color var(--transition-duration-fast) var(--ease-authority),
     outline-offset var(--transition-duration-fast) var(--ease-authority);
 }
 
-@media (prefers-reduced-motion: reduce), html[data-motion='reduced'] {
+/* Enhanced focus visibility in high contrast mode */
+:root[data-contrast='high'] :focus-visible {
+  outline-width: 3px;
+  outline-offset: 3px;
+  outline-style: solid;
+}
+
+@media (prefers-contrast: more) {
+  :root:not([data-contrast]) :focus-visible {
+    outline-width: 3px;
+    outline-offset: 3px;
+    outline-style: solid;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
@@ -92,6 +107,24 @@ h4 {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+}
+
+html[data-motion='reduced'] {
+  scroll-behavior: auto;
+}
+
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-motion='reduced'] .hero-authority-inner {
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
 /* Reduced motion override (from AX panel) */

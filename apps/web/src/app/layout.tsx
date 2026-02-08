@@ -25,6 +25,7 @@ export default async function RootLayout({
                   const theme = localStorage.getItem('joelklemmer-theme');
                   const contrast = localStorage.getItem('joelklemmer-contrast');
                   const underlineLinks = localStorage.getItem('joelklemmer-underline-links');
+                  const textSize = localStorage.getItem('joelklemmer-text-size');
                   if (theme && theme !== 'system') {
                     document.documentElement.setAttribute('data-theme', theme);
                   }
@@ -33,6 +34,9 @@ export default async function RootLayout({
                   }
                   if (underlineLinks === 'true') {
                     document.documentElement.setAttribute('data-underline-links', 'true');
+                  }
+                  if (textSize === 'large') {
+                    document.documentElement.setAttribute('data-text-size', 'large');
                   }
                 } catch (e) {}
               })();

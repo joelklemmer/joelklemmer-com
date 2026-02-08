@@ -101,14 +101,14 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
 
   // Desktop: horizontal nav
   const desktopNav = (
-    <ul className="hidden md:flex flex-wrap items-center gap-4 text-sm text-muted">
+    <ul className="hidden md:flex flex-wrap items-baseline gap-4 text-sm text-muted">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
           <li key={item.href}>
             <Link
               href={item.href}
-              className={`${focusRingClass} rounded-sm px-1 py-0.5 transition-colors motion-reduce:transition-none ${
+              className={`${focusRingClass} rounded-sm px-2 py-1 transition-colors motion-reduce:transition-none ${
                 isActive ? 'text-text font-semibold' : 'hover:text-text'
               }`}
               aria-current={isActive ? 'page' : undefined}

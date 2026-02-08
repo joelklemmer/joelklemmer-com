@@ -36,31 +36,34 @@ const MEDIA_KINDS = ['portrait', 'speaking', 'author', 'identity'] as const;
 
 export interface MediaLibraryScreenProps {
   kind?: string | null;
+  page?: number;
 }
 
 const defaultBaseUrl = 'http://localhost:3000';
 
 const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
-  'executive-studio': 'Executive studio',
-  'formal-board': 'Formal board',
-  'institutional-identity': 'Institutional identity',
-  'statesman-portrait': 'Statesman portrait',
-  'policy-profile': 'Policy profile',
-  'press-headshot': 'Press headshot',
-  'leadership-profile': 'Leadership profile',
-  'speaking-address': 'Speaking address',
-  'author-environment': 'Author environment',
-  'keynote-podium': 'Keynote address',
+  'executive-studio': 'Official portrait',
+  'formal-board': 'Official portrait',
+  'institutional-identity': 'Official portrait',
+  'statesman-portrait': 'Official portrait',
+  'policy-profile': 'Official portrait',
+  'press-headshot': 'Press photo',
+  'leadership-profile': 'Official portrait',
+  'speaking-address': 'Keynote photo',
+  'author-environment': 'Author portrait',
+  'keynote-podium': 'Keynote photo',
   'bookstore-stack': 'Author portrait',
-  'startup-founder': 'Startup founder',
-  'city-vogue': 'City',
-  'luxury-hotel': 'Luxury hotel',
-  'fine-dining': 'Fine dining',
-  'outdoor-adventure': 'Outdoor',
-  winter: 'Winter',
-  luxury: 'Luxury',
-  'hot-air-balloon': 'Hot air balloon',
+  'startup-founder': 'Official portrait',
+  'city-vogue': 'Official portrait',
+  'luxury-hotel': 'Official portrait',
+  'fine-dining': 'Official portrait',
+  'outdoor-adventure': 'Official portrait',
+  winter: 'Official portrait',
+  luxury: 'Official portrait',
+  'hot-air-balloon': 'Official portrait',
 };
+
+const ITEMS_PER_PAGE = 20;
 
 export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
   const devTimerStart =
@@ -78,12 +81,25 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
     kind && MEDIA_KINDS.includes(kind as (typeof MEDIA_KINDS)[number])
       ? visible.filter((a) => a.kind === kind)
       : visible;
+
+  const page = Math.max(1, _props.page ?? 1);
+  const totalPages = Math.ceil(filtered.length / ITEMS_PER_PAGE);
+  const currentPage = Math.min(page, totalPages || 1);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedAssets = filtered.slice(startIndex, endIndex);
   const basePath = `/${locale}`;
   const baseUrl =
     (typeof process !== 'undefined' && process.env?.NEXT_PUBLIC_SITE_URL) ||
     defaultBaseUrl;
   const siteBase = baseUrl.replace(/\/+$/, '');
   const tierAForStructuredData = getMediaManifestTierAOnly(manifest);
+  // Limit JSON-LD to prevent bloat: max 50 ImageObjects per page
+  const MAX_JSON_LD_IMAGES = 50;
+  const tierAForStructuredDataLimited = tierAForStructuredData.slice(
+    0,
+    MAX_JSON_LD_IMAGES,
+  );
 
   if (devTimerStart && typeof process !== 'undefined') {
     const elapsed = Date.now() - devTimerStart;
@@ -120,7 +136,7 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
         baseUrl={baseUrl}
         locale={locale}
         pathname="/media"
-        assets={tierAForStructuredData.map((a) => ({
+        assets={tierAForStructuredDataLimited.map((a) => ({
           id: a.id,
           file: a.file,
           alt: a.alt,
@@ -144,12 +160,15 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
         }
       >
         <MediaLibraryClient
-          assets={filtered}
+          assets={paginatedAssets}
           initialKind={kind}
           manifestSize={manifest.assets.length}
           basePath={basePath}
           siteBase={siteBase}
           labels={labels}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          totalItems={filtered.length}
         />
       </Suspense>
       <section

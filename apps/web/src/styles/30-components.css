@@ -11,10 +11,14 @@
     background-color var(--transition-duration-fast) var(--ease-authority);
 }
 
-@media (prefers-reduced-motion: reduce), html[data-motion='reduced'] {
+@media (prefers-reduced-motion: reduce) {
   .calc-card-material {
     transition: none;
   }
+}
+
+html[data-motion='reduced'] .calc-card-material {
+  transition: none;
 }
 
 .calc-section-heading {
@@ -111,6 +115,14 @@
     box-shadow var(--transition-duration-normal) var(--ease-authority),
     background-color var(--transition-duration-fast) var(--ease-authority),
     transform var(--transition-duration-fast) var(--ease-authority);
+  /* Home page card padding */
+  padding: var(--home-card-padding);
+}
+
+@media (min-width: 768px) {
+  .authority-card {
+    padding: var(--home-card-padding-md);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

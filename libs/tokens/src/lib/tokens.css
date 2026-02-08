@@ -218,6 +218,13 @@
   --section-inner-gap: var(--space-4);
   --section-heading-margin: var(--space-2);
 
+  /* Home page specific: tighter rhythm for briefing interface */
+  --home-section-gap: var(--space-6);
+  --home-section-gap-md: var(--space-7);
+  --home-card-padding: var(--space-5);
+  --home-card-padding-md: var(--space-6);
+  --home-card-gap: var(--space-4);
+
   /* Spacing scale and section rhythm (vertical cadence) */
   --spacing-scale-xs: var(--space-1);
   --spacing-scale-sm: var(--space-2);
@@ -265,24 +272,35 @@
   --section-anchor-min-height: 6rem;
 
   /* Media list: thumb derivative size only; 1:1 box; list must not load master by default. */
-  --media-thumb-size: 56px;
+  --media-thumb-size: 48px;
 
   /* Page Frame: consistent lanes, section spacing, content stage (reduces thin-column float). WCAG-safe. */
   --page-frame-max-width: var(--container-max-width);
   --page-frame-stage-bg: hsl(var(--color-surface-elevated) / 0.92);
   --page-frame-stage-radius: 0.75rem;
   --page-frame-stage-elevation: 0 1px 3px hsl(var(--color-text) / 0.04);
+
+  /* Header and Navigation: baseline alignment, spacing, active states */
+  --header-padding-y: var(--space-4);
+  --header-padding-y-md: var(--space-5);
+  --nav-padding-y: var(--space-3);
+  --nav-padding-y-md: var(--space-4);
+  --nav-item-gap: var(--space-4);
+  --nav-item-padding-x: var(--space-2);
+  --nav-item-padding-y: var(--space-1);
+  --nav-active-indicator-height: 2px;
+  --header-baseline-offset: 0.125em;
 }
 
 @media (min-width: 640px) {
   :root {
-    --media-thumb-size: 64px;
+    --media-thumb-size: 56px;
   }
 }
 
 @media (min-width: 768px) {
   :root {
-    --media-thumb-size: 72px;
+    --media-thumb-size: 64px;
   }
 }
 
@@ -350,7 +368,7 @@
   --color-focus: 212 68% 58%;
 }
 
-/* High contrast mode: meaningful difference, not cosmetic */
+/* High contrast mode: WCAG AA+ compliance - meaningful difference, not cosmetic */
 :root[data-contrast='high'] {
   --color-bg: 0 0% 100%;
   --color-surface: 0 0% 100%;
@@ -358,7 +376,7 @@
   --color-text: 0 0% 0%;
   --color-muted: 0 0% 15%;
   --color-border: 0 0% 0%;
-  --color-border-subtle: 0 0% 10%;
+  --color-border-subtle: 0 0% 0%;
   --color-neutral-50: 0 0% 98%;
   --color-neutral-100: 0 0% 95%;
   --color-neutral-200: 0 0% 90%;
@@ -369,9 +387,16 @@
   --color-accent-strong: 217 100% 30%;
   --color-accent-muted: 217 100% 35%;
   --color-focus: 217 100% 40%;
-  /* Ensure borders are visible */
+  /* Strengthened focus ring for high contrast (WCAG AA+) */
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+  --focus-ring-color: hsl(var(--color-focus));
+  /* Ensure borders are visible and stronger */
   --authority-card-glow: 0 0 0 2px hsl(var(--color-border));
   --authority-soft-glow: 0 0 0 2px hsl(var(--color-border));
+  /* Strengthen all borders in high contrast mode */
+  --authority-surface-elevation: 0 1px 2px hsl(var(--color-border) / 1);
+  --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.3);
 }
 
 @media (prefers-contrast: more) {
@@ -382,7 +407,7 @@
     --color-text: 0 0% 0%;
     --color-muted: 0 0% 15%;
     --color-border: 0 0% 0%;
-    --color-border-subtle: 0 0% 10%;
+    --color-border-subtle: 0 0% 0%;
     --color-neutral-50: 0 0% 98%;
     --color-neutral-100: 0 0% 95%;
     --color-neutral-200: 0 0% 90%;
@@ -393,7 +418,13 @@
     --color-accent-strong: 217 100% 30%;
     --color-accent-muted: 217 100% 35%;
     --color-focus: 217 100% 40%;
+    /* Strengthened focus ring for system high contrast preference */
+    --focus-ring-width: 3px;
+    --focus-ring-offset: 3px;
+    --focus-ring-color: hsl(var(--color-focus));
     --authority-card-glow: 0 0 0 2px hsl(var(--color-border));
     --authority-soft-glow: 0 0 0 2px hsl(var(--color-border));
+    --authority-surface-elevation: 0 1px 2px hsl(var(--color-border) / 1);
+    --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.3);
   }
 }
