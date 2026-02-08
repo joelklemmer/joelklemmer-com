@@ -32,6 +32,8 @@ export { MdxSection } from './MdxSection';
 export { PrimaryNavSection } from './PrimaryNavSection';
 export { QuantifiedOutcomesSection } from './QuantifiedOutcomesSection';
 export { ReadPathSection } from './ReadPathSection';
+export { SectionVisualAnchor } from './SectionVisualAnchor';
+export type { SectionVisualAnchorProps } from './SectionVisualAnchor';
 export { StartHereSection } from './StartHereSection';
 export { VerificationGuidanceSection } from './VerificationGuidanceSection';
 export { AECBriefingPanel } from './AECBriefingPanel.client';

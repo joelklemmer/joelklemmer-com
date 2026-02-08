@@ -37,6 +37,8 @@ module.exports = {
           100: 'hsl(var(--color-neutral-100) / <alpha-value>)',
           200: 'hsl(var(--color-neutral-200) / <alpha-value>)',
           300: 'hsl(var(--color-neutral-300) / <alpha-value>)',
+          400: 'hsl(var(--color-neutral-400) / <alpha-value>)',
+          500: 'hsl(var(--color-neutral-500) / <alpha-value>)',
         },
       },
       maxWidth: {
@@ -103,6 +105,22 @@ module.exports = {
         'authority-card': 'var(--authority-card-elevation)',
         'authority-card-glow': 'var(--authority-card-glow)',
         'authority-hero': 'var(--authority-hero-depth)',
+        'authority-glow-controlled': 'var(--authority-controlled-glow)',
+      },
+      padding: {
+        'container-x': 'var(--container-padding-x)',
+        'container-x-wide': 'var(--container-padding-x-wide)',
+        'container-x-start':
+          'calc(var(--container-padding-x) + var(--optical-inset))',
+        'optical-inset': 'var(--optical-inset)',
+      },
+      gap: {
+        'content-rhythm': 'var(--content-rhythm)',
+        'column-cadence': 'var(--column-cadence)',
+        'row-cadence': 'var(--row-cadence)',
+        'grid-base': 'var(--grid-gap-base)',
+        'grid-wide': 'var(--grid-gap-wide)',
+        'grid-tight': 'var(--grid-gap-tight)',
       },
       transitionDuration: {
         fast: 'var(--transition-duration-fast)',

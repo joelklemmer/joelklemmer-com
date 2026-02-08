@@ -89,6 +89,11 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+
+    .hero-authority-inner {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
 }
 
@@ -174,10 +179,12 @@
     margin-block-start: var(--heading-to-content-gap);
   }
 
-  /* VACIL B) Hero: dimensional layout, typographic command, focal hierarchy, atmospheric depth */
+  /* ACS B) Hero authority field: dimensional composition, atmospheric layering, typographic dominance, visual inevitability */
   .hero-authority {
+    position: relative;
     margin-block-end: var(--section-block-margin);
     padding-block: var(--space-8);
+    isolation: isolate;
   }
 
   .hero-authority-atmosphere {
@@ -188,11 +195,49 @@
     z-index: 0;
   }
 
+  .hero-authority-atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--hero-atmosphere-primary);
+    pointer-events: none;
+  }
+
+  .hero-authority-atmosphere::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--hero-atmosphere-secondary);
+    pointer-events: none;
+  }
+
+  /* ACS B+D) Focal cognition anchor: premium inner surface, subtle glass translucency, dimensional depth */
   .hero-authority-inner {
     position: relative;
     z-index: 1;
     display: grid;
     gap: var(--hero-block-gap);
+    background: var(--hero-inner-surface);
+    backdrop-filter: blur(var(--hero-inner-blur));
+    -webkit-backdrop-filter: blur(var(--hero-inner-blur));
+    border: 1px solid var(--hero-inner-border);
+    border-radius: 0.5rem;
+    box-shadow: var(--hero-depth-shadow), var(--authority-soft-light);
+    overflow: hidden;
+  }
+
+  .hero-authority-inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--hero-atmosphere-tertiary);
+    pointer-events: none;
+    border-radius: inherit;
+  }
+
+  .hero-authority-inner > * {
+    position: relative;
+    z-index: 1;
   }
 
   .hero-authority-stack,
@@ -211,7 +256,9 @@
     .hero-authority-grid {
       grid-template-columns: 1fr minmax(200px, 320px);
       align-items: start;
+      align-content: start;
       gap: var(--hero-inline-gap);
+      /* Text–image dialogue: content primary, visual anchor secondary */
     }
   }
 
@@ -219,6 +266,17 @@
     display: grid;
     gap: var(--hero-block-gap);
     max-width: var(--readable-line-length);
+    min-width: 0;
+  }
+
+  /* Portrait composition: refined framing, tonal harmony, responsive scaling */
+  .hero-portrait-composition {
+    aspect-ratio: 4 / 5;
+    max-height: min(420px, 60vh);
+  }
+
+  .hero-portrait-image {
+    object-position: center 20%;
   }
 
   .hero-display {
@@ -267,13 +325,24 @@
     min-height: 0;
   }
 
+  /* ACS E) Identity gravity anchors: photographic presence, compositional hierarchy, lighting realism */
+  .hero-authority-visual-frame {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    box-shadow:
+      var(--hero-visual-depth), var(--hero-visual-frame),
+      var(--hero-visual-glow), var(--hero-visual-highlight);
+    background: hsl(var(--color-neutral-100));
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .hero-action-link {
       transition: none;
     }
   }
 
-  /* VACIL C) Layout: grid cadence, spacing rhythm */
+  /* ACS C) Precision grid: optical alignment, cadence rhythm, hierarchy reinforcement, composition maturity */
   .content-rhythm {
     gap: var(--content-rhythm);
   }
@@ -282,29 +351,64 @@
     gap: var(--content-rhythm-tight);
   }
 
-  /* VACIL D) Material: translucent panels, depth layering, glass-like surfaces */
+  .grid-cadence-column {
+    column-gap: var(--column-cadence);
+  }
+
+  .grid-cadence-row {
+    row-gap: var(--row-cadence);
+  }
+
+  .grid-cadence {
+    column-gap: var(--column-cadence);
+    row-gap: var(--row-cadence);
+  }
+
+  /* AIPL: Section visual anchor — token-aware composition, graphite harmony */
+  .section-visual-anchor {
+    min-height: var(--section-anchor-min-height);
+    background: var(--section-anchor-bg);
+    border: 1px solid var(--section-anchor-border);
+    border-radius: var(--section-anchor-radius);
+    box-shadow: var(--section-anchor-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Optical alignment: nudge content for visual grid alignment (use on container or content block) */
+  .optical-align-start {
+    padding-inline-start: var(--optical-inset);
+  }
+
+  /* ACS D) Premium material realism: glass translucency, layered depth, controlled glow, lighting realism */
   .authority-glass {
     background: var(--authority-glass-bg);
     backdrop-filter: blur(var(--authority-glass-blur));
     -webkit-backdrop-filter: blur(var(--authority-glass-blur));
     box-shadow:
       var(--authority-depth-layer1),
-      0 0 0 1px var(--authority-glass-border);
+      0 0 0 1px var(--authority-glass-border),
+      var(--authority-soft-light);
   }
 
+  /* ACS D) Layered depth, controlled glow, lighting realism */
   .authority-panel {
     background: hsl(
       var(--color-surface) / var(--authority-surface-translucency)
     );
-    box-shadow: var(--authority-depth-layer1), var(--authority-soft-glow);
+    box-shadow:
+      var(--authority-depth-layer1), var(--authority-soft-glow),
+      var(--authority-soft-light);
   }
 
-  /* VACEL D) Authority cards and major surfaces: layered depth, soft translucency, shadow discipline */
   .authority-card {
     background: hsl(
       var(--color-surface) / var(--authority-surface-translucency)
     );
-    box-shadow: var(--authority-card-elevation), var(--authority-card-glow);
+    box-shadow:
+      var(--authority-card-elevation), var(--authority-card-glow),
+      var(--authority-controlled-glow);
     transition:
       box-shadow var(--transition-duration-normal) var(--ease-authority),
       background-color var(--transition-duration-fast) var(--ease-authority);

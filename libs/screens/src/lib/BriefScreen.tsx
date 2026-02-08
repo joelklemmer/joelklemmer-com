@@ -41,6 +41,7 @@ import {
 import {
   IdentityScopeSection,
   ReadPathSection,
+  SectionVisualAnchor,
   VerificationGuidanceSection,
   ListSection,
   QuantifiedOutcomesSection,
@@ -377,7 +378,10 @@ export async function BriefScreen(props?: BriefScreenProps) {
         toggleLabel={tCommon('density.toggleLabel')}
         densityDefault={orchestrationHints.densityDefaultSuggestion}
       >
-        <IdentityScopeSection body={t('identityScope')} />
+        <IdentityScopeSection
+          body={t('identityScope')}
+          visualAnchor={<SectionVisualAnchor />}
+        />
 
         <ReadPathSection
           title={t('readPath.title')}

@@ -41,18 +41,15 @@ export function HeroSection({
         height?: number;
       };
       visualNode = (
-        <div
-          className="hero-visual relative overflow-hidden rounded-lg bg-neutral-100"
-          aria-hidden
-        >
+        <div className="hero-authority-visual-frame hero-visual hero-portrait-composition">
           <Image
             src={v.src}
             alt={v.alt}
             width={v.width ?? 320}
-            height={v.height ?? 320}
-            className="object-cover w-full h-full"
+            height={v.height ?? 500}
+            className="hero-portrait-image object-cover w-full h-full"
             priority
-            sizes="(max-width: 768px) 100vw, 320px"
+            sizes="(max-width: 768px) 100vw, min(320px, 40vw)"
           />
         </div>
       );

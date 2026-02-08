@@ -2,7 +2,8 @@
   "hero": {
     "title": "Joel Robert Klemmer",
     "lede": "Authority verification ecosystem for executive evaluation, board review, and public record.",
-    "cta": "Open executive brief"
+    "cta": "Open executive brief",
+    "portraitAlt": "Professional portrait"
   },
   "startHere": {
     "sentence": "Start here for evaluator review.",

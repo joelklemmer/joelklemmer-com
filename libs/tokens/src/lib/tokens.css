@@ -1,23 +1,30 @@
-/* Visual Authority Cinematic Identity: deep graphite base, layered neutrals, restrained accent. WCAG-safe. */
+/* ACS: Converged Color Intelligence — graphite foundations, layered neutrals, restrained signal accents, tonal hierarchy. Token-driven; no decorative colors. WCAG-safe. */
 :root {
-  /* Base: deep graphite undertone (cool gray) */
-  --color-bg: 222 14% 97%;
-  --color-surface: 0 0% 100%;
-  --color-surface-elevated: 222 12% 99%;
-  --color-text: 222 24% 12%;
-  --color-muted: 222 14% 42%;
-  --color-border: 222 12% 88%;
-  --color-border-subtle: 222 10% 92%;
-  /* Layered neutrals (structure, not decoration) */
-  --color-neutral-50: 222 12% 98%;
-  --color-neutral-100: 222 10% 94%;
-  --color-neutral-200: 222 10% 88%;
-  --color-neutral-300: 222 8% 75%;
-  /* Restrained accent: intelligence, not marketing */
-  --color-accent: 218 55% 38%;
-  --color-accent-strong: 218 60% 30%;
-  --color-accent-muted: 218 40% 48%;
-  --color-focus: 218 65% 42%;
+  /* Graphite foundations (cool gray base — depth and composure) */
+  --color-bg: 222 14% 95%;
+  --color-surface: 222 10% 100%;
+  --color-surface-elevated: 222 12% 98%;
+  --color-text: 222 26% 9%;
+  --color-muted: 222 14% 38%;
+  --color-border: 222 12% 84%;
+  --color-border-subtle: 222 10% 90%;
+  /* Layered neutrals — full tonal hierarchy, structure only */
+  --color-neutral-50: 222 12% 97%;
+  --color-neutral-100: 222 10% 92%;
+  --color-neutral-200: 222 10% 84%;
+  --color-neutral-300: 222 8% 68%;
+  --color-neutral-400: 222 8% 50%;
+  --color-neutral-500: 222 10% 38%;
+  /* Restrained signal accents — intelligence, not marketing */
+  --color-accent: 218 48% 34%;
+  --color-accent-strong: 218 54% 26%;
+  --color-accent-muted: 218 36% 44%;
+  --color-focus: 218 58% 38%;
+  /* Tonal hierarchy aliases (semantic) */
+  --color-text-primary: var(--color-text);
+  --color-text-secondary: var(--color-muted);
+  --color-surface-base: var(--color-surface);
+  --color-surface-tier1: var(--color-surface-elevated);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -84,35 +91,60 @@
   --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.5);
   --authority-contrast-balance: hsl(var(--color-surface));
 
-  /* VACIL D) Material: glass-like surfaces, depth layering, subtle lighting */
-  --authority-glass-bg: hsl(var(--color-surface) / 0.72);
-  --authority-glass-border: hsl(var(--color-border) / 0.6);
-  --authority-glass-blur: 12px;
-  --authority-depth-layer1: 0 2px 4px hsl(var(--color-text) / 0.04);
-  --authority-depth-layer2: 0 4px 12px hsl(var(--color-text) / 0.06);
-  --authority-depth-layer3: 0 8px 24px hsl(var(--color-text) / 0.08);
-  --authority-soft-light: 0 1px 0 0 hsl(0 0% 100% / 0.6);
+  /* ACS D) Premium material realism: glass translucency, layered depth, controlled glow, lighting realism. Subtle and restrained. */
+  --authority-glass-bg: hsl(var(--color-surface) / 0.76);
+  --authority-glass-border: hsl(var(--color-border) / 0.55);
+  --authority-glass-blur: 14px;
+  --authority-depth-layer1: 0 2px 5px hsl(var(--color-text) / 0.045);
+  --authority-depth-layer2: 0 4px 14px hsl(var(--color-text) / 0.065);
+  --authority-depth-layer3: 0 10px 28px hsl(var(--color-text) / 0.08);
+  --authority-soft-light: 0 1px 0 0 hsl(0 0% 100% / 0.55);
+  --authority-controlled-glow: 0 0 24px -4px hsl(var(--color-text) / 0.06);
   --authority-ambient-soft: radial-gradient(
     ellipse 80% 50% at 50% 0%,
-    hsl(var(--color-accent) / 0.06) 0%,
+    hsl(var(--color-accent) / 0.05) 0%,
     transparent 70%
   );
 
-  /* VACEL A) Atmosphere: tonal depth, ambient lighting, depth illusion (token-controlled; WCAG-safe). */
+  /* ACS A) Atmosphere: tonal depth, ambient lighting, depth illusion. Token-controlled; WCAG-safe. */
   --authority-atmosphere-subtle: linear-gradient(
     180deg,
     hsl(var(--color-neutral-50)) 0%,
-    hsl(var(--color-bg)) 25%,
-    hsl(var(--color-surface)) 50%,
+    hsl(var(--color-bg)) 22%,
+    hsl(var(--color-surface)) 48%,
     hsl(var(--color-bg)) 100%
   );
   --authority-ambient-radial: radial-gradient(
     ellipse 100% 60% at 50% -20%,
-    hsl(var(--color-accent) / 0.04) 0%,
-    transparent 55%
+    hsl(var(--color-accent) / 0.035) 0%,
+    transparent 50%
   );
-  --authority-depth-illusion: 0 2px 8px hsl(var(--color-text) / 0.04);
-  --authority-hero-depth: 0 4px 20px hsl(var(--color-text) / 0.06);
+  --authority-depth-illusion: 0 2px 10px hsl(var(--color-text) / 0.045);
+  --authority-hero-depth: 0 6px 24px hsl(var(--color-text) / 0.065);
+  /* ACS B) Hero authority field: dimensional composition, atmospheric layering, visual inevitability */
+  --hero-atmosphere-primary: radial-gradient(
+    ellipse 85% 50% at 50% -15%,
+    hsl(var(--color-neutral-100) / 0.95) 0%,
+    hsl(var(--color-neutral-50) / 0.6) 35%,
+    transparent 65%
+  );
+  --hero-atmosphere-secondary: linear-gradient(
+    180deg,
+    hsl(var(--color-bg) / 0.5) 0%,
+    transparent 35%
+  );
+  --hero-atmosphere-tertiary: linear-gradient(
+    180deg,
+    transparent 0%,
+    hsl(var(--color-surface) / 0.3) 100%
+  );
+  --hero-depth-shadow:
+    0 6px 24px hsl(var(--color-text) / 0.06),
+    0 1px 3px hsl(var(--color-text) / 0.04);
+  --hero-inner-surface: hsl(var(--color-surface-elevated) / 0.94);
+  --hero-inner-border: hsl(var(--color-border-subtle) / 0.75);
+  --hero-inner-blur: 10px;
+  --hero-typography-weight: 600;
 
   /* VACEL B) Eye path: heading prominence, content lane, section anchoring. */
   --section-heading-weight: 600;
@@ -143,23 +175,43 @@
   --section-inner-gap: var(--space-4);
   --section-heading-margin: var(--space-2);
 
-  /* VACIL C) Layout: grid cadence, alignment precision, visual rhythm */
+  /* ACS C) Precision grid: optical alignment, cadence rhythm, hierarchy reinforcement */
   --grid-gap-base: var(--space-4);
   --grid-gap-wide: var(--space-6);
+  --grid-gap-tight: var(--space-3);
   --content-rhythm: var(--space-6);
   --content-rhythm-tight: var(--space-4);
   --align-content-max: var(--container-max-width);
   --readable-line-length: var(--readable-max-width);
+  --container-padding-x: var(--space-6);
+  --container-padding-x-wide: var(--space-8);
+  --optical-inset: var(--space-4);
+  --column-cadence: var(--space-6);
+  --row-cadence: var(--space-5);
 
-  /* VACIL B) Hero: dimensional typography and focal hierarchy */
-  --hero-display-size: clamp(2.25rem, 5vw + 1.5rem, 3rem);
-  --hero-display-line: 1.15;
-  --hero-display-spacing: -0.03em;
-  --hero-display-weight: 600;
+  /* ACS B) Hero: dimensional composition, typographic dominance, visual inevitability */
+  --hero-display-size: clamp(2.75rem, 6vw + 1.5rem, 3.5rem);
+  --hero-display-line: 1.1;
+  --hero-display-spacing: -0.04em;
+  --hero-display-weight: 660;
   --hero-lede-size: var(--text-lg);
-  --hero-lede-line: 1.5;
+  --hero-lede-line: 1.45;
   --hero-block-gap: var(--space-6);
   --hero-inline-gap: var(--space-8);
+  /* ACS E) Identity gravity: photographic presence, compositional hierarchy, lighting realism */
+  --hero-visual-frame: 0 0 0 1px hsl(var(--color-border) / 0.55);
+  --hero-visual-depth:
+    0 10px 40px hsl(var(--color-text) / 0.09),
+    0 2px 8px hsl(var(--color-text) / 0.05);
+  --hero-visual-glow: 0 0 0 1px hsl(var(--color-border-subtle) / 0.75);
+  --hero-visual-highlight: inset 0 1px 0 0 hsl(0 0% 100% / 0.6);
+
+  /* AIPL: Section visual anchors — token-aware composition, graphite harmony */
+  --section-anchor-bg: hsl(var(--color-neutral-100));
+  --section-anchor-border: hsl(var(--color-border) / 0.6);
+  --section-anchor-shadow: 0 2px 8px hsl(var(--color-text) / 0.04);
+  --section-anchor-radius: 0.5rem;
+  --section-anchor-min-height: 6rem;
 }
 
 /* EIL: Authority Density View — compressed scanning; tighter rhythm, emphasized hierarchy. */
@@ -186,40 +238,44 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: 222 20% 9%;
-    --color-surface: 222 18% 13%;
-    --color-surface-elevated: 222 16% 16%;
+    --color-bg: 222 20% 7%;
+    --color-surface: 222 18% 11%;
+    --color-surface-elevated: 222 16% 14%;
     --color-text: 220 14% 96%;
-    --color-muted: 220 12% 68%;
-    --color-border: 222 12% 24%;
-    --color-border-subtle: 222 12% 20%;
-    --color-neutral-50: 222 18% 12%;
-    --color-neutral-100: 222 16% 16%;
-    --color-neutral-200: 222 14% 22%;
-    --color-neutral-300: 220 12% 40%;
-    --color-accent: 212 70% 58%;
-    --color-accent-strong: 212 75% 65%;
-    --color-accent-muted: 212 50% 52%;
-    --color-focus: 212 75% 62%;
+    --color-muted: 220 12% 64%;
+    --color-border: 222 12% 20%;
+    --color-border-subtle: 222 12% 16%;
+    --color-neutral-50: 222 18% 10%;
+    --color-neutral-100: 222 16% 14%;
+    --color-neutral-200: 222 14% 19%;
+    --color-neutral-300: 220 12% 36%;
+    --color-neutral-400: 220 10% 50%;
+    --color-neutral-500: 220 10% 62%;
+    --color-accent: 212 64% 54%;
+    --color-accent-strong: 212 70% 62%;
+    --color-accent-muted: 212 46% 48%;
+    --color-focus: 212 68% 58%;
   }
 }
 
 :root[data-theme='dark'] {
-  --color-bg: 222 20% 9%;
-  --color-surface: 222 18% 13%;
-  --color-surface-elevated: 222 16% 16%;
+  --color-bg: 222 20% 7%;
+  --color-surface: 222 18% 11%;
+  --color-surface-elevated: 222 16% 14%;
   --color-text: 220 14% 96%;
-  --color-muted: 220 12% 68%;
-  --color-border: 222 12% 24%;
-  --color-border-subtle: 222 12% 20%;
-  --color-neutral-50: 222 18% 12%;
-  --color-neutral-100: 222 16% 16%;
-  --color-neutral-200: 222 14% 22%;
-  --color-neutral-300: 220 12% 40%;
-  --color-accent: 212 70% 58%;
-  --color-accent-strong: 212 75% 65%;
-  --color-accent-muted: 212 50% 52%;
-  --color-focus: 212 75% 62%;
+  --color-muted: 220 12% 64%;
+  --color-border: 222 12% 20%;
+  --color-border-subtle: 222 12% 16%;
+  --color-neutral-50: 222 18% 10%;
+  --color-neutral-100: 222 16% 14%;
+  --color-neutral-200: 222 14% 19%;
+  --color-neutral-300: 220 12% 36%;
+  --color-neutral-400: 220 10% 50%;
+  --color-neutral-500: 220 10% 62%;
+  --color-accent: 212 64% 54%;
+  --color-accent-strong: 212 70% 62%;
+  --color-accent-muted: 212 46% 48%;
+  --color-focus: 212 68% 58%;
 }
 
 :root[data-contrast='high'] {
@@ -234,6 +290,8 @@
   --color-neutral-100: 0 0% 95%;
   --color-neutral-200: 0 0% 90%;
   --color-neutral-300: 0 0% 25%;
+  --color-neutral-400: 0 0% 20%;
+  --color-neutral-500: 0 0% 15%;
   --color-accent: 217 100% 35%;
   --color-accent-strong: 217 100% 30%;
   --color-accent-muted: 217 100% 35%;

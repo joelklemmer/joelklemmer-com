@@ -10,6 +10,7 @@ import {
   CardGridSection,
   HeroSection,
   ListSection,
+  SectionVisualAnchor,
 } from '@joelklemmer/sections';
 import { DensityAwarePage } from '@joelklemmer/authority-density';
 
@@ -38,6 +39,7 @@ export async function BooksScreen() {
     <>
       <HeroSection title={t('index.title')} lede={t('index.subtitle')} />
       <DensityAwarePage toggleLabel={tCommon('density.toggleLabel')}>
+        <SectionVisualAnchor className="mb-6" />
         {books.length ? (
           <CardGridSection
             title={t('index.listTitle')}

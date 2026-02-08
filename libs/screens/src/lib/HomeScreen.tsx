@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react';
 import { Fragment } from 'react';
+import { existsSync } from 'fs';
+import { join } from 'path';
 import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import {
@@ -16,6 +18,7 @@ import {
   FrameworkCard,
   HeroSection,
   ListSection,
+  SectionVisualAnchor,
   StartHereSection,
 } from '@joelklemmer/sections';
 import { Container } from '@joelklemmer/ui';
@@ -70,11 +73,27 @@ export async function HomeScreen() {
     (a, b) => (orderMap.get(a) ?? 99) - (orderMap.get(b) ?? 99),
   );
 
+  const cwd = process.cwd();
+  const portraitPath = [
+    join(cwd, 'apps', 'web', 'public', 'media', 'portrait.jpg'),
+    join(cwd, 'public', 'media', 'portrait.jpg'),
+  ].find((p) => existsSync(p));
+  const hasPortrait = Boolean(portraitPath);
   const hero = (
     <HeroSection
       title={t('hero.title')}
       lede={t('hero.lede')}
       actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
+      visual={
+        hasPortrait
+          ? {
+              src: '/media/portrait.jpg',
+              alt: t('hero.portraitAlt'),
+              width: 400,
+              height: 500,
+            }
+          : undefined
+      }
     />
   );
   const startHere = (
@@ -89,6 +108,7 @@ export async function HomeScreen() {
     frameworks.length > 0 ? (
       <section id="doctrine" className="section-shell">
         <Container className="section-shell">
+          <SectionVisualAnchor className="mb-6" />
           <div className="section-shell">
             <h2 className="text-section-heading font-semibold">
               {tFw('section.title')}
