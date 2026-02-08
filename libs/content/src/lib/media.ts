@@ -10,6 +10,28 @@ const recommendedUseSchema = z.enum([
   'press',
   'books',
 ]);
+const personaSignalSchema = z.enum([
+  'executive',
+  'statesman',
+  'author',
+  'speaker',
+  'institutional',
+]);
+const environmentSignalSchema = z.enum([
+  'studio',
+  'podium',
+  'office',
+  'architectural',
+  'literary',
+]);
+const formalityLevelSchema = z.enum(['high', 'elevated', 'moderate']);
+const visualToneSchema = z.enum([
+  'commanding',
+  'approachable',
+  'scholarly',
+  'strategic',
+  'decisive',
+]);
 const mediaAssetSchema = z.object({
   id: z.string().min(1),
   file: z.string().min(1),
@@ -21,6 +43,14 @@ const mediaAssetSchema = z.object({
   height: z.number(),
   sha256: z.string().min(1),
   alt: z.string().min(1),
+  // Phase II semantic enrichment (optional for backward compat)
+  authorityTier: z.enum(['A', 'B', 'C']).optional(),
+  personaSignal: personaSignalSchema.optional(),
+  environmentSignal: environmentSignalSchema.optional(),
+  formalityLevel: formalityLevelSchema.optional(),
+  visualTone: visualToneSchema.optional(),
+  caption: z.string().optional(),
+  seoKeywords: z.array(z.string()).optional(),
 });
 
 const mediaManifestSchema = z.object({
@@ -30,13 +60,17 @@ const mediaManifestSchema = z.object({
 export type MediaAsset = z.infer<typeof mediaAssetSchema>;
 export type MediaManifest = z.infer<typeof mediaManifestSchema>;
 
-/** Authority Core: visible on media page, indexable, in sitemap. */
+/** Authority Core: visible on media page, indexable, in sitemap. Semantic descriptors only. */
 export const MEDIA_TIER_A_VISIBLE_DESCRIPTORS = [
-  'studio-graphite',
-  'studio-formal',
-  'studio-tight',
-  'keynote-podium',
-  'bookstore-stack',
+  'executive-studio',
+  'formal-board',
+  'institutional-identity',
+  'statesman-portrait',
+  'policy-profile',
+  'press-headshot',
+  'leadership-profile',
+  'speaking-address',
+  'author-environment',
 ] as const;
 
 /** Authority Core (other): indexable, in sitemap, not shown on media page. */

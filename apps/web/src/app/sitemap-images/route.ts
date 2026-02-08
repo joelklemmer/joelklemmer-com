@@ -8,6 +8,8 @@ const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
 const siteBase = baseUrl.replace(/\/+$/, '');
 const IMAGE_SITEMAP_MAX = 50000;
 const LICENSE_URL = `${siteBase}/en/terms`;
+const CREDIT_TEXT = 'Joel R. Klemmer';
+const CREATOR_NAME = 'Joel R. Klemmer';
 
 function escapeXml(s: string): string {
   return s
@@ -27,13 +29,14 @@ export async function GET() {
     '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
   );
   const limit = Math.min(eligible.length, IMAGE_SITEMAP_MAX);
+  const mediaPageUrl = `${siteBase}/en/media`;
   for (let i = 0; i < limit; i++) {
     const asset = eligible[i];
     const imageUrl = asset.file.startsWith('http')
       ? asset.file
       : `${siteBase}${asset.file}`;
     const title = asset.alt.slice(0, 100);
-    const caption = asset.alt;
+    const caption = (asset as { caption?: string }).caption ?? asset.alt;
     chunks.push(
       '  <url>',
       `    <loc>${escapeXml(imageUrl)}</loc>`,
@@ -42,6 +45,9 @@ export async function GET() {
       `      <image:title>${escapeXml(title)}</image:title>`,
       `      <image:caption>${escapeXml(caption)}</image:caption>`,
       `      <image:license>${escapeXml(LICENSE_URL)}</image:license>`,
+      `      <image:creator>${escapeXml(CREATOR_NAME)}</image:creator>`,
+      `      <image:credit>${escapeXml(CREDIT_TEXT)}</image:credit>`,
+      `      <image:contextualPage>${escapeXml(mediaPageUrl)}</image:contextualPage>`,
       '    </image:image>',
       '  </url>',
     );

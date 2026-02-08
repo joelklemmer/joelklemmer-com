@@ -23,5 +23,59 @@
       "joel-klemmer__portrait__studio-formal__2026-01__16__hero.webp",
       "joel-klemmer__portrait__studio-formal__2026-01__16__thumb.webp"
     ]
+  },
+  {
+    "date": "2026-02-08",
+    "action": "prune",
+    "reason": "Authority Media Distribution Center Phase II — controlled removal",
+    "assets": [
+      {
+        "id": "portrait-studio-graphite-2026-01-07",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__07.webp",
+        "movedTo": "tools/media-review-delete/"
+      },
+      {
+        "id": "portrait-studio-graphite-2026-01-12",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__12.webp",
+        "movedTo": "tools/media-review-delete/"
+      },
+      {
+        "id": "portrait-studio-graphite-2026-01-27",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__27.webp",
+        "movedTo": "tools/media-review-delete/"
+      },
+      {
+        "id": "portrait-studio-formal-2026-01-19",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__19.webp",
+        "movedTo": "tools/media-review-delete/"
+      },
+      {
+        "id": "portrait-studio-formal-2026-01-41",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__41.webp",
+        "movedTo": "tools/media-review-delete/"
+      }
+    ],
+    "derivativesMoved": [
+      "joel-klemmer__portrait__studio-graphite__2026-01__07.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__07__card.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__07__hero.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__07__thumb.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__12.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__12__card.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__12__hero.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__12__thumb.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__27.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__27__card.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__27__hero.webp",
+      "joel-klemmer__portrait__studio-graphite__2026-01__27__thumb.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__19.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__19__card.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__19__hero.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__19__thumb.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__41.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__41__card.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__41__hero.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__41__thumb.webp"
+    ]
   }
 ]

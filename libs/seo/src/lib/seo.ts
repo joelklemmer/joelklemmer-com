@@ -301,12 +301,14 @@ export interface MediaPageJsonLdProps {
     descriptor: string;
     width: number;
     height: number;
+    caption?: string;
+    seoKeywords?: string[];
   }>;
 }
 
 /**
  * JSON-LD for Media Library page: CollectionPage with ItemList of ImageObject.
- * Author Person Joel Robert Klemmer; license reference; no embellishment.
+ * Phase II: creator, creditText, acquireLicensePage, representativeOfPage; Person entity linkage.
  */
 export function getMediaPageJsonLd({
   baseUrl,
@@ -321,25 +323,37 @@ export function getMediaPageJsonLd({
     locale,
   });
   const personLd = getPersonJsonLd({ baseUrl: siteUrl });
-  const author = { '@type': 'Person' as const, name: personLd.name };
   const licenseUrl = `${siteUrl}/${locale}/terms`;
+  const personId = `${siteUrl}/${locale}`;
+  const creator = {
+    '@type': 'Person' as const,
+    '@id': personId,
+    name: personLd.name as string,
+  };
+  const creditText = 'Joel R. Klemmer';
   const itemListElement = assets.map((asset) => {
     const contentUrl = asset.file.startsWith('http')
       ? asset.file
       : `${siteUrl}${asset.file}`;
+    const keywords = asset.seoKeywords?.length
+      ? asset.seoKeywords
+      : asset.descriptor
+        ? [asset.descriptor.replace(/-/g, ' ')]
+        : undefined;
     return {
       '@type': 'ImageObject' as const,
       '@id': `${pageUrl}#${encodeURIComponent(asset.id)}`,
       contentUrl,
       name: asset.alt.slice(0, 80),
-      description: asset.alt,
-      author,
+      description: asset.caption ?? asset.alt,
+      creator,
+      creditText,
       license: licenseUrl,
+      acquireLicensePage: licenseUrl,
+      representativeOfPage: false,
       width: asset.width,
       height: asset.height,
-      ...(asset.descriptor && {
-        keywords: asset.descriptor.replace(/-/g, ' '),
-      }),
+      ...(keywords?.length && { keywords: keywords.join(', ') }),
     };
   });
   return {

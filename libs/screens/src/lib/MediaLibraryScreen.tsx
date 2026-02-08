@@ -10,6 +10,7 @@ import {
   getMediaManifest,
   getMediaManifestVisible,
   getMediaManifestSitemapEligible,
+  getMediaThumbPath,
   type MediaAsset,
 } from '@joelklemmer/content';
 import { focusRingClass } from '@joelklemmer/a11y';
@@ -24,14 +25,28 @@ type MediaKind = (typeof MEDIA_KINDS)[number];
 
 /**
  * Presentation-only: descriptor → executive display label.
- * Does not change filenames or manifest; applied only in UI.
+ * Phase II: semantic descriptors only; fallback title-cases unknown.
  */
 const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
-  'studio-graphite': 'Studio portrait',
-  'studio-formal': 'Formal portrait',
-  'studio-tight': 'Identity portrait',
+  'executive-studio': 'Executive studio',
+  'formal-board': 'Formal board',
+  'institutional-identity': 'Institutional identity',
+  'statesman-portrait': 'Statesman portrait',
+  'policy-profile': 'Policy profile',
+  'press-headshot': 'Press headshot',
+  'leadership-profile': 'Leadership profile',
+  'speaking-address': 'Speaking address',
+  'author-environment': 'Author environment',
   'keynote-podium': 'Keynote address',
   'bookstore-stack': 'Author portrait',
+  'startup-founder': 'Startup founder',
+  'city-vogue': 'City',
+  'luxury-hotel': 'Luxury hotel',
+  'fine-dining': 'Fine dining',
+  'outdoor-adventure': 'Outdoor',
+  winter: 'Winter',
+  luxury: 'Luxury',
+  'hot-air-balloon': 'Hot air balloon',
 };
 
 function getDescriptorDisplayLabel(descriptor: string): string {
@@ -91,6 +106,8 @@ export async function MediaLibraryScreen({ kind }: MediaLibraryScreenProps) {
           descriptor: a.descriptor,
           width: a.width,
           height: a.height,
+          caption: a.caption,
+          seoKeywords: a.seoKeywords,
         }))}
       />
       <HeroSection title={tQuiet('media.title')} lede={tQuiet('media.lede')} />
@@ -127,78 +144,91 @@ export async function MediaLibraryScreen({ kind }: MediaLibraryScreenProps) {
               </Link>
             ))}
           </nav>
-          <ul className="space-y-6 list-none p-0 m-0" role="list">
-            {filtered.map((asset) => (
-              <li
-                key={asset.id}
-                className="flex flex-col sm:flex-row gap-4 border-b border-border pb-6 last:border-0 [content-visibility:auto] [contain-intrinsic-size:auto_200px]"
-              >
-                <div className="shrink-0 w-32 h-40 relative rounded overflow-hidden border border-border bg-muted">
-                  <Image
-                    src={asset.file}
-                    alt={asset.alt}
-                    width={128}
-                    height={160}
-                    className="object-cover w-full h-full"
-                    sizes="128px"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm text-muted font-medium">
-                    {getDescriptorDisplayLabel(asset.descriptor)}
-                  </p>
-                  <p className="text-base text-text mt-0.5">{asset.alt}</p>
-                  <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-text">
-                      {tQuiet('media.dimensions')}
-                    </dt>
-                    <dd className="text-base text-muted">
-                      {`${asset.width} × ${asset.height}`}
-                    </dd>
-                    <dt className="text-xs font-semibold uppercase tracking-wide text-text">
-                      {tQuiet('media.recommendedUse')}
-                    </dt>
-                    <dd className="text-base text-muted">
-                      {asset.recommendedUse.join(', ')}
-                    </dd>
-                  </dl>
-                  <details className="mt-2">
-                    <summary
-                      className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text`}
-                    >
-                      {tQuiet('media.sha256Disclosure')}
-                    </summary>
-                    <div className="mt-1 flex items-center gap-2 flex-wrap">
-                      <code className="text-xs break-all font-mono">
-                        {asset.sha256}
-                      </code>
-                      <CopySha256Button
-                        sha256={asset.sha256}
-                        copyLabel={tQuiet('media.copySha256')}
-                      />
-                    </div>
-                  </details>
-                  <div className="mt-3 flex flex-wrap gap-3">
+          <ul className="space-y-8 list-none p-0 m-0" role="list">
+            {filtered.map((asset, index) => {
+              const thumbPath = getMediaThumbPath(asset);
+              const isFirstViewport = index < 4;
+              return (
+                <li
+                  key={asset.id}
+                  className="flex flex-col sm:flex-row gap-6 sm:gap-8 border-b border-border pb-8 last:border-0 [content-visibility:auto] [contain-intrinsic-size:auto_280px]"
+                >
+                  <div className="shrink-0 w-full sm:w-52 h-64 sm:h-[272px] relative rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5">
                     <Link
                       href={asset.file}
-                      className={`${focusRingClass} text-sm underline underline-offset-4 hover:text-accent`}
+                      className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg`}
+                      aria-label={asset.alt}
                     >
-                      {tQuiet('media.viewImage')}
+                      <Image
+                        src={thumbPath}
+                        alt={asset.alt}
+                        width={208}
+                        height={272}
+                        className="object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02]"
+                        sizes="(max-width: 640px) 100vw, 208px"
+                        loading={isFirstViewport ? 'eager' : 'lazy'}
+                        decoding="async"
+                        priority={isFirstViewport}
+                      />
                     </Link>
-                    <CopyLinkButton
-                      url={
-                        asset.file.startsWith('http')
-                          ? asset.file
-                          : `${siteBase}${asset.file}`
-                      }
-                      label={tQuiet('media.copyLink')}
-                    />
                   </div>
-                </div>
-              </li>
-            ))}
+                  <div className="min-w-0 flex-1 flex flex-col gap-3">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted">
+                      {getDescriptorDisplayLabel(asset.descriptor)}
+                    </p>
+                    <p className="text-base text-text leading-relaxed mt-0">
+                      {asset.alt}
+                    </p>
+                    <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1.5 text-sm">
+                      <dt className="text-muted font-medium">
+                        {tQuiet('media.dimensions')}
+                      </dt>
+                      <dd className="text-text">
+                        {`${asset.width} × ${asset.height}`}
+                      </dd>
+                      <dt className="text-muted font-medium">
+                        {tQuiet('media.recommendedUse')}
+                      </dt>
+                      <dd className="text-text">
+                        {asset.recommendedUse.join(', ')}
+                      </dd>
+                    </dl>
+                    <details className="mt-1">
+                      <summary
+                        className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text rounded py-1`}
+                      >
+                        {tQuiet('media.sha256Disclosure')}
+                      </summary>
+                      <div className="mt-2 flex items-center gap-2 flex-wrap">
+                        <code className="text-xs break-all font-mono text-muted">
+                          {asset.sha256}
+                        </code>
+                        <CopySha256Button
+                          sha256={asset.sha256}
+                          copyLabel={tQuiet('media.copySha256')}
+                        />
+                      </div>
+                    </details>
+                    <div className="mt-auto pt-2 flex flex-wrap gap-4">
+                      <Link
+                        href={asset.file}
+                        className={`${focusRingClass} text-sm font-medium underline underline-offset-4 text-text hover:text-muted rounded focus-visible:ring-2 focus-visible:ring-offset-2`}
+                      >
+                        {tQuiet('media.viewImage')}
+                      </Link>
+                      <CopyLinkButton
+                        url={
+                          asset.file.startsWith('http')
+                            ? asset.file
+                            : `${siteBase}${asset.file}`
+                        }
+                        label={tQuiet('media.copyLink')}
+                      />
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ul>
           {filtered.length === 0 && (
             <p className="text-muted text-sm">{tQuiet('media.noResults')}</p>
