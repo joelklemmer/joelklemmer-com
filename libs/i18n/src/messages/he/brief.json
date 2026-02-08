@@ -13,6 +13,7 @@
     "lede": "אם אתה מעריך לאמינות או לאימות, השתמש במסלולים אלה.",
     "routes": [
       { "label": "ראה אינדקס טענות", "path": "/brief#claims" },
+      { "label": "ראה מסגרות ודוקטרינות", "path": "/brief#doctrine" },
       { "label": "ראה מחקרי מקרה", "path": "/casestudies" },
       { "label": "ראה רישום ציבורי", "path": "/proof" }
     ]

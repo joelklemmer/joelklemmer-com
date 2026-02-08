@@ -11,9 +11,11 @@ import { z } from 'zod';
 import {
   bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
+  frameworkFrontmatterSchema,
   getAllClaims,
   getBookId,
   getCaseStudyId,
+  getFrameworkId,
   getPublicRecordId,
   publicRecordFrontmatterSchema,
 } from '@joelklemmer/content/validate';
@@ -117,6 +119,27 @@ const bookEntries = existsSync(booksDir)
   : [];
 const books = bookEntries.filter((e): e is NonNullable<typeof e> => e != null);
 
+const frameworksDir = path.join(contentRoot, 'frameworks');
+const frameworkFiles = existsSync(frameworksDir)
+  ? getMdxFiles(frameworksDir)
+  : [];
+const frameworkEntries = frameworkFiles.map((filePath) => {
+  const { data } = readMdx(filePath);
+  const parsed = validateFrontmatter(
+    frameworkFrontmatterSchema,
+    data,
+    filePath,
+  );
+  if (!parsed.ok) {
+    loadErrors.push(parsed.error);
+    return null;
+  }
+  return { frontmatter: parsed.data };
+});
+const frameworks = frameworkEntries.filter(
+  (e): e is NonNullable<typeof e> => e != null,
+);
+
 if (loadErrors.length) {
   console.error(loadErrors.join('\n'));
   process.exit(1);
@@ -130,6 +153,7 @@ const entityIds: EntityIdSet = {
     caseStudies.map((cs) => getCaseStudyId(cs.frontmatter)),
   ),
   bookIds: new Set(books.map((b) => getBookId(b.frontmatter))),
+  frameworkIds: new Set(frameworks.map((f) => getFrameworkId(f.frontmatter))),
 };
 
 const { errors, warnings, info } = getMappingDiagnostics(entityIds);

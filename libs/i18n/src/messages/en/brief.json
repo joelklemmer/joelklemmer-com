@@ -13,6 +13,7 @@
     "lede": "If you are evaluating for credibility or verification, use these routes.",
     "routes": [
       { "label": "See Claims Index", "path": "/brief#claims" },
+      { "label": "See Frameworks and doctrine", "path": "/brief#doctrine" },
       { "label": "See Case Studies", "path": "/casestudies" },
       { "label": "See Public Record", "path": "/proof" }
     ]

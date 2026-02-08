@@ -212,4 +212,46 @@ export type PublicRecordFrontmatter = z.infer<
 export type InstitutionalFrontmatter = z.infer<
   typeof institutionalFrontmatterSchema
 >;
+/** Framework/doctrine domain for classification. */
+const frameworkDomainSchema = z.enum([
+  'strategy',
+  'governance',
+  'operations',
+  'public_service',
+  'technology',
+  'evidence',
+  'delivery',
+]);
+export type FrameworkDomain = z.infer<typeof frameworkDomainSchema>;
+
+/** Optional signal weights in frontmatter (canonical binding in authority-mapping). */
+const frameworkSignalsSchema = z
+  .record(z.string(), z.number().min(0).max(1))
+  .optional();
+
+/** Framework/doctrine frontmatter: ISE content type. */
+export const frameworkFrontmatterSchema = z.object({
+  id: nonEmptyString,
+  titleKey: nonEmptyString,
+  summaryKey: nonEmptyString,
+  intent10Key: nonEmptyString,
+  intent60Key: nonEmptyString,
+  signals: frameworkSignalsSchema,
+  tags: z.array(nonEmptyString).max(10).optional(),
+  domains: z.array(frameworkDomainSchema).min(1),
+  relatedClaims: z.array(nonEmptyString).optional(),
+  relatedCaseStudies: z.array(nonEmptyString).optional(),
+  relatedRecords: z.array(nonEmptyString).optional(),
+  publishedDate: dateStringSchema,
+  updatedDate: dateStringSchema,
+  status: z.enum(['active', 'archived']),
+});
+
+export type FrameworkFrontmatter = z.infer<typeof frameworkFrontmatterSchema>;
+
+/** Stable framework ID: frontmatter.id (required). Must be unique across collection. */
+export function getFrameworkId(frontmatter: FrameworkFrontmatter): string {
+  return frontmatter.id;
+}
+
 export type BookFrontmatter = z.infer<typeof bookFrontmatterSchema>;

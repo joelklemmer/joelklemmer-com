@@ -7,13 +7,18 @@
 import type { SignalWeightVector } from '@joelklemmer/authority-signals';
 
 /** Node type discriminator for graph entities. */
-export type GraphNodeKind = 'claim' | 'record' | 'caseStudy' | 'book';
+export type GraphNodeKind =
+  | 'claim'
+  | 'record'
+  | 'caseStudy'
+  | 'book'
+  | 'framework';
 
 /** Edge relationship type. */
 export type GraphEdgeKind =
   | 'supports' // Claim → Record
   | 'verifies' // Record verifies Claim (inverse of supports in verification sense)
-  | 'references' // CaseStudy/Book → Record or CaseStudy → Claim
+  | 'references' // CaseStudy/Book → Record or CaseStudy → Claim; Framework → Claim/CaseStudy/Record
   | 'derivesFrom'; // Optional derivation lineage
 
 /** Claim entity node. */
@@ -75,8 +80,31 @@ export interface BookNode {
   signalEntropyContribution?: number;
 }
 
+/** Framework/doctrine entity node. */
+export interface FrameworkNode {
+  kind: 'framework';
+  id: string;
+  titleKey: string;
+  summaryKey: string;
+  intent10Key: string;
+  intent60Key: string;
+  domains: string[];
+  relatedClaims: string[];
+  relatedCaseStudies: string[];
+  relatedRecords: string[];
+  /** Authority signal weights for ranking/traversal (UASIL). */
+  signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for ranking/clustering (optional). */
+  signalEntropyContribution?: number;
+}
+
 /** Union of all entity node types. */
-export type GraphNode = ClaimNode | RecordNode | CaseStudyNode | BookNode;
+export type GraphNode =
+  | ClaimNode
+  | RecordNode
+  | CaseStudyNode
+  | BookNode
+  | FrameworkNode;
 
 /** Directed edge between two graph nodes. */
 export interface GraphEdge {
@@ -94,7 +122,12 @@ export interface EntityGraph {
 }
 
 /** Semantic index entry type discriminator. */
-export type SemanticEntryType = 'claim' | 'record' | 'caseStudy' | 'book';
+export type SemanticEntryType =
+  | 'claim'
+  | 'record'
+  | 'caseStudy'
+  | 'book'
+  | 'framework';
 
 /** Single entry in the searchable text corpus. */
 export interface SemanticIndexEntry {

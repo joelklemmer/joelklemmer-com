@@ -12,6 +12,7 @@ import {
   getFeaturedClaims,
   getCaseStudies,
   getCaseStudiesByClaimIdMap,
+  getFrameworkList,
   getLastVerifiedFromRecordDates,
   getBriefContent,
   getPublicRecordList,
@@ -42,6 +43,7 @@ import {
   CardGridSection,
   ArtifactSingleSection,
   ContactPathwaySection,
+  FrameworkDetailSection,
   HeroSection,
   EvidenceGraphSection,
 } from '@joelklemmer/sections';
@@ -71,9 +73,14 @@ const PUBLIC_RECORD_HIGHLIGHTS_MAX = 10;
 
 export async function BriefScreen() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['brief', 'common']);
+  const messages = await loadMessages(locale, [
+    'brief',
+    'common',
+    'frameworks',
+  ]);
   const t = createScopedTranslator(locale, messages, 'brief');
   const tCommon = createScopedTranslator(locale, messages, 'common');
+  const tFw = createScopedTranslator(locale, messages, 'frameworks');
 
   const publicRecords = await getPublicRecordList(locale);
   const recordLookup = new Map(
@@ -248,6 +255,7 @@ export async function BriefScreen() {
 
   const caseStudies = (await getCaseStudies(locale)).slice(0, CASE_STUDIES_MAX);
   const recordHighlights = publicRecords.slice(0, PUBLIC_RECORD_HIGHLIGHTS_MAX);
+  const frameworkList = await getFrameworkList();
 
   let executiveBriefArtifact: {
     title: string;
@@ -288,7 +296,9 @@ export async function BriefScreen() {
     const label =
       node.kind === 'claim'
         ? t(node.labelKey)
-        : (node as { title: string }).title;
+        : node.kind === 'framework'
+          ? tFw(node.titleKey)
+          : (node as { title: string }).title;
     labelByNodeId.set(node.id, label);
     if (node.kind === 'record' && 'slug' in node) {
       hrefByNodeId.set(node.id, `/${locale}/publicrecord/${node.slug}`);
@@ -296,6 +306,8 @@ export async function BriefScreen() {
       hrefByNodeId.set(node.id, `/${locale}/casestudies/${node.slug}`);
     } else if (node.kind === 'book' && 'slug' in node) {
       hrefByNodeId.set(node.id, `/${locale}/books/${node.slug}`);
+    } else if (node.kind === 'framework') {
+      hrefByNodeId.set(node.id, `/${locale}/brief#doctrine`);
     }
   }
   const linkedLabelsByNodeId = new Map<string, string[]>();
@@ -413,6 +425,20 @@ export async function BriefScreen() {
           tracePathLabel={t('evidenceGraph.tracePath')}
           nodes={evidenceGraphNodes}
         />
+
+        {frameworkList.length > 0 ? (
+          <FrameworkDetailSection
+            id="doctrine"
+            title={tFw('section.title')}
+            lede={tFw('section.lede')}
+            expandLabel={tFw('section.expandLabel')}
+            items={frameworkList.map((fw) => ({
+              title: tFw(fw.frontmatter.titleKey),
+              intent10: tFw(fw.frontmatter.intent10Key),
+              intent60: tFw(fw.frontmatter.intent60Key),
+            }))}
+          />
+        ) : null}
 
         <ContactPathwaySection
           title={t('contactPathway.title')}

@@ -1,0 +1,27 @@
+{
+  "items": {
+    "strategic-cognition-lens": {
+      "title": "Strategic cognition lens",
+      "summary": "A decision lens that separates situational clarity from solution space.",
+      "intent10": "Clarify the situation before choosing tools.",
+      "intent60": "Distinguish what is known from what is assumed. Map constraints and decision rights before proposing options. Reduces premature solution lock-in and improves alignment with stakeholders who hold different mental models."
+    },
+    "governance-stack-doctrine": {
+      "title": "Governance stack doctrine",
+      "summary": "Layers of accountability from delivery to board, with clear handoffs.",
+      "intent10": "Define one layer of governance at a time.",
+      "intent60": "Governance works when each layer has a single responsibility and a clear input from the layer below. Stack from delivery (facts and dates) to board (choices and risk). Avoid skipping layers or mixing reporting with decision-making."
+    },
+    "operational-transformation-model": {
+      "title": "Operational transformation model",
+      "summary": "Three phases: stabilize, align, then scale.",
+      "intent10": "Stabilize before you align; align before you scale.",
+      "intent60": "Transformation fails when scale is attempted before stability or alignment. Phase one: stop the bleed and establish a baseline. Phase two: align goals, metrics, and incentives. Phase three: scale only what is already working and measured."
+    }
+  },
+  "section": {
+    "title": "Frameworks and doctrine",
+    "lede": "Original structures used in strategy, governance, and delivery. Proof-forward; not proof-dependent.",
+    "expandLabel": "Expand full context"
+  }
+}

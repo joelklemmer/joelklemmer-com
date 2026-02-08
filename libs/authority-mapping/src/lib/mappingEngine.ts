@@ -31,6 +31,7 @@ export type EntityIdSet = {
   recordIds: Set<string>;
   caseStudyIds: Set<string>;
   bookIds: Set<string>;
+  frameworkIds?: Set<string>;
 };
 
 /** Structured mapping output for Intelligence Layer consumption. */
@@ -176,6 +177,12 @@ export function validateAllEntitiesMapped(entityIds: EntityIdSet): string[] {
   for (const id of entityIds.bookIds) {
     if (!configKeys.has(`book:${id}`)) {
       errors.push(`Book "${id}" has no authority signal binding.`);
+    }
+  }
+
+  for (const id of entityIds.frameworkIds ?? new Set<string>()) {
+    if (!configKeys.has(`framework:${id}`)) {
+      errors.push(`Framework "${id}" has no authority signal binding.`);
     }
   }
 

@@ -19,6 +19,7 @@ import {
 import {
   bookFrontmatterSchema,
   caseStudyFrontmatterSchema,
+  frameworkFrontmatterSchema,
   getAllClaims,
   getBookId,
   getCaseStudyId,
@@ -151,8 +152,27 @@ const bookEntries = fs.existsSync(booksDir)
   : [];
 const books = bookEntries.filter((e): e is NonNullable<typeof e> => e != null);
 
+const frameworksDir = path.join(contentRoot, 'frameworks');
+const frameworkFiles = fs.existsSync(frameworksDir)
+  ? getMdxFiles(frameworksDir)
+  : [];
+const frameworkEntries = frameworkFiles.map((filePath) => {
+  const { data } = readMdx(filePath);
+  const parsed = validateFrontmatter(frameworkFrontmatterSchema, data);
+  return parsed.ok ? { frontmatter: parsed.data } : null;
+});
+const frameworks = frameworkEntries.filter(
+  (e): e is NonNullable<typeof e> => e != null,
+);
+
 const claims = getAllClaims();
-const graph = buildEntityGraphFromData(claims, records, caseStudies, books);
+const graph = buildEntityGraphFromData(
+  claims,
+  records,
+  caseStudies,
+  books,
+  frameworks,
+);
 const graphErrors = validateEntityGraph(graph);
 for (const msg of graphErrors) {
   errors.push(`Evidence graph: ${msg}`);

@@ -12,6 +12,15 @@ export type {
   EvidenceGraphNodeDisplay,
   EvidenceGraphSectionProps,
 } from './EvidenceGraphSection';
+export { FrameworkCard } from './FrameworkCard';
+export type { FrameworkCardProps } from './FrameworkCard';
+export { FrameworkDetailSection } from './FrameworkDetailSection';
+export type {
+  FrameworkDetailSectionProps,
+  FrameworkDetailItem,
+} from './FrameworkDetailSection';
+export { FrameworkIntentBand } from './FrameworkIntentBand.client';
+export type { FrameworkIntentBandProps } from './FrameworkIntentBand.client';
 export { FallbackNoticeSection } from './FallbackNoticeSection';
 export { FooterSection } from './FooterSection';
 export { HeaderSection } from './HeaderSection';

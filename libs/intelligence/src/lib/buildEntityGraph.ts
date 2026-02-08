@@ -7,9 +7,11 @@ import {
   getAllClaims,
   getBookEntries,
   getCaseStudyEntries,
+  getFrameworkEntries,
   getPublicRecordEntries,
   getBookId,
   getCaseStudyId,
+  getFrameworkId,
   getPublicRecordId,
 } from '@joelklemmer/content';
 import { getEffectiveWeights } from '@joelklemmer/authority-signals';
@@ -35,11 +37,12 @@ export interface BuildEntityGraphOptions {
 export async function buildEntityGraph(
   options?: BuildEntityGraphOptions,
 ): Promise<EntityGraph> {
-  const [claims, records, caseStudies, books] = await Promise.all([
+  const [claims, records, caseStudies, books, frameworks] = await Promise.all([
     Promise.resolve(getAllClaims()),
     getPublicRecordEntries(),
     getCaseStudyEntries(),
     getBookEntries(),
+    getFrameworkEntries(),
   ]);
 
   const getVector = options?.getSignalVector;
@@ -133,6 +136,37 @@ export async function buildEntityGraph(
     }
   }
 
+  // Framework nodes; Framework → Claim/CaseStudy/Record (references)
+  for (const f of frameworks) {
+    const id = getFrameworkId(f.frontmatter);
+    const node: GraphNode = {
+      kind: 'framework',
+      id,
+      titleKey: f.frontmatter.titleKey,
+      summaryKey: f.frontmatter.summaryKey,
+      intent10Key: f.frontmatter.intent10Key,
+      intent60Key: f.frontmatter.intent60Key,
+      domains: [...f.frontmatter.domains],
+      relatedClaims: [...(f.frontmatter.relatedClaims ?? [])],
+      relatedCaseStudies: [...(f.frontmatter.relatedCaseStudies ?? [])],
+      relatedRecords: [...(f.frontmatter.relatedRecords ?? [])],
+    };
+    const vec = getVector?.('framework', id);
+    if (vec) node.signalVector = vec;
+    const contrib = getVariance?.('framework', id);
+    if (contrib !== undefined) node.signalEntropyContribution = contrib;
+    nodes.push(node);
+    for (const claimId of f.frontmatter.relatedClaims ?? []) {
+      edges.push({ fromId: id, toId: claimId, kind: 'references' });
+    }
+    for (const caseStudyId of f.frontmatter.relatedCaseStudies ?? []) {
+      edges.push({ fromId: id, toId: caseStudyId, kind: 'references' });
+    }
+    for (const recordId of f.frontmatter.relatedRecords ?? []) {
+      edges.push({ fromId: id, toId: recordId, kind: 'references' });
+    }
+  }
+
   const nodeById = new Map(nodes.map((n) => [n.id, n]));
   const edgesWithWeight = edges.map((e) => {
     const fromNode = nodeById.get(e.fromId);
@@ -176,7 +210,13 @@ function edgeWeightFromVectors(
 
 function sortNodes(nodes: GraphNode[]): GraphNode[] {
   return [...nodes].sort((a, b) => {
-    const kindOrder = { claim: 0, record: 1, caseStudy: 2, book: 3 };
+    const kindOrder = {
+      claim: 0,
+      record: 1,
+      caseStudy: 2,
+      book: 3,
+      framework: 4,
+    };
     const ka = kindOrder[a.kind];
     const kb = kindOrder[b.kind];
     if (ka !== kb) return ka - kb;

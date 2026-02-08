@@ -1,0 +1,27 @@
+{
+  "items": {
+    "strategic-cognition-lens": {
+      "title": "Lente de cognición estratégica",
+      "summary": "Una lente de decisión que separa la claridad situacional del espacio de soluciones.",
+      "intent10": "Aclare la situación antes de elegir herramientas.",
+      "intent60": "Distinga lo conocido de lo asumido. Mapee restricciones y derechos de decisión antes de proponer opciones. Reduce el bloqueo prematuro de soluciones y mejora la alineación con las partes interesadas."
+    },
+    "governance-stack-doctrine": {
+      "title": "Doctrina de la pila de gobernanza",
+      "summary": "Capas de rendición de cuentas desde la entrega hasta el consejo, con traspasos claros.",
+      "intent10": "Defina una capa de gobernanza a la vez.",
+      "intent60": "La gobernanza funciona cuando cada capa tiene una sola responsabilidad y una entrada clara de la capa inferior. Apile desde la entrega (hechos y fechas) hasta el consejo (decisiones y riesgo). Evite saltar capas o mezclar reportes con la toma de decisiones."
+    },
+    "operational-transformation-model": {
+      "title": "Modelo de transformación operacional",
+      "summary": "Tres fases: estabilizar, alinear, luego escalar.",
+      "intent10": "Estabilice antes de alinear; alinee antes de escalar.",
+      "intent60": "La transformación falla cuando se intenta escalar antes de la estabilidad o la alineación. Fase uno: detener la hemorragia y establecer una línea base. Fase dos: alinear metas, métricas e incentivos. Fase tres: escalar solo lo que ya funciona y se mide."
+    }
+  },
+  "section": {
+    "title": "Marcos y doctrinas",
+    "lede": "Estructuras originales usadas en estrategia, gobernanza y entrega. Orientadas a la prueba; no dependientes de ella.",
+    "expandLabel": "Expandir contexto completo"
+  }
+}

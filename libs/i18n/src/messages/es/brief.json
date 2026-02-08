@@ -13,6 +13,7 @@
     "lede": "Si está evaluando credibilidad o verificación, use estas rutas.",
     "routes": [
       { "label": "Ver índice de afirmaciones", "path": "/brief#claims" },
+      { "label": "Ver marcos y doctrinas", "path": "/brief#doctrine" },
       { "label": "Ver estudios de caso", "path": "/casestudies" },
       { "label": "Ver registro público", "path": "/proof" }
     ]

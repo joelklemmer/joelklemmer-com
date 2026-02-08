@@ -54,7 +54,8 @@ export type ContentEntityKind =
   | 'record'
   | 'caseStudy'
   | 'book'
-  | 'briefNode';
+  | 'briefNode'
+  | 'framework';
 
 /**
  * Binding record: entity id + kind + weight vector.
@@ -67,7 +68,14 @@ export interface SignalBinding {
 }
 
 export const signalBindingSchema: z.ZodType<SignalBinding> = z.object({
-  entityKind: z.enum(['claim', 'record', 'caseStudy', 'book', 'briefNode']),
+  entityKind: z.enum([
+    'claim',
+    'record',
+    'caseStudy',
+    'book',
+    'briefNode',
+    'framework',
+  ]),
   entityId: z.string().min(1),
   signalVector: signalWeightVectorSchema,
 });

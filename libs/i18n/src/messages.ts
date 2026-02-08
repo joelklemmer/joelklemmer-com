@@ -17,6 +17,7 @@ export const messageNamespaces = [
   'publicRecord',
   'quiet',
   'institutional',
+  'frameworks',
 ] as const;
 
 export type MessageNamespace = (typeof messageNamespaces)[number];

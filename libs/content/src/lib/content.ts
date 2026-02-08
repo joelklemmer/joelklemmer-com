@@ -9,14 +9,17 @@ import {
   bookFrontmatterSchema,
   briefFrontmatterSchema,
   caseStudyFrontmatterSchema,
+  frameworkFrontmatterSchema,
   getBookId,
   getCaseStudyId,
+  getFrameworkId,
   getPublicRecordId,
   institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
   type BookFrontmatter,
   type BriefFrontmatter,
   type CaseStudyFrontmatter,
+  type FrameworkFrontmatter,
   type InstitutionalPageFrontmatter,
   type PublicRecordFrontmatter,
 } from './schemas';
@@ -522,6 +525,49 @@ export async function getBookSlugs() {
 export async function getAllBookIds(): Promise<string[]> {
   const entries = await getBookEntries();
   return entries.map((e) => getBookId(e.frontmatter));
+}
+
+// ——— Frameworks (Doctrine) ———
+
+export async function getFrameworkEntries() {
+  const dir = path.join(contentRoot, 'frameworks');
+  if (!existsSync(dir)) {
+    return [];
+  }
+  const files = await getMdxFiles(dir);
+  const entries = await Promise.all(
+    files.map(async (filePath) => {
+      const { content, data } =
+        await readMdxFile<FrameworkFrontmatter>(filePath);
+      const frontmatter = validateFrontmatter(
+        frameworkFrontmatterSchema,
+        data,
+        filePath,
+      );
+      return { frontmatter, content };
+    }),
+  );
+  return entries.filter((e) => e.frontmatter.status === 'active');
+}
+
+export async function getFrameworkList(_locale?: AppLocale) {
+  const entries = await getFrameworkEntries();
+  return [...entries].sort(
+    (a, b) =>
+      new Date(b.frontmatter.updatedDate).getTime() -
+      new Date(a.frontmatter.updatedDate).getTime(),
+  );
+}
+
+export async function getFrameworkById(id: string) {
+  const entries = await getFrameworkEntries();
+  return entries.find((e) => getFrameworkId(e.frontmatter) === id) ?? null;
+}
+
+/** All stable framework IDs across the collection. */
+export async function getAllFrameworkIds(): Promise<string[]> {
+  const entries = await getFrameworkEntries();
+  return entries.map((e) => getFrameworkId(e.frontmatter));
 }
 
 /** Books that reference this public record (proofRefs). Returns up to 6 for display. */

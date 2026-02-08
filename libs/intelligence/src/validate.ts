@@ -5,10 +5,12 @@
 import {
   getBookId,
   getCaseStudyId,
+  getFrameworkId,
   getPublicRecordId,
   type BookFrontmatter,
   type CaseStudyFrontmatter,
   type ClaimRegistryEntry,
+  type FrameworkFrontmatter,
   type PublicRecordFrontmatter,
 } from '@joelklemmer/content/validate';
 import type {
@@ -22,6 +24,7 @@ import type {
 type RecordEntry = { frontmatter: PublicRecordFrontmatter };
 type CaseStudyEntry = { frontmatter: CaseStudyFrontmatter };
 type BookEntry = { frontmatter: BookFrontmatter };
+type FrameworkEntry = { frontmatter: FrameworkFrontmatter };
 
 /**
  * Builds the entity graph from pre-loaded content (e.g. loaded via content/validate + sync file reads).
@@ -32,6 +35,7 @@ export function buildEntityGraphFromData(
   records: RecordEntry[],
   caseStudies: CaseStudyEntry[],
   books: BookEntry[],
+  frameworks: FrameworkEntry[] = [],
 ): EntityGraph {
   const nodes: GraphNode[] = [];
   const edges: GraphEdge[] = [];
@@ -98,6 +102,31 @@ export function buildEntityGraphFromData(
     }
   }
 
+  for (const f of frameworks) {
+    const id = getFrameworkId(f.frontmatter);
+    nodes.push({
+      kind: 'framework',
+      id,
+      titleKey: f.frontmatter.titleKey,
+      summaryKey: f.frontmatter.summaryKey,
+      intent10Key: f.frontmatter.intent10Key,
+      intent60Key: f.frontmatter.intent60Key,
+      domains: [...f.frontmatter.domains],
+      relatedClaims: [...(f.frontmatter.relatedClaims ?? [])],
+      relatedCaseStudies: [...(f.frontmatter.relatedCaseStudies ?? [])],
+      relatedRecords: [...(f.frontmatter.relatedRecords ?? [])],
+    });
+    for (const claimId of f.frontmatter.relatedClaims ?? []) {
+      edges.push({ fromId: id, toId: claimId, kind: 'references' });
+    }
+    for (const caseStudyId of f.frontmatter.relatedCaseStudies ?? []) {
+      edges.push({ fromId: id, toId: caseStudyId, kind: 'references' });
+    }
+    for (const recordId of f.frontmatter.relatedRecords ?? []) {
+      edges.push({ fromId: id, toId: recordId, kind: 'references' });
+    }
+  }
+
   return {
     nodes: sortNodes(nodes),
     edges: sortEdges(edges),
@@ -111,6 +140,7 @@ function sortNodes(nodes: GraphNode[]): GraphNode[] {
       record: 1,
       caseStudy: 2,
       book: 3,
+      framework: 4,
     };
     if (kindOrder[a.kind] !== kindOrder[b.kind])
       return kindOrder[a.kind] - kindOrder[b.kind];
@@ -138,7 +168,7 @@ export function validateEntityGraph(graph: EntityGraph): string[] {
     endpointIds.add(e.toId);
   }
   for (const n of graph.nodes) {
-    if (!endpointIds.has(n.id)) {
+    if (!endpointIds.has(n.id) && n.kind !== 'framework') {
       errors.push(`Orphan node: ${n.kind} id="${n.id}" (appears in no edge).`);
     }
   }

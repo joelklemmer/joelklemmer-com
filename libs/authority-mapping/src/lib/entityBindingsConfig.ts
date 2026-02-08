@@ -9,7 +9,13 @@ import type { AuthoritySignalId } from '@joelklemmer/authority-signals';
 import type { SignalWeightVector } from '@joelklemmer/authority-signals';
 
 export type EntityBindingConfig = {
-  entityKind: 'claim' | 'record' | 'caseStudy' | 'book' | 'briefNode';
+  entityKind:
+    | 'claim'
+    | 'record'
+    | 'caseStudy'
+    | 'book'
+    | 'briefNode'
+    | 'framework';
   entityId: string;
   signalVector: SignalWeightVector;
 };
@@ -174,5 +180,21 @@ export const ENTITY_BINDINGS_CONFIG: EntityBindingConfig[] = [
     entityKind: 'briefNode',
     entityId: 'brief',
     signalVector: { weights: balancedVector() },
+  },
+  // Frameworks (doctrine) — add entries when content/frameworks/*.mdx exist
+  {
+    entityKind: 'framework',
+    entityId: 'strategic-cognition-lens',
+    signalVector: { weights: withPrimary('strategic_cognition', 0.4) },
+  },
+  {
+    entityKind: 'framework',
+    entityId: 'governance-stack-doctrine',
+    signalVector: { weights: withPrimary('institutional_leadership', 0.4) },
+  },
+  {
+    entityKind: 'framework',
+    entityId: 'operational-transformation-model',
+    signalVector: { weights: withPrimary('operational_transformation', 0.4) },
   },
 ];

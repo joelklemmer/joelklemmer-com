@@ -8,9 +8,11 @@ import {
   getAllClaims,
   getBookEntries,
   getCaseStudyEntries,
+  getFrameworkEntries,
   getPublicRecordEntries,
   getBookId,
   getCaseStudyId,
+  getFrameworkId,
   getPublicRecordId,
 } from '@joelklemmer/content';
 import type {
@@ -41,11 +43,12 @@ export async function buildSemanticIndex(
   locale: string = DEFAULT_LOCALE,
   options?: BuildSemanticIndexOptions,
 ): Promise<SemanticIndexEntry[]> {
-  const [claims, records, caseStudies, books] = await Promise.all([
+  const [claims, records, caseStudies, books, frameworks] = await Promise.all([
     Promise.resolve(getAllClaims()),
     getPublicRecordEntries(),
     getCaseStudyEntries(),
     getBookEntries(),
+    getFrameworkEntries(),
   ]);
 
   const getVector = options?.getSignalVector;
@@ -115,12 +118,35 @@ export async function buildSemanticIndex(
     entries.push(entry);
   }
 
+  for (const f of frameworks) {
+    const id = getFrameworkId(f.frontmatter);
+    const entry: SemanticIndexEntry = {
+      id,
+      type: 'framework',
+      text: [
+        f.frontmatter.titleKey,
+        f.frontmatter.summaryKey,
+        f.frontmatter.intent10Key,
+        f.frontmatter.intent60Key,
+      ]
+        .filter(Boolean)
+        .join(' '),
+      url: `/${locale}/brief#doctrine`,
+    };
+    const vec = getVector?.('framework', id);
+    if (vec) entry.signalVector = vec;
+    const contrib = getVariance?.('framework', id);
+    if (contrib !== undefined) entry.signalEntropyContribution = contrib;
+    entries.push(entry);
+  }
+
   return entries.sort((a, b) => {
     const typeOrder: Record<SemanticEntryType, number> = {
       claim: 0,
       record: 1,
       caseStudy: 2,
       book: 3,
+      framework: 4,
     };
     if (typeOrder[a.type] !== typeOrder[b.type])
       return typeOrder[a.type] - typeOrder[b.type];
