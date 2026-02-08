@@ -47,6 +47,7 @@ export default [
                 '@joelklemmer/a11y/*',
                 '@joelklemmer/screens/*',
                 '@joelklemmer/sections/*',
+                '@joelklemmer/intelligence/*',
               ],
               message:
                 'Import from the library root (e.g. @joelklemmer/ui), not deep paths.',

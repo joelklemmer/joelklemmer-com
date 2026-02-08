@@ -29,7 +29,11 @@
       "@joelklemmer/seo": ["libs/seo/src/index.ts"],
       "@joelklemmer/a11y": ["libs/a11y/src/index.ts"],
       "@joelklemmer/screens": ["libs/screens/src/index.ts"],
-      "@joelklemmer/sections": ["libs/sections/src/index.ts"]
+      "@joelklemmer/sections": ["libs/sections/src/index.ts"],
+      "@joelklemmer/intelligence": ["libs/intelligence/src/index.ts"],
+      "@joelklemmer/intelligence/validate": [
+        "libs/intelligence/src/validate.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]
