@@ -30,6 +30,10 @@ import {
   AUTHORITY_SIGNAL_IDS,
 } from '@joelklemmer/authority-signals';
 import {
+  computeOrchestrationHints,
+  type SignalVectorInput,
+} from '@joelklemmer/authority-orchestration';
+import {
   createPageMetadata,
   PersonJsonLd,
   BriefPageJsonLd,
@@ -184,7 +188,25 @@ export async function BriefScreen(props?: BriefScreenProps) {
     };
   });
 
+  const signalVectorsForOrchestration: SignalVectorInput[] =
+    claimCardsUnsorted.map((c) => ({
+      entityKind: 'claims',
+      entityId: c.id,
+      signalScore:
+        c.dominantSignalId != null
+          ? 0.5 + (signalOrder.get(c.dominantSignalId) ?? 99) * 0.01
+          : 0.5,
+      entropyContribution: c.entropyContribution,
+    }));
+  const orchestrationHints = computeOrchestrationHints({
+    evaluatorMode,
+    signalVectors: signalVectorsForOrchestration,
+  });
+
   const bySignalThenEntropy = [...claimCardsUnsorted].sort((a, b) => {
+    const emphasisA = orchestrationHints.entityEmphasisScores[a.id] ?? 0;
+    const emphasisB = orchestrationHints.entityEmphasisScores[b.id] ?? 0;
+    if (emphasisB !== emphasisA) return emphasisB - emphasisA;
     const orderA = a.dominantSignalId
       ? (signalOrder.get(a.dominantSignalId) ?? 99)
       : 99;
@@ -351,7 +373,10 @@ export async function BriefScreen(props?: BriefScreenProps) {
       />
       <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
 
-      <DensityAwarePage toggleLabel={tCommon('density.toggleLabel')}>
+      <DensityAwarePage
+        toggleLabel={tCommon('density.toggleLabel')}
+        densityDefault={orchestrationHints.densityDefaultSuggestion}
+      >
         <IdentityScopeSection body={t('identityScope')} />
 
         <ReadPathSection

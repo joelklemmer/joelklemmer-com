@@ -6,6 +6,8 @@
 import type { EntityGraph, GraphNode } from '@joelklemmer/intelligence';
 import type { SemanticIndexEntry } from '@joelklemmer/intelligence';
 import { getEffectiveWeights } from '@joelklemmer/authority-signals';
+import { surfacePriorityMatrix } from '@joelklemmer/authority-orchestration';
+import type { EvaluatorMode } from '@joelklemmer/evaluator-mode';
 import type { AECQueryIntent } from './queryTypes';
 
 export interface AECRetrievalResult {
@@ -65,12 +67,36 @@ function semanticEntryScore(entry: SemanticIndexEntry): number {
   return Object.values(w).reduce((s, v) => s + v, 0);
 }
 
+function entryTypeToPriorityKey(
+  type: string,
+): keyof typeof surfacePriorityMatrix.default {
+  switch (type) {
+    case 'framework':
+      return 'frameworks';
+    case 'claim':
+      return 'claims';
+    case 'record':
+      return 'records';
+    case 'caseStudy':
+      return 'caseStudies';
+    case 'book':
+      return 'books';
+    default:
+      return 'claims';
+  }
+}
+
 function rankSemanticEntries(
   entries: SemanticIndexEntry[],
   queryText: string,
+  priorityWeights?: Record<string, number>,
 ): SemanticIndexEntry[] {
   const q = queryText.toLowerCase().trim();
-  if (!q) return entries;
+  const withPriority = (entry: SemanticIndexEntry, base: number): number => {
+    const key = entryTypeToPriorityKey(entry.type);
+    const w = priorityWeights?.[key] ?? 0.5;
+    return base * w;
+  };
   return [...entries].sort((a, b) => {
     const aText = a.text.toLowerCase();
     const bText = b.text.toLowerCase();
@@ -79,7 +105,9 @@ function rankSemanticEntries(
     if (bMatch !== aMatch) return bMatch - aMatch;
     const aSig = semanticEntryScore(a);
     const bSig = semanticEntryScore(b);
-    if (bSig !== aSig) return bSig - aSig;
+    const aScore = withPriority(a, aSig);
+    const bScore = withPriority(b, bSig);
+    if (bScore !== aScore) return bScore - aScore;
     return (
       (b.signalEntropyContribution ?? 0) - (a.signalEntropyContribution ?? 0)
     );
@@ -210,10 +238,15 @@ export function query(
       break;
     }
     case 'explore_domain': {
-      const ranked = rankSemanticEntries(semanticIndex, '').slice(
-        0,
-        maxPerType * 2,
-      );
+      const priorityWeights =
+        options?.evaluatorMode != null
+          ? surfacePriorityMatrix[options.evaluatorMode as EvaluatorMode]
+          : undefined;
+      const ranked = rankSemanticEntries(
+        semanticIndex,
+        '',
+        priorityWeights,
+      ).slice(0, maxPerType * 2);
       for (const entry of ranked) {
         if (entry.type === 'framework') addFramework(entry.id);
         else if (entry.type === 'claim') addClaim(entry.id);

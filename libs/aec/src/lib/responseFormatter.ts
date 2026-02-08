@@ -1,10 +1,12 @@
 /**
  * Transforms AEC retrieval results into short briefings, bullet summaries, and entity link lists.
  * Enforces PGF tone: evidence-forward, no marketing, no exclamation.
+ * When priorityWeights is provided, entity link order reflects evaluator context (orchestration).
  */
 
 import type { GraphNode } from '@joelklemmer/intelligence';
 import type { AECRetrievalResult } from './retrievalEngine';
+import type { SurfacePriorityWeights } from '@joelklemmer/authority-orchestration';
 
 export interface EntityLink {
   id: string;
@@ -26,6 +28,8 @@ export interface ResponseFormatterOptions {
   labelResolver?: LabelResolver;
   /** Base path for hrefs (e.g. /en). Caller must pass locale-prefixed base. */
   basePath?: string;
+  /** When set, entity links are ordered by these weights (orchestration). */
+  priorityWeights?: SurfacePriorityWeights;
 }
 
 function defaultLabel(node: GraphNode): string {
@@ -52,6 +56,7 @@ function buildHref(node: GraphNode, basePath: string): string {
 /**
  * Format retrieval result into PGF-compliant briefing text and entity links.
  * No hallucinated or marketing language; evidence-forward only.
+ * When priorityWeights is provided, entityLinks order reflects orchestration weighting.
  */
 export function format(
   result: AECRetrievalResult,
@@ -59,6 +64,7 @@ export function format(
 ): AECFormattedResult {
   const labelResolver = options?.labelResolver ?? defaultLabel;
   const basePath = options?.basePath ?? '';
+  const priorityWeights = options?.priorityWeights;
 
   const bullets: string[] = [];
   const entityLinks: EntityLink[] = [];
@@ -72,26 +78,64 @@ export function format(
     });
   };
 
+  type Group = { weight: number; add: () => void };
+  const groups: Group[] = [];
+
   if (result.frameworks.length > 0) {
     bullets.push(`Frameworks: ${result.frameworks.length} in scope.`);
-    for (const { node } of result.frameworks) addLink(node);
+    const w = priorityWeights?.frameworks ?? 0.5;
+    groups.push({
+      weight: w,
+      add: () => {
+        for (const { node } of result.frameworks) addLink(node);
+      },
+    });
   }
   if (result.claims.length > 0) {
     bullets.push(`Claims: ${result.claims.length} indexed.`);
-    for (const { node } of result.claims) addLink(node);
+    const w = priorityWeights?.claims ?? 0.5;
+    groups.push({
+      weight: w,
+      add: () => {
+        for (const { node } of result.claims) addLink(node);
+      },
+    });
   }
   if (result.records.length > 0) {
     bullets.push(`Public record: ${result.records.length} artifact(s).`);
-    for (const { node } of result.records) addLink(node);
+    const w = priorityWeights?.records ?? 0.5;
+    groups.push({
+      weight: w,
+      add: () => {
+        for (const { node } of result.records) addLink(node);
+      },
+    });
   }
   if (result.caseStudies.length > 0) {
     bullets.push(`Case studies: ${result.caseStudies.length} referenced.`);
-    for (const { node } of result.caseStudies) addLink(node);
+    const w = priorityWeights?.caseStudies ?? 0.5;
+    groups.push({
+      weight: w,
+      add: () => {
+        for (const { node } of result.caseStudies) addLink(node);
+      },
+    });
   }
   if (result.books.length > 0) {
     bullets.push(`Books: ${result.books.length} referenced.`);
-    for (const { node } of result.books) addLink(node);
+    const w = priorityWeights?.books ?? 0.5;
+    groups.push({
+      weight: w,
+      add: () => {
+        for (const { node } of result.books) addLink(node);
+      },
+    });
   }
+
+  if (priorityWeights) {
+    groups.sort((a, b) => b.weight - a.weight);
+  }
+  for (const g of groups) g.add();
 
   const total =
     result.frameworks.length +

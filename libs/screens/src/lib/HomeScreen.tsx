@@ -1,9 +1,15 @@
+import type { ReactNode } from 'react';
+import { Fragment } from 'react';
 import { getLocale } from 'next-intl/server';
+import { cookies } from 'next/headers';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
+import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
+import { getHomeSectionOrder } from '@joelklemmer/authority-orchestration';
+import type { SectionId } from '@joelklemmer/authority-orchestration';
 import { createPageMetadata, PersonJsonLd } from '@joelklemmer/seo';
 import {
   CardGridSection,
@@ -29,6 +35,14 @@ export async function generateMetadata() {
 
 export const homeMetadata = generateMetadata;
 
+const HOME_SECTION_IDS: SectionId[] = [
+  'hero',
+  'startHere',
+  'claims',
+  'doctrine',
+  'routes',
+];
+
 export async function HomeScreen() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['home', 'frameworks']);
@@ -43,51 +57,82 @@ export async function HomeScreen() {
   const frameworks = (await getFrameworkList()).slice(0, 3);
   const briefDoctrineAnchor = `/${locale}/brief#doctrine`;
 
+  const cookieStore = await cookies();
+  const evaluatorMode = resolveEvaluatorMode({
+    cookies: cookieStore.toString(),
+    isDev: process.env.NODE_ENV !== 'production',
+  });
+  const sectionOrder = getHomeSectionOrder(evaluatorMode).filter((id) =>
+    HOME_SECTION_IDS.includes(id),
+  );
+  const orderMap = new Map(sectionOrder.map((id, i) => [id, i]));
+  const orderedIds = [...HOME_SECTION_IDS].sort(
+    (a, b) => (orderMap.get(a) ?? 99) - (orderMap.get(b) ?? 99),
+  );
+
+  const hero = (
+    <HeroSection
+      title={t('hero.title')}
+      lede={t('hero.lede')}
+      actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
+    />
+  );
+  const startHere = (
+    <StartHereSection
+      sentence={t('startHere.sentence')}
+      linkLabel={t('startHere.linkLabel')}
+      href={`/${locale}/brief`}
+    />
+  );
+  const claims = <ListSection title={t('claims.title')} items={claimItems} />;
+  const doctrine =
+    frameworks.length > 0 ? (
+      <section id="doctrine" className="section-shell">
+        <Container className="section-shell">
+          <div className="section-shell">
+            <h2 className="text-title font-semibold">{tFw('section.title')}</h2>
+            <p className="text-base text-muted">{tFw('section.lede')}</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3 mt-4">
+            {frameworks.map((fw) => (
+              <FrameworkCard
+                key={fw.frontmatter.id}
+                title={tFw(fw.frontmatter.titleKey)}
+                summary={tFw(fw.frontmatter.summaryKey)}
+                intent10={tFw(fw.frontmatter.intent10Key)}
+                href={briefDoctrineAnchor}
+              />
+            ))}
+          </div>
+        </Container>
+      </section>
+    ) : null;
+  const routes = (
+    <CardGridSection
+      title={t('routes.title')}
+      items={routeItems.map((item) => ({
+        title: item.title,
+        description: item.description,
+        href: `/${locale}${item.path}`,
+      }))}
+    />
+  );
+
+  const byId: Partial<Record<SectionId, ReactNode>> = {
+    hero,
+    startHere,
+    claims,
+    doctrine,
+    routes,
+  };
+
   return (
     <>
       <PersonJsonLd />
-      <HeroSection
-        title={t('hero.title')}
-        lede={t('hero.lede')}
-        actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
-      />
-      <StartHereSection
-        sentence={t('startHere.sentence')}
-        linkLabel={t('startHere.linkLabel')}
-        href={`/${locale}/brief`}
-      />
-      <ListSection title={t('claims.title')} items={claimItems} />
-      {frameworks.length > 0 ? (
-        <section id="doctrine" className="section-shell">
-          <Container className="section-shell">
-            <div className="section-shell">
-              <h2 className="text-title font-semibold">
-                {tFw('section.title')}
-              </h2>
-              <p className="text-base text-muted">{tFw('section.lede')}</p>
-            </div>
-            <div className="grid gap-4 md:grid-cols-3 mt-4">
-              {frameworks.map((fw) => (
-                <FrameworkCard
-                  key={fw.frontmatter.id}
-                  title={tFw(fw.frontmatter.titleKey)}
-                  summary={tFw(fw.frontmatter.summaryKey)}
-                  intent10={tFw(fw.frontmatter.intent10Key)}
-                  href={briefDoctrineAnchor}
-                />
-              ))}
-            </div>
-          </Container>
-        </section>
-      ) : null}
-      <CardGridSection
-        title={t('routes.title')}
-        items={routeItems.map((item) => ({
-          title: item.title,
-          description: item.description,
-          href: `/${locale}${item.path}`,
-        }))}
-      />
+      {orderedIds.map((id) => {
+        const node = byId[id];
+        return node != null ? <Fragment key={id}>{node}</Fragment> : null;
+      })}
     </>
   );
 }

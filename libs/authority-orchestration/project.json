@@ -1,0 +1,7 @@
+{
+  "name": "authority-orchestration",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/authority-orchestration/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:authority-orchestration"]
+}

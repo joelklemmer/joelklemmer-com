@@ -38,7 +38,10 @@
       "@joelklemmer/authority-mapping": ["libs/authority-mapping/src/index.ts"],
       "@joelklemmer/evaluator-mode": ["libs/evaluator-mode/src/index.ts"],
       "@joelklemmer/authority-density": ["libs/authority-density/src/index.ts"],
-      "@joelklemmer/aec": ["libs/aec/src/index.ts"]
+      "@joelklemmer/aec": ["libs/aec/src/index.ts"],
+      "@joelklemmer/authority-orchestration": [
+        "libs/authority-orchestration/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

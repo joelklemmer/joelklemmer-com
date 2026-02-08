@@ -8,6 +8,7 @@ import {
   type AppLocale,
 } from '@joelklemmer/i18n';
 import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
+import { surfacePriorityMatrix } from '@joelklemmer/authority-orchestration';
 import {
   populateRegistryFromConfig,
   getEntitySignalVector,
@@ -80,8 +81,11 @@ export async function queryBriefingAction(
     return node.id;
   };
 
+  const priorityWeights = surfacePriorityMatrix[evaluatorMode];
+
   return format(result, {
     labelResolver,
     basePath: `/${locale}`,
+    priorityWeights,
   });
 }

@@ -1,9 +1,12 @@
 import { getLocale } from 'next-intl/server';
+import { cookies } from 'next/headers';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
+import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
+import { computeOrchestrationHints } from '@joelklemmer/authority-orchestration';
 import {
   getCaseStudyList,
   getPublicRecordId,
@@ -33,8 +36,31 @@ export async function CaseStudiesScreen() {
   const messages = await loadMessages(locale, ['work', 'common']);
   const t = createScopedTranslator(locale, messages, 'work');
   const tCommon = createScopedTranslator(locale, messages, 'common');
-  const caseStudies = await getCaseStudyList(locale);
+  const caseStudiesRaw = await getCaseStudyList(locale);
   const publicRecords = await getPublicRecordList(locale);
+
+  const cookieStore = await cookies();
+  const evaluatorMode = resolveEvaluatorMode({
+    cookies: cookieStore.toString(),
+    isDev: process.env.NODE_ENV !== 'production',
+  });
+  const orchestrationHints = computeOrchestrationHints({
+    evaluatorMode,
+    signalVectors: caseStudiesRaw.map((s) => ({
+      entityKind: 'caseStudies' as const,
+      entityId: s.frontmatter.slug,
+      signalScore: 0.5,
+      entropyContribution: 0,
+    })),
+  });
+  const caseStudies = [...caseStudiesRaw].sort((a, b) => {
+    const scoreA =
+      orchestrationHints.entityEmphasisScores[a.frontmatter.slug] ?? 0;
+    const scoreB =
+      orchestrationHints.entityEmphasisScores[b.frontmatter.slug] ?? 0;
+    return scoreB - scoreA;
+  });
+
   const labels = {
     context: t('caseStudies.labels.context'),
     constraints: t('caseStudies.labels.constraints'),
@@ -45,7 +71,10 @@ export async function CaseStudiesScreen() {
 
   return (
     <>
-      <DensityAwarePage toggleLabel={tCommon('density.toggleLabel')}>
+      <DensityAwarePage
+        toggleLabel={tCommon('density.toggleLabel')}
+        densityDefault={orchestrationHints.densityDefaultSuggestion}
+      >
         <section className="section-shell">
           <Container className="section-shell">
             <h1 className="text-display font-semibold tracking-tight">

@@ -66,6 +66,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-aec.ts"
       }
     },
+    "orchestration-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-orchestration.ts"
+      }
+    },
     "content-os-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -111,6 +117,7 @@
           "nx run web:experience-intelligence-validate",
           "nx run web:frameworks-validate",
           "nx run web:aec-validate",
+          "nx run web:orchestration-validate",
           "nx run web:content-os-validate",
           "nx run web:sitemap-validate",
           "nx run web:seo-validate",
