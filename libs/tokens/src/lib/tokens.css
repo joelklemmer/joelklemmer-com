@@ -23,9 +23,9 @@
   /* Tonal hierarchy aliases (semantic) */
   --color-text-primary: var(--color-text);
   --color-text-secondary: var(--color-muted);
+  --color-text-muted: var(--color-muted);
   --color-surface-base: var(--color-surface);
   --color-surface-tier1: var(--color-surface-elevated);
-  /* Surface tokens for cards/hero plates */
   --color-surface-1: var(--color-surface);
   --color-surface-2: var(--color-surface-elevated);
 
@@ -38,7 +38,6 @@
   --space-7: 3rem;
   --space-8: 4rem;
   --space-10: 5rem;
-  --space-12: 6rem;
 
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -67,6 +66,28 @@
   --meta-label-size: 0.75rem;
   --meta-label-line: 1.4;
   --meta-label-spacing: 0.05em;
+  
+  /* Typography scale tokens (H1/H2/H3/body/small) */
+  --typography-h1-size: var(--display-heading-size);
+  --typography-h1-line: var(--display-heading-line);
+  --typography-h1-spacing: var(--display-heading-spacing);
+  --typography-h1-weight: var(--display-heading-weight);
+  
+  --typography-h2-size: var(--section-heading-size);
+  --typography-h2-line: var(--section-heading-line);
+  --typography-h2-spacing: var(--section-heading-letter-spacing);
+  --typography-h2-weight: var(--section-heading-weight);
+  
+  --typography-h3-size: var(--text-lg);
+  --typography-h3-line: var(--leading-tight);
+  --typography-h3-weight: 600;
+  
+  --typography-body-size: var(--body-analytical-size);
+  --typography-body-line: var(--body-analytical-line);
+  --typography-body-spacing: var(--body-analytical-spacing);
+  
+  --typography-small-size: var(--text-sm);
+  --typography-small-line: var(--leading-normal);
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -83,13 +104,12 @@
   --readable-max-width: 42rem;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 200ms;
-  --transition-duration-slow: 300ms;
-  /* Motion tokens with reduced-motion support */
-  --motion-duration-fast: var(--transition-duration-fast);
-  --motion-duration-normal: var(--transition-duration-normal);
-  --motion-duration-slow: var(--transition-duration-slow);
-  --motion-ease: var(--ease-authority);
-  --motion-ease-out: var(--ease-authority-out);
+  
+  /* Focus ring token (high visibility, theme-aware) */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: hsl(var(--color-focus));
+  --focus-ring-radius: 0.25rem;
 
   /* UASIL: authority signal hooks (restrained; no visible labels). */
   --authority-spacing-density: 1;
@@ -102,14 +122,12 @@
   --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.06);
   --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.5);
   --authority-contrast-balance: hsl(var(--color-surface));
-  /* Elevation tokens: subtle (cards) and premium (hero plates) */
-  --elevation-subtle: 0 1px 3px hsl(var(--color-text) / 0.04), 0 0 0 1px hsl(var(--color-border) / 0.4);
-  --elevation-premium: 0 4px 14px hsl(var(--color-text) / 0.065), 0 2px 5px hsl(var(--color-text) / 0.045), 0 0 0 1px hsl(var(--color-border) / 0.5);
-  /* Focus ring token: high visibility, theme-aware */
-  --focus-ring-width: 2px;
-  --focus-ring-offset: 2px;
-  --focus-ring-color: hsl(var(--color-focus));
-  --focus-ring: var(--focus-ring-width) solid var(--focus-ring-color);
+  
+  /* Elevation tokens for cards/hero plates (subtle, premium) */
+  --elevation-subtle: 0 1px 2px hsl(var(--color-border) / 0.08);
+  --elevation-premium: 
+    0 2px 8px hsl(var(--color-text) / 0.06),
+    0 1px 3px hsl(var(--color-text) / 0.04);
 
   /* ACS D) Premium material realism: glass translucency, layered depth, controlled glow, lighting realism. Subtle and restrained. */
   --authority-glass-bg: hsl(var(--color-surface) / 0.76);
@@ -175,6 +193,11 @@
   /* VACEL C) Motion: eased transitions, focus reinforcement (respects reduced-motion). */
   --ease-authority: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-authority-out: cubic-bezier(0.33, 1, 0.68, 1);
+  
+  /* Motion tokens with reduced-motion support */
+  --motion-duration-fast: var(--transition-duration-fast);
+  --motion-duration-normal: var(--transition-duration-normal);
+  --motion-ease: var(--ease-authority);
 
   /* VACEL D) Surface materiality: layered depth, refined elevation, soft translucency. */
   --authority-surface-layer2: 0 4px 12px hsl(var(--color-text) / 0.05);
@@ -194,6 +217,14 @@
   --section-block-margin: var(--space-8);
   --section-inner-gap: var(--space-4);
   --section-heading-margin: var(--space-2);
+  
+  /* Spacing scale and section rhythm (vertical cadence) */
+  --spacing-scale-xs: var(--space-1);
+  --spacing-scale-sm: var(--space-2);
+  --spacing-scale-md: var(--space-4);
+  --spacing-scale-lg: var(--space-6);
+  --spacing-scale-xl: var(--space-8);
+  --section-rhythm: var(--section-block-margin);
 
   /* ACS C) Precision grid: optical alignment, cadence rhythm, hierarchy reinforcement */
   --grid-gap-base: var(--space-4);
@@ -282,8 +313,6 @@
     --color-bg: 222 20% 7%;
     --color-surface: 222 18% 11%;
     --color-surface-elevated: 222 16% 14%;
-    --color-surface-1: 222 18% 11%;
-    --color-surface-2: 222 16% 14%;
     --color-text: 220 14% 96%;
     --color-muted: 220 12% 64%;
     --color-border: 222 12% 20%;
@@ -305,8 +334,6 @@
   --color-bg: 222 20% 7%;
   --color-surface: 222 18% 11%;
   --color-surface-elevated: 222 16% 14%;
-  --color-surface-1: 222 18% 11%;
-  --color-surface-2: 222 16% 14%;
   --color-text: 220 14% 96%;
   --color-muted: 220 12% 64%;
   --color-border: 222 12% 20%;
@@ -323,12 +350,11 @@
   --color-focus: 212 68% 58%;
 }
 
+/* High contrast mode: meaningful difference, not cosmetic */
 :root[data-contrast='high'] {
   --color-bg: 0 0% 100%;
   --color-surface: 0 0% 100%;
   --color-surface-elevated: 0 0% 100%;
-  --color-surface-1: 0 0% 100%;
-  --color-surface-2: 0 0% 100%;
   --color-text: 0 0% 0%;
   --color-muted: 0 0% 15%;
   --color-border: 0 0% 0%;
@@ -343,47 +369,31 @@
   --color-accent-strong: 217 100% 30%;
   --color-accent-muted: 217 100% 35%;
   --color-focus: 217 100% 40%;
-  --focus-ring-color: hsl(217 100% 40%);
-  --focus-ring-width: 3px;
-  --focus-ring-offset: 3px;
+  /* Ensure borders are visible */
+  --authority-card-glow: 0 0 0 2px hsl(var(--color-border));
+  --authority-soft-glow: 0 0 0 2px hsl(var(--color-border));
 }
 
-:root[data-contrast='high'][data-theme='dark'] {
-  --color-bg: 0 0% 0%;
-  --color-surface: 0 0% 0%;
-  --color-surface-elevated: 0 0% 0%;
-  --color-text: 0 0% 100%;
-  --color-muted: 0 0% 85%;
-  --color-border: 0 0% 100%;
-  --color-border-subtle: 0 0% 90%;
-  --color-neutral-50: 0 0% 2%;
-  --color-neutral-100: 0 0% 5%;
-  --color-neutral-200: 0 0% 10%;
-  --color-neutral-300: 0 0% 75%;
-  --color-neutral-400: 0 0% 80%;
-  --color-neutral-500: 0 0% 85%;
-  --color-accent: 217 100% 65%;
-  --color-accent-strong: 217 100% 70%;
-  --color-accent-muted: 217 100% 65%;
-  --color-focus: 217 100% 60%;
-}
-
-:root[data-text-size='large'] {
-  --body-analytical-size: 1.125rem;
-  --body-analytical-line: 1.7;
-  --text-sm: 1rem;
-  --text-base: 1.125rem;
-  --text-lg: 1.25rem;
-  --text-xl: 1.375rem;
-  --section-heading-size: 1.625rem;
-  --display-heading-size: 2.25rem;
-}
-
-:root[data-motion='reduced'] *,
-:root[data-motion='reduced'] *::before,
-:root[data-motion='reduced'] *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
-  scroll-behavior: auto !important;
+@media (prefers-contrast: more) {
+  :root:not([data-contrast]) {
+    --color-bg: 0 0% 100%;
+    --color-surface: 0 0% 100%;
+    --color-surface-elevated: 0 0% 100%;
+    --color-text: 0 0% 0%;
+    --color-muted: 0 0% 15%;
+    --color-border: 0 0% 0%;
+    --color-border-subtle: 0 0% 10%;
+    --color-neutral-50: 0 0% 98%;
+    --color-neutral-100: 0 0% 95%;
+    --color-neutral-200: 0 0% 90%;
+    --color-neutral-300: 0 0% 25%;
+    --color-neutral-400: 0 0% 20%;
+    --color-neutral-500: 0 0% 15%;
+    --color-accent: 217 100% 35%;
+    --color-accent-strong: 217 100% 30%;
+    --color-accent-muted: 217 100% 35%;
+    --color-focus: 217 100% 40%;
+    --authority-card-glow: 0 0 0 2px hsl(var(--color-border));
+    --authority-soft-glow: 0 0 0 2px hsl(var(--color-border));
+  }
 }

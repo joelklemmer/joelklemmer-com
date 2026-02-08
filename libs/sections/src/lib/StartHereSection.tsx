@@ -16,15 +16,17 @@ export function StartHereSection({
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <p className="text-base text-muted">
-          {sentence}{' '}
-          <Link
-            href={href}
-            className={`${focusRingClass} underline underline-offset-4 hover:text-accent`}
-          >
-            {linkLabel}
-          </Link>
-        </p>
+        <div className="authority-card rounded-lg border border-border p-6 bg-surface-elevated">
+          <p className="text-base text-muted">
+            {sentence}{' '}
+            <Link
+              href={href}
+              className={`${focusRingClass} font-medium text-accent hover:text-accent-strong transition-colors motion-reduce:transition-none`}
+            >
+              {linkLabel}
+            </Link>
+          </p>
+        </div>
       </Container>
     </section>
   );

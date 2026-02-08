@@ -5,17 +5,11 @@ export type { AuthoritySurfaceProps } from './AuthoritySurface';
 export { Container } from './Container';
 export type { ContainerProps } from './Container';
 export { LanguageSwitcher } from './LanguageSwitcher';
-<<<<<<< Current (Your changes)
-export { LanguageMenu } from './LanguageMenu';
-export { ThemeProvider, useTheme } from './ThemeProvider';
-export { ThemeToggle } from './ThemeToggle';
-export { ContrastProvider, useContrast } from './ContrastProvider';
-=======
 export { LanguageSwitcherPopover } from './LanguageSwitcherPopover';
-export { ThemeToggle } from './ThemeToggle';
->>>>>>> Incoming (Background Agent changes)
-export { AccessibilityPanel } from './AccessibilityPanel';
 export { PageFrame } from './PageFrame';
 export type { PageFrameProps } from './PageFrame';
 export { Shell } from './Shell';
 export type { ShellProps } from './Shell';
+export { ThemeProvider, useTheme } from './ThemeProvider';
+export { ThemeToggle } from './ThemeToggle';
+export { AccessibilityPanel } from './AccessibilityPanel';

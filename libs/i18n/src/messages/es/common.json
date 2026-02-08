@@ -14,6 +14,7 @@
     "footerLabel": "Pie de pagina",
     "languageSwitcherLabel": "Opciones de idioma",
     "languageSwitcherAction": "Cambiar idioma a {language}",
+<<<<<<< Current (Your changes)
     "accessibilityPanelLabel": "Configuración de accesibilidad",
     "themeLabel": "Tema",
     "themeLight": "Claro",
@@ -25,7 +26,38 @@
     "motionLabel": "Reducir movimiento",
     "textSizeLabel": "Tamaño del texto",
     "textSizeDefault": "Predeterminado",
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
     "textSizeLarge": "Grande"
+=======
+    "themeLight": "Tema claro",
+    "themeDark": "Tema oscuro",
+    "themeSystem": "Tema del sistema",
+    "themeLabel": "Tema",
+    "contrastLabel": "Contraste",
+    "contrastDefault": "Por defecto",
+    "contrastHigh": "Alto",
+    "motionLabel": "Movimiento",
+    "motionDefault": "Por defecto",
+    "motionReduced": "Reducido",
+    "textSizeLabel": "Tamaño de texto",
+    "textSizeDefault": "Por defecto",
+    "textSizeLarge": "Grande",
+    "accessibilityPanelLabel": "Configuración de accesibilidad"
+>>>>>>> Incoming (Background Agent changes)
+=======
+    "textSizeLarge": "Grande",
+    "underlineLinksLabel": "Subrayar enlaces"
+>>>>>>> Incoming (Background Agent changes)
+=======
+    "textSizeLarge": "Grande",
+    "underlineLinksLabel": "Subrayar enlaces"
+>>>>>>> Incoming (Background Agent changes)
+=======
+    "textSizeLarge": "Grande",
+    "underlineLinksLabel": "Subrayar enlaces"
+>>>>>>> Incoming (Background Agent changes)
   },
   "fallbackNotice": {
     "title": "Aviso de traducción",
@@ -34,5 +66,29 @@
   },
   "density": {
     "toggleLabel": "Vista de densidad"
+  },
+  "a11y": {
+    "panelLabel": "Configuración de accesibilidad",
+    "theme": {
+      "label": "Tema",
+      "light": "Claro",
+      "dark": "Oscuro",
+      "system": "Sistema"
+    },
+    "contrast": {
+      "label": "Contraste",
+      "default": "Predeterminado",
+      "high": "Alto"
+    },
+    "motion": {
+      "label": "Movimiento",
+      "default": "Predeterminado",
+      "reduced": "Reducido"
+    },
+    "textSize": {
+      "label": "Tamaño del texto",
+      "default": "Predeterminado",
+      "large": "Grande"
+    }
   }
 }

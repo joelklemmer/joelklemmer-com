@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { locales } from '@joelklemmer/i18n';
-import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
+import { focusRingClass } from '@joelklemmer/a11y';
 import Link from 'next/link';
 
 function resolvePathname(pathname: string | null, currentLocale: string) {
@@ -26,7 +26,7 @@ export function LanguageSwitcherPopover() {
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-  const firstItemRef = useRef<HTMLAnchorElement>(null);
+  const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   const { restSegments } = resolvePathname(pathname, locale);
   const queryString = searchParams?.toString();
@@ -46,40 +46,40 @@ export function LanguageSwitcherPopover() {
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
+      if (e.key === 'Escape' && isOpen) {
         handleClose();
         return;
       }
 
+      if (!isOpen) return;
+
       if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
         e.preventDefault();
-        const menu = menuRef.current;
-        if (!menu) return;
-
-        const items = Array.from(
-          menu.querySelectorAll<HTMLAnchorElement>('a[role="menuitem"]'),
-        );
-        if (items.length === 0) return;
-
-        const currentIndex = items.findIndex((item) =>
-          item === document.activeElement,
+        const items = Array.from(itemRefs.current.values());
+        const currentIndex = items.findIndex(
+          (el) => el === document.activeElement,
         );
         let nextIndex: number;
 
         if (e.key === 'ArrowDown') {
           nextIndex =
-            currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+            currentIndex === -1 || currentIndex === items.length - 1
+              ? 0
+              : currentIndex + 1;
         } else {
-          nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+          nextIndex =
+            currentIndex === -1 || currentIndex === 0
+              ? items.length - 1
+              : currentIndex - 1;
         }
 
         items[nextIndex]?.focus();
       }
     },
-    [handleClose],
+    [isOpen, handleClose],
   );
 
+  // Close on outside click
   useEffect(() => {
     if (!isOpen) return;
 
@@ -94,108 +94,104 @@ export function LanguageSwitcherPopover() {
       }
     };
 
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        handleClose();
-      }
-    };
-
     document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('keydown', handleEscape);
-
-    requestAnimationFrame(() => {
-      firstItemRef.current?.focus();
-    });
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('keydown', handleEscape);
-    };
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClose]);
 
-  const menuId = 'language-switcher-menu';
-  const buttonId = 'language-switcher-button';
+  // Focus first item when opened
+  useEffect(() => {
+    if (isOpen && menuRef.current) {
+      requestAnimationFrame(() => {
+        const firstItem = Array.from(itemRefs.current.values())[0];
+        firstItem?.focus();
+      });
+    }
+  }, [isOpen]);
 
   return (
     <div className="relative">
       <button
         ref={buttonRef}
-        id={buttonId}
         type="button"
-        aria-expanded={isOpen}
-        aria-controls={menuId}
-        aria-haspopup="true"
-        aria-label={common('a11y.languageSwitcherLabel')}
         onClick={handleToggle}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleToggle();
-          }
-        }}
-        className={`${focusRingClass} flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        onKeyDown={handleKeyDown}
+        aria-expanded={isOpen}
+        aria-controls="language-menu"
+        aria-label={common('a11y.languageSwitcherLabel')}
+        aria-haspopup="true"
+        className={`${focusRingClass} flex items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-muted hover:text-text`}
       >
         <svg
-          aria-hidden="true"
-          className="h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-          />
+          <path d="M5 8l6 6" />
+          <path d="M4 14l6-6 2-3" />
+          <path d="M2 5h12" />
+          <path d="M7 2h1" />
+          <path d="M22 22l-5-10-5 10" />
+          <path d="M14 18h6" />
         </svg>
-        <span className={visuallyHiddenClass}>
-          {common('a11y.languageSwitcherLabel')}
+        <span className="sr-only">{currentLanguageLabel}</span>
+        <span aria-hidden="true" className="hidden sm:inline">
+          {currentLanguageLabel}
         </span>
-        <span aria-hidden="true">{currentLanguageLabel}</span>
       </button>
+
       {isOpen && (
         <div
           ref={menuRef}
-          id={menuId}
+          id="language-menu"
           role="menu"
-          aria-labelledby={buttonId}
+          className="absolute end-0 top-full z-50 mt-2 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg"
           onKeyDown={handleKeyDown}
-          className="absolute top-full mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg z-50 py-1"
-          style={{ insetInlineEnd: 0 }}
         >
-          {locales.map((targetLocale) => {
-            const restPath = restSegments.length
-              ? `/${restSegments.join('/')}`
-              : '';
-            const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
-            const isCurrent = targetLocale === locale;
-            const languageLabel = common(`languages.${targetLocale}`);
-            const itemRef = isCurrent ? firstItemRef : undefined;
+          <div className="py-1" role="none">
+            {locales.map((targetLocale) => {
+              const restPath = restSegments.length
+                ? `/${restSegments.join('/')}`
+                : '';
+              const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
+              const isCurrent = targetLocale === locale;
+              const languageLabel = common(`languages.${targetLocale}`);
 
-            return (
-              <Link
-                key={targetLocale}
-                ref={itemRef}
-                href={href}
-                lang={targetLocale}
-                role="menuitem"
-                aria-current={isCurrent ? 'page' : undefined}
-                aria-label={common('a11y.languageSwitcherAction', {
-                  language: languageLabel,
-                })}
-                className={`${focusRingClass} block px-3 py-2 text-sm transition-colors motion-reduce:transition-none ${
-                  isCurrent
-                    ? 'font-semibold text-text bg-surface-elevated'
-                    : 'text-muted hover:text-text hover:bg-surface-elevated'
-                }`}
-                onClick={handleClose}
-              >
-                {languageLabel}
-              </Link>
-            );
-          })}
+              return (
+                <Link
+                  key={targetLocale}
+                  ref={(el) => {
+                    if (el) {
+                      itemRefs.current.set(targetLocale, el);
+                    } else {
+                      itemRefs.current.delete(targetLocale);
+                    }
+                  }}
+                  href={href}
+                  lang={targetLocale}
+                  role="menuitem"
+                  aria-current={isCurrent ? 'page' : undefined}
+                  aria-label={common('a11y.languageSwitcherAction', {
+                    language: languageLabel,
+                  })}
+                  className={`${focusRingClass} block w-full px-4 py-2 text-left text-sm ${
+                    isCurrent
+                      ? 'bg-neutral-100 font-semibold text-text'
+                      : 'text-muted hover:bg-neutral-50 hover:text-text'
+                  }`}
+                  onClick={handleClose}
+                >
+                  {languageLabel}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

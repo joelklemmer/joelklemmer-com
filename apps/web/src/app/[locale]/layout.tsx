@@ -17,9 +17,10 @@ import { defaultLocale } from '@joelklemmer/i18n';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import {
   LanguageSwitcherPopover,
+  Shell,
+  ThemeProvider,
   ThemeToggle,
   AccessibilityPanel,
-  Shell,
 } from '@joelklemmer/ui';
 import {
   EvaluatorModeProvider,
@@ -92,27 +93,33 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
-      <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
-        <DensityViewProvider syncWithHash>
-          <Shell
-            headerContent={
-              <HeaderSection
-                wordmark={common('wordmark')}
-                homeHref={`/${resolvedLocale}`}
-                languageSwitcher={<LanguageSwitcherPopover />}
-                themeToggle={<ThemeToggle />}
-                accessibilityPanel={<AccessibilityPanel />}
-              />
-            }
-            navContent={<PrimaryNavSection items={navItems} />}
-            footerContent={
-              <FooterSection label={footer('label')} links={footerItems} />
-            }
-          >
-            {children}
-          </Shell>
-        </DensityViewProvider>
-      </EvaluatorModeProvider>
+      <ThemeProvider>
+        <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
+          <DensityViewProvider syncWithHash>
+            <Shell
+              headerContent={
+                <HeaderSection
+                  wordmark={common('wordmark')}
+                  homeHref={`/${resolvedLocale}`}
+                  headerControls={
+                    <>
+                      <LanguageSwitcherPopover />
+                      <ThemeToggle />
+                      <AccessibilityPanel />
+                    </>
+                  }
+                />
+              }
+              navContent={<PrimaryNavSection items={navItems} />}
+              footerContent={
+                <FooterSection label={footer('label')} links={footerItems} />
+              }
+            >
+              {children}
+            </Shell>
+          </DensityViewProvider>
+        </EvaluatorModeProvider>
+      </ThemeProvider>
     </NextIntlClientProvider>
   );
 }

@@ -30,34 +30,34 @@ export function CardGridSection({
   return (
     <section id={id} className="section-shell">
       <Container className="section-shell">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-wrap items-end justify-between gap-4 mb-6">
           <div className="section-shell">
             <h2 className="text-section-heading font-semibold">{title}</h2>
-            {lede ? <p className="text-base text-muted">{lede}</p> : null}
+            {lede ? <p className="text-base text-muted mt-2">{lede}</p> : null}
           </div>
           {action ? (
             <Link
               href={action.href}
-              className={`${focusRingClass} rounded-md border border-border px-3 py-1.5 text-sm font-medium hover:border-accent hover:text-accent`}
+              className={`${focusRingClass} rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent transition-colors motion-reduce:transition-none`}
             >
               {action.label}
             </Link>
           ) : null}
         </div>
-        <div className="grid gap-6 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => {
             const content = (
-              <div className="authority-card section-shell rounded-lg border border-border/60 bg-surface p-6 hover:border-accent/40 transition-colors motion-reduce:transition-none">
-                <div className="section-shell">
-                  <h3 className="text-xl font-semibold text-text mb-2">
+              <div className="authority-card section-shell rounded-lg border border-border p-6 h-full flex flex-col">
+                <div className="section-shell flex-1">
+                  <h3 className="text-lg font-semibold text-text mb-2">
                     {item.title}
                   </h3>
                   {item.description ? (
-                    <p className="text-base text-muted leading-relaxed">{item.description}</p>
+                    <p className="text-sm text-muted leading-relaxed">{item.description}</p>
                   ) : null}
                 </div>
                 {item.meta ? (
-                  <p className="text-xs text-muted mt-3 pt-3 border-t border-border/40">{item.meta}</p>
+                  <p className="text-xs text-muted mt-4 pt-4 border-t border-border">{item.meta}</p>
                 ) : null}
               </div>
             );
@@ -66,7 +66,7 @@ export function CardGridSection({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${focusRingClass} block rounded-lg hover:scale-[1.01] transition-transform motion-reduce:transition-none`}
+                className={`${focusRingClass} block rounded-lg transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
               >
                 {content}
               </Link>

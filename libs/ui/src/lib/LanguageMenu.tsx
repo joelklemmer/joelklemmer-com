@@ -112,10 +112,30 @@ export function LanguageMenu() {
         aria-label={common('a11y.languageSwitcherLabel')}
         onClick={handleToggle}
         className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <span aria-hidden="true">🌐</span>
         <span className="sr-only">{currentLanguageLabel}</span>
+=======
+      >
+        <span aria-hidden="true">🌐</span>
+        <span className="sr-only">{common('a11y.languageSwitcherLabel')}</span>
+>>>>>>> Incoming (Background Agent changes)
+=======
+        title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
+      >
+        <span aria-hidden="true">🌐</span>
+        <span className="sr-only">{common('a11y.languageSwitcherLabel')}: {currentLanguageLabel}</span>
+>>>>>>> Incoming (Background Agent changes)
+=======
+        title={common('a11y.languageSwitcherLabel')}
+      >
+        <span aria-hidden="true">🌐</span>
+        <span className="sr-only">{currentLanguageLabel}</span>
+>>>>>>> Incoming (Background Agent changes)
       </button>
 
       {isOpen && (

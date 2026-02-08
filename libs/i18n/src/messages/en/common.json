@@ -14,6 +14,7 @@
     "footerLabel": "Footer",
     "languageSwitcherLabel": "Language options",
     "languageSwitcherAction": "Switch language to {language}",
+<<<<<<< Current (Your changes)
     "accessibilityPanelLabel": "Accessibility settings",
     "themeLabel": "Theme",
     "themeLight": "Light",
@@ -27,6 +28,31 @@
     "textSizeDefault": "Default",
     "textSizeLarge": "Large",
     "underlineLinksLabel": "Underline links"
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+<<<<<<< Current (Your changes)
+=======
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme",
+    "themeSystem": "System theme",
+    "themeLabel": "Theme",
+    "contrastLabel": "Contrast",
+    "contrastDefault": "Default",
+    "contrastHigh": "High",
+    "motionLabel": "Motion",
+    "motionDefault": "Default",
+    "motionReduced": "Reduced",
+    "textSizeLabel": "Text size",
+    "textSizeDefault": "Default",
+    "textSizeLarge": "Large",
+    "accessibilityPanelLabel": "Accessibility settings"
+>>>>>>> Incoming (Background Agent changes)
+=======
+>>>>>>> Incoming (Background Agent changes)
+=======
+>>>>>>> Incoming (Background Agent changes)
+=======
+>>>>>>> Incoming (Background Agent changes)
   },
   "fallbackNotice": {
     "title": "Translation fallback",
@@ -35,5 +61,29 @@
   },
   "density": {
     "toggleLabel": "Density view"
+  },
+  "a11y": {
+    "panelLabel": "Accessibility settings",
+    "theme": {
+      "label": "Theme",
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "contrast": {
+      "label": "Contrast",
+      "default": "Default",
+      "high": "High"
+    },
+    "motion": {
+      "label": "Motion",
+      "default": "Default",
+      "reduced": "Reduced"
+    },
+    "textSize": {
+      "label": "Text size",
+      "default": "Default",
+      "large": "Large"
+    }
   }
 }

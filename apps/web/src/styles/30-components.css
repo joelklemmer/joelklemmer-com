@@ -11,7 +11,8 @@
     background-color var(--transition-duration-fast) var(--ease-authority);
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (prefers-reduced-motion: reduce),
+       html[data-motion='reduced'] {
   .calc-card-material {
     transition: none;
   }
@@ -109,7 +110,8 @@
     var(--authority-controlled-glow);
   transition:
     box-shadow var(--transition-duration-normal) var(--ease-authority),
-    background-color var(--transition-duration-fast) var(--ease-authority);
+    background-color var(--transition-duration-fast) var(--ease-authority),
+    transform var(--transition-duration-fast) var(--ease-authority);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -118,7 +120,8 @@
   }
 }
 
-.authority-card:focus-within {
+.authority-card:focus-within,
+.authority-card:hover {
   box-shadow:
     var(--authority-card-elevation), var(--authority-surface-layer2),
     var(--authority-card-glow);

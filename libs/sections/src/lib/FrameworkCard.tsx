@@ -24,11 +24,11 @@ export function FrameworkCard({
 }: FrameworkCardProps) {
   const description = intent10 ?? summary;
   const content = (
-    <div className="authority-card section-shell rounded-lg border border-border/60 bg-surface p-6 hover:border-accent/40 transition-colors motion-reduce:transition-none">
-      <div className="section-shell">
-        <h3 className="text-xl font-semibold text-text mb-2">{title}</h3>
+    <div className="authority-card section-shell rounded-lg border border-border p-6 h-full flex flex-col">
+      <div className="section-shell flex-1">
+        <h3 className="text-lg font-semibold text-text mb-3">{title}</h3>
         {description ? (
-          <p className="text-body-analytical text-base text-muted leading-relaxed">
+          <p className="text-body-analytical text-sm text-muted leading-relaxed">
             {description}
           </p>
         ) : null}
@@ -40,7 +40,7 @@ export function FrameworkCard({
     return (
       <Link
         href={href}
-        className={`${focusRingClass} block rounded-lg hover:scale-[1.01] transition-transform motion-reduce:transition-none`}
+        className={`${focusRingClass} block rounded-lg transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
         aria-label={title}
       >
         {content}

@@ -5,17 +5,13 @@ import { focusRingClass } from '@joelklemmer/a11y';
 export interface HeaderSectionProps {
   wordmark: string;
   homeHref: string;
-  languageSwitcher?: ReactNode;
-  themeToggle?: ReactNode;
-  accessibilityPanel?: ReactNode;
+  headerControls?: ReactNode;
 }
 
 export function HeaderSection({
   wordmark,
   homeHref,
-  languageSwitcher,
-  themeToggle,
-  accessibilityPanel,
+  headerControls,
 }: HeaderSectionProps) {
   return (
     <div className="flex items-center justify-between gap-4">
@@ -25,17 +21,9 @@ export function HeaderSection({
       >
         {wordmark}
       </Link>
-      <div className="flex items-center gap-2">
-<<<<<<< Current (Your changes)
-        {languageSwitcher}
-        {themeToggle}
-        {accessibilityPanel}
-=======
-        {themeToggle}
-        {accessibilityPanel}
-        {languageSwitcher}
->>>>>>> Incoming (Background Agent changes)
-      </div>
+      {headerControls && (
+        <div className="flex items-center gap-2">{headerControls}</div>
+      )}
     </div>
   );
 }

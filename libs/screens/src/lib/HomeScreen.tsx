@@ -96,10 +96,10 @@ export async function HomeScreen() {
         <Container className="section-shell">
           <SectionVisualAnchor className="mb-6" />
           <div className="section-shell mb-6">
-            <h2 className="text-section-heading font-semibold mb-3">
+            <h2 className="text-section-heading font-semibold">
               {tFw('section.title')}
             </h2>
-            <p className="text-body-analytical text-muted text-base leading-relaxed">
+            <p className="text-body-analytical text-muted mt-2">
               {tFw('section.lede')}
             </p>
           </div>

@@ -1,5 +1,11 @@
 /* App-layer tokens only. Do not duplicate libs/tokens. Overrides for layout/readability. */
 :root {
+<<<<<<< Current (Your changes)
   --content-lane-max-width: 56rem;
   --readable-line-length-app: var(--content-lane-max-width);
+=======
+  /* Content lane matches container max-width for executive-grade presentation */
+  --content-lane-max-width: var(--container-max-width);
+  --readable-line-length-app: var(--readable-max-width);
+>>>>>>> Incoming (Background Agent changes)
 }
