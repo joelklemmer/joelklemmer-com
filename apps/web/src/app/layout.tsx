@@ -20,18 +20,6 @@ export default async function RootLayout({
         <script
           dangerouslySetInnerHTML={{
             __html: `
-<<<<<<< Current (Your changes)
-(function() {
-  try {
-    const theme = localStorage.getItem('joelklemmer-theme');
-    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const resolved = theme === 'dark' ? 'dark' : theme === 'light' ? 'light' : (systemDark ? 'dark' : 'light');
-    if (resolved === 'dark') {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  } catch (e) {}
-})();
-=======
               (function() {
                 try {
                   const theme = localStorage.getItem('joelklemmer-theme');
@@ -48,7 +36,6 @@ export default async function RootLayout({
                   }
                 } catch (e) {}
               })();
->>>>>>> Incoming (Background Agent changes)
             `,
           }}
         />
