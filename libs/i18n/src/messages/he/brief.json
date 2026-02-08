@@ -29,7 +29,14 @@
     "title": "טענות ממופות",
     "lede": "הטענות מקושרות ישירות לארטיפקטים ברישום הציבורי.",
     "allClaimsExpander": "כל הטענות רשומות למעלה.",
-    "categories": { "operational": "מסירה תפעולית" },
+    "categories": {
+      "operational_delivery": "מסירה תפעולית",
+      "risk_recovery": "התאוששות סיכונים",
+      "stakeholder_alignment": "יישור בעלי עניין",
+      "program_governance": "ממשל תוכנית",
+      "evidence_verification": "אימות ראיות",
+      "delivery_capability": "יכולת מסירה"
+    },
     "verificationConnections": "חיבורי אימות",
     "supportingRecords": "רישומים תומכים",
     "supportingCaseStudies": "מחקרי מקרה",

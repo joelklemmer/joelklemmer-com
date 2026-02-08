@@ -1,15 +1,27 @@
+/** Claim category enum (max 6). Evaluator-grade rubric; enforced at build. */
+export const CLAIM_CATEGORIES = [
+  'operational_delivery',
+  'risk_recovery',
+  'stakeholder_alignment',
+  'program_governance',
+  'evidence_verification',
+  'delivery_capability',
+] as const;
+
+export type ClaimCategoryId = (typeof CLAIM_CATEGORIES)[number];
+
+const CLAIM_CATEGORY_SET = new Set<string>(CLAIM_CATEGORIES);
+
 export interface ClaimRegistryEntry {
   id: string;
   labelKey: string;
   /** next-intl key for 1-line summary (brief namespace) */
   summaryKey: string;
   recordIds: string[];
-  /** next-intl key for category label (brief namespace) */
-  categoryKey?: string;
+  /** Category from CLAIM_CATEGORIES; i18n key is claims.categories.<category> */
+  category: ClaimCategoryId;
   /** Confidence tier for verification strength display */
   confidenceTier?: 'high' | 'medium' | 'standard';
-  /** Last verification date (YYYY-MM-DD) */
-  lastVerified?: string;
   featured?: boolean;
   order?: number;
 }
@@ -20,9 +32,8 @@ export const claimRegistry: ClaimRegistryEntry[] = [
     labelKey: 'claims.items.recoveryPlan.label',
     summaryKey: 'claims.items.recoveryPlan.summary',
     recordIds: ['recovery-plan-two-weeks'],
-    categoryKey: 'claims.categories.operational',
+    category: 'operational_delivery',
     confidenceTier: 'high',
-    lastVerified: '2026-01-18',
     featured: true,
     order: 0,
   },
@@ -51,7 +62,25 @@ export function getAllClaims(): ClaimRegistryEntry[] {
 }
 
 /**
- * Build-time validation: recordIds exist, counts within limits.
+ * Derive last verified date from linked Public Record entry dates (max date).
+ * Returns YYYY-MM-DD or undefined if no dates available.
+ */
+export function getLastVerifiedFromRecordDates(
+  recordIds: string[],
+  recordIdToDate: Map<string, string>,
+): string | undefined {
+  const dates = recordIds
+    .map((id) => recordIdToDate.get(id))
+    .filter(
+      (d): d is string =>
+        typeof d === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d),
+    );
+  if (dates.length === 0) return undefined;
+  return dates.sort().reverse()[0];
+}
+
+/**
+ * Build-time validation: recordIds exist, category in enum, counts within limits.
  * Call from tools/validate-content.ts with publicRecordIdSet.
  */
 export function validateClaimRegistry(publicRecordIdSet: Set<string>): void {
@@ -79,7 +108,18 @@ export function validateClaimRegistry(publicRecordIdSet: Set<string>): void {
     }
   }
 
+  if (CLAIM_CATEGORIES.length > 6) {
+    errors.push(
+      `Claims registry: CLAIM_CATEGORIES must be <= 6, got ${CLAIM_CATEGORIES.length}`,
+    );
+  }
+
   for (const claim of claimRegistry) {
+    if (!CLAIM_CATEGORY_SET.has(claim.category)) {
+      errors.push(
+        `Claim ${claim.id}: category "${claim.category}" must be one of [${CLAIM_CATEGORIES.join(', ')}]`,
+      );
+    }
     if (!claim.recordIds.length) {
       errors.push(`Claim ${claim.id} must have at least one recordId`);
     }

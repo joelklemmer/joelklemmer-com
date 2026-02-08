@@ -9,6 +9,7 @@ import {
   getFeaturedClaims,
   getCaseStudies,
   getCaseStudiesByClaimIdMap,
+  getLastVerifiedFromRecordDates,
   getBriefContent,
   getPublicRecordList,
   getExecutiveBriefArtifact,
@@ -66,6 +67,15 @@ export async function BriefScreen() {
       return pairs;
     }),
   );
+  const recordIdToDate = new Map<string, string>();
+  for (const record of publicRecords) {
+    const date = record.frontmatter.date;
+    if (!date) continue;
+    recordIdToDate.set(record.frontmatter.slug, date);
+    if (record.frontmatter.id) {
+      recordIdToDate.set(record.frontmatter.id, date);
+    }
+  }
 
   const featuredClaims = getFeaturedClaims();
   const caseStudiesByClaim = await getCaseStudiesByClaimIdMap(
@@ -83,13 +93,17 @@ export async function BriefScreen() {
       })
       .filter(Boolean) as Array<{ label: string; href: string }>;
     const caseStudies = caseStudiesByClaim.get(claim.id) ?? [];
+    const lastVerified = getLastVerifiedFromRecordDates(
+      claim.recordIds,
+      recordIdToDate,
+    );
     return {
       id: claim.id,
       label: t(claim.labelKey),
       summary: t(claim.summaryKey),
-      category: claim.categoryKey ? t(claim.categoryKey) : undefined,
+      category: t(`claims.categories.${claim.category}`),
       verificationStrength: claim.recordIds.length,
-      lastVerified: claim.lastVerified,
+      lastVerified,
       supportingLinks,
       caseStudies,
       casestudiesBasePath: `/${locale}/casestudies`,

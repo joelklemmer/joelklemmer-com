@@ -1,12 +1,14 @@
 /**
  * Build-time SEO validation: canonical and hreflang correctness for core routes.
- * Validates metadata builder output; no server required.
+ * Asserts /brief emits both Person and Report JSON-LD. No server required.
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts
  */
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 import {
+  getBriefPageJsonLd,
   getCanonicalUrl,
   getHrefLangs,
+  getPersonJsonLd,
   hreflangAlternates,
 } from '@joelklemmer/seo';
 
@@ -94,10 +96,45 @@ for (const key of expectedKeys) {
   }
 }
 
+// /brief must emit both Person and Report JSON-LD (author identity + entity graph)
+const personLd = getPersonJsonLd({ baseUrl });
+if (personLd['@type'] !== 'Person') {
+  errors.push(
+    `Brief page Person JSON-LD: expected @type "Person", got ${personLd['@type']}`,
+  );
+}
+const reportLd = getBriefPageJsonLd({
+  baseUrl,
+  locale: defaultLocale as AppLocale,
+  pathname: '/brief',
+  claimIds: [],
+  caseStudySlugs: [],
+  publicRecordSlugs: [],
+});
+if (reportLd['@type'] !== 'Report') {
+  errors.push(
+    `Brief page Report JSON-LD: expected @type "Report", got ${reportLd['@type']}`,
+  );
+}
+if (
+  !reportLd.author ||
+  (reportLd.author as { '@type'?: string })['@type'] !== 'Person'
+) {
+  errors.push('Brief page Report JSON-LD: must include author of type Person');
+}
+if (
+  !reportLd.mainEntityOfPage ||
+  typeof reportLd.mainEntityOfPage !== 'string'
+) {
+  errors.push(
+    'Brief page Report JSON-LD: must include mainEntityOfPage canonical URL',
+  );
+}
+
 if (errors.length) {
   throw new Error(`SEO validation failed:\n- ${errors.join('\n- ')}`);
 }
 
 console.log(
-  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes.`,
+  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; /brief Person + Report JSON-LD.`,
 );

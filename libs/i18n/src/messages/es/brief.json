@@ -29,7 +29,14 @@
     "title": "Afirmaciones indexadas",
     "lede": "Las afirmaciones se vinculan directamente a artefactos del Registro público.",
     "allClaimsExpander": "Todas las afirmaciones se listan arriba.",
-    "categories": { "operational": "Entrega operativa" },
+    "categories": {
+      "operational_delivery": "Entrega operativa",
+      "risk_recovery": "Recuperación de riesgo",
+      "stakeholder_alignment": "Alineación de interesados",
+      "program_governance": "Gobernanza de programa",
+      "evidence_verification": "Verificación de evidencia",
+      "delivery_capability": "Capacidad de entrega"
+    },
     "verificationConnections": "Conexiones de verificación",
     "supportingRecords": "Registros de apoyo",
     "supportingCaseStudies": "Estudios de caso",

@@ -198,8 +198,8 @@ export interface BriefPageJsonLdProps {
 }
 
 /**
- * JSON-LD for the Executive Brief page: Report with about, mentions for entity graph reinforcement.
- * Valid Schema.org; references claims, case studies, and public records.
+ * JSON-LD for the Executive Brief page: Report with author, mainEntityOfPage, about, mentions.
+ * Uses canonical URLs per locale. Author references the same Person as Person JSON-LD.
  */
 export function getBriefPageJsonLd({
   baseUrl,
@@ -210,21 +210,41 @@ export function getBriefPageJsonLd({
   publicRecordSlugs,
 }: BriefPageJsonLdProps) {
   const siteUrl = normalizeBaseUrl(baseUrl);
-  const pageUrl = `${siteUrl}/${locale}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+  const normalizedPath = pathname.startsWith('/') ? pathname : `/${pathname}`;
+  const mainEntityOfPage = getCanonicalUrl({
+    baseUrl: siteUrl,
+    pathname: normalizedPath,
+    locale,
+  });
 
   const about: string[] = [
-    ...claimIds.map((id) => `${pageUrl}#claim-${id}`),
-    ...caseStudySlugs.map((slug) => `${siteUrl}/${locale}/casestudies/${slug}`),
-    ...publicRecordSlugs.map(
-      (slug) => `${siteUrl}/${locale}/publicrecord/${slug}`,
+    ...claimIds.map((id) => `${mainEntityOfPage}#claim-${id}`),
+    ...caseStudySlugs.map((slug) =>
+      getCanonicalUrl({
+        baseUrl: siteUrl,
+        pathname: `/casestudies/${slug}`,
+        locale,
+      }),
+    ),
+    ...publicRecordSlugs.map((slug) =>
+      getCanonicalUrl({
+        baseUrl: siteUrl,
+        pathname: `/publicrecord/${slug}`,
+        locale,
+      }),
     ),
   ].filter(Boolean);
+
+  const personLd = getPersonJsonLd({ baseUrl: siteUrl });
+  const author = { '@type': 'Person' as const, name: personLd.name };
 
   return {
     '@context': 'https://schema.org',
     '@type': 'Report',
     name: 'Executive Brief',
-    url: pageUrl,
+    url: mainEntityOfPage,
+    mainEntityOfPage,
+    author,
     ...(about.length > 0 && {
       about: about.map((url) => ({ '@type': 'Thing', url })),
     }),

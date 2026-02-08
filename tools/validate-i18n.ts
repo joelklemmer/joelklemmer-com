@@ -309,6 +309,10 @@ function validateBriefClaimKeys() {
     for (const claim of claimRegistry) {
       const label = getByPath(brief, claim.labelKey);
       const summary = getByPath(brief, claim.summaryKey);
+      const categoryLabel = getByPath(
+        brief,
+        `claims.categories.${claim.category}`,
+      );
       if (typeof label !== 'string' || !label.trim()) {
         errors.push(
           `${filePath}: missing or empty brief.${claim.labelKey} for claim ${claim.id}`,
@@ -317,6 +321,11 @@ function validateBriefClaimKeys() {
       if (typeof summary !== 'string' || !summary.trim()) {
         errors.push(
           `${filePath}: missing or empty brief.${claim.summaryKey} for claim ${claim.id}`,
+        );
+      }
+      if (typeof categoryLabel !== 'string' || !categoryLabel.trim()) {
+        errors.push(
+          `${filePath}: missing or empty brief.claims.categories.${claim.category} for claim ${claim.id}`,
         );
       }
     }

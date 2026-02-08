@@ -40,27 +40,65 @@ All text is localized via next-intl (brief namespace). No hardcoded strings.
 
 Claims live in a **single registry** in `libs/content/src/lib/claims.ts`.
 
+### Category enum (governance)
+
+Claim categories are a **constrained enum** (max 6), enforced at build time. Every claim must have a `category` from this set. Labels are evaluator-grade, non-marketing rubric language.
+
+| Category ID             | Purpose               |
+| ----------------------- | --------------------- |
+| `operational_delivery`  | Operational delivery  |
+| `risk_recovery`         | Risk recovery         |
+| `stakeholder_alignment` | Stakeholder alignment |
+| `program_governance`    | Program governance    |
+| `evidence_verification` | Evidence verification |
+| `delivery_capability`   | Delivery capability   |
+
+i18n key for the label: `claims.categories.<category>` (e.g. `claims.categories.operational_delivery`). All locales must define every category in use.
+
+### lastVerified (derived)
+
+**Last verified** is **not** stored in the registry. It is derived at runtime as the **maximum `date`** among the Public Record entries linked to the claim (`recordIds`). The brief UI displays this as “Last verified”. No manual date is allowed; content-validate does not enforce a lastVerified field on claims.
+
+### Registry entry shape
+
 Each entry has:
 
 - `id` – unique string (e.g. `recovery-plan-speed`)
 - `labelKey` – next-intl key for the claim label (brief namespace, e.g. `claims.items.recoveryPlan.label`)
 - `summaryKey` – next-intl key for the one-line summary (brief namespace, e.g. `claims.items.recoveryPlan.summary`)
 - `recordIds` – array of public record entry IDs or slugs that support this claim (must exist in content)
+- `category` – **required**; one of the category enum values above (e.g. `operational_delivery`)
 - `featured` – optional; if not `false`, the claim is in the default "top set" on the Brief (max 9 featured)
 - `order` – optional number for sort order
 
+**Example claim registry entry:**
+
+```ts
+{
+  id: 'recovery-plan-speed',
+  labelKey: 'claims.items.recoveryPlan.label',
+  summaryKey: 'claims.items.recoveryPlan.summary',
+  recordIds: ['recovery-plan-two-weeks'],
+  category: 'operational_delivery',
+  confidenceTier: 'high',
+  featured: true,
+  order: 0,
+}
+```
+
 **Rules (enforced at build / content-validate):**
 
+- Every claim must have a `category` from the enum (max 6 categories total in code).
 - Every claim must have at least one `recordId`.
 - Every `recordId` must match an existing public record entry (by `id` or `slug` in frontmatter).
 - Total claims ≤ 12; featured ≤ 9 (soft warning in dev, hard fail in production build).
-- `labelKey` and `summaryKey` must exist in **all** locales (i18n-validate).
+- `labelKey`, `summaryKey`, and `claims.categories.<category>` must exist in **all** locales (i18n-validate).
 
 **Steps to add a claim:**
 
 1. Add a public record entry (e.g. in `content/proof/*.mdx` or `content/public-record/*.mdx`) with a stable `slug` and optionally `id` in frontmatter.
-2. In `libs/content/src/lib/claims.ts`, add an entry to `claimRegistry` with `id`, `labelKey`, `summaryKey`, `recordIds` (use the entry’s `id` or `slug`), and optionally `featured` and `order`.
-3. In every locale’s `libs/i18n/src/messages/<locale>/brief.json`, add the corresponding nested keys for `labelKey` and `summaryKey` (e.g. under `claims.items.<key>.label` and `claims.items.<key>.summary`).
+2. In `libs/content/src/lib/claims.ts`, add an entry to `claimRegistry` with `id`, `labelKey`, `summaryKey`, `recordIds`, `category` (from the enum), and optionally `featured` and `order`.
+3. In every locale’s `libs/i18n/src/messages/<locale>/brief.json`, add the corresponding keys for `labelKey`, `summaryKey`, and `claims.categories.<category>` (if that category is not yet present).
 4. Run `nx run web:content-validate` and `nx run web:i18n-validate` to confirm.
 
 Public record entry pages show a "Supports Claims" section that lists any claims referencing that entry, with links to `/brief#claim-<id>`.

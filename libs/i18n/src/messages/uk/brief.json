@@ -29,7 +29,14 @@
     "title": "Індексовані твердження",
     "lede": "Твердження пов'язано безпосередньо з артефактами Публічного реєстру.",
     "allClaimsExpander": "Усі твердження перелічені вище.",
-    "categories": { "operational": "Операційна доставка" },
+    "categories": {
+      "operational_delivery": "Операційна доставка",
+      "risk_recovery": "Відновлення після ризиків",
+      "stakeholder_alignment": "Узгодження стейкхолдерів",
+      "program_governance": "Управління програмою",
+      "evidence_verification": "Верифікація доказів",
+      "delivery_capability": "Здатність доставки"
+    },
     "verificationConnections": "Зв'язки верифікації",
     "supportingRecords": "Підтверджувальні записи",
     "supportingCaseStudies": "Кейс-стаді",

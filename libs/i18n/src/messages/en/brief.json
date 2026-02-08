@@ -29,7 +29,14 @@
     "title": "Indexed claims",
     "lede": "Claims are linked directly to Public Record artifacts.",
     "allClaimsExpander": "All claims are listed above.",
-    "categories": { "operational": "Operational delivery" },
+    "categories": {
+      "operational_delivery": "Operational delivery",
+      "risk_recovery": "Risk recovery",
+      "stakeholder_alignment": "Stakeholder alignment",
+      "program_governance": "Program governance",
+      "evidence_verification": "Evidence verification",
+      "delivery_capability": "Delivery capability"
+    },
     "verificationConnections": "Verification connections",
     "supportingRecords": "Supporting records",
     "supportingCaseStudies": "Case studies",
