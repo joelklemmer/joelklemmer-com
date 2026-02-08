@@ -263,6 +263,37 @@ const pathwayKeysSchema = z.object({
   cta: z.string().min(1),
 });
 
+const contentOSSchema = z
+  .object({
+    intents: z.object({
+      home: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+      brief: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+      casestudies: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+      books: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+      publicrecord: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+      contact: z.object({
+        tenSecond: z.string().min(1),
+        sixtySecond: z.string().min(1),
+      }),
+    }),
+  })
+  .passthrough();
+
 const contactSchema = z
   .object({
     title: z.string().min(1),
@@ -455,6 +486,7 @@ locales.forEach((locale) => {
   validateNamespace(locale, 'publicRecord', publicRecordSchema);
   validateNamespace(locale, 'institutional', institutionalSchema);
   validateNamespace(locale, 'contact', contactSchema);
+  validateNamespace(locale, 'contentOS', contentOSSchema);
 });
 validateBriefClaimKeys();
 validateContactPathwayKeys();

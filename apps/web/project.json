@@ -42,6 +42,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-intelligence.ts"
       }
     },
+    "content-os-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content-os.ts"
+      }
+    },
     "sitemap-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -77,6 +83,7 @@
           "nx run web:i18n-validate",
           "nx run web:pgf-validate",
           "nx run web:intelligence-validate",
+          "nx run web:content-os-validate",
           "nx run web:sitemap-validate",
           "nx run web:seo-validate",
           "nx run web:test",

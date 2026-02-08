@@ -12,7 +12,7 @@ When working on **evaluator-facing surfaces** (Executive Brief, Public Record in
 nx run web:verify
 ```
 
-Runs in order: lint → content-validate → i18n-validate → pgf-validate → sitemap-validate → seo-validate → test → build → a11y. Stops on first failure. See [Quality gates](quality-gates.md) for details.
+Runs in order: lint → content-validate → governance-validate → i18n-validate → pgf-validate → intelligence-validate → content-os-validate → sitemap-validate → seo-validate → test → build → a11y. Stops on first failure. See [Quality gates](quality-gates.md) for details.
 
 ## Individual gates
 
@@ -34,7 +34,7 @@ Runs in order: lint → content-validate → i18n-validate → pgf-validate → 
   ```
   Or use the root script: `pnpm build` (same as `nx build web`).
 
-Other useful targets: `nx run web:lint`, `nx run web:i18n-validate`, `nx run web:pgf-validate`, `nx run web:test`. Full list is in [Quality gates](quality-gates.md).
+Other useful targets: `nx run web:lint`, `nx run web:i18n-validate`, `nx run web:pgf-validate`, `nx run web:content-os-validate`, `nx run web:test`. Full list is in [Quality gates](quality-gates.md).
 
 ## Development server
 

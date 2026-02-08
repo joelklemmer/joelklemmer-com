@@ -8,19 +8,22 @@ Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and rel
 
 ## Overview
 
-| Gate             | Nx target                     | What it checks                                            |
-| ---------------- | ----------------------------- | --------------------------------------------------------- |
-| Format           | `nx format:check`             | Prettier / Nx format across the workspace                 |
-| Lint             | `nx run web:lint`             | ESLint for the web app                                    |
-| Content validate | `nx run web:content-validate` | MDX frontmatter, proofRefs, claims, artifacts, media      |
-| i18n validate    | `nx run web:i18n-validate`    | Translation completeness (chrome + meta + publicRecord)   |
-| PGF validate     | `nx run web:pgf-validate`     | H1/lede uniqueness, claims registry, primary CTA labels   |
-| Sitemap validate | `nx run web:sitemap-validate` | Dynamic public record and case study URLs for all locales |
-| SEO validate     | `nx run web:seo-validate`     | Canonical and hreflang for core routes                    |
-| Test             | `nx run web:test`             | Unit tests (currently a placeholder)                      |
-| Build            | `nx run web:build`            | Next.js production build                                  |
-| A11y             | `nx run web:a11y`             | Playwright + axe-core accessibility scans                 |
-| E2E              | `nx e2e web-e2e`              | Playwright E2E tests                                      |
+| Gate                | Nx target                        | What it checks                                                |
+| ------------------- | -------------------------------- | ------------------------------------------------------------- |
+| Format              | `nx format:check`                | Prettier / Nx format across the workspace                     |
+| Lint                | `nx run web:lint`                | ESLint for the web app                                        |
+| Content validate     | `nx run web:content-validate`     | MDX frontmatter, proofRefs, claims, artifacts, media           |
+| Governance validate | `nx run web:governance-validate`   | Governance doc and config checks                              |
+| i18n validate        | `nx run web:i18n-validate`         | Translation completeness (chrome + meta + contentOS)         |
+| PGF validate         | `nx run web:pgf-validate`          | H1/lede uniqueness, claims registry, primary CTA labels        |
+| Intelligence validate| `nx run web:intelligence-validate` | Intelligence layer and semantic index                         |
+| Content OS validate  | `nx run web:content-os-validate`   | Page intent map, contentOS intents, meta/CTA, no placeholders |
+| Sitemap validate    | `nx run web:sitemap-validate`     | Dynamic public record and case study URLs for all locales     |
+| SEO validate        | `nx run web:seo-validate`        | Canonical and hreflang for core routes                        |
+| Test                | `nx run web:test`                | Unit tests (currently a placeholder)                          |
+| Build               | `nx run web:build`               | Next.js production build                                      |
+| A11y                | `nx run web:a11y`                | Playwright + axe-core accessibility scans                     |
+| E2E                 | `nx e2e web-e2e`                 | Playwright E2E tests                                          |
 
 **Single command to run all web gates in order:** `nx run web:verify` (see [Dev workflow](dev-workflow.md)).
 
@@ -60,8 +63,17 @@ Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and rel
 
 - **Run:** `nx run web:i18n-validate`
 - **Implementation:** Runs `tools/validate-i18n.ts` via **tsx** with `tsconfig.base.json`.
-- **What it checks:** For each locale, JSON message files (`libs/i18n/src/messages/<locale>/*.json`) satisfy required keys for `common`, `nav`, `footer`, `meta`, `brief`, and `publicRecord`.
+- **What it checks:** For each locale, JSON message files (`libs/i18n/src/messages/<locale>/*.json`) satisfy required keys for `common`, `nav`, `footer`, `meta`, `brief`, `publicRecord`, `contentOS`, and other namespaces.
 - **Success:** Exit code 0 and stdout: `i18n validation passed.`
+
+---
+
+## 5a. Content OS validate
+
+- **Run:** `nx run web:content-os-validate`
+- **Implementation:** Runs `tools/validate-content-os.ts` via **tsx** with `tsconfig.base.json`.
+- **What it checks:** (1) `docs/page-intent-map.md` documents all primary routes. (2) Required `contentOS` intent keys exist for all locales. (3) Home, Brief, Work, Books, Public Record, Contact have meta.title and meta.description; home has hero.cta; contact has pathways and mailto.buttonLabel. (4) No placeholder language (lorem, placeholder, sample, coming soon, tbd, to be added, draft) in default-locale user-facing strings.
+- **Success:** Exit code 0 and stdout: `Content OS validation passed.`
 
 ---
 
@@ -138,14 +150,17 @@ Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and rel
   1. `nx format:check --all`
   2. `nx run web:lint`
   3. `nx run web:content-validate`
-  4. `nx run web:i18n-validate`
-  5. `nx run web:pgf-validate`
-  6. `nx run web:sitemap-validate`
-  7. `nx run web:seo-validate`
-  8. `nx run web:test`
-  9. `nx run web:build`
-  10. `nx run web:restore-generated-typings` (hygiene: restores `next-env.d.ts`; does not affect format)
-  11. `nx run web:a11y`
+  4. `nx run web:governance-validate`
+  5. `nx run web:i18n-validate`
+  6. `nx run web:pgf-validate`
+  7. `nx run web:intelligence-validate`
+  8. `nx run web:content-os-validate`
+  9. `nx run web:sitemap-validate`
+  10. `nx run web:seo-validate`
+  11. `nx run web:test`
+  12. `nx run web:build`
+  13. `nx run web:restore-generated-typings` (hygiene: restores `next-env.d.ts`; does not affect format)
+  14. `nx run web:a11y`
 
 No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed. Verify must not create uncommitted changes; see [CI parity](ci-parity.md) (repo must remain clean in CI).
 

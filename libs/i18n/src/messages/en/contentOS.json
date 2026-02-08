@@ -1,0 +1,28 @@
+{
+  "intents": {
+    "home": {
+      "tenSecond": "Authority verification site for executive evaluation.",
+      "sixtySecond": "Choose Executive Brief, Case Studies, or Public Record."
+    },
+    "brief": {
+      "tenSecond": "Primary authority hub for structured review.",
+      "sixtySecond": "Reach Claims, Case Studies, or Public Record with evidence routing."
+    },
+    "casestudies": {
+      "tenSecond": "Structured demonstrations with evidence links.",
+      "sixtySecond": "Open a case study for context, constraints, actions, outcomes, and references."
+    },
+    "books": {
+      "tenSecond": "Published volumes with verification-linked references.",
+      "sixtySecond": "See metadata, verified references, and availability per book."
+    },
+    "publicrecord": {
+      "tenSecond": "Verification artifacts supporting claims.",
+      "sixtySecond": "Open a record for type, date, source, verification, and claim linkage."
+    },
+    "contact": {
+      "tenSecond": "Controlled intake for role, media, and public record requests.",
+      "sixtySecond": "Select a pathway and send a message by email."
+    }
+  }
+}

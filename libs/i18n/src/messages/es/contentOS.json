@@ -1,0 +1,28 @@
+{
+  "intents": {
+    "home": {
+      "tenSecond": "Sitio de verificacion de autoridad para evaluacion ejecutiva.",
+      "sixtySecond": "Elegir Informe ejecutivo, Estudios de caso o Registro publico."
+    },
+    "brief": {
+      "tenSecond": "Centro de autoridad para revision estructurada.",
+      "sixtySecond": "Acceder a Afirmaciones, Estudios de caso o Registro publico con enrutamiento de evidencia."
+    },
+    "casestudies": {
+      "tenSecond": "Demostraciones estructuradas con enlaces a evidencia.",
+      "sixtySecond": "Abrir un estudio de caso para contexto, restricciones, acciones, resultados y referencias."
+    },
+    "books": {
+      "tenSecond": "Volumenes publicados con referencias verificadas.",
+      "sixtySecond": "Ver metadatos, referencias verificadas y disponibilidad por libro."
+    },
+    "publicrecord": {
+      "tenSecond": "Artefactos de verificacion que respaldan afirmaciones.",
+      "sixtySecond": "Abrir un registro para tipo, fecha, fuente, verificacion y vinculo con afirmacion."
+    },
+    "contact": {
+      "tenSecond": "Entrada controlada para solicitudes de rol, medios y registro publico.",
+      "sixtySecond": "Seleccionar una via y enviar un mensaje por correo."
+    }
+  }
+}
