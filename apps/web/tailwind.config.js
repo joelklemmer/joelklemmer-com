@@ -22,12 +22,26 @@ module.exports = {
       colors: {
         bg: 'hsl(var(--color-bg) / <alpha-value>)',
         surface: 'hsl(var(--color-surface) / <alpha-value>)',
+        'surface-elevated':
+          'hsl(var(--color-surface-elevated) / <alpha-value>)',
         text: 'hsl(var(--color-text) / <alpha-value>)',
         muted: 'hsl(var(--color-muted) / <alpha-value>)',
         border: 'hsl(var(--color-border) / <alpha-value>)',
+        'border-subtle': 'hsl(var(--color-border-subtle) / <alpha-value>)',
         accent: 'hsl(var(--color-accent) / <alpha-value>)',
         'accent-strong': 'hsl(var(--color-accent-strong) / <alpha-value>)',
+        'accent-muted': 'hsl(var(--color-accent-muted) / <alpha-value>)',
         focus: 'hsl(var(--color-focus) / <alpha-value>)',
+        neutral: {
+          50: 'hsl(var(--color-neutral-50) / <alpha-value>)',
+          100: 'hsl(var(--color-neutral-100) / <alpha-value>)',
+          200: 'hsl(var(--color-neutral-200) / <alpha-value>)',
+          300: 'hsl(var(--color-neutral-300) / <alpha-value>)',
+        },
+      },
+      maxWidth: {
+        container: 'var(--container-max-width)',
+        readable: 'var(--readable-max-width)',
       },
       fontFamily: {
         sans: ['var(--font-sans)'],
@@ -83,8 +97,12 @@ module.exports = {
         'authority-depth': 'var(--authority-surface-depth)',
         'authority-glow': 'var(--authority-soft-glow)',
         'authority-layer2': 'var(--authority-surface-layer2)',
+        'authority-layer1': 'var(--authority-depth-layer1)',
+        'authority-layer2-depth': 'var(--authority-depth-layer2)',
+        'authority-layer3': 'var(--authority-depth-layer3)',
         'authority-card': 'var(--authority-card-elevation)',
         'authority-card-glow': 'var(--authority-card-glow)',
+        'authority-hero': 'var(--authority-hero-depth)',
       },
       transitionDuration: {
         fast: 'var(--transition-duration-fast)',

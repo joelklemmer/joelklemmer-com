@@ -174,6 +174,131 @@
     margin-block-start: var(--heading-to-content-gap);
   }
 
+  /* VACIL B) Hero: dimensional layout, typographic command, focal hierarchy, atmospheric depth */
+  .hero-authority {
+    margin-block-end: var(--section-block-margin);
+    padding-block: var(--space-8);
+  }
+
+  .hero-authority-atmosphere {
+    position: absolute;
+    inset: 0;
+    background: var(--authority-ambient-soft);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .hero-authority-inner {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    gap: var(--hero-block-gap);
+  }
+
+  .hero-authority-stack,
+  .hero-authority-grid {
+    display: grid;
+    gap: var(--hero-block-gap);
+    align-content: start;
+  }
+
+  .hero-authority-grid {
+    grid-template-columns: 1fr;
+    gap: var(--content-rhythm);
+  }
+
+  @media (min-width: 768px) {
+    .hero-authority-grid {
+      grid-template-columns: 1fr minmax(200px, 320px);
+      align-items: start;
+      gap: var(--hero-inline-gap);
+    }
+  }
+
+  .hero-authority-content {
+    display: grid;
+    gap: var(--hero-block-gap);
+    max-width: var(--readable-line-length);
+  }
+
+  .hero-display {
+    font-size: var(--hero-display-size);
+    line-height: var(--hero-display-line);
+    letter-spacing: var(--hero-display-spacing);
+    font-weight: var(--hero-display-weight);
+    color: hsl(var(--color-text));
+    margin: 0;
+  }
+
+  .hero-lede {
+    font-size: var(--hero-lede-size);
+    line-height: var(--hero-lede-line);
+    margin: 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .hero-action-link {
+    display: inline-block;
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: hsl(var(--color-text));
+    background: hsl(var(--color-surface));
+    border: 1px solid hsl(var(--color-border));
+    border-radius: 0.375rem;
+    transition:
+      color var(--transition-duration-fast) var(--ease-authority),
+      border-color var(--transition-duration-fast) var(--ease-authority),
+      background-color var(--transition-duration-fast) var(--ease-authority);
+  }
+
+  .hero-action-link:hover {
+    border-color: hsl(var(--color-accent));
+    color: hsl(var(--color-accent));
+  }
+
+  .hero-authority-visual {
+    position: relative;
+    min-height: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-action-link {
+      transition: none;
+    }
+  }
+
+  /* VACIL C) Layout: grid cadence, spacing rhythm */
+  .content-rhythm {
+    gap: var(--content-rhythm);
+  }
+
+  .content-rhythm-tight {
+    gap: var(--content-rhythm-tight);
+  }
+
+  /* VACIL D) Material: translucent panels, depth layering, glass-like surfaces */
+  .authority-glass {
+    background: var(--authority-glass-bg);
+    backdrop-filter: blur(var(--authority-glass-blur));
+    -webkit-backdrop-filter: blur(var(--authority-glass-blur));
+    box-shadow:
+      var(--authority-depth-layer1),
+      0 0 0 1px var(--authority-glass-border);
+  }
+
+  .authority-panel {
+    background: hsl(
+      var(--color-surface) / var(--authority-surface-translucency)
+    );
+    box-shadow: var(--authority-depth-layer1), var(--authority-soft-glow);
+  }
+
   /* VACEL D) Authority cards and major surfaces: layered depth, soft translucency, shadow discipline */
   .authority-card {
     background: hsl(
