@@ -19,5 +19,8 @@
     "title": "Aviso de traducción",
     "body": "Esta página se muestra en inglés mientras la versión localizada está en preparación.",
     "linkLabel": "Ver versión en inglés"
+  },
+  "density": {
+    "toggleLabel": "Vista de densidad"
   }
 }

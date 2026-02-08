@@ -24,10 +24,7 @@ import {
   findLowEntropyClusters,
   detectSignalFlattening,
 } from './topologyDifferentiation';
-import {
-  getEntropyContribution,
-  getMeanVectorsByKind,
-} from './entropyMetrics';
+import { getEntropyContribution, getMeanVectorsByKind } from './entropyMetrics';
 
 export type EntityIdSet = {
   claimIds: Set<string>;
@@ -122,12 +119,14 @@ function getAggregateCoverageFromBindings(
 
 /**
  * Resolve signal vector for an entity. Registry must be populated first.
+ * When context (e.g. evaluator mode) is provided, bindings with contextOverrides use it.
  */
 export function getEntitySignalVector(
   entityKind: ContentEntityKind,
   entityId: string,
+  context?: string,
 ): SignalWeightVector | undefined {
-  return getSignalVector(entityKind, entityId);
+  return getSignalVector(entityKind, entityId, context);
 }
 
 /**

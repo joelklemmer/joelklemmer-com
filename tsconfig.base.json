@@ -35,7 +35,9 @@
         "libs/intelligence/src/validate.ts"
       ],
       "@joelklemmer/authority-signals": ["libs/authority-signals/src/index.ts"],
-      "@joelklemmer/authority-mapping": ["libs/authority-mapping/src/index.ts"]
+      "@joelklemmer/authority-mapping": ["libs/authority-mapping/src/index.ts"],
+      "@joelklemmer/evaluator-mode": ["libs/evaluator-mode/src/index.ts"],
+      "@joelklemmer/authority-density": ["libs/authority-density/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

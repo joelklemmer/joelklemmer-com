@@ -1,0 +1,7 @@
+{
+  "name": "authority-density",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/authority-density/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:authority-density"]
+}

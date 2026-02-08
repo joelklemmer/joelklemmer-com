@@ -166,6 +166,10 @@
       }
     ]
   },
+  "evidenceGraph": {
+    "title": "Grafo de evidencia",
+    "tracePath": "Vinculado"
+  },
   "contactPathway": {
     "title": "Contacto",
     "linkLabel": "Acceso controlado y coordinación."

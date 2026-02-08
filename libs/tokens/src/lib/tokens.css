@@ -47,6 +47,26 @@
   --authority-depth-layer: 0;
 }
 
+/* EIL: Authority Density View — compressed scanning; tighter rhythm, emphasized hierarchy. */
+[data-density='on'] {
+  --authority-spacing-density: 0.75;
+  --authority-hierarchy-emphasis: 1.08;
+  --authority-motion-restraint: 1;
+}
+[data-density='on'].authority-density-root {
+  gap: calc(var(--space-4) * var(--authority-spacing-density));
+}
+
+/* EIL: data-dominant-signal / data-evaluator-mode — subtle hierarchy only; no color coding. */
+[data-dominant-signal] {
+  --authority-hierarchy-emphasis: calc(
+    var(--authority-hierarchy-emphasis) * 1.02
+  );
+}
+[data-evaluator-mode] {
+  --authority-depth-layer: 1;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: 222 18% 10%;

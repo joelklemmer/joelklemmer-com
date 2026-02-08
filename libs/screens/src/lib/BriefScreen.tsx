@@ -1,9 +1,11 @@
 import { getLocale } from 'next-intl/server';
+import { cookies } from 'next/headers';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
+import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
 import {
   CLAIM_CATEGORIES,
   claimRegistry,
@@ -41,8 +43,12 @@ import {
   ArtifactSingleSection,
   ContactPathwaySection,
   HeroSection,
+  EvidenceGraphSection,
 } from '@joelklemmer/sections';
+import { getEntityGraph } from '@joelklemmer/intelligence';
+import type { EntityGraph } from '@joelklemmer/intelligence';
 import { Container } from '@joelklemmer/ui';
+import { DensityAwarePage } from '@joelklemmer/authority-density';
 import { BriefNavigator } from './BriefNavigator.client';
 
 export async function generateMetadata() {
@@ -65,8 +71,9 @@ const PUBLIC_RECORD_HIGHLIGHTS_MAX = 10;
 
 export async function BriefScreen() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['brief']);
+  const messages = await loadMessages(locale, ['brief', 'common']);
   const t = createScopedTranslator(locale, messages, 'brief');
+  const tCommon = createScopedTranslator(locale, messages, 'common');
 
   const publicRecords = await getPublicRecordList(locale);
   const recordLookup = new Map(
@@ -80,6 +87,12 @@ export async function BriefScreen() {
       return pairs;
     }),
   );
+  const cookieStore = await cookies();
+  const evaluatorMode = resolveEvaluatorMode({
+    cookies: cookieStore.toString(),
+    isDev: process.env.NODE_ENV !== 'production',
+  });
+
   const recordIdToDate = new Map<string, string>();
   for (const record of publicRecords) {
     const date = record.frontmatter.date;
@@ -127,7 +140,7 @@ export async function BriefScreen() {
       claim.recordIds,
       recordIdToDate,
     );
-    const vector = getEntitySignalVector('claim', claim.id);
+    const vector = getEntitySignalVector('claim', claim.id, evaluatorMode);
     const effectiveVector = vector ? getEffectiveWeights(vector) : undefined;
     const dominantSignalId = vector
       ? getDominantSignalIdFromEffective(vector)
@@ -265,6 +278,47 @@ export async function BriefScreen() {
   const briefContent = await getBriefContent(locale);
   const quantifiedOutcomes = briefContent?.quantifiedOutcomes ?? [];
 
+  const entityGraph: EntityGraph = await getEntityGraph(undefined, {
+    getSignalVector: (kind, id) =>
+      getEntitySignalVector(kind, id, evaluatorMode),
+  });
+  const labelByNodeId = new Map<string, string>();
+  const hrefByNodeId = new Map<string, string>();
+  for (const node of entityGraph.nodes) {
+    const label =
+      node.kind === 'claim'
+        ? t(node.labelKey)
+        : (node as { title: string }).title;
+    labelByNodeId.set(node.id, label);
+    if (node.kind === 'record' && 'slug' in node) {
+      hrefByNodeId.set(node.id, `/${locale}/publicrecord/${node.slug}`);
+    } else if (node.kind === 'caseStudy' && 'slug' in node) {
+      hrefByNodeId.set(node.id, `/${locale}/casestudies/${node.slug}`);
+    } else if (node.kind === 'book' && 'slug' in node) {
+      hrefByNodeId.set(node.id, `/${locale}/books/${node.slug}`);
+    }
+  }
+  const linkedLabelsByNodeId = new Map<string, string[]>();
+  for (const node of entityGraph.nodes) {
+    const linked = new Set<string>();
+    for (const edge of entityGraph.edges) {
+      if (edge.fromId === node.id) {
+        const other = labelByNodeId.get(edge.toId);
+        if (other) linked.add(other);
+      } else if (edge.toId === node.id) {
+        const other = labelByNodeId.get(edge.fromId);
+        if (other) linked.add(other);
+      }
+    }
+    linkedLabelsByNodeId.set(node.id, [...linked]);
+  }
+  const evidenceGraphNodes = entityGraph.nodes.map((node) => ({
+    id: node.id,
+    label: labelByNodeId.get(node.id) ?? node.id,
+    href: hrefByNodeId.get(node.id),
+    linkedLabels: linkedLabelsByNodeId.get(node.id) ?? [],
+  }));
+
   return (
     <>
       <PersonJsonLd />
@@ -276,88 +330,96 @@ export async function BriefScreen() {
       />
       <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
 
-      <IdentityScopeSection body={t('identityScope')} />
+      <DensityAwarePage toggleLabel={tCommon('density.toggleLabel')}>
+        <IdentityScopeSection body={t('identityScope')} />
 
-      <ReadPathSection
-        title={t('readPath.title')}
-        lede={t('readPath.lede')}
-        routes={readPathRoutes}
-      />
-
-      <VerificationGuidanceSection
-        title={t('verificationGuidance.title')}
-        body={t('verificationGuidance.body')}
-      />
-
-      <section id="claims" className="section-shell">
-        <Container className="section-shell">
-          <div className="section-shell">
-            <h2 className="text-title font-semibold">{t('claims.title')}</h2>
-            <p className="text-base text-muted">{t('claims.lede')}</p>
-          </div>
-          <BriefNavigator
-            claimCards={claimCards}
-            briefAnchorBase={`/${locale}/brief`}
-            categoryOptions={categoryOptions}
-            labels={navigatorLabels}
-          />
-          {hasMoreClaims ? (
-            <p className="mt-3 text-sm text-muted">
-              {t('claims.allClaimsExpander')}
-            </p>
-          ) : null}
-        </Container>
-      </section>
-
-      <ListSection
-        title={t('selectedOutcomes.title')}
-        items={selectedOutcomesItems}
-      />
-
-      {quantifiedOutcomes.length > 0 ? (
-        <QuantifiedOutcomesSection
-          title={t('quantifiedOutcomes.title')}
-          items={quantifiedOutcomes}
+        <ReadPathSection
+          title={t('readPath.title')}
+          lede={t('readPath.lede')}
+          routes={readPathRoutes}
         />
-      ) : null}
 
-      <CardGridSection
-        title={t('caseStudies.title')}
-        lede={t('caseStudies.lede')}
-        items={caseStudies.map((study) => ({
-          title: study.frontmatter.title,
-          description: study.frontmatter.summary,
-          meta: study.frontmatter.date,
-          href: `/${locale}/casestudies/${study.frontmatter.slug}`,
-        }))}
-      />
+        <VerificationGuidanceSection
+          title={t('verificationGuidance.title')}
+          body={t('verificationGuidance.body')}
+        />
 
-      <CardGridSection
-        title={t('publicRecordHighlights.title')}
-        lede={t('publicRecordHighlights.lede')}
-        items={recordHighlights.map((record) => ({
-          title: record.frontmatter.title,
-          description: record.frontmatter.claimSupported,
-          meta: record.frontmatter.date,
-          href: `/${locale}/publicrecord/${record.frontmatter.slug}`,
-        }))}
-      />
+        <section id="claims" className="section-shell">
+          <Container className="section-shell">
+            <div className="section-shell">
+              <h2 className="text-title font-semibold">{t('claims.title')}</h2>
+              <p className="text-base text-muted">{t('claims.lede')}</p>
+            </div>
+            <BriefNavigator
+              claimCards={claimCards}
+              briefAnchorBase={`/${locale}/brief`}
+              categoryOptions={categoryOptions}
+              labels={navigatorLabels}
+            />
+            {hasMoreClaims ? (
+              <p className="mt-3 text-sm text-muted">
+                {t('claims.allClaimsExpander')}
+              </p>
+            ) : null}
+          </Container>
+        </section>
 
-      <ArtifactSingleSection
-        title={t('artifacts.title')}
-        lede={t('artifacts.lede')}
-        artifact={executiveBriefArtifact}
-        notPublishedMessage={t('artifacts.notPublished')}
-        downloadLabel={t('artifacts.downloadLabel')}
-        checksumLabel={t('artifacts.checksum')}
-        scopeLabelHeading={t('artifacts.scopeLabel')}
-      />
+        <ListSection
+          title={t('selectedOutcomes.title')}
+          items={selectedOutcomesItems}
+        />
 
-      <ContactPathwaySection
-        title={t('contactPathway.title')}
-        linkLabel={t('contactPathway.linkLabel')}
-        href={`/${locale}/contact`}
-      />
+        {quantifiedOutcomes.length > 0 ? (
+          <QuantifiedOutcomesSection
+            title={t('quantifiedOutcomes.title')}
+            items={quantifiedOutcomes}
+          />
+        ) : null}
+
+        <CardGridSection
+          title={t('caseStudies.title')}
+          lede={t('caseStudies.lede')}
+          items={caseStudies.map((study) => ({
+            title: study.frontmatter.title,
+            description: study.frontmatter.summary,
+            meta: study.frontmatter.date,
+            href: `/${locale}/casestudies/${study.frontmatter.slug}`,
+          }))}
+        />
+
+        <CardGridSection
+          title={t('publicRecordHighlights.title')}
+          lede={t('publicRecordHighlights.lede')}
+          items={recordHighlights.map((record) => ({
+            title: record.frontmatter.title,
+            description: record.frontmatter.claimSupported,
+            meta: record.frontmatter.date,
+            href: `/${locale}/publicrecord/${record.frontmatter.slug}`,
+          }))}
+        />
+
+        <ArtifactSingleSection
+          title={t('artifacts.title')}
+          lede={t('artifacts.lede')}
+          artifact={executiveBriefArtifact}
+          notPublishedMessage={t('artifacts.notPublished')}
+          downloadLabel={t('artifacts.downloadLabel')}
+          checksumLabel={t('artifacts.checksum')}
+          scopeLabelHeading={t('artifacts.scopeLabel')}
+        />
+
+        <EvidenceGraphSection
+          title={t('evidenceGraph.title')}
+          tracePathLabel={t('evidenceGraph.tracePath')}
+          nodes={evidenceGraphNodes}
+        />
+
+        <ContactPathwaySection
+          title={t('contactPathway.title')}
+          linkLabel={t('contactPathway.linkLabel')}
+          href={`/${locale}/contact`}
+        />
+      </DensityAwarePage>
     </>
   );
 }

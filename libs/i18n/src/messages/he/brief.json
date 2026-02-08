@@ -164,6 +164,10 @@
       }
     ]
   },
+  "evidenceGraph": {
+    "title": "גרף ראיות",
+    "tracePath": "קשור"
+  },
   "contactPathway": {
     "title": "צור קשר",
     "linkLabel": "גישה מבוקרת ותיאום."

@@ -166,6 +166,10 @@
       }
     ]
   },
+  "evidenceGraph": {
+    "title": "Граф доказів",
+    "tracePath": "Пов’язано"
+  },
   "contactPathway": {
     "title": "Контакти",
     "linkLabel": "Контрольований доступ і координація."

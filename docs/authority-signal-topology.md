@@ -63,9 +63,9 @@ The registry and structured mapping use differentiated bindings; the verify pipe
 
 ## Executive Brief adaptive ordering
 
-- **Sort keys (in order):**  
-  1. Dominant signal (by canonical signal order).  
-  2. Entropy contribution (descending; more distinctive entities first within a signal).  
+- **Sort keys (in order):**
+  1. Dominant signal (by canonical signal order).
+  2. Entropy contribution (descending; more distinctive entities first within a signal).
   3. Traversal diversity: after grouping by dominant signal and sorting by entropy, items are interleaved in round-robin by signal so that consecutive items tend to differ in dominant signal, maximizing cognitive dimensional exposure during exploration.
 
 ---

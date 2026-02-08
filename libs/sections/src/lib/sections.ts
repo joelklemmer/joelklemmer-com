@@ -7,6 +7,11 @@ export { ContactPathwaysSection } from './ContactPathwaysSection';
 export { ContactGuidanceSection } from './ContactGuidanceSection';
 export { MailtoComposerSection } from './MailtoComposerSection';
 export { DefinitionListSection } from './DefinitionListSection';
+export { EvidenceGraphSection } from './EvidenceGraphSection';
+export type {
+  EvidenceGraphNodeDisplay,
+  EvidenceGraphSectionProps,
+} from './EvidenceGraphSection';
 export { FallbackNoticeSection } from './FallbackNoticeSection';
 export { FooterSection } from './FooterSection';
 export { HeaderSection } from './HeaderSection';

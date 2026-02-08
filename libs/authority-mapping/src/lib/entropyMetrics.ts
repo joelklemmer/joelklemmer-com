@@ -69,16 +69,16 @@ export function getVarianceDistributionReport(
   bindings: EntityBindingConfig[],
 ): VarianceDistributionReport {
   const vectors = bindings.map((b) => getEffectiveWeights(b.signalVector));
-  const perSignal: Record<AuthoritySignalId, { mean: number; variance: number }> =
-    {} as Record<AuthoritySignalId, { mean: number; variance: number }>;
+  const perSignal: Record<
+    AuthoritySignalId,
+    { mean: number; variance: number }
+  > = {} as Record<AuthoritySignalId, { mean: number; variance: number }>;
   const n = vectors.length;
   for (const id of AUTHORITY_SIGNAL_IDS) {
     const values = vectors.map((v) => v[id] ?? 0);
     const mean = values.reduce((a, b) => a + b, 0) / n;
     const variance =
-      n <= 1
-        ? 0
-        : values.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1);
+      n <= 1 ? 0 : values.reduce((s, x) => s + (x - mean) ** 2, 0) / (n - 1);
     perSignal[id] = { mean, variance };
   }
   const overallVariance =
@@ -102,16 +102,23 @@ export const SEVERE_DIMENSIONALITY_THRESHOLD = 0.15;
 /**
  * Returns true if topology has severely collapsed (fail validation).
  */
-export function isSevereCollapse(
-  bindings: EntityBindingConfig[],
-): { severe: boolean; reason?: string } {
+export function isSevereCollapse(bindings: EntityBindingConfig[]): {
+  severe: boolean;
+  reason?: string;
+} {
   const entropy = computeSignalEntropyScore(bindings);
   const dim = computeTopologyDimensionalityIndex(bindings);
   if (entropy < SEVERE_ENTROPY_THRESHOLD) {
-    return { severe: true, reason: `Signal entropy score ${entropy.toFixed(3)} below threshold ${SEVERE_ENTROPY_THRESHOLD}` };
+    return {
+      severe: true,
+      reason: `Signal entropy score ${entropy.toFixed(3)} below threshold ${SEVERE_ENTROPY_THRESHOLD}`,
+    };
   }
   if (dim < SEVERE_DIMENSIONALITY_THRESHOLD) {
-    return { severe: true, reason: `Topology dimensionality index ${dim.toFixed(3)} below threshold ${SEVERE_DIMENSIONALITY_THRESHOLD}` };
+    return {
+      severe: true,
+      reason: `Topology dimensionality index ${dim.toFixed(3)} below threshold ${SEVERE_DIMENSIONALITY_THRESHOLD}`,
+    };
   }
   return { severe: false };
 }

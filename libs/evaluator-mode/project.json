@@ -1,0 +1,7 @@
+{
+  "name": "evaluator-mode",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/evaluator-mode/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:evaluator-mode"]
+}

@@ -2,6 +2,7 @@ import '../global.css';
 
 import type { ReactNode } from 'react';
 
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import {
@@ -15,6 +16,11 @@ import {
 import { defaultLocale } from '@joelklemmer/i18n';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import { LanguageSwitcher, Shell } from '@joelklemmer/ui';
+import {
+  EvaluatorModeProvider,
+  resolveEvaluatorMode,
+} from '@joelklemmer/evaluator-mode';
+import { DensityViewProvider } from '@joelklemmer/authority-density';
 import {
   FooterSection,
   HeaderSection,
@@ -45,6 +51,11 @@ export default async function LocaleLayout({
     : defaultLocale;
 
   setRequestLocale(resolvedLocale);
+  const cookieStore = await cookies();
+  const initialEvaluatorMode = resolveEvaluatorMode({
+    cookies: cookieStore.toString(),
+    isDev: process.env.NODE_ENV !== 'production',
+  });
   const common = await getTranslations('common');
   const nav = await getTranslations('nav');
   const footer = await getTranslations('footer');
@@ -75,21 +86,25 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
-      <Shell
-        headerContent={
-          <HeaderSection
-            wordmark={common('wordmark')}
-            homeHref={`/${resolvedLocale}`}
-            languageSwitcher={<LanguageSwitcher />}
-          />
-        }
-        navContent={<PrimaryNavSection items={navItems} />}
-        footerContent={
-          <FooterSection label={footer('label')} links={footerItems} />
-        }
-      >
-        {children}
-      </Shell>
+      <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
+        <DensityViewProvider syncWithHash>
+          <Shell
+            headerContent={
+              <HeaderSection
+                wordmark={common('wordmark')}
+                homeHref={`/${resolvedLocale}`}
+                languageSwitcher={<LanguageSwitcher />}
+              />
+            }
+            navContent={<PrimaryNavSection items={navItems} />}
+            footerContent={
+              <FooterSection label={footer('label')} links={footerItems} />
+            }
+          >
+            {children}
+          </Shell>
+        </DensityViewProvider>
+      </EvaluatorModeProvider>
     </NextIntlClientProvider>
   );
 }

@@ -89,7 +89,9 @@ export function generateDifferentiatedBindings(
         weights: { ...b.signalVector.weights },
         ...(Object.keys(secondary).length ? { secondary } : {}),
         ...(Object.keys(tertiary).length ? { tertiary } : {}),
-        ...(b.signalVector.negative ? { negative: b.signalVector.negative } : {}),
+        ...(b.signalVector.negative
+          ? { negative: b.signalVector.negative }
+          : {}),
         ...(b.signalVector.contextOverrides
           ? { contextOverrides: b.signalVector.contextOverrides }
           : {}),
@@ -163,6 +165,7 @@ export function detectSignalFlattening(
       totalVariance += d * d;
     }
   }
-  const avgVariance = totalVariance / (vectors.length * AUTHORITY_SIGNAL_IDS.length);
+  const avgVariance =
+    totalVariance / (vectors.length * AUTHORITY_SIGNAL_IDS.length);
   return avgVariance < varianceThreshold;
 }

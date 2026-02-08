@@ -19,5 +19,8 @@
     "title": "Translation fallback",
     "body": "This page is shown in English while the localized version is in progress.",
     "linkLabel": "View English version"
+  },
+  "density": {
+    "toggleLabel": "Density view"
   }
 }

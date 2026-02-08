@@ -38,13 +38,15 @@ export interface SignalWeightVector {
 
 const weightRecordSchema = z.record(z.string(), z.number().min(0).max(1));
 
-export const signalWeightVectorSchema: z.ZodType<SignalWeightVector> = z.object({
-  weights: weightRecordSchema.default({}),
-  secondary: weightRecordSchema.optional(),
-  tertiary: weightRecordSchema.optional(),
-  negative: weightRecordSchema.optional(),
-  contextOverrides: z.record(z.string(), weightRecordSchema).optional(),
-});
+export const signalWeightVectorSchema: z.ZodType<SignalWeightVector> = z.object(
+  {
+    weights: weightRecordSchema.default({}),
+    secondary: weightRecordSchema.optional(),
+    tertiary: weightRecordSchema.optional(),
+    negative: weightRecordSchema.optional(),
+    contextOverrides: z.record(z.string(), weightRecordSchema).optional(),
+  },
+);
 
 /** Content entity kind for binding scope. */
 export type ContentEntityKind =
