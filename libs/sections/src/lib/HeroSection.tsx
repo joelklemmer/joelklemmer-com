@@ -45,11 +45,15 @@ export function HeroSection({
           <Image
             src={v.src}
             alt={v.alt}
-            width={v.width ?? 320}
-            height={v.height ?? 500}
+            width={v.width ?? 1200}
+            height={v.height ?? 1500}
             className="hero-portrait-image object-contain w-full h-full"
             priority
-            sizes="(max-width: 768px) 100vw, min(380px, 40vw)"
+            sizes="(max-width: 767px) 100vw, (max-width: 1023px) min(400px, 40vw), min(400px, 35vw)"
+            style={{
+              width: '100%',
+              height: 'auto',
+            }}
           />
         </div>
       );
@@ -65,7 +69,7 @@ export function HeroSection({
       aria-labelledby="hero-title"
     >
       <div className="hero-authority-atmosphere" aria-hidden />
-      <Container className="hero-authority-inner">
+      <Container className="hero-authority-inner hero-authority-plate">
         <div
           className={useGrid ? 'hero-authority-grid' : 'hero-authority-stack'}
         >
@@ -90,7 +94,9 @@ export function HeroSection({
             {children}
           </div>
           {useGrid && visualNode ? (
-            <div className="hero-authority-visual">{visualNode}</div>
+            <div className="hero-authority-visual" aria-hidden="true">
+              {visualNode}
+            </div>
           ) : null}
         </div>
       </Container>

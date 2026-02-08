@@ -25,7 +25,8 @@
     "motionLabel": "Reduce motion",
     "textSizeLabel": "Text size",
     "textSizeDefault": "Default",
-    "textSizeLarge": "Large"
+    "textSizeLarge": "Large",
+    "underlineLinksLabel": "Underline links"
   },
   "fallbackNotice": {
     "title": "Translation fallback",

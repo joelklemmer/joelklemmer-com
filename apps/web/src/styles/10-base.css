@@ -48,6 +48,12 @@ a {
   text-decoration: none;
 }
 
+/* Underline links when data-underline-links is set */
+html[data-underline-links='true'] a:not([class*='no-underline']) {
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
 p,
 h1,
 h2,
@@ -86,4 +92,14 @@ h4 {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
+}
+
+/* Reduced motion override (from AX panel) */
+html.motion-reduce-force *,
+html.motion-reduce-force *::before,
+html.motion-reduce-force *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
 }

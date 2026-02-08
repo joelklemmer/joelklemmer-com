@@ -95,15 +95,15 @@ export async function HomeScreen() {
       <section id="doctrine" className="section-shell">
         <Container className="section-shell">
           <SectionVisualAnchor className="mb-6" />
-          <div className="section-shell">
-            <h2 className="text-section-heading font-semibold">
+          <div className="section-shell mb-6">
+            <h2 className="text-section-heading font-semibold mb-3">
               {tFw('section.title')}
             </h2>
-            <p className="text-body-analytical text-muted">
+            <p className="text-body-analytical text-muted text-base leading-relaxed">
               {tFw('section.lede')}
             </p>
           </div>
-          <div className="grid gap-4 md:grid-cols-3 mt-4">
+          <div className="grid gap-6 md:grid-cols-3">
             {frameworks.map((fw) => (
               <FrameworkCard
                 key={fw.frontmatter.id}

@@ -111,11 +111,11 @@ export function LanguageMenu() {
         aria-haspopup="true"
         aria-label={common('a11y.languageSwitcherLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} flex items-center gap-2 rounded-sm px-2 py-1 text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <span aria-hidden="true">🌐</span>
         <span className="sr-only">{currentLanguageLabel}</span>
-        <span className="hidden sm:inline">{currentLanguageLabel}</span>
       </button>
 
       {isOpen && (

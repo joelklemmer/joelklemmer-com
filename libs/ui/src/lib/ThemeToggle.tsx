@@ -1,10 +1,12 @@
 'use client';
 
 import { useTheme } from './ThemeProvider';
+import { useContrast } from './ContrastProvider';
 import { focusRingClass } from '@joelklemmer/a11y';
 
 export function ThemeToggle() {
   const { theme, setTheme, resolvedTheme } = useTheme();
+  const { contrast } = useContrast();
 
   const cycleTheme = () => {
     if (theme === 'light') {
@@ -17,10 +19,17 @@ export function ThemeToggle() {
   };
 
   const getLabel = () => {
-    if (theme === 'system') {
-      return `Theme: System (${resolvedTheme})`;
+    const themeLabel = theme === 'system' ? `System (${resolvedTheme})` : theme === 'light' ? 'Light' : 'Dark';
+    const contrastLabel = contrast === 'high' ? 'High Contrast' : '';
+    return `Theme: ${themeLabel}${contrastLabel ? `, ${contrastLabel}` : ''}`;
+  };
+
+  // Show moon for dark, sun for light, adjust for high contrast
+  const getIcon = () => {
+    if (contrast === 'high') {
+      return resolvedTheme === 'dark' ? '🌑' : '☀️';
     }
-    return `Theme: ${theme === 'light' ? 'Light' : 'Dark'}`;
+    return resolvedTheme === 'dark' ? '🌙' : '☀️';
   };
 
   return (
@@ -31,7 +40,7 @@ export function ThemeToggle() {
       className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
       title={getLabel()}
     >
-      {resolvedTheme === 'dark' ? '🌙' : '☀️'}
+      <span aria-hidden="true">{getIcon()}</span>
       <span className="sr-only">{getLabel()}</span>
     </button>
   );

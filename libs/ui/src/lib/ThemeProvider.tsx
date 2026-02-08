@@ -40,8 +40,21 @@ function applyTheme(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setThemeState] = useState<Theme>(() => {
+    // Initialize synchronously on client
+    if (typeof window !== 'undefined') {
+      return getStoredTheme();
+    }
+    return 'system';
+  });
+  const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
+    // Initialize synchronously on client
+    if (typeof window !== 'undefined') {
+      const stored = getStoredTheme();
+      return stored === 'system' ? getSystemTheme() : stored;
+    }
+    return 'light';
+  });
 
   useEffect(() => {
     const stored = getStoredTheme();
@@ -77,6 +90,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     setThemeState(newTheme);
   };
 
+  // Prevent flash of wrong theme on SSR - render immediately but apply theme synchronously
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}

@@ -12,13 +12,22 @@ export function AccessibilityPanel() {
   const { contrast, setContrast } = useContrast();
   const [motionReduced, setMotionReduced] = useState(false);
   const [textSize, setTextSize] = useState<'default' | 'large'>('default');
+  const [underlineLinks, setUnderlineLinks] = useState(false);
 
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
 
   const panelId = 'accessibility-panel';
   const triggerId = 'accessibility-panel-trigger';
+
+  // Load stored preferences on mount
+  useEffect(() => {
+    setMotionReduced(getStoredMotionReduced());
+    setTextSize(getStoredTextSize());
+    setUnderlineLinks(getStoredUnderlineLinks());
+  }, []);
 
   const handleToggle = useCallback(() => {
     setIsOpen((prev) => !prev);
@@ -35,8 +44,10 @@ export function AccessibilityPanel() {
     const root = document.documentElement;
     if (motionReduced) {
       root.classList.add('motion-reduce-force');
+      localStorage.setItem(MOTION_STORAGE_KEY, 'true');
     } else {
       root.classList.remove('motion-reduce-force');
+      localStorage.removeItem(MOTION_STORAGE_KEY);
     }
   }, [motionReduced]);
 
@@ -46,10 +57,25 @@ export function AccessibilityPanel() {
     const root = document.documentElement;
     if (textSize === 'large') {
       root.setAttribute('data-text-size', 'large');
+      localStorage.setItem(TEXT_SIZE_STORAGE_KEY, 'large');
     } else {
       root.removeAttribute('data-text-size');
+      localStorage.removeItem(TEXT_SIZE_STORAGE_KEY);
     }
   }, [textSize]);
+
+  // Apply underline links
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const root = document.documentElement;
+    if (underlineLinks) {
+      root.setAttribute('data-underline-links', 'true');
+      localStorage.setItem(UNDERLINE_LINKS_STORAGE_KEY, 'true');
+    } else {
+      root.removeAttribute('data-underline-links');
+      localStorage.removeItem(UNDERLINE_LINKS_STORAGE_KEY);
+    }
+  }, [underlineLinks]);
 
   // Close on Escape
   useEffect(() => {
@@ -84,16 +110,58 @@ export function AccessibilityPanel() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClose]);
 
-  // Focus first control when opening
+  // Focus trap and management
   useEffect(() => {
-    if (isOpen && panelRef.current) {
+    if (!isOpen || !panelRef.current) return;
+
+    // Store previous focus
+    previousFocusRef.current = document.activeElement as HTMLElement;
+
+    // Focus first focusable element
+    const focusableElements = panelRef.current.querySelectorAll<HTMLElement>(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    const firstElement = focusableElements[0];
+    if (firstElement) {
       requestAnimationFrame(() => {
-        const firstControl = panelRef.current?.querySelector('button, select');
-        if (firstControl instanceof HTMLElement) {
-          firstControl.focus();
-        }
+        firstElement.focus();
       });
     }
+
+    // Focus trap: keep focus within panel
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab' || !panelRef.current) return;
+
+      const focusableElements = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(
+          'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+        )
+      );
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+
+      if (e.shiftKey) {
+        // Shift + Tab
+        if (document.activeElement === firstElement) {
+          e.preventDefault();
+          lastElement.focus();
+        }
+      } else {
+        // Tab
+        if (document.activeElement === lastElement) {
+          e.preventDefault();
+          firstElement.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
   }, [isOpen]);
 
   return (
@@ -178,6 +246,20 @@ export function AccessibilityPanel() {
                   aria-label={common('a11y.motionLabel')}
                 />
                 <span>{common('a11y.motionLabel')}</span>
+              </label>
+            </div>
+
+            {/* Underline Links */}
+            <div>
+              <label className="flex items-center gap-2 text-sm text-text">
+                <input
+                  type="checkbox"
+                  checked={underlineLinks}
+                  onChange={(e) => setUnderlineLinks(e.target.checked)}
+                  className={`${focusRingClass} rounded border-border text-accent`}
+                  aria-label={common('a11y.underlineLinksLabel')}
+                />
+                <span>{common('a11y.underlineLinksLabel')}</span>
               </label>
             </div>
 

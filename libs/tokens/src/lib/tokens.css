@@ -25,6 +25,9 @@
   --color-text-secondary: var(--color-muted);
   --color-surface-base: var(--color-surface);
   --color-surface-tier1: var(--color-surface-elevated);
+  /* Surface tokens for cards/hero plates */
+  --color-surface-1: var(--color-surface);
+  --color-surface-2: var(--color-surface-elevated);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -34,6 +37,8 @@
   --space-6: 2rem;
   --space-7: 3rem;
   --space-8: 4rem;
+  --space-10: 5rem;
+  --space-12: 6rem;
 
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -78,6 +83,13 @@
   --readable-max-width: 42rem;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 200ms;
+  --transition-duration-slow: 300ms;
+  /* Motion tokens with reduced-motion support */
+  --motion-duration-fast: var(--transition-duration-fast);
+  --motion-duration-normal: var(--transition-duration-normal);
+  --motion-duration-slow: var(--transition-duration-slow);
+  --motion-ease: var(--ease-authority);
+  --motion-ease-out: var(--ease-authority-out);
 
   /* UASIL: authority signal hooks (restrained; no visible labels). */
   --authority-spacing-density: 1;
@@ -90,6 +102,14 @@
   --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.06);
   --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.5);
   --authority-contrast-balance: hsl(var(--color-surface));
+  /* Elevation tokens: subtle (cards) and premium (hero plates) */
+  --elevation-subtle: 0 1px 3px hsl(var(--color-text) / 0.04), 0 0 0 1px hsl(var(--color-border) / 0.4);
+  --elevation-premium: 0 4px 14px hsl(var(--color-text) / 0.065), 0 2px 5px hsl(var(--color-text) / 0.045), 0 0 0 1px hsl(var(--color-border) / 0.5);
+  /* Focus ring token: high visibility, theme-aware */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: hsl(var(--color-focus));
+  --focus-ring: var(--focus-ring-width) solid var(--focus-ring-color);
 
   /* ACS D) Premium material realism: glass translucency, layered depth, controlled glow, lighting realism. Subtle and restrained. */
   --authority-glass-bg: hsl(var(--color-surface) / 0.76);
@@ -262,6 +282,8 @@
     --color-bg: 222 20% 7%;
     --color-surface: 222 18% 11%;
     --color-surface-elevated: 222 16% 14%;
+    --color-surface-1: 222 18% 11%;
+    --color-surface-2: 222 16% 14%;
     --color-text: 220 14% 96%;
     --color-muted: 220 12% 64%;
     --color-border: 222 12% 20%;
@@ -283,6 +305,8 @@
   --color-bg: 222 20% 7%;
   --color-surface: 222 18% 11%;
   --color-surface-elevated: 222 16% 14%;
+  --color-surface-1: 222 18% 11%;
+  --color-surface-2: 222 16% 14%;
   --color-text: 220 14% 96%;
   --color-muted: 220 12% 64%;
   --color-border: 222 12% 20%;
@@ -303,6 +327,8 @@
   --color-bg: 0 0% 100%;
   --color-surface: 0 0% 100%;
   --color-surface-elevated: 0 0% 100%;
+  --color-surface-1: 0 0% 100%;
+  --color-surface-2: 0 0% 100%;
   --color-text: 0 0% 0%;
   --color-muted: 0 0% 15%;
   --color-border: 0 0% 0%;
@@ -317,4 +343,7 @@
   --color-accent-strong: 217 100% 30%;
   --color-accent-muted: 217 100% 35%;
   --color-focus: 217 100% 40%;
+  --focus-ring-color: hsl(217 100% 40%);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
 }

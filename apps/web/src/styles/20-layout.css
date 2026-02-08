@@ -137,9 +137,26 @@ section.section-shell:last-child {
   backdrop-filter: blur(var(--hero-inner-blur));
   -webkit-backdrop-filter: blur(var(--hero-inner-blur));
   border: 1px solid var(--hero-inner-border);
-  border-radius: 0.5rem;
-  box-shadow: var(--hero-depth-shadow), var(--authority-soft-light);
+  border-radius: 0.75rem;
+  box-shadow: var(--elevation-premium);
   overflow: hidden;
+  padding: var(--space-8);
+}
+
+@media (min-width: 640px) {
+  .hero-authority-inner {
+    padding: var(--space-8) var(--space-8);
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-authority-inner {
+    padding: var(--space-10) var(--space-10);
+  }
+}
+
+.hero-authority-plate {
+  min-height: min(600px, 70vh);
 }
 
 .hero-authority-inner::after {
@@ -166,14 +183,21 @@ section.section-shell:last-child {
 .hero-authority-grid {
   grid-template-columns: 1fr;
   gap: var(--content-rhythm);
+  align-items: start;
 }
 
 @media (min-width: 768px) {
   .hero-authority-grid {
-    grid-template-columns: 1fr minmax(240px, 380px);
+    grid-template-columns: 1fr minmax(280px, 400px);
     align-items: start;
     align-content: start;
     gap: var(--hero-inline-gap);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-authority-grid {
+    gap: var(--space-8);
   }
 }
 
@@ -182,11 +206,23 @@ section.section-shell:last-child {
   gap: var(--hero-block-gap);
   max-width: var(--readable-line-length);
   min-width: 0;
+  align-content: start;
+}
+
+@media (min-width: 768px) {
+  .hero-authority-content {
+    padding-block-start: var(--space-2);
+  }
 }
 
 .hero-portrait-composition {
   aspect-ratio: 4 / 5;
-  max-height: min(420px, 60vh);
+  max-height: min(500px, 65vh);
+  width: 100%;
+  height: auto;
+  min-height: 300px;
+  /* Prevent CLS: reserve space */
+  contain: layout style paint;
 }
 
 .hero-portrait-image {
@@ -237,6 +273,16 @@ section.section-shell:last-child {
 .hero-authority-visual {
   position: relative;
   min-height: 0;
+  display: flex;
+  align-items: start;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .hero-authority-visual {
+    order: -1;
+    margin-block-end: var(--space-6);
+  }
 }
 
 .hero-authority-visual-frame {

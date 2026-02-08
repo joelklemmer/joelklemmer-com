@@ -44,20 +44,20 @@ export function CardGridSection({
             </Link>
           ) : null}
         </div>
-        <div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-6 md:grid-cols-2">
           {items.map((item) => {
             const content = (
-              <div className="authority-card section-shell rounded-card border border-border p-4">
+              <div className="authority-card section-shell rounded-lg border border-border/60 bg-surface p-6 hover:border-accent/40 transition-colors motion-reduce:transition-none">
                 <div className="section-shell">
-                  <h3 className="text-lg font-semibold text-text">
+                  <h3 className="text-xl font-semibold text-text mb-2">
                     {item.title}
                   </h3>
                   {item.description ? (
-                    <p className="text-sm text-muted">{item.description}</p>
+                    <p className="text-base text-muted leading-relaxed">{item.description}</p>
                   ) : null}
                 </div>
                 {item.meta ? (
-                  <p className="text-xs text-muted">{item.meta}</p>
+                  <p className="text-xs text-muted mt-3 pt-3 border-t border-border/40">{item.meta}</p>
                 ) : null}
               </div>
             );
@@ -66,7 +66,7 @@ export function CardGridSection({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${focusRingClass} block rounded-card`}
+                className={`${focusRingClass} block rounded-lg hover:scale-[1.01] transition-transform motion-reduce:transition-none`}
               >
                 {content}
               </Link>
