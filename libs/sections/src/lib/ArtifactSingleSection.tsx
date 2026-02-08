@@ -11,9 +11,15 @@ export interface ArtifactSingleSectionProps {
     version: string;
     date: string;
     href: string;
+    /** SHA-256 checksum for verification */
+    checksum?: string;
+    /** Document scope label (e.g. canonical briefing document) */
+    scopeLabel?: string;
   } | null;
   notPublishedMessage: string;
   downloadLabel: string;
+  checksumLabel?: string;
+  scopeLabelHeading?: string;
 }
 
 export function ArtifactSingleSection({
@@ -22,6 +28,8 @@ export function ArtifactSingleSection({
   artifact,
   notPublishedMessage,
   downloadLabel,
+  checksumLabel,
+  scopeLabelHeading,
 }: ArtifactSingleSectionProps) {
   return (
     <section className="section-shell">
@@ -35,6 +43,21 @@ export function ArtifactSingleSection({
               <p className="text-sm text-muted">
                 {artifact.version} · {artifact.date}
               </p>
+              {artifact.scopeLabel && scopeLabelHeading ? (
+                <p className="mt-1 text-xs text-muted">
+                  <span className="font-medium">{scopeLabelHeading}: </span>
+                  {artifact.scopeLabel}
+                </p>
+              ) : null}
+              {artifact.checksum && checksumLabel ? (
+                <p
+                  className="mt-1 font-mono text-xs text-muted"
+                  title={checksumLabel}
+                >
+                  <span className="font-medium">{checksumLabel}: </span>
+                  <span className="break-all">{artifact.checksum}</span>
+                </p>
+              ) : null}
               <Link
                 href={artifact.href}
                 className={`mt-2 inline-block ${focusRingClass} text-sm underline underline-offset-4 hover:text-accent`}

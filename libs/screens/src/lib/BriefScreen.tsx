@@ -8,15 +8,23 @@ import {
   claimRegistry,
   getFeaturedClaims,
   getCaseStudies,
+  getCaseStudiesByClaimIdMap,
+  getBriefContent,
   getPublicRecordList,
   getExecutiveBriefArtifact,
 } from '@joelklemmer/content';
-import { createPageMetadata, PersonJsonLd } from '@joelklemmer/seo';
+import {
+  createPageMetadata,
+  PersonJsonLd,
+  BriefPageJsonLd,
+} from '@joelklemmer/seo';
 import {
   IdentityScopeSection,
   ReadPathSection,
+  VerificationGuidanceSection,
   BriefClaimsSection,
   ListSection,
+  QuantifiedOutcomesSection,
   CardGridSection,
   ArtifactSingleSection,
   ContactPathwaySection,
@@ -60,6 +68,9 @@ export async function BriefScreen() {
   );
 
   const featuredClaims = getFeaturedClaims();
+  const caseStudiesByClaim = await getCaseStudiesByClaimIdMap(
+    featuredClaims.map((c) => c.id),
+  );
   const claimCards = featuredClaims.map((claim) => {
     const supportingLinks = claim.recordIds
       .map((recordId) => {
@@ -71,11 +82,22 @@ export async function BriefScreen() {
         };
       })
       .filter(Boolean) as Array<{ label: string; href: string }>;
+    const caseStudies = caseStudiesByClaim.get(claim.id) ?? [];
     return {
       id: claim.id,
       label: t(claim.labelKey),
       summary: t(claim.summaryKey),
+      category: claim.categoryKey ? t(claim.categoryKey) : undefined,
+      verificationStrength: claim.recordIds.length,
+      lastVerified: claim.lastVerified,
       supportingLinks,
+      caseStudies,
+      casestudiesBasePath: `/${locale}/casestudies`,
+      publicrecordBasePath: `/${locale}/proof`,
+      supportingRecordsLabel: t('claims.supportingRecords'),
+      supportingCaseStudiesLabel: t('claims.supportingCaseStudies'),
+      verificationConnectionsLabel: t('claims.verificationConnections'),
+      lastVerifiedLabel: t('claims.lastVerified'),
     };
   });
 
@@ -94,6 +116,8 @@ export async function BriefScreen() {
     version: string;
     date: string;
     href: string;
+    checksum?: string;
+    scopeLabel?: string;
   } | null = null;
   try {
     const artifact = getExecutiveBriefArtifact();
@@ -103,6 +127,8 @@ export async function BriefScreen() {
         version: artifact.version,
         date: artifact.date,
         href: `/artifacts/${artifact.filename}`,
+        checksum: artifact.sha256,
+        scopeLabel: t('artifacts.executiveBriefScope'),
       };
     }
   } catch {
@@ -111,10 +137,18 @@ export async function BriefScreen() {
 
   const selectedOutcomesItems = t.raw('selectedOutcomes.items') as string[];
   const hasMoreClaims = claimRegistry.length > CLAIMS_DEFAULT_COUNT;
+  const briefContent = await getBriefContent(locale);
+  const quantifiedOutcomes = briefContent?.quantifiedOutcomes ?? [];
 
   return (
     <>
       <PersonJsonLd />
+      <BriefPageJsonLd
+        locale={locale}
+        claimIds={featuredClaims.map((c) => c.id)}
+        caseStudySlugs={caseStudies.map((s) => s.frontmatter.slug)}
+        publicRecordSlugs={recordHighlights.map((r) => r.frontmatter.slug)}
+      />
       <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
 
       <IdentityScopeSection body={t('identityScope')} />
@@ -123,6 +157,11 @@ export async function BriefScreen() {
         title={t('readPath.title')}
         lede={t('readPath.lede')}
         routes={readPathRoutes}
+      />
+
+      <VerificationGuidanceSection
+        title={t('verificationGuidance.title')}
+        body={t('verificationGuidance.body')}
       />
 
       <BriefClaimsSection
@@ -138,6 +177,13 @@ export async function BriefScreen() {
         title={t('selectedOutcomes.title')}
         items={selectedOutcomesItems}
       />
+
+      {quantifiedOutcomes.length > 0 ? (
+        <QuantifiedOutcomesSection
+          title={t('quantifiedOutcomes.title')}
+          items={quantifiedOutcomes}
+        />
+      ) : null}
 
       <CardGridSection
         title={t('caseStudies.title')}
@@ -167,6 +213,8 @@ export async function BriefScreen() {
         artifact={executiveBriefArtifact}
         notPublishedMessage={t('artifacts.notPublished')}
         downloadLabel={t('artifacts.downloadLabel')}
+        checksumLabel={t('artifacts.checksum')}
+        scopeLabelHeading={t('artifacts.scopeLabel')}
       />
 
       <ContactPathwaySection

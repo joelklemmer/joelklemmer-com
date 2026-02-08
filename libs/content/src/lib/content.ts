@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { defaultLocale, type AppLocale } from '@joelklemmer/i18n';
 import {
   bookFrontmatterSchema,
+  briefFrontmatterSchema,
   caseStudyFrontmatterSchema,
   getBookId,
   getCaseStudyId,
@@ -14,6 +15,7 @@ import {
   institutionalPageFrontmatterSchema,
   publicRecordFrontmatterSchema,
   type BookFrontmatter,
+  type BriefFrontmatter,
   type CaseStudyFrontmatter,
   type InstitutionalPageFrontmatter,
   type PublicRecordFrontmatter,
@@ -316,6 +318,29 @@ export async function getOperatingSystem(locale: AppLocale) {
   }
 }
 
+/** Brief page content: optional quantified outcomes. Returns null if no content/brief or no matching locale. */
+export async function getBriefContent(locale: AppLocale): Promise<{
+  quantifiedOutcomes: BriefFrontmatter['quantifiedOutcomes'];
+} | null> {
+  const dir = path.join(contentRoot, 'brief');
+  if (!existsSync(dir)) return null;
+  const files = await getMdxFiles(dir);
+  if (files.length === 0) return null;
+  const filePath = files[0];
+  const { data } = await readMdxFile<BriefFrontmatter>(filePath);
+  const frontmatter = validateFrontmatter(
+    briefFrontmatterSchema,
+    data,
+    filePath,
+  );
+  if (frontmatter.locale != null && frontmatter.locale !== locale) {
+    return null;
+  }
+  return {
+    quantifiedOutcomes: frontmatter.quantifiedOutcomes ?? undefined,
+  };
+}
+
 export async function getCaseStudyEntries() {
   const dir = path.join(contentRoot, 'case-studies');
   const files = await getMdxFiles(dir);
@@ -410,6 +435,31 @@ export async function getCaseStudiesByClaimId(
     slug: e.frontmatter.slug,
     title: e.frontmatter.title,
   }));
+}
+
+/** Map of claimId -> case studies referencing that claim. Single pass over case studies. */
+export async function getCaseStudiesByClaimIdMap(
+  claimIds: string[],
+  limitPerClaim = 6,
+): Promise<Map<string, Array<{ slug: string; title: string }>>> {
+  const entries = await getCaseStudyEntries();
+  const map = new Map<string, Array<{ slug: string; title: string }>>();
+  for (const claimId of claimIds) {
+    map.set(claimId, []);
+  }
+  for (const e of entries) {
+    const refs = e.frontmatter.claimRefs ?? [];
+    const item = {
+      slug: e.frontmatter.slug,
+      title: e.frontmatter.title,
+    };
+    for (const claimId of refs) {
+      if (!map.has(claimId)) continue;
+      const list = map.get(claimId)!;
+      if (list.length < limitPerClaim) list.push(item);
+    }
+  }
+  return map;
 }
 
 // ——— Books ———

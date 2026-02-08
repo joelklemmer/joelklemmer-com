@@ -184,3 +184,60 @@ export function PersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps) {
     dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },
   });
 }
+
+export interface BriefPageJsonLdProps {
+  baseUrl?: string;
+  locale: AppLocale;
+  pathname?: string;
+  /** Claim IDs (for #claim-* anchors) */
+  claimIds: string[];
+  /** Case study slugs (for /casestudies/[slug]) */
+  caseStudySlugs: string[];
+  /** Public record slugs (for /publicrecord/[slug]) */
+  publicRecordSlugs: string[];
+}
+
+/**
+ * JSON-LD for the Executive Brief page: Report with about, mentions for entity graph reinforcement.
+ * Valid Schema.org; references claims, case studies, and public records.
+ */
+export function getBriefPageJsonLd({
+  baseUrl,
+  locale,
+  pathname = '/brief',
+  claimIds,
+  caseStudySlugs,
+  publicRecordSlugs,
+}: BriefPageJsonLdProps) {
+  const siteUrl = normalizeBaseUrl(baseUrl);
+  const pageUrl = `${siteUrl}/${locale}${pathname.startsWith('/') ? pathname : `/${pathname}`}`;
+
+  const about: string[] = [
+    ...claimIds.map((id) => `${pageUrl}#claim-${id}`),
+    ...caseStudySlugs.map((slug) => `${siteUrl}/${locale}/casestudies/${slug}`),
+    ...publicRecordSlugs.map(
+      (slug) => `${siteUrl}/${locale}/publicrecord/${slug}`,
+    ),
+  ].filter(Boolean);
+
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Report',
+    name: 'Executive Brief',
+    url: pageUrl,
+    ...(about.length > 0 && {
+      about: about.map((url) => ({ '@type': 'Thing', url })),
+    }),
+    ...(about.length > 0 && {
+      mentions: about.map((url) => ({ '@type': 'Thing', url })),
+    }),
+  };
+}
+
+export function BriefPageJsonLd(props: BriefPageJsonLdProps) {
+  const jsonLd = getBriefPageJsonLd(props);
+  return createElement('script', {
+    type: 'application/ld+json',
+    dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },
+  });
+}

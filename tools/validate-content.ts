@@ -4,6 +4,7 @@ import matter from 'gray-matter';
 import { z } from 'zod';
 import {
   bookFrontmatterSchema,
+  briefFrontmatterSchema,
   caseStudyFrontmatterSchema,
   claimRegistry,
   contactPathways,
@@ -229,6 +230,17 @@ try {
   validateClaimRegistry(publicRecordIds);
 } catch (error) {
   errors.push((error as Error).message);
+}
+
+// Brief: optional content/brief/*.mdx with quantifiedOutcomes
+const briefDir = path.join(contentRoot, 'brief');
+const briefFiles = getMdxFiles(briefDir);
+for (const filePath of briefFiles) {
+  const { data } = readMdx(filePath);
+  const parsed = validateFrontmatter(briefFrontmatterSchema, data, filePath);
+  if (!parsed.ok) {
+    errors.push(parsed.error);
+  }
 }
 
 try {

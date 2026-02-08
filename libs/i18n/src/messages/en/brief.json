@@ -4,6 +4,10 @@
     "lede": "Primary authority hub for structured review and evidence routing."
   },
   "identityScope": "Scope: executive evaluation, institutional review, and policy credibility. Method: evidence-led briefing with clear constraints and outcomes. Verification: public record artifacts linked to indexed claims.",
+  "verificationGuidance": {
+    "title": "Verification guidance",
+    "body": "This briefing routes to independently reviewable materials. Evaluators are encouraged to review linked records and case studies for validation context."
+  },
   "readPath": {
     "title": "Evaluator read path",
     "lede": "If you are evaluating for credibility or verification, use these routes.",
@@ -25,12 +29,20 @@
     "title": "Indexed claims",
     "lede": "Claims are linked directly to Public Record artifacts.",
     "allClaimsExpander": "All claims are listed above.",
+    "categories": { "operational": "Operational delivery" },
+    "verificationConnections": "Verification connections",
+    "supportingRecords": "Supporting records",
+    "supportingCaseStudies": "Case studies",
+    "lastVerified": "Last verified",
     "items": {
       "recoveryPlan": {
         "label": "Delivered a recovery plan within two weeks",
         "summary": "Verified recovery plan delivered under a two-week constraint."
       }
     }
+  },
+  "quantifiedOutcomes": {
+    "title": "Outcome quantification"
   },
   "selectedOutcomes": {
     "title": "Selected outcomes",
@@ -81,6 +93,9 @@
     "lede": "Stable PDFs for brief and executive bio.",
     "notPublished": "Artifact not published yet.",
     "downloadLabel": "Download",
+    "checksum": "SHA-256",
+    "scopeLabel": "Document scope",
+    "executiveBriefScope": "Canonical briefing document for evaluator review.",
     "items": [
       {
         "id": "executive-brief-pdf",

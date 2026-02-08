@@ -4,6 +4,10 @@
     "lede": "Centro de autoridad para revisión estructurada y enrutamiento de evidencia."
   },
   "identityScope": "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas. Método: briefing basado en evidencia con restricciones y resultados claros. Verificación: artefactos del registro público vinculados a afirmaciones indexadas.",
+  "verificationGuidance": {
+    "title": "Orientación de verificación",
+    "body": "Este informe enlaza a materiales revisables de forma independiente. Se anima a los evaluadores a revisar los registros y estudios de caso enlazados para contexto de validación."
+  },
   "readPath": {
     "title": "Ruta de lectura para evaluadores",
     "lede": "Si está evaluando credibilidad o verificación, use estas rutas.",
@@ -25,12 +29,20 @@
     "title": "Afirmaciones indexadas",
     "lede": "Las afirmaciones se vinculan directamente a artefactos del Registro público.",
     "allClaimsExpander": "Todas las afirmaciones se listan arriba.",
+    "categories": { "operational": "Entrega operativa" },
+    "verificationConnections": "Conexiones de verificación",
+    "supportingRecords": "Registros de apoyo",
+    "supportingCaseStudies": "Estudios de caso",
+    "lastVerified": "Última verificación",
     "items": {
       "recoveryPlan": {
         "label": "Entregó un plan de recuperación en dos semanas",
         "summary": "Plan de recuperación verificado entregado en un plazo de dos semanas."
       }
     }
+  },
+  "quantifiedOutcomes": {
+    "title": "Cuantificación de resultados"
   },
   "selectedOutcomes": {
     "title": "Resultados seleccionados",
@@ -81,6 +93,9 @@
     "lede": "PDF estables para informe y biografía ejecutiva.",
     "notPublished": "Artefacto aún no publicado.",
     "downloadLabel": "Descargar",
+    "checksum": "SHA-256",
+    "scopeLabel": "Alcance del documento",
+    "executiveBriefScope": "Documento canónico de informe para revisión por evaluadores.",
     "items": [
       {
         "id": "executive-brief-pdf",

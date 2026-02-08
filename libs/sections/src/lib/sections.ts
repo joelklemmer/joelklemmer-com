@@ -16,5 +16,7 @@ export { LinkListSection } from './LinkListSection';
 export { ListSection } from './ListSection';
 export { MdxSection } from './MdxSection';
 export { PrimaryNavSection } from './PrimaryNavSection';
+export { QuantifiedOutcomesSection } from './QuantifiedOutcomesSection';
 export { ReadPathSection } from './ReadPathSection';
 export { StartHereSection } from './StartHereSection';
+export { VerificationGuidanceSection } from './VerificationGuidanceSection';

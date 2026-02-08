@@ -4,6 +4,12 @@ export interface ClaimRegistryEntry {
   /** next-intl key for 1-line summary (brief namespace) */
   summaryKey: string;
   recordIds: string[];
+  /** next-intl key for category label (brief namespace) */
+  categoryKey?: string;
+  /** Confidence tier for verification strength display */
+  confidenceTier?: 'high' | 'medium' | 'standard';
+  /** Last verification date (YYYY-MM-DD) */
+  lastVerified?: string;
   featured?: boolean;
   order?: number;
 }
@@ -14,6 +20,9 @@ export const claimRegistry: ClaimRegistryEntry[] = [
     labelKey: 'claims.items.recoveryPlan.label',
     summaryKey: 'claims.items.recoveryPlan.summary',
     recordIds: ['recovery-plan-two-weeks'],
+    categoryKey: 'claims.categories.operational',
+    confidenceTier: 'high',
+    lastVerified: '2026-01-18',
     featured: true,
     order: 0,
   },

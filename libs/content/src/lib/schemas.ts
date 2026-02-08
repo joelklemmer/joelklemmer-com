@@ -131,6 +131,24 @@ export function getBookId(frontmatter: { id?: string; slug: string }): string {
   return frontmatter.id ?? frontmatter.slug;
 }
 
+/** Optional outcome quantification entry for brief page. */
+export const quantifiedOutcomeEntrySchema = z.object({
+  metric: nonEmptyString,
+  value: nonEmptyString,
+  context: nonEmptyString,
+});
+
+/** Brief page frontmatter: optional quantified outcomes for evaluator anchoring. */
+export const briefFrontmatterSchema = z.object({
+  locale: localeSchema.optional(),
+  quantifiedOutcomes: z.array(quantifiedOutcomeEntrySchema).optional(),
+});
+
+export type QuantifiedOutcomeEntry = z.infer<
+  typeof quantifiedOutcomeEntrySchema
+>;
+export type BriefFrontmatter = z.infer<typeof briefFrontmatterSchema>;
+
 export type CaseStudyFrontmatter = z.infer<typeof caseStudyFrontmatterSchema>;
 export type PublicRecordFrontmatter = z.infer<
   typeof publicRecordFrontmatterSchema
