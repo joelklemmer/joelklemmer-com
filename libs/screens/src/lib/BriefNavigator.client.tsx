@@ -191,7 +191,7 @@ export function BriefNavigator({
               aria-describedby="brief-nav-view-label"
               className={`rounded-s border-e border-border px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'grid'
-                  ? 'bg-accent/20 text-accent'
+                  ? 'bg-accent/20 text-accent-strong'
                   : 'text-text hover:bg-muted/50'
               }`}
             >
@@ -204,7 +204,7 @@ export function BriefNavigator({
               aria-describedby="brief-nav-view-label"
               className={`rounded-e px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'graph'
-                  ? 'bg-accent/20 text-accent'
+                  ? 'bg-accent/20 text-accent-strong'
                   : 'text-text hover:bg-muted/50'
               }`}
             >

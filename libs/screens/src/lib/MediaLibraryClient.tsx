@@ -150,7 +150,7 @@ export function MediaLibraryClient({
             onClick={() => setKind(null)}
             className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
               !kind
-                ? 'border-accent bg-accent/10 text-accent'
+                ? 'border-accent bg-accent/10 text-accent-strong'
                 : 'border-border text-muted hover:text-text'
             }`}
             aria-pressed={!kind}
@@ -165,7 +165,7 @@ export function MediaLibraryClient({
               onClick={() => setKind(k)}
               className={`${focusRingClass} rounded border px-3 py-1.5 text-sm capitalize ${
                 kind === k
-                  ? 'border-accent bg-accent/10 text-accent'
+                  ? 'border-accent bg-accent/10 text-accent-strong'
                   : 'border-border text-muted hover:text-text'
               }`}
               aria-pressed={kind === k}

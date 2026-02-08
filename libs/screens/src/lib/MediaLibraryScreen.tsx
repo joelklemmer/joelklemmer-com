@@ -187,7 +187,7 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
           </p>
           <Link
             href={`${basePath}/terms`}
-            className={`${focusRingClass} text-sm font-medium text-accent underline underline-offset-4 hover:text-accent-strong rounded focus-visible:ring-2 focus-visible:ring-offset-2`}
+            className={`${focusRingClass} text-sm font-medium text-accent-strong underline underline-offset-4 hover:opacity-90 rounded focus-visible:ring-2 focus-visible:ring-offset-2`}
           >
             {tQuiet('media.pressUsageTermsLink')}
           </Link>

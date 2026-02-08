@@ -60,7 +60,7 @@ html[data-motion='reduced'] .calc-card-material {
 }
 
 .mdx-content a {
-  color: hsl(var(--color-accent));
+  color: hsl(var(--color-accent-strong));
   text-decoration: underline;
   text-underline-offset: 2px;
   transition: color var(--transition-duration-fast) var(--ease-authority);
