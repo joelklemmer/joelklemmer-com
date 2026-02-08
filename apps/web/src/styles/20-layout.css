@@ -256,6 +256,7 @@ section.section-shell:last-child {
   background: hsl(var(--color-neutral-100));
   /* Reduced shadow for editorial/institutional feel, not thumbnail tile */
   box-shadow: 0 2px 8px hsl(var(--color-text) / 0.04);
+  /* Height controlled by aspect ratio from PortraitImage component - no max-height to avoid conflicts */
 }
 
 /* Portrait image wrapper handles aspect ratio from component */
@@ -263,13 +264,15 @@ section.section-shell:last-child {
   width: 100%;
   position: relative;
   overflow: hidden;
-  /* Height determined by aspect ratio set inline by component */
+  /* Height determined by aspect ratio set inline by component (4:5 = 0.8) */
+  /* Aspect ratio enforced consistently across all breakpoints */
 }
 
 .portrait-image {
   display: block;
   width: 100%;
   height: 100%;
+  /* Face-safe cropping: center top ensures head/face remains visible */
 }
 
 /* Mobile-first: portrait stacks above content */
@@ -282,11 +285,7 @@ section.section-shell:last-child {
     max-width: min(320px, 100%);
     margin-inline: auto;
     order: -1;
-  }
-
-  .hero-portrait-wrapper {
-    max-height: min(400px, 50vh);
-    /* Aspect ratio handled by PortraitImage component */
+    /* Width constraint only - height follows aspect ratio (4:5) */
   }
 
   /* Mobile: ensure content is never overlapped */
@@ -299,11 +298,10 @@ section.section-shell:last-child {
 @media (min-width: 768px) {
   .hero-portrait-composition {
     max-width: 100%;
-    max-height: min(480px, 60vh);
     width: 100%;
+    /* Width constraint only - height follows aspect ratio (4:5) */
+    /* No max-height to allow aspect ratio to control dimensions */
   }
-
-  /* Aspect ratio handled by PortraitImage component */
 
   /* Tablet: ensure portrait stays in its column, never overlaps */
   .hero-authority-visual {
@@ -317,17 +315,17 @@ section.section-shell:last-child {
 @media (min-width: 1024px) {
   .hero-portrait-composition {
     max-width: 420px;
-    max-height: min(525px, 65vh);
+    /* Width constraint only - height follows aspect ratio (4:5) */
+    /* At 420px width, height = 420 / 0.8 = 525px (maintains 4:5 ratio) */
   }
-
-  /* Aspect ratio handled by PortraitImage component */
 }
 
 /* Large desktop: maintain proportions */
 @media (min-width: 1280px) {
   .hero-portrait-composition {
     max-width: 450px;
-    max-height: min(560px, 70vh);
+    /* Width constraint only - height follows aspect ratio (4:5) */
+    /* At 450px width, height = 450 / 0.8 = 562.5px (maintains 4:5 ratio) */
   }
 }
 

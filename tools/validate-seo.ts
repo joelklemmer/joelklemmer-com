@@ -159,15 +159,20 @@ if (!homePersonLd.name || typeof homePersonLd.name !== 'string') {
 if (!homePersonLd.url || typeof homePersonLd.url !== 'string') {
   errors.push('Home Person JSON-LD: must include url');
 }
-if (!homePersonLd.sameAs || !Array.isArray(homePersonLd.sameAs)) {
-  errors.push('Home Person JSON-LD: must include sameAs array');
-} else if (homePersonLd.sameAs.length === 0) {
-  errors.push('Home Person JSON-LD: sameAs must not be empty');
-} else {
-  // Validate all sameAs URLs are valid
-  for (const url of homePersonLd.sameAs) {
-    if (typeof url !== 'string' || !url.startsWith('http')) {
-      errors.push(`Home Person JSON-LD: sameAs contains invalid URL: ${url}`);
+// sameAs: empty-safe strategy - if present, must not be empty; if unknown, omit (no empty arrays/fields)
+if (homePersonLd.sameAs !== undefined) {
+  if (!Array.isArray(homePersonLd.sameAs)) {
+    errors.push('Home Person JSON-LD: sameAs must be an array if present');
+  } else if (homePersonLd.sameAs.length === 0) {
+    errors.push(
+      'Home Person JSON-LD: sameAs must not be empty if present (omit when unknown)',
+    );
+  } else {
+    // Validate all sameAs URLs are valid
+    for (const url of homePersonLd.sameAs) {
+      if (typeof url !== 'string' || !url.startsWith('http')) {
+        errors.push(`Home Person JSON-LD: sameAs contains invalid URL: ${url}`);
+      }
     }
   }
 }

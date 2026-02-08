@@ -8,17 +8,83 @@ The Home page (`/`) is the orientation system for institutional evaluation. It p
 
 **60-second outcome:** Access the Executive Brief and understand the primary routes (Case Studies, Public Record) for verification.
 
-## Section list and what belongs in each
+## Non-goals
+
+The Home page does **not**:
+
+- Serve as a marketing landing page (no testimonials, hype, or sales language)
+- Provide detailed content (content lives in Executive Brief, Case Studies, Public Record)
+- Act as a blog or news feed (no dynamic content streams)
+- Include interactive features beyond navigation (no forms, calculators, or widgets)
+- Duplicate content from other pages (PGF no-duplication rules enforced)
+- Render placeholder content (validator blocks placeholder blocks)
+
+The Home page is a **structural entry point** that routes evaluators to verification materials, not a content destination itself.
+
+## Authority signals mapping
+
+The Home page does not directly bind to authority signals (it is an entry point, not a content entity). However, it routes to entities that carry signal vectors:
+
+- **Executive Brief** (`briefNode` entity) – Balanced vector (0.2 per signal) via `ENTITY_BINDINGS_CONFIG`
+- **Case Studies** – Each case study has its own signal vector (e.g., `strategic_cognition`, `systems_construction`, `operational_transformation`)
+- **Public Record** – Each record has its own signal vector
+- **Frameworks** – Each framework emphasizes a primary signal (e.g., `strategic-cognition-lens` → `strategic_cognition`)
+
+The Home page's role is **structural routing** to signal-weighted content, not signal expression itself. Authority signals are embedded in the content entities (claims, records, case studies, frameworks) that Home routes to, not in Home's UI or copy.
+
+## Section contracts
 
 The Home page is built from these sections in order (defined by `HOME_IA_ORDER` in `libs/screens/src/lib/HomeScreen.tsx`):
 
-1. **Hero** (`hero`) – Primary page heading (H1), lede, and CTA to Executive Brief. Includes portrait image with proper aspect ratio and CLS prevention.
+### 1. Hero (`hero`)
 
-2. **Routes** (`routes`) – **Required section containing Executive Brief (dominant entry point) and Verification Rails.** The Executive Brief is rendered first as a prominent card (H2) linking to `/brief`. Verification Rails follow, showing other primary routes (Case Studies, Public Record) from `home.routes.items`. The Executive Brief CTA is required; the validator enforces its presence.
+**Contract:**
 
-3. **Claim Summary** (`claims`) – Short list of provable claims from `home.claims.items`. Each claim should reference Public Record where applicable.
+- **Renders:** Exactly one H1 (`<h1 id="hero-title">`), lede paragraph, primary CTA button, optional portrait image
+- **Component:** `HeroSection`
+- **i18n keys:** `hero.title`, `hero.lede`, `hero.cta`, `hero.portraitAlt`
+- **Required:** H1 title, lede, CTA (all non-empty)
+- **CTA target:** `/${locale}/brief` (Executive Brief)
+- **Image:** Portrait at `/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp` (1200x1500, priority loading)
 
-4. **Doctrine** (`doctrine`) – Framework cards (max 3) linking to `/brief#doctrine`. Only rendered if frameworks are available. Uses `FrameworkCard` component.
+**Validator enforces:** Exactly one H1 on Home (HeroSection renders single H1).
+
+### 2. Routes (`routes`)
+
+**Contract:**
+
+- **Renders:** Executive Brief card (H2) + Verification Rails section (H2 + H3 items)
+- **Component:** Custom section with `Link` for Executive Brief, `VerificationRailsSection` for other routes
+- **i18n keys:** `routes.title`, `routes.items[]` (each with `title`, `description`, `path`)
+- **Required:** Executive Brief route (`path` contains `/brief`), Case Studies route (`path` contains `/work`), Public Record route (`path` contains `/proof`)
+- **Section ID:** `id="routes"`
+
+**Validator enforces:** All three primary routes (Executive Brief, Case Studies, Public Record) must exist in `routes.items`.
+
+### 3. Claim Summary (`claims`)
+
+**Contract:**
+
+- **Renders:** H2 heading + unordered list of claim strings
+- **Component:** `ListSection`
+- **i18n keys:** `claims.title`, `claims.items[]` (array of strings)
+- **Required:** Non-empty title, at least one claim item
+- **Content:** Each claim should reference Public Record where applicable
+
+**Validator enforces:** No duplicate headings (claims.title must not duplicate routes.title or doctrine title).
+
+### 4. Doctrine (`doctrine`)
+
+**Contract:**
+
+- **Renders:** H2 heading + lede + grid of framework cards (max 3)
+- **Component:** Custom section with `FrameworkCard` components
+- **i18n keys:** `frameworks.section.title`, `frameworks.section.lede`, framework-specific keys
+- **Required:** Only rendered if frameworks exist (`getFrameworkList().length > 0`)
+- **Section ID:** `id="doctrine"`
+- **Links:** Each card links to `/${locale}/brief#doctrine`
+
+**Validator enforces:** No duplicate headings (doctrine title must not duplicate routes.title or claims.title).
 
 ## Fixed IA order
 
@@ -130,14 +196,106 @@ Hero portrait:
 - Responsive sizes: `(max-width: 768px) 100vw, min(380px, 40vw)`
 - Priority loading: Above-fold image uses `priority` prop
 
+## Accessibility guarantees and ACP behavior
+
+### WCAG 2.2 AA compliance
+
+- **Heading hierarchy:** Exactly one H1 (Hero), H2 for sections (routes, claims, doctrine), H3 for subsections
+- **Skip link:** Provided by Shell layout (skip to main content)
+- **Focus management:** All interactive elements (links, buttons) have visible focus indicators via `focusRingClass`
+- **Semantic landmarks:** Hero uses `<section>`, routes/claims/doctrine use semantic sections
+- **Image alt text:** Hero portrait has descriptive alt text from `hero.portraitAlt`
+- **ARIA labels:** Hero section uses `aria-labelledby="hero-title"`, visual elements use `aria-hidden` where appropriate
+
+### Accessibility Control Panel (ACP) behavior
+
+The Home page respects ACP preferences set via `AccessibilityPanel`:
+
+- **Theme:** Light/Dark/System (applied via `data-theme` on `<html>`)
+- **Contrast:** Default/High (applied via `data-contrast="high"`)
+- **Motion:** Default/Reduced (applied via `data-motion="reduced"`)
+- **Text size:** Default/Large (applied via `data-text-size="large"`)
+
+ACP preferences are persisted in `localStorage` and applied globally (not Home-specific). The Home page inherits these preferences through CSS custom properties and data attributes.
+
+### Reduced motion support
+
+All transitions and animations respect `prefers-reduced-motion` and ACP motion preference. Hero image loading and section transitions use `motion-reduce:transition-none` classes.
+
+## i18n rules
+
+### Supported locales
+
+- **en** (English) – Default locale
+- **uk** (Ukrainian)
+- **es** (Spanish)
+- **he** (Hebrew) – RTL locale
+
+### RTL support
+
+- **Hebrew (`he`):** Renders with `dir="rtl"` and `lang="he"` at `<html>` level (set in root layout)
+- **Logical properties:** All CSS uses logical properties (`start`/`end` instead of `left`/`right`) for RTL compatibility
+- **Text alignment:** Text respects RTL direction automatically via logical properties
+
+### Translation contract
+
+- **Namespace:** `home` (primary), `frameworks` (for doctrine section)
+- **Stable keys:** Message keys are stable; do not churn keys without migration plan
+- **Required keys:** All keys in `home.json` must be translated for all locales (validator enforces completeness)
+- **Empty strings:** Not allowed (validator blocks empty strings in required fields)
+
+### Locale-aware routing
+
+- **Path structure:** `/{locale}/` (e.g., `/en/`, `/he/`)
+- **Default locale:** `en` (fallback for missing translations)
+- **Canonical URLs:** Each locale has its own canonical URL (e.g., `https://example.com/en/`, `https://example.com/he/`)
+- **Hreflang:** All locale variants + `x-default` pointing to default locale
+
+## SEO outputs summary
+
+### Structured data (JSON-LD)
+
+Home emits two JSON-LD schemas:
+
+1. **WebSite schema** (`WebSiteJsonLd`)
+   - `@type`: `WebSite`
+   - `name`: "Joel R. Klemmer"
+   - `url`: Canonical site URL for Home page (locale-aware)
+
+2. **Person schema** (`PersonJsonLd`)
+   - `@type`: `Person`
+   - `name`: "Joel Robert Klemmer"
+   - `alternateName`: "Joel R. Klemmer"
+   - `url`: Site URL
+   - `sameAs`: Array of verified identity URLs (from `NEXT_PUBLIC_IDENTITY_SAME_AS` env var)
+
+### Meta tags
+
+- **Title:** `meta.home.title` (e.g., "Joel Robert Klemmer")
+- **Description:** `meta.home.description` (e.g., "Orientation system for institutional evaluation.")
+- **Canonical:** `/{locale}/` (locale-aware)
+- **Hreflang:** All locale variants (`en`, `uk`, `es`, `he`) + `x-default`
+- **OG Image:** `/media/og/joel-klemmer__og__home__2026-01__01.webp`
+
+### Sitemap
+
+Home is included in XML sitemap with:
+
+- All locale variants (`/{locale}/`)
+- Priority: 1.0 (highest)
+- Change frequency: Weekly
+
 ## Validation gates
 
 The Home subsystem validator (`tools/validate-home.ts`) enforces:
 
-1. **No placeholder blocks** – Scans `home.json` for placeholder language
-2. **Required Executive Brief CTA** – Ensures route item with `/brief` path exists
-3. **Heading outline enforcement** – Validates H1 → H2 → H3 hierarchy
-4. **PGF no-duplication** – Ensures Home headings don't duplicate other page headings
+1. **No placeholder blocks** – Scans `home.json` for placeholder language (lorem, placeholder, sample, coming soon, tbd, to be added, draft)
+2. **Exactly one H1** – Ensures HeroSection renders exactly one H1 (no duplicate H1s)
+3. **Required primary route links** – Executive Brief (`/brief`), Case Studies (`/work`), Public Record (`/proof`) must exist in `routes.items`
+4. **No duplicate section headings** – `routes.title`, `claims.title`, and doctrine title must be unique
+5. **Required Executive Brief CTA** – Ensures route item with `/brief` path exists and has title/description
+6. **Heading outline enforcement** – Validates H1 → H2 → H3 hierarchy
+7. **PGF no-duplication** – Ensures Home headings don't duplicate other page headings
 
 Run validation:
 

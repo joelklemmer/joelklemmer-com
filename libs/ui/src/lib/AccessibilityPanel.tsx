@@ -104,9 +104,7 @@ export function AccessibilityPanel() {
   useEffect(() => {
     if (!isOpen || !panelRef.current) return;
 
-    const handleTabKey = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
-
+    const getFocusableElements = (): HTMLElement[] => {
       const focusableSelectors = [
         'button:not([disabled])',
         '[href]',
@@ -116,32 +114,38 @@ export function AccessibilityPanel() {
         '[tabindex]:not([tabindex="-1"])',
       ].join(', ');
 
-      const focusableElements = Array.from(
+      return Array.from(
         panelRef.current?.querySelectorAll<HTMLElement>(focusableSelectors) ||
           [],
       );
+    };
 
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+
+      const focusableElements = getFocusableElements();
       if (focusableElements.length === 0) return;
 
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
       const activeElement = document.activeElement as HTMLElement;
 
+      // If focus is outside the panel, bring it to the first element
+      if (!focusableElements.includes(activeElement)) {
+        e.preventDefault();
+        firstElement.focus();
+        return;
+      }
+
       if (e.shiftKey) {
         // Shift+Tab: if focus is on first element, wrap to last
-        if (
-          activeElement === firstElement ||
-          !focusableElements.includes(activeElement)
-        ) {
+        if (activeElement === firstElement) {
           e.preventDefault();
           lastElement.focus();
         }
       } else {
         // Tab: if focus is on last element, wrap to first
-        if (
-          activeElement === lastElement ||
-          !focusableElements.includes(activeElement)
-        ) {
+        if (activeElement === lastElement) {
           e.preventDefault();
           firstElement.focus();
         }
@@ -177,7 +181,7 @@ export function AccessibilityPanel() {
         aria-haspopup="dialog"
         aria-label={common('a11y.accessibilityPanelLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} flex items-center justify-center w-9 h-9 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={common('a11y.accessibilityPanelLabel')}
       >
         <span aria-hidden="true">♿</span>

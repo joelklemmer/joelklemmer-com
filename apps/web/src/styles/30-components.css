@@ -2,10 +2,8 @@
 /* CALC: Authority composition anchors — hero, section headings, route list, claims, doctrine; consistent card material */
 
 .calc-card-material {
-  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
-  box-shadow:
-    var(--authority-card-elevation), var(--authority-card-glow),
-    var(--authority-controlled-glow);
+  background: hsl(var(--color-surface));
+  box-shadow: var(--authority-card-elevation);
   transition:
     box-shadow var(--transition-duration-normal) var(--ease-authority),
     background-color var(--transition-duration-fast) var(--ease-authority);
@@ -89,25 +87,43 @@ html[data-motion='reduced'] .calc-card-material {
   justify-content: center;
 }
 
+@media (prefers-color-scheme: dark) {
+  .section-visual-anchor {
+    border-color: var(--section-anchor-border);
+  }
+}
+
+:root[data-theme='dark'] .section-visual-anchor {
+  border-color: var(--section-anchor-border);
+}
+
 .authority-glass {
+  position: relative;
   background: var(--authority-glass-bg);
   backdrop-filter: blur(var(--authority-glass-blur));
   -webkit-backdrop-filter: blur(var(--authority-glass-blur));
-  box-shadow:
-    var(--authority-depth-layer1),
-    0 0 0 1px var(--authority-glass-border);
+  box-shadow: var(--authority-depth-layer1);
   border-radius: var(--radius-md);
 }
 
+.authority-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid var(--authority-glass-border);
+  pointer-events: none;
+}
+
 .authority-panel {
-  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
-  box-shadow: var(--authority-depth-layer1), var(--authority-soft-glow);
+  background: hsl(var(--color-surface));
+  box-shadow: var(--authority-depth-layer1);
   border-radius: var(--radius-md);
 }
 
 .authority-card {
-  background: hsl(var(--color-surface) / var(--authority-surface-translucency));
-  box-shadow: var(--authority-card-elevation), var(--authority-card-glow);
+  background: hsl(var(--color-surface));
+  box-shadow: var(--authority-card-elevation);
   border-radius: var(--radius-card);
   transition:
     box-shadow var(--transition-duration-normal) var(--ease-authority),
@@ -131,14 +147,11 @@ html[data-motion='reduced'] .calc-card-material {
 
 .authority-card:focus-within,
 .authority-card:hover {
-  box-shadow:
-    var(--authority-card-elevation), var(--authority-surface-layer2),
-    var(--authority-card-glow);
-  --authority-card-glow: 0 0 0 1px hsl(var(--color-border) / 0.25);
+  box-shadow: var(--authority-card-elevation), var(--authority-surface-layer2);
 }
 
 [data-density='on'] .authority-card {
-  box-shadow: var(--authority-surface-depth), var(--authority-card-glow);
+  box-shadow: var(--authority-surface-depth);
 }
 
 /* Media list: thumb rail fixed; 1:1 box; thumb derivative only (56 / 64 / 72px). */

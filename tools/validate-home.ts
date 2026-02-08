@@ -1,6 +1,9 @@
 /**
  * Home subsystem validation. Ensures:
  * - No placeholder blocks in home.json
+ * - Exactly one H1 on Home (HeroSection renders single H1)
+ * - Required primary route links exist (Executive Brief, Public Record, Case Studies)
+ * - No duplicate section headings on Home
  * - Required Executive Brief CTA presence
  * - Heading outline enforcement (H1 → H2 → H3)
  * - PGF no-duplication checks on Home headings
@@ -129,7 +132,82 @@ function validateNoPlaceholders(): void {
   }
 }
 
-// Check 2: Required Executive Brief CTA presence
+// Check 2: Exactly one H1 on Home
+function validateExactlyOneH1(): void {
+  if (!existsSync(homeScreenPath)) {
+    errors.push(`[Home] Missing HomeScreen.tsx: ${homeScreenPath}`);
+    return;
+  }
+
+  const homeScreenContent = readFileSync(homeScreenPath, 'utf-8');
+
+  // Count HeroSection usage (should be exactly 1)
+  const heroSectionMatches = homeScreenContent.match(/<HeroSection/g);
+  const heroSectionCount = heroSectionMatches ? heroSectionMatches.length : 0;
+
+  if (heroSectionCount === 0) {
+    errors.push(
+      `[Home] Exactly one H1 violation: HeroSection must be used to render H1`,
+    );
+  } else if (heroSectionCount > 1) {
+    errors.push(
+      `[Home] Exactly one H1 violation: Found ${heroSectionCount} HeroSection components, expected exactly 1`,
+    );
+  }
+
+  // Also check for direct H1 tags (should not exist outside HeroSection)
+  // HeroSection renders <h1 id="hero-title">, so we check for other H1 patterns
+  const h1Matches = homeScreenContent.match(/<h1[^>]*>/g);
+  const h1Count = h1Matches ? h1Matches.length : 0;
+  if (h1Count > 1) {
+    errors.push(
+      `[Home] Exactly one H1 violation: Found ${h1Count} <h1> tags, expected exactly 1 (from HeroSection)`,
+    );
+  }
+}
+
+// Check 3: Required primary route links
+function validateRequiredPrimaryRoutes(): void {
+  const homePath = path.join(messagesRoot, defaultLocale, 'home.json');
+  if (!existsSync(homePath)) {
+    return; // Already reported in validateNoPlaceholders
+  }
+
+  const home = readJson(homePath);
+  const routeItems = getByPath(home, 'routes.items');
+
+  if (!Array.isArray(routeItems) || routeItems.length === 0) {
+    errors.push(
+      `[Home] Missing or empty routes.items in home.json (required for primary routes)`,
+    );
+    return;
+  }
+
+  const requiredRoutes = [
+    { name: 'Executive Brief', pathPattern: '/brief' },
+    { name: 'Case Studies', pathPattern: '/work' },
+    { name: 'Public Record', pathPattern: '/proof' },
+  ];
+
+  for (const requiredRoute of requiredRoutes) {
+    const found = routeItems.some(
+      (item: unknown) =>
+        typeof item === 'object' &&
+        item != null &&
+        'path' in item &&
+        typeof (item as { path: unknown }).path === 'string' &&
+        (item as { path: string }).path.includes(requiredRoute.pathPattern),
+    );
+
+    if (!found) {
+      errors.push(
+        `[Home] Required primary route missing: routes.items must include ${requiredRoute.name} with path containing "${requiredRoute.pathPattern}"`,
+      );
+    }
+  }
+}
+
+// Check 4: Required Executive Brief CTA presence
 function validateExecutiveBriefCTA(): void {
   const homePath = path.join(messagesRoot, defaultLocale, 'home.json');
   if (!existsSync(homePath)) {
@@ -183,7 +261,59 @@ function validateExecutiveBriefCTA(): void {
   }
 }
 
-// Check 3: Heading outline enforcement (H1 → H2 → H3)
+// Check 5: No duplicate section headings
+function validateNoDuplicateSectionHeadings(): void {
+  const homePath = path.join(messagesRoot, defaultLocale, 'home.json');
+  const frameworksPath = path.join(
+    messagesRoot,
+    defaultLocale,
+    'frameworks.json',
+  );
+
+  if (!existsSync(homePath)) {
+    return; // Already reported
+  }
+
+  const home = readJson(homePath);
+  const routesTitle = getByPath(home, 'routes.title') as string | undefined;
+  const claimsTitle = getByPath(home, 'claims.title') as string | undefined;
+
+  const headings: { name: string; value: string }[] = [];
+
+  if (routesTitle && typeof routesTitle === 'string') {
+    headings.push({ name: 'routes.title', value: routesTitle.trim() });
+  }
+  if (claimsTitle && typeof claimsTitle === 'string') {
+    headings.push({ name: 'claims.title', value: claimsTitle.trim() });
+  }
+
+  // Get doctrine title from frameworks.json
+  if (existsSync(frameworksPath)) {
+    const frameworks = readJson(frameworksPath);
+    const doctrineTitle = getByPath(frameworks, 'section.title') as
+      | string
+      | undefined;
+    if (doctrineTitle && typeof doctrineTitle === 'string') {
+      headings.push({
+        name: 'frameworks.section.title',
+        value: doctrineTitle.trim(),
+      });
+    }
+  }
+
+  // Check for duplicates
+  for (let i = 0; i < headings.length; i++) {
+    for (let j = i + 1; j < headings.length; j++) {
+      if (headings[i].value.toLowerCase() === headings[j].value.toLowerCase()) {
+        errors.push(
+          `[Home] Duplicate section heading: "${headings[i].name}" ("${headings[i].value}") duplicates "${headings[j].name}" ("${headings[j].value}")`,
+        );
+      }
+    }
+  }
+}
+
+// Check 6: Heading outline enforcement (H1 → H2 → H3)
 function validateHeadingOutline(): void {
   if (!existsSync(homeScreenPath)) {
     errors.push(`[Home] Missing HomeScreen.tsx: ${homeScreenPath}`);
@@ -251,7 +381,7 @@ function validateHeadingOutline(): void {
   }
 }
 
-// Check 4: PGF no-duplication checks on Home headings
+// Check 7: PGF no-duplication checks on Home headings
 function validatePGFNoDuplication(): void {
   const metaPath = path.join(messagesRoot, defaultLocale, 'meta.json');
   const homePath = path.join(messagesRoot, defaultLocale, 'home.json');
@@ -402,7 +532,10 @@ function validatePGFNoDuplication(): void {
 
 // Run all validations
 validateNoPlaceholders();
+validateExactlyOneH1();
+validateRequiredPrimaryRoutes();
 validateExecutiveBriefCTA();
+validateNoDuplicateSectionHeadings();
 validateHeadingOutline();
 validatePGFNoDuplication();
 

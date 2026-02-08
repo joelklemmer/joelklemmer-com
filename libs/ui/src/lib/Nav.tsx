@@ -101,27 +101,21 @@ export function Nav({ items }: NavProps) {
 
   // Desktop: horizontal nav with institutional active state
   const desktopNav = (
-    <ul className="hidden md:flex flex-wrap items-center gap-2 text-sm h-12">
+    <ul className="hidden md:flex flex-wrap items-center gap-1 text-sm h-10">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
           <li key={item.href} className="flex items-center h-full">
             <Link
               href={item.href}
-              className={`${focusRingClass} rounded-sm px-3 py-2 h-full flex items-center transition-colors motion-reduce:transition-none relative ${
+              className={`${focusRingClass} rounded-sm px-3 py-1.5 h-full flex items-center transition-colors motion-reduce:transition-none relative ${
                 isActive
-                  ? 'text-text font-semibold bg-surface-elevated'
+                  ? 'text-text font-semibold bg-surface-elevated before:absolute before:inset-x-0 before:bottom-0 before:h-[2px] before:bg-accent before:rounded-t-sm'
                   : 'text-muted hover:text-text'
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
               {item.label}
-              {isActive && (
-                <span
-                  className="absolute inset-0 rounded-sm border-2 border-accent pointer-events-none"
-                  aria-hidden="true"
-                />
-              )}
             </Link>
           </li>
         );
@@ -131,7 +125,7 @@ export function Nav({ items }: NavProps) {
 
   // Mobile: menu button + panel
   const mobileNav = (
-    <div className="relative md:hidden h-10 flex items-center">
+    <div className="relative md:hidden h-9 flex items-center">
       <button
         ref={triggerRef}
         id={triggerId}
@@ -171,20 +165,14 @@ export function Nav({ items }: NavProps) {
                   lang={undefined}
                   role="menuitem"
                   aria-current={isActive ? 'page' : undefined}
-                  className={`${focusRingClass} block w-full px-4 py-2.5 text-sm text-left transition-colors motion-reduce:transition-none relative ${
+                  className={`${focusRingClass} block w-full px-4 py-2.5 text-sm text-start transition-colors motion-reduce:transition-none relative ${
                     isActive
-                      ? 'bg-accent/10 text-accent font-semibold'
+                      ? 'bg-surface-elevated text-text font-semibold before:absolute before:inset-y-0 before:start-0 before:w-[2px] before:bg-accent'
                       : 'text-text hover:bg-muted/50'
                   }`}
                   onClick={handleClose}
                 >
                   {item.label}
-                  {isActive && (
-                    <span
-                      className="absolute inset-y-0 start-0 w-1 bg-accent rounded-e-sm"
-                      aria-hidden="true"
-                    />
-                  )}
                 </Link>
               );
             })}

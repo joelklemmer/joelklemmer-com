@@ -10,7 +10,7 @@ export interface HeaderProps {
 
 export function Header({ wordmark, homeHref, headerControls }: HeaderProps) {
   return (
-    <div className="flex items-center justify-between gap-3 w-full h-12 md:h-14">
+    <div className="flex items-center justify-between gap-3 w-full h-10 md:h-11">
       <Link
         href={homeHref}
         className={`${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center`}

@@ -167,7 +167,7 @@ export function LanguageSwitcherPopover() {
         aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
         aria-haspopup="true"
-        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} flex items-center justify-center w-9 h-9 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg

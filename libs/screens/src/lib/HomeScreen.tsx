@@ -12,13 +12,7 @@ import {
   PersonJsonLd,
   WebSiteJsonLd,
 } from '@joelklemmer/seo';
-import {
-  FrameworkCard,
-  HeroSection,
-  ListSection,
-  SectionVisualAnchor,
-  VerificationRailsSection,
-} from '@joelklemmer/sections';
+import { FrameworkCard, HeroSection, ListSection } from '@joelklemmer/sections';
 import Link from 'next/link';
 import { Container } from '@joelklemmer/ui';
 import { focusRingClass } from '@joelklemmer/a11y';
@@ -77,8 +71,7 @@ export async function HomeScreen() {
     frameworks.length > 0 ? (
       <section id="doctrine" className="section-shell">
         <Container className="section-shell">
-          <SectionVisualAnchor className="mb-6" />
-          <div className="section-shell mb-6">
+          <div className="mb-6">
             <h2 className="text-section-heading font-semibold">
               {tFw('section.title')}
             </h2>
@@ -113,20 +106,20 @@ export async function HomeScreen() {
       <Container className="section-shell">
         {/* Executive Brief - dominant entry point */}
         {executiveBriefItem ? (
-          <div className="mb-6">
+          <div className="mb-8">
             <Link
               href={`/${locale}/brief`}
-              className={`${focusRingClass} block rounded-lg border-2 border-accent bg-surface-elevated p-6 transition-all motion-reduce:transition-none hover:border-accent-strong hover:shadow-lg`}
+              className={`${focusRingClass} block rounded-lg border-2 border-accent bg-surface-elevated p-8 transition-all motion-reduce:transition-none hover:border-accent-strong hover:shadow-lg`}
             >
-              <div className="flex items-start gap-4">
+              <div className="flex items-start gap-5">
                 <span
                   aria-hidden="true"
-                  className="text-accent font-bold text-xl shrink-0 mt-0.5"
+                  className="text-accent font-bold text-2xl shrink-0 mt-1"
                 >
                   →
                 </span>
                 <div className="flex-1">
-                  <h2 className="text-xl font-bold text-text mb-2">
+                  <h2 className="text-2xl font-bold text-text mb-3">
                     {executiveBriefItem.title}
                   </h2>
                   <p className="text-base text-muted leading-relaxed">
@@ -139,14 +132,39 @@ export async function HomeScreen() {
         ) : null}
         {/* Verification rails - other routes */}
         {otherRoutes.length > 0 ? (
-          <VerificationRailsSection
-            title={t('routes.title')}
-            items={otherRoutes.map((item) => ({
-              title: item.title,
-              description: item.description,
-              href: `/${locale}${item.path}`,
-            }))}
-          />
+          <div>
+            <h2 className="text-section-heading font-semibold mb-4">
+              {t('routes.title')}
+            </h2>
+            <div className="space-y-3">
+              {otherRoutes.map((item) => (
+                <Link
+                  key={`/${locale}${item.path}`}
+                  href={`/${locale}${item.path}`}
+                  className={`${focusRingClass} block rounded-md border border-border bg-surface-elevated p-4 transition-colors motion-reduce:transition-none hover:border-accent hover:bg-surface`}
+                >
+                  <div className="flex items-start gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="text-accent font-semibold mt-0.5 shrink-0"
+                    >
+                      →
+                    </span>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-base font-semibold text-text mb-1">
+                        {item.title}
+                      </h3>
+                      {item.description ? (
+                        <p className="text-sm text-muted leading-relaxed">
+                          {item.description}
+                        </p>
+                      ) : null}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
         ) : null}
       </Container>
     </section>

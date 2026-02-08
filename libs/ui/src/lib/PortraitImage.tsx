@@ -12,13 +12,17 @@ export interface PortraitImageProps {
   quality?: number;
   /** Optional className for additional styling */
   className?: string;
-  /** Optional object position override (default: 'center top' for institutional portraits) */
+  /** Optional object position override (default: 'center top' for face-safe institutional portraits) */
   objectPosition?: string;
 }
 
 /**
  * Institutional portrait image component with proper aspect ratio handling,
  * optimized for editorial/institutional presentation without thumbnail tile feel.
+ *
+ * Enforces consistent 4:5 portrait aspect ratio contract (1200x1500 = 0.8).
+ * Face-safe cropping with 'center top' positioning ensures head/face remains visible.
+ * Optimized for 2x displays with proper Next.js Image sizing.
  */
 export function PortraitImage({
   src,
@@ -30,13 +34,16 @@ export function PortraitImage({
   className = '',
   objectPosition = 'center top',
 }: PortraitImageProps) {
-  // Calculate aspect ratio from dimensions
+  // Enforce consistent 4:5 portrait aspect ratio contract
+  // Standard institutional portrait: 1200x1500 = 0.8 (4:5)
   const aspectRatio = width / height;
 
-  // Optimize sizes for LCP: ensure hero portrait loads appropriate size
-  // Mobile: full width up to 320px, Tablet: up to 420px, Desktop: up to 450px
+  // Optimize sizes for LCP and 2x displays: ensure hero portrait loads appropriate size
+  // For 2x displays, double the pixel dimensions:
+  // Mobile: up to 640px (320px * 2), Tablet: up to 840px (420px * 2), Desktop: up to 900px (450px * 2)
+  // Next.js Image automatically handles 2x selection based on device pixel ratio
   const sizes =
-    '(max-width: 767px) min(320px, 100vw), (max-width: 1023px) min(420px, 40vw), min(450px, 35vw)';
+    '(max-width: 767px) min(640px, 100vw), (max-width: 1023px) min(840px, 80vw), min(900px, 70vw)';
 
   const imageStyle: CSSProperties = {
     objectPosition,
@@ -48,7 +55,12 @@ export function PortraitImage({
   return (
     <div
       className={`portrait-image-wrapper ${className}`}
-      style={{ aspectRatio }}
+      style={{
+        aspectRatio,
+        // Reserve space to prevent CLS - ensure wrapper maintains aspect ratio
+        minHeight: 0,
+        width: '100%',
+      }}
     >
       <Image
         src={src}

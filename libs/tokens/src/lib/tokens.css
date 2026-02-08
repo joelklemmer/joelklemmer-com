@@ -4,6 +4,8 @@
   --color-bg: 222 14% 95%;
   --color-surface: 222 10% 100%;
   --color-surface-elevated: 222 12% 98%;
+  --color-surface-field: 222 8% 99%;
+  --color-surface-inset: 222 10% 97%;
   --color-text: 222 26% 9%;
   --color-muted: 222 14% 38%;
   --color-border: 222 10% 88%;
@@ -28,6 +30,9 @@
   --color-surface-tier1: var(--color-surface-elevated);
   --color-surface-1: var(--color-surface);
   --color-surface-2: var(--color-surface-elevated);
+  --color-surface-primary: var(--color-surface);
+  --color-surface-field: var(--color-surface-field);
+  --color-surface-inset: var(--color-surface-inset);
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -120,24 +125,24 @@
   /* Depth: minimal elevation for cards and major surfaces (no decorative shadow). */
   --authority-surface-elevation: 0 1px 2px hsl(var(--color-text) / 0.04);
   --authority-surface-depth: 0 1px 3px hsl(var(--color-text) / 0.05);
-  --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.2);
+  --authority-soft-glow: 0 0 0 1px hsl(var(--color-border) / 0.12);
   --authority-contrast-balance: hsl(var(--color-surface));
 
   /* Elevation tokens for cards/hero plates (subtle, premium) */
-  --elevation-subtle: 0 1px 2px hsl(var(--color-border) / 0.08);
+  --elevation-subtle: 0 1px 2px hsl(var(--color-text) / 0.03);
   --elevation-premium:
-    0 2px 8px hsl(var(--color-text) / 0.06),
-    0 1px 3px hsl(var(--color-text) / 0.04);
+    0 2px 8px hsl(var(--color-text) / 0.05),
+    0 1px 3px hsl(var(--color-text) / 0.03);
 
   /* ACS D) Premium material realism: glass translucency, layered depth, controlled glow, lighting realism. Subtle and restrained. */
   --authority-glass-bg: hsl(var(--color-surface) / 0.76);
-  --authority-glass-border: hsl(var(--color-border) / 0.25);
+  --authority-glass-border: hsl(var(--color-border) / 0.15);
   --authority-glass-blur: 14px;
   --authority-depth-layer1: 0 1px 3px hsl(var(--color-text) / 0.03);
   --authority-depth-layer2: 0 2px 8px hsl(var(--color-text) / 0.04);
   --authority-depth-layer3: 0 4px 16px hsl(var(--color-text) / 0.05);
-  --authority-soft-light: 0 1px 0 0 hsl(0 0% 100% / 0.3);
-  --authority-controlled-glow: 0 0 16px -4px hsl(var(--color-text) / 0.03);
+  --authority-soft-light: 0 1px 0 0 hsl(0 0% 100% / 0.2);
+  --authority-controlled-glow: 0 0 16px -4px hsl(var(--color-text) / 0.02);
   --authority-ambient-soft: radial-gradient(
     ellipse 80% 50% at 50% 0%,
     hsl(var(--color-accent) / 0.05) 0%,
@@ -180,7 +185,7 @@
     0 6px 24px hsl(var(--color-text) / 0.06),
     0 1px 3px hsl(var(--color-text) / 0.04);
   --hero-inner-surface: hsl(var(--color-surface-elevated) / 0.94);
-  --hero-inner-border: hsl(var(--color-border-subtle) / 0.3);
+  --hero-inner-border: hsl(var(--color-border-subtle) / 0.2);
   --hero-inner-blur: 10px;
   --hero-typography-weight: 600;
 
@@ -201,11 +206,11 @@
 
   /* VACEL D) Surface materiality: layered depth, refined elevation, soft translucency. */
   --authority-surface-layer2: 0 2px 8px hsl(var(--color-text) / 0.04);
-  --authority-surface-translucency: 0.98;
+  --authority-surface-translucency: 1;
   --authority-card-elevation:
     0 1px 2px hsl(var(--color-text) / 0.03),
     0 2px 4px hsl(var(--color-text) / 0.02);
-  --authority-card-glow: 0 0 0 1px hsl(var(--color-border) / 0.15);
+  --authority-card-glow: none;
 
   /* VACEL E) Typography amplification: weight, hierarchy, rhythm. */
   --display-heading-weight: 600;
@@ -266,8 +271,8 @@
 
   /* AIPL: Section visual anchors — token-aware composition, graphite harmony */
   --section-anchor-bg: hsl(var(--color-neutral-100));
-  --section-anchor-border: hsl(var(--color-border) / 0.25);
-  --section-anchor-shadow: 0 1px 3px hsl(var(--color-text) / 0.03);
+  --section-anchor-border: hsl(var(--color-border) / 0.15);
+  --section-anchor-shadow: 0 1px 3px hsl(var(--color-text) / 0.02);
   --section-anchor-radius: 0.5rem;
 
   /* Unified border-radius tokens */
@@ -282,9 +287,9 @@
 
   /* Page Frame: consistent lanes, section spacing, content stage (reduces thin-column float). WCAG-safe. */
   --page-frame-max-width: var(--container-max-width);
-  --page-frame-stage-bg: hsl(var(--color-surface-elevated) / 0.92);
+  --page-frame-stage-bg: hsl(var(--color-surface-elevated));
   --page-frame-stage-radius: 0.75rem;
-  --page-frame-stage-elevation: 0 1px 2px hsl(var(--color-text) / 0.03);
+  --page-frame-stage-elevation: 0 1px 2px hsl(var(--color-text) / 0.02);
 
   /* Header and Navigation: baseline alignment, spacing, active states */
   --header-padding-y: var(--space-4);
@@ -335,15 +340,17 @@
 @media (prefers-color-scheme: dark) {
   :root {
     --color-bg: 222 18% 10%;
-    --color-surface: 222 16% 13%;
-    --color-surface-elevated: 222 14% 16%;
+    --color-surface: 222 16% 14%;
+    --color-surface-elevated: 222 14% 18%;
+    --color-surface-field: 222 12% 16%;
+    --color-surface-inset: 222 15% 12%;
     --color-text: 220 12% 94%;
     --color-muted: 220 10% 68%;
-    --color-border: 222 10% 24%;
-    --color-border-subtle: 222 8% 20%;
+    --color-border: 222 10% 22%;
+    --color-border-subtle: 222 8% 18%;
     --color-neutral-50: 222 16% 12%;
     --color-neutral-100: 222 14% 16%;
-    --color-neutral-200: 222 12% 22%;
+    --color-neutral-200: 222 12% 20%;
     --color-neutral-300: 220 10% 42%;
     --color-neutral-400: 220 8% 56%;
     --color-neutral-500: 220 8% 68%;
@@ -351,20 +358,28 @@
     --color-accent-strong: 212 66% 66%;
     --color-accent-muted: 212 50% 52%;
     --color-focus: 212 64% 62%;
+    /* Reduced border visibility in dark mode */
+    --authority-soft-glow: none;
+    --authority-card-glow: none;
+    --authority-glass-border: hsl(var(--color-border) / 0.08);
+    --section-anchor-border: hsl(var(--color-border) / 0.1);
+    --hero-inner-border: hsl(var(--color-border-subtle) / 0.15);
   }
 }
 
 :root[data-theme='dark'] {
   --color-bg: 222 18% 10%;
-  --color-surface: 222 16% 13%;
-  --color-surface-elevated: 222 14% 16%;
+  --color-surface: 222 16% 14%;
+  --color-surface-elevated: 222 14% 18%;
+  --color-surface-field: 222 12% 16%;
+  --color-surface-inset: 222 15% 12%;
   --color-text: 220 12% 94%;
   --color-muted: 220 10% 68%;
-  --color-border: 222 10% 24%;
-  --color-border-subtle: 222 8% 20%;
+  --color-border: 222 10% 22%;
+  --color-border-subtle: 222 8% 18%;
   --color-neutral-50: 222 16% 12%;
   --color-neutral-100: 222 14% 16%;
-  --color-neutral-200: 222 12% 22%;
+  --color-neutral-200: 222 12% 20%;
   --color-neutral-300: 220 10% 42%;
   --color-neutral-400: 220 8% 56%;
   --color-neutral-500: 220 8% 68%;
@@ -372,6 +387,12 @@
   --color-accent-strong: 212 66% 66%;
   --color-accent-muted: 212 50% 52%;
   --color-focus: 212 64% 62%;
+  /* Reduced border visibility in dark mode */
+  --authority-soft-glow: none;
+  --authority-card-glow: none;
+  --authority-glass-border: hsl(var(--color-border) / 0.08);
+  --section-anchor-border: hsl(var(--color-border) / 0.1);
+  --hero-inner-border: hsl(var(--color-border-subtle) / 0.15);
 }
 
 /* High contrast mode: WCAG AA+ compliance - meaningful difference, not cosmetic */
@@ -379,6 +400,8 @@
   --color-bg: 0 0% 100%;
   --color-surface: 0 0% 100%;
   --color-surface-elevated: 0 0% 100%;
+  --color-surface-field: 0 0% 98%;
+  --color-surface-inset: 0 0% 98%;
   --color-text: 0 0% 0%;
   --color-muted: 0 0% 15%;
   --color-border: 0 0% 0%;
@@ -410,6 +433,8 @@
     --color-bg: 0 0% 100%;
     --color-surface: 0 0% 100%;
     --color-surface-elevated: 0 0% 100%;
+    --color-surface-field: 0 0% 98%;
+    --color-surface-inset: 0 0% 98%;
     --color-text: 0 0% 0%;
     --color-muted: 0 0% 15%;
     --color-border: 0 0% 0%;

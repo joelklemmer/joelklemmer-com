@@ -1,7 +1,7 @@
 {
   "hero": {
     "title": "Joel Robert Klemmer",
-    "lede": "Authority verification ecosystem for executive evaluation, board review, and public record.",
+    "lede": "Authority verification dossier for executive evaluation, board review, and public record.",
     "cta": "Open executive brief",
     "portraitAlt": "Professional portrait"
   },
@@ -17,7 +17,7 @@
     ]
   },
   "routes": {
-    "title": "Primary routes",
+    "title": "Verification rails",
     "items": [
       {
         "title": "Executive Brief",

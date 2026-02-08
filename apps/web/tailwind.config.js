@@ -24,6 +24,8 @@ module.exports = {
         surface: 'hsl(var(--color-surface) / <alpha-value>)',
         'surface-elevated':
           'hsl(var(--color-surface-elevated) / <alpha-value>)',
+        'surface-field': 'hsl(var(--color-surface-field) / <alpha-value>)',
+        'surface-inset': 'hsl(var(--color-surface-inset) / <alpha-value>)',
         text: 'hsl(var(--color-text) / <alpha-value>)',
         muted: 'hsl(var(--color-muted) / <alpha-value>)',
         border: 'hsl(var(--color-border) / <alpha-value>)',
