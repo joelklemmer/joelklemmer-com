@@ -15,7 +15,10 @@ export function ContactGuidanceSection({
       aria-labelledby="contact-guidance-heading"
     >
       <Container className="section-shell">
-        <h2 id="contact-guidance-heading" className="text-title font-semibold">
+        <h2
+          id="contact-guidance-heading"
+          className="text-section-heading font-semibold"
+        >
           {heading}
         </h2>
         <ul className="mt-3 grid gap-2 text-base text-muted">

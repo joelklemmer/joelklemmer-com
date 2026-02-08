@@ -30,7 +30,7 @@ export function EvidenceGraphSection({
   return (
     <section className="section-shell" aria-label={title}>
       <Container className="section-shell">
-        <h2 className="text-title font-semibold">{title}</h2>
+        <h2 className="text-section-heading font-semibold">{title}</h2>
         <ul className="grid gap-4 text-sm text-muted list-none p-0 m-0">
           {nodes.map((node) => (
             <li key={node.id} className="section-shell">

@@ -20,7 +20,9 @@
     margin: 0;
     background: hsl(var(--color-bg));
     color: hsl(var(--color-text));
-    font-size: var(--text-base);
+    font-size: var(--body-analytical-size);
+    line-height: var(--body-analytical-line);
+    letter-spacing: var(--body-analytical-spacing);
   }
 
   html[dir='rtl'],
@@ -48,6 +50,9 @@
   :focus-visible {
     outline: 2px solid hsl(var(--color-focus));
     outline-offset: 2px;
+    transition:
+      outline-color var(--transition-duration-fast) ease,
+      outline-offset var(--transition-duration-fast) ease;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -69,15 +74,24 @@
 @layer components {
   .mdx-content {
     display: grid;
-    gap: var(--space-4);
-    font-size: var(--text-base);
-    line-height: var(--leading-normal);
+    gap: var(--section-inner-gap);
+    font-size: var(--body-analytical-size);
+    line-height: var(--body-analytical-line);
+  }
+
+  .mdx-content h1 {
+    font-size: var(--display-heading-size);
+    line-height: var(--display-heading-line);
+    letter-spacing: var(--display-heading-spacing);
+    font-weight: 600;
   }
 
   .mdx-content h2 {
-    font-size: var(--text-xl);
-    line-height: var(--leading-tight);
+    font-size: var(--section-heading-size);
+    line-height: var(--section-heading-line);
+    letter-spacing: var(--section-heading-spacing);
     font-weight: 600;
+    margin-block-end: var(--section-heading-margin);
   }
 
   .mdx-content h3 {
@@ -94,6 +108,7 @@
     color: hsl(var(--color-accent));
     text-decoration: underline;
     text-underline-offset: 2px;
+    transition: color var(--transition-duration-fast) ease;
   }
 
   .mdx-content ul {
@@ -106,8 +121,31 @@
     color: hsl(var(--color-text));
   }
 
+  /* Spatial hierarchy: vertical rhythm, breathing margins, density-aware */
   .section-shell {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--section-inner-gap);
+  }
+
+  .section-shell > * + * {
+    margin-block-start: 0;
+  }
+
+  section.section-shell {
+    margin-block-end: var(--section-block-margin);
+  }
+
+  section.section-shell:last-child {
+    margin-block-end: 0;
+  }
+
+  /* Authority cards and major surfaces: minimal depth (token-bound) */
+  .authority-card {
+    background: var(--authority-contrast-balance);
+    box-shadow: var(--authority-surface-elevation), var(--authority-soft-glow);
+  }
+
+  [data-density='on'] .authority-card {
+    box-shadow: var(--authority-surface-depth);
   }
 }

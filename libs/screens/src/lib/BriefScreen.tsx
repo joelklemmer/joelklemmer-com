@@ -410,8 +410,12 @@ export async function BriefScreen(props?: BriefScreenProps) {
         <section id="claims" className="section-shell">
           <Container className="section-shell">
             <div className="section-shell">
-              <h2 className="text-title font-semibold">{t('claims.title')}</h2>
-              <p className="text-base text-muted">{t('claims.lede')}</p>
+              <h2 className="text-section-heading font-semibold">
+                {t('claims.title')}
+              </h2>
+              <p className="text-body-analytical text-muted">
+                {t('claims.lede')}
+              </p>
             </div>
             <BriefNavigator
               claimCards={claimCards}

@@ -41,14 +41,16 @@ export function FrameworkDetailSection({
     <section id={id} className="section-shell">
       <Container className="section-shell">
         <div className="section-shell">
-          <h2 className="text-title font-semibold">{title}</h2>
-          {lede ? <p className="text-base text-muted">{lede}</p> : null}
+          <h2 className="text-section-heading font-semibold">{title}</h2>
+          {lede ? (
+            <p className="text-body-analytical text-muted">{lede}</p>
+          ) : null}
         </div>
         <div className="mt-6 space-y-8">
           {items.map((item) => (
             <div
               key={item.title}
-              className="rounded-card border border-border bg-surface p-4"
+              className="authority-card rounded-card border border-border p-4"
             >
               <h3 className="text-lg font-semibold text-text mb-3">
                 {item.title}

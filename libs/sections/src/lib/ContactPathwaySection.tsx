@@ -16,7 +16,7 @@ export function ContactPathwaySection({
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <h2 className="text-title font-semibold">{title}</h2>
+        <h2 className="text-section-heading font-semibold">{title}</h2>
         <Link
           href={href}
           className={`mt-2 inline-block ${focusRingClass} text-base text-muted underline underline-offset-4 hover:text-accent`}

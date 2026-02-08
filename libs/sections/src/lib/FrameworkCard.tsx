@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { focusRingClass } from '@joelklemmer/a11y';
-import { Container } from '@joelklemmer/ui';
 
 export interface FrameworkCardProps {
   /** Already-translated title (i18n). */
@@ -25,11 +24,13 @@ export function FrameworkCard({
 }: FrameworkCardProps) {
   const description = intent10 ?? summary;
   const content = (
-    <div className="section-shell rounded-card border border-border bg-surface p-4">
+    <div className="authority-card section-shell rounded-card border border-border p-4">
       <div className="section-shell">
         <h3 className="text-lg font-semibold text-text">{title}</h3>
         {description ? (
-          <p className="text-sm text-muted">{description}</p>
+          <p className="text-body-analytical text-sm text-muted">
+            {description}
+          </p>
         ) : null}
       </div>
     </div>
@@ -39,7 +40,7 @@ export function FrameworkCard({
     return (
       <Link
         href={href}
-        className={`${focusRingClass} block rounded-card`}
+        className={`${focusRingClass} block rounded-card transition-colors duration-fast motion-reduce:transition-none`}
         aria-label={title}
       >
         {content}

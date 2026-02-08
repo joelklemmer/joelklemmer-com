@@ -9,7 +9,7 @@ export function IdentityScopeSection({ body }: IdentityScopeSectionProps) {
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <p className="max-w-2xl text-base text-muted">{body}</p>
+        <p className="max-w-2xl text-body-analytical text-muted">{body}</p>
       </Container>
     </section>
   );

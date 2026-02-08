@@ -29,7 +29,10 @@ export function ContactPathwaysSection({
       aria-labelledby="contact-pathways-heading"
     >
       <Container className="section-shell">
-        <h2 id="contact-pathways-heading" className="text-title font-semibold">
+        <h2
+          id="contact-pathways-heading"
+          className="text-section-heading font-semibold"
+        >
           {groupLabel}
         </h2>
         <div

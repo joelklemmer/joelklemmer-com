@@ -17,7 +17,7 @@ export function VerificationGuidanceSection({
       <Container className="section-shell">
         <h2
           id="verification-guidance-heading"
-          className="text-title font-semibold"
+          className="text-section-heading font-semibold"
         >
           {title}
         </h2>

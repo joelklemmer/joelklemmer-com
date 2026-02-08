@@ -223,7 +223,7 @@ export function BriefNavigator({
               <article
                 key={claim.id}
                 id={`claim-${claim.id}`}
-                className="section-shell rounded-card border border-border bg-surface overflow-hidden"
+                className="authority-card section-shell rounded-card border border-border overflow-hidden"
                 {...(claim.dominantSignalId
                   ? { 'data-dominant-signal': claim.dominantSignalId }
                   : {})}
@@ -239,7 +239,7 @@ export function BriefNavigator({
                   onKeyDown={(e) => handleCardKeyDown(e, claim.id)}
                   aria-expanded={isExpanded}
                   aria-controls={panelId}
-                  className={`w-full p-4 text-left ${focusRingClass} rounded-card`}
+                  className={`w-full p-4 text-left ${focusRingClass} rounded-card transition-colors duration-fast motion-reduce:transition-none`}
                 >
                   <h3 className="text-lg font-semibold text-text">
                     {claim.label}

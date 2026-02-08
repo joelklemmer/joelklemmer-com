@@ -17,7 +17,7 @@ export function ReadPathSection({ title, lede, routes }: ReadPathSectionProps) {
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <h2 className="text-title font-semibold">{title}</h2>
+        <h2 className="text-section-heading font-semibold">{title}</h2>
         {lede ? <p className="mb-3 text-sm text-muted">{lede}</p> : null}
         <ul className="grid gap-2 text-base">
           {routes.map((route) => (

@@ -77,7 +77,7 @@ export async function CaseStudiesScreen() {
       >
         <section className="section-shell">
           <Container className="section-shell">
-            <h1 className="text-display font-semibold tracking-tight">
+            <h1 className="text-display-heading font-semibold">
               {t('caseStudies.title')}
             </h1>
           </Container>

@@ -22,7 +22,7 @@ export function LinkListSection({
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <h2 className="text-title font-semibold">{title}</h2>
+        <h2 className="text-section-heading font-semibold">{title}</h2>
         {items.length > 0 ? (
           <ul className="grid gap-2 text-base text-muted">
             {items.map((item) => (

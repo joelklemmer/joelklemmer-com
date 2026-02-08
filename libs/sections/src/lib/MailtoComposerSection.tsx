@@ -24,7 +24,7 @@ export function MailtoComposerSection({
       aria-live="polite"
     >
       <Container className="section-shell">
-        <h2 id="mailto-heading" className="text-title font-semibold">
+        <h2 id="mailto-heading" className="text-section-heading font-semibold">
           {heading}
         </h2>
         <p className="mt-2">

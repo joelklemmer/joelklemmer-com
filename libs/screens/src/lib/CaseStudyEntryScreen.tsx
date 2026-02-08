@@ -102,7 +102,7 @@ export async function CaseStudyEntryScreen({ slug }: { slug: string }) {
       ) : null}
       <section className="section-shell">
         <Container className="section-shell">
-          <h1 className="text-title font-semibold">
+          <h1 className="text-display-heading font-semibold">
             {entry.frontmatter.title}
           </h1>
           <DefinitionListSection

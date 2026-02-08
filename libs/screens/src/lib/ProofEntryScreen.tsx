@@ -232,7 +232,10 @@ export async function ProofEntryScreen({ slug }: { slug: string }) {
           aria-labelledby="attachments-heading"
         >
           <Container className="section-shell">
-            <h2 id="attachments-heading" className="text-title font-semibold">
+            <h2
+              id="attachments-heading"
+              className="text-section-heading font-semibold"
+            >
               {t('attachments.heading')}
             </h2>
             <dl className="grid gap-4 text-sm text-muted md:grid-cols-2">

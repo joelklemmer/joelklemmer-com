@@ -18,14 +18,14 @@ export function DefinitionListSection({
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <h2 className="text-title font-semibold">{title}</h2>
+        <h2 className="text-section-heading font-semibold">{title}</h2>
         <dl className="grid gap-4 text-sm text-muted md:grid-cols-2">
           {items.map((item) => (
             <div key={item.label} className="section-shell">
-              <dt className="text-xs font-semibold uppercase tracking-wide text-text">
+              <dt className="text-meta-label font-semibold uppercase tracking-wide text-text">
                 {item.label}
               </dt>
-              <dd className="text-base text-muted">{item.value}</dd>
+              <dd className="text-body-analytical text-muted">{item.value}</dd>
             </div>
           ))}
         </dl>

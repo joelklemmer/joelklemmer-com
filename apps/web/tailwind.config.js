@@ -45,9 +45,47 @@ module.exports = {
         title: ['var(--text-2xl)', { lineHeight: 'var(--leading-tight)' }],
         display: ['var(--text-3xl)', { lineHeight: 'var(--leading-tight)' }],
         small: ['var(--text-sm)', { lineHeight: 'var(--leading-normal)' }],
+        /* Visual Authority typography system */
+        'display-heading': [
+          'var(--display-heading-size)',
+          {
+            lineHeight: 'var(--display-heading-line)',
+            letterSpacing: 'var(--display-heading-spacing)',
+          },
+        ],
+        'section-heading': [
+          'var(--section-heading-size)',
+          {
+            lineHeight: 'var(--section-heading-line)',
+            letterSpacing: 'var(--section-heading-spacing)',
+          },
+        ],
+        'body-analytical': [
+          'var(--body-analytical-size)',
+          {
+            lineHeight: 'var(--body-analytical-line)',
+            letterSpacing: 'var(--body-analytical-spacing)',
+          },
+        ],
+        'meta-label': [
+          'var(--meta-label-size)',
+          {
+            lineHeight: 'var(--meta-label-line)',
+            letterSpacing: 'var(--meta-label-spacing)',
+          },
+        ],
       },
       borderRadius: {
         card: '1rem',
+      },
+      boxShadow: {
+        'authority-elevation': 'var(--authority-surface-elevation)',
+        'authority-depth': 'var(--authority-surface-depth)',
+        'authority-glow': 'var(--authority-soft-glow)',
+      },
+      transitionDuration: {
+        fast: 'var(--transition-duration-fast)',
+        normal: 'var(--transition-duration-normal)',
       },
     },
   },

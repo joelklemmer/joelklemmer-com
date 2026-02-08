@@ -57,9 +57,11 @@ export function CaseStudySection({
     <section id={id} className="section-shell">
       <Container className="section-shell">
         <div className="section-shell">
-          <h2 className="text-title font-semibold">{title}</h2>
-          {summary ? <p className="text-base text-muted">{summary}</p> : null}
-          {meta ? <p className="text-xs text-muted">{meta}</p> : null}
+          <h2 className="text-section-heading font-semibold">{title}</h2>
+          {summary ? (
+            <p className="text-body-analytical text-muted">{summary}</p>
+          ) : null}
+          {meta ? <p className="text-meta-label text-muted">{meta}</p> : null}
           {detailLink ? (
             <Link
               href={detailLink.href}

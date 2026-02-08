@@ -32,7 +32,7 @@ export function CardGridSection({
       <Container className="section-shell">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div className="section-shell">
-            <h2 className="text-title font-semibold">{title}</h2>
+            <h2 className="text-section-heading font-semibold">{title}</h2>
             {lede ? <p className="text-base text-muted">{lede}</p> : null}
           </div>
           {action ? (
@@ -47,7 +47,7 @@ export function CardGridSection({
         <div className="grid gap-4 md:grid-cols-2">
           {items.map((item) => {
             const content = (
-              <div className="section-shell rounded-card border border-border bg-surface p-4">
+              <div className="authority-card section-shell rounded-card border border-border p-4">
                 <div className="section-shell">
                   <h3 className="text-lg font-semibold text-text">
                     {item.title}

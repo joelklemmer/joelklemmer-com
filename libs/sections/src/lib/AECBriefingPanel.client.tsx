@@ -85,7 +85,7 @@ export function AECBriefingPanel({
 
   return (
     <section
-      className="section-shell border border-border/60 rounded-lg overflow-hidden"
+      className="authority-card section-shell border border-border/60 rounded-lg overflow-hidden"
       aria-label={title}
       onKeyDown={handleKeyDown}
     >
@@ -97,7 +97,7 @@ export function AECBriefingPanel({
           aria-expanded={expanded}
           aria-controls="aec-briefing-panel"
           id="aec-briefing-toggle"
-          className={`w-full flex items-center justify-between text-left font-semibold text-title ${focusRingClass} p-2 rounded`}
+          className={`w-full flex items-center justify-between text-left font-semibold text-section-heading ${focusRingClass} p-2 rounded transition-colors duration-fast motion-reduce:transition-none`}
         >
           <span>{title}</span>
           <span className="text-sm font-normal text-muted">

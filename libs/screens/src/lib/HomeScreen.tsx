@@ -90,8 +90,12 @@ export async function HomeScreen() {
       <section id="doctrine" className="section-shell">
         <Container className="section-shell">
           <div className="section-shell">
-            <h2 className="text-title font-semibold">{tFw('section.title')}</h2>
-            <p className="text-base text-muted">{tFw('section.lede')}</p>
+            <h2 className="text-section-heading font-semibold">
+              {tFw('section.title')}
+            </h2>
+            <p className="text-body-analytical text-muted">
+              {tFw('section.lede')}
+            </p>
           </div>
           <div className="grid gap-4 md:grid-cols-3 mt-4">
             {frameworks.map((fw) => (

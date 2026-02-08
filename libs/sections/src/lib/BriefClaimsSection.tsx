@@ -42,21 +42,25 @@ export function BriefClaimsSection({
     <section id={id} className="section-shell">
       <Container className="section-shell">
         <div className="section-shell">
-          <h2 className="text-title font-semibold">{title}</h2>
-          {lede ? <p className="text-base text-muted">{lede}</p> : null}
+          <h2 className="text-section-heading font-semibold">{title}</h2>
+          {lede ? (
+            <p className="text-body-analytical text-muted">{lede}</p>
+          ) : null}
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {claims.map((claim) => (
             <article
               key={claim.id}
               id={`claim-${claim.id}`}
-              className="section-shell rounded-card border border-border bg-surface p-4"
+              className="authority-card section-shell rounded-card border border-border p-4"
             >
               <h3 className="text-lg font-semibold text-text">{claim.label}</h3>
               {claim.category ? (
-                <p className="text-xs text-muted">{claim.category}</p>
+                <p className="text-meta-label text-muted">{claim.category}</p>
               ) : null}
-              <p className="text-sm text-muted">{claim.summary}</p>
+              <p className="text-body-analytical text-sm text-muted">
+                {claim.summary}
+              </p>
               <dl className="mt-2 text-xs text-muted">
                 <div>
                   <dt className="sr-only">Verification strength</dt>
