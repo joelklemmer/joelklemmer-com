@@ -23,6 +23,12 @@
       "summary": "Acorte la ventana de decisión al intervalo en que los compromisos siguen siendo reversibles y la información accionable.",
       "intent10": "Decida en el horizonte más corto que siga siendo reversible.",
       "intent60": "Comprima el horizonte para que gobernanza y entrega compartan un mismo marco temporal. Los horizontes largos fomentan sobreplanificación y bloqueo; los cortos obligan a clarificar qué debe decidirse ya y qué puede esperar. Alinee cadencia e informes al horizonte comprimido."
+    },
+    "institutional-friction-mapping": {
+      "title": "Mapa de fricción institucional",
+      "summary": "Mapee dónde las instituciones generan fricción para que estrategia y operaciones puedan diseñar en torno a ello.",
+      "intent10": "Mapee la fricción institucional antes de diseñar en torno a ella.",
+      "intent60": "Identifique puntos donde estructura, proceso o incentivos ralentizan decisiones o bloquean alineación. Use el mapa para priorizar cambios que reduzcan fricción reversible y aceptar o sortear el resto. Alinee gobernanza y operaciones al mapa para que la estrategia aborde cuellos de botella reales."
     }
   },
   "section": {

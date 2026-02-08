@@ -210,4 +210,17 @@ export const ENTITY_BINDINGS_CONFIG: EntityBindingConfig[] = [
       },
     },
   },
+  {
+    entityKind: 'framework',
+    entityId: 'institutional-friction-mapping',
+    signalVector: {
+      weights: {
+        systems_construction: 0.4,
+        operational_transformation: 0.3,
+        public_service_statesmanship: 0.2,
+        strategic_cognition: 0.05,
+        institutional_leadership: 0.05,
+      },
+    },
+  },
 ];

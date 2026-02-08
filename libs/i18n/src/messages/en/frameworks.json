@@ -23,6 +23,12 @@
       "summary": "Shorten the decision window to the interval where commitments stay reversible and information stays actionable.",
       "intent10": "Decide over the shortest horizon that remains reversible.",
       "intent60": "Compress the horizon so governance and delivery share one temporal frame. Long horizons encourage over-planning and lock-in; short horizons force clarity on what must be decided now versus what can wait. Align cadence and reporting to the compressed horizon."
+    },
+    "institutional-friction-mapping": {
+      "title": "Institutional friction mapping",
+      "summary": "Map where institutions create friction so strategy and operations can design around it.",
+      "intent10": "Map where institutions create friction before you design around it.",
+      "intent60": "Identify points where structure, process, or incentives slow decisions or block alignment. Use the map to prioritise changes that reduce reversible friction and to accept or work around the rest. Align governance and operations to the map so that strategy addresses real bottlenecks instead of assumed ones."
     }
   },
   "section": {
