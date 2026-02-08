@@ -1,0 +1,28 @@
+---
+title: 'Case study evidence bundle reference'
+artifactType: 'Deliverable'
+claimSupported: 'Case study evidence bundle and proof linkage documented'
+date: '2026-01-19'
+locale: 'en'
+slug: 'case-study-evidence-bundle'
+verificationNotes: 'Case studies subsystem requires proofRefs to Public Record; ProofEntryScreen shows referenced case studies.'
+source:
+  sourceType: 'internal'
+  sourceName: 'Case studies subsystem and ProofEntryScreen'
+verification:
+  method: 'deliverable'
+  confidence: 'high'
+  verifiedDate: '2026-01-19'
+---
+
+## Scope
+
+Case studies are work products with mandatory proofRefs to Public Record. Each case study references at least one recordId. ProofEntryScreen displays "Referenced by case studies" for each record.
+
+## Evidence
+
+Case study frontmatter schema enforces proofRefs array; content-validate fails if any proofRef does not match a Public Record id. Bidirectional linkage is implemented and validated.
+
+## Outcome
+
+Evidence bundle is consistent. Evaluators can traverse from record to case studies and from case study to records.

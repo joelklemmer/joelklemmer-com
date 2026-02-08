@@ -59,6 +59,42 @@
       "recoveryPlan": {
         "label": "Delivered a recovery plan within two weeks",
         "summary": "Verified recovery plan delivered under a two-week constraint."
+      },
+      "executiveBriefEvaluation": {
+        "label": "Executive brief scope and evaluation method documented",
+        "summary": "Scope and method defined; artifact manifest references canonical PDF."
+      },
+      "procurementGovernance": {
+        "label": "Governance operating system and procurement deliverable",
+        "summary": "Operating system and procurement transformation artifact on record."
+      },
+      "accessibilityCompliance": {
+        "label": "Accessibility compliance and test evidence documented",
+        "summary": "Institutional page and a11y test runs; posture documented."
+      },
+      "securityDisclosure": {
+        "label": "Security posture and disclosure process documented",
+        "summary": "Institutional security page; scope and disclosure process on record."
+      },
+      "contentOsPgf": {
+        "label": "Content OS and PGF adoption documented",
+        "summary": "Content OS and PGF docs; validators enforce adoption in CI."
+      },
+      "intelligenceGraph": {
+        "label": "Intelligence layer and graph model validated",
+        "summary": "Graph from content; node and edge integrity validated in CI."
+      },
+      "caseStudyEvidence": {
+        "label": "Case study evidence bundle and proof linkage documented",
+        "summary": "Case studies reference Public Record; ProofEntryScreen shows bidirectional links."
+      },
+      "deliveryGovernance": {
+        "label": "Delivery and governance evidence from recovery and procurement records",
+        "summary": "Recovery plan and governance artifact support delivery capability."
+      },
+      "policyVerification": {
+        "label": "Policy and audit evidence across accessibility and security",
+        "summary": "Accessibility and security posture records support verification."
       }
     }
   },

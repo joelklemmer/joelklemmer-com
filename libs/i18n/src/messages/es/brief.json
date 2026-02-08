@@ -59,6 +59,42 @@
       "recoveryPlan": {
         "label": "Entregó un plan de recuperación en dos semanas",
         "summary": "Plan de recuperación verificado entregado en un plazo de dos semanas."
+      },
+      "executiveBriefEvaluation": {
+        "label": "Alcance del informe ejecutivo y método de evaluación documentados",
+        "summary": "Alcance y método definidos; manifiesto de artefactos referencia PDF canónico."
+      },
+      "procurementGovernance": {
+        "label": "Sistema operativo de gobernanza y entregable de contratación",
+        "summary": "Artefacto de sistema operativo y transformación de contratación en registro."
+      },
+      "accessibilityCompliance": {
+        "label": "Cumplimiento de accesibilidad y evidencia de pruebas documentados",
+        "summary": "Página institucional y ejecución de pruebas a11y; postura documentada."
+      },
+      "securityDisclosure": {
+        "label": "Postura de seguridad y proceso de divulgación documentados",
+        "summary": "Página institucional de seguridad; alcance y proceso en registro."
+      },
+      "contentOsPgf": {
+        "label": "Adopción de Content OS y PGF documentada",
+        "summary": "Documentación Content OS y PGF; validadores aplican adopción en CI."
+      },
+      "intelligenceGraph": {
+        "label": "Capa de inteligencia y modelo de grafo validados",
+        "summary": "Grafo a partir de contenido; integridad de nodos y aristas validada en CI."
+      },
+      "caseStudyEvidence": {
+        "label": "Paquete de evidencia de estudios de caso y enlaces de prueba documentados",
+        "summary": "Estudios de caso referencian Registro público; enlaces bidireccionales."
+      },
+      "deliveryGovernance": {
+        "label": "Evidencia de entrega y gobernanza desde registros de recuperación y contratación",
+        "summary": "Plan de recuperación y artefacto de gobernanza apoyan capacidad de entrega."
+      },
+      "policyVerification": {
+        "label": "Evidencia de política y auditoría en accesibilidad y seguridad",
+        "summary": "Registros de accesibilidad y seguridad apoyan verificación."
       }
     }
   },

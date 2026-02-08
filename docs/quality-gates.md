@@ -8,22 +8,22 @@ Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and rel
 
 ## Overview
 
-| Gate                | Nx target                        | What it checks                                                |
-| ------------------- | -------------------------------- | ------------------------------------------------------------- |
-| Format              | `nx format:check`                | Prettier / Nx format across the workspace                     |
-| Lint                | `nx run web:lint`                | ESLint for the web app                                        |
-| Content validate     | `nx run web:content-validate`     | MDX frontmatter, proofRefs, claims, artifacts, media           |
-| Governance validate | `nx run web:governance-validate`   | Governance doc and config checks                              |
-| i18n validate        | `nx run web:i18n-validate`         | Translation completeness (chrome + meta + contentOS)         |
-| PGF validate         | `nx run web:pgf-validate`          | H1/lede uniqueness, claims registry, primary CTA labels        |
-| Intelligence validate| `nx run web:intelligence-validate` | Intelligence layer and semantic index                         |
-| Content OS validate  | `nx run web:content-os-validate`   | Page intent map, contentOS intents, meta/CTA, no placeholders |
-| Sitemap validate    | `nx run web:sitemap-validate`     | Dynamic public record and case study URLs for all locales     |
-| SEO validate        | `nx run web:seo-validate`        | Canonical and hreflang for core routes                        |
-| Test                | `nx run web:test`                | Unit tests (currently a placeholder)                          |
-| Build               | `nx run web:build`               | Next.js production build                                      |
-| A11y                | `nx run web:a11y`                | Playwright + axe-core accessibility scans                     |
-| E2E                 | `nx e2e web-e2e`                 | Playwright E2E tests                                          |
+| Gate                  | Nx target                          | What it checks                                                |
+| --------------------- | ---------------------------------- | ------------------------------------------------------------- |
+| Format                | `nx format:check`                  | Prettier / Nx format across the workspace                     |
+| Lint                  | `nx run web:lint`                  | ESLint for the web app                                        |
+| Content validate      | `nx run web:content-validate`      | MDX frontmatter, proofRefs, claims, artifacts, media          |
+| Governance validate   | `nx run web:governance-validate`   | Governance doc and config checks                              |
+| i18n validate         | `nx run web:i18n-validate`         | Translation completeness (chrome + meta + contentOS)          |
+| PGF validate          | `nx run web:pgf-validate`          | H1/lede uniqueness, claims registry, primary CTA labels       |
+| Intelligence validate | `nx run web:intelligence-validate` | Intelligence layer and semantic index                         |
+| Content OS validate   | `nx run web:content-os-validate`   | Page intent map, contentOS intents, meta/CTA, no placeholders |
+| Sitemap validate      | `nx run web:sitemap-validate`      | Dynamic public record and case study URLs for all locales     |
+| SEO validate          | `nx run web:seo-validate`          | Canonical and hreflang for core routes                        |
+| Test                  | `nx run web:test`                  | Unit tests (currently a placeholder)                          |
+| Build                 | `nx run web:build`                 | Next.js production build                                      |
+| A11y                  | `nx run web:a11y`                  | Playwright + axe-core accessibility scans                     |
+| E2E                   | `nx e2e web-e2e`                   | Playwright E2E tests                                          |
 
 **Single command to run all web gates in order:** `nx run web:verify` (see [Dev workflow](dev-workflow.md)).
 
