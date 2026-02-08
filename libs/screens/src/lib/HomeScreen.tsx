@@ -28,6 +28,7 @@ export async function generateMetadata() {
     description: t('home.description'),
     locale,
     pathname: '/',
+    ogImageSlug: 'home',
   });
 }
 

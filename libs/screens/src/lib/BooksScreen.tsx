@@ -23,6 +23,7 @@ export async function generateMetadata() {
     description: t('books.description'),
     locale,
     pathname: '/books',
+    ogImageSlug: 'books',
   });
 }
 

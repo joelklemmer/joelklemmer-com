@@ -22,6 +22,7 @@ export async function generateMetadata() {
     description: t('proof.description'),
     locale,
     pathname: '/publicrecord',
+    ogImageSlug: 'publicrecord',
   });
 }
 

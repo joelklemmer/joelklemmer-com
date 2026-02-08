@@ -102,7 +102,12 @@ export interface PageMetadataInput {
   baseUrl?: string;
   canonicalLocale?: AppLocale;
   canonicalOverride?: string;
+  /** OG image slug (e.g. 'home', 'brief'); image at /media/og/joel-klemmer__og__{slug}__2026-01__01.webp */
+  ogImageSlug?: string;
 }
+
+const OG_IMAGE_BASENAME = 'joel-klemmer__og__';
+const OG_IMAGE_SUFFIX = '__2026-01__01.webp';
 
 export function createPageMetadata({
   title,
@@ -112,16 +117,41 @@ export function createPageMetadata({
   baseUrl,
   canonicalLocale,
   canonicalOverride,
+  ogImageSlug,
 }: PageMetadataInput): Metadata {
   const canonical =
     canonicalOverride ??
     canonicalUrl(canonicalLocale ?? locale, pathname, baseUrl);
+  const siteUrl = normalizeBaseUrl(baseUrl);
   const languages = Object.fromEntries(
     hreflangAlternates(pathname, baseUrl).map((alt) => [
       alt.hrefLang,
       alt.href,
     ]),
   );
+  const openGraph: {
+    title: string;
+    description: string;
+    url: string;
+    siteName: string;
+    locale: string;
+    type: 'website';
+    images?: { url: string }[];
+  } = {
+    title,
+    description,
+    url: canonical,
+    siteName: title,
+    locale,
+    type: 'website',
+  };
+  if (ogImageSlug) {
+    openGraph.images = [
+      {
+        url: `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`,
+      },
+    ];
+  }
 
   return {
     title,
@@ -130,14 +160,7 @@ export function createPageMetadata({
       canonical,
       languages,
     },
-    openGraph: {
-      title,
-      description,
-      url: canonical,
-      siteName: title,
-      locale,
-      type: 'website',
-    },
+    openGraph,
   };
 }
 
@@ -260,6 +283,82 @@ export function getBriefPageJsonLd({
 
 export function BriefPageJsonLd(props: BriefPageJsonLdProps) {
   const jsonLd = getBriefPageJsonLd(props);
+  return createElement('script', {
+    type: 'application/ld+json',
+    dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },
+  });
+}
+
+export interface MediaPageJsonLdProps {
+  baseUrl?: string;
+  locale: AppLocale;
+  pathname?: string;
+  /** Sitemap-eligible assets (Tier A + B) for ItemList */
+  assets: Array<{
+    id: string;
+    file: string;
+    alt: string;
+    descriptor: string;
+    width: number;
+    height: number;
+  }>;
+}
+
+/**
+ * JSON-LD for Media Library page: CollectionPage with ItemList of ImageObject.
+ * Author Person Joel Robert Klemmer; license reference; no embellishment.
+ */
+export function getMediaPageJsonLd({
+  baseUrl,
+  locale,
+  pathname = '/media',
+  assets,
+}: MediaPageJsonLdProps) {
+  const siteUrl = normalizeBaseUrl(baseUrl);
+  const pageUrl = getCanonicalUrl({
+    baseUrl: siteUrl,
+    pathname,
+    locale,
+  });
+  const personLd = getPersonJsonLd({ baseUrl: siteUrl });
+  const author = { '@type': 'Person' as const, name: personLd.name };
+  const licenseUrl = `${siteUrl}/${locale}/terms`;
+  const itemListElement = assets.map((asset) => {
+    const contentUrl = asset.file.startsWith('http')
+      ? asset.file
+      : `${siteUrl}${asset.file}`;
+    return {
+      '@type': 'ImageObject' as const,
+      '@id': `${pageUrl}#${encodeURIComponent(asset.id)}`,
+      contentUrl,
+      name: asset.alt.slice(0, 80),
+      description: asset.alt,
+      author,
+      license: licenseUrl,
+      width: asset.width,
+      height: asset.height,
+      ...(asset.descriptor && {
+        keywords: asset.descriptor.replace(/-/g, ' '),
+      }),
+    };
+  });
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    url: pageUrl,
+    name: 'Media Library',
+    description:
+      'Official imagery archive for authority verification and press use.',
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: itemListElement.length,
+      itemListElement,
+    },
+  };
+}
+
+export function MediaPageJsonLd(props: MediaPageJsonLdProps) {
+  const jsonLd = getMediaPageJsonLd(props);
   return createElement('script', {
     type: 'application/ld+json',
     dangerouslySetInnerHTML: { __html: JSON.stringify(jsonLd) },

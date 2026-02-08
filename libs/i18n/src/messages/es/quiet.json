@@ -3,6 +3,25 @@
     "title": "Kit de prensa",
     "lede": "Material de referencia y biografia aprobada."
   },
+  "media": {
+    "title": "Biblioteca de medios",
+    "lede": "Archivo oficial de imágenes. Activos indexados con descriptores y guía de uso.",
+    "filterByKind": "Filtrar por tipo",
+    "filterAll": "Todos",
+    "kind": {
+      "portrait": "Retratos",
+      "speaking": "Charlas",
+      "author": "Autor",
+      "identity": "Identidad"
+    },
+    "dimensions": "Dimensiones",
+    "recommendedUse": "Uso recomendado",
+    "sha256Disclosure": "SHA-256",
+    "copySha256": "Copiar",
+    "viewImage": "Ver imagen",
+    "copyLink": "Copiar enlace",
+    "noResults": "Ningún activo coincide con el filtro."
+  },
   "mediaKit": {
     "title": "Kit de medios",
     "lede": "Activos aprobados y términos de uso.",

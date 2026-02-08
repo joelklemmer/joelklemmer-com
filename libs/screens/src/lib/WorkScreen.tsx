@@ -25,6 +25,7 @@ export async function generateMetadata() {
     description: t('work.description'),
     locale,
     pathname: '/work',
+    ogImageSlug: 'casestudies',
   });
 }
 

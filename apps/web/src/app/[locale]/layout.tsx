@@ -70,6 +70,7 @@ export default async function LocaleLayout({
     { href: `/${resolvedLocale}/contact`, label: nav('contact') },
   ];
   const footerItems = [
+    'media',
     'media-kit',
     'press',
     'bio',

@@ -3,6 +3,25 @@
     "title": "Press kit",
     "lede": "Press reference material and approved biography."
   },
+  "media": {
+    "title": "Media Library",
+    "lede": "Official imagery archive. Indexed assets with descriptors and usage guidance.",
+    "filterByKind": "Filter by kind",
+    "filterAll": "All",
+    "kind": {
+      "portrait": "Portraits",
+      "speaking": "Speaking",
+      "author": "Author",
+      "identity": "Identity"
+    },
+    "dimensions": "Dimensions",
+    "recommendedUse": "Recommended use",
+    "sha256Disclosure": "SHA-256",
+    "copySha256": "Copy",
+    "viewImage": "View image",
+    "copyLink": "Copy link",
+    "noResults": "No assets match the selected filter."
+  },
   "mediaKit": {
     "title": "Media kit",
     "lede": "Approved assets and usage terms.",

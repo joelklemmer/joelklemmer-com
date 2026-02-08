@@ -1,7 +1,12 @@
-import { MediaKitScreen, mediaKitMetadata } from '@joelklemmer/screens';
+import { MediaLibraryScreen, mediaLibraryMetadata } from '@joelklemmer/screens';
 
-export const generateMetadata = mediaKitMetadata;
+export const generateMetadata = mediaLibraryMetadata;
 
-export default function MediaPage() {
-  return <MediaKitScreen />;
+export default async function MediaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ kind?: string }>;
+}) {
+  const { kind } = await searchParams;
+  return <MediaLibraryScreen kind={kind ?? null} />;
 }

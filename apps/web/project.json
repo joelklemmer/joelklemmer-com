@@ -120,6 +120,7 @@
           "nx run web:orchestration-validate",
           "nx run web:content-os-validate",
           "nx run web:sitemap-validate",
+          "nx run web:media-manifest-validate",
           "nx run web:seo-validate",
           "nx run web:test",
           "nx run web:build",
@@ -127,6 +128,12 @@
           "nx run web:a11y"
         ],
         "parallel": false
+      }
+    },
+    "media-manifest-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-manifest.ts"
       }
     }
   }

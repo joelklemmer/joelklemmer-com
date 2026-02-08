@@ -30,6 +30,76 @@ const mediaManifestSchema = z.object({
 export type MediaAsset = z.infer<typeof mediaAssetSchema>;
 export type MediaManifest = z.infer<typeof mediaManifestSchema>;
 
+/** Authority Core: visible on media page, indexable, in sitemap. */
+export const MEDIA_TIER_A_VISIBLE_DESCRIPTORS = [
+  'studio-graphite',
+  'studio-formal',
+  'studio-tight',
+  'keynote-podium',
+  'bookstore-stack',
+] as const;
+
+/** Authority Core (other): indexable, in sitemap, not shown on media page. */
+export const MEDIA_TIER_A_DESCRIPTORS = [
+  ...MEDIA_TIER_A_VISIBLE_DESCRIPTORS,
+  'startup-founder',
+  'city-vogue',
+  'luxury-hotel',
+  'fine-dining',
+] as const;
+
+/** Authority Adjacent: indexable, in sitemap, not visible on page. */
+export const MEDIA_TIER_B_DESCRIPTORS = [
+  'outdoor-adventure',
+  'winter',
+  'luxury',
+  'hot-air-balloon',
+] as const;
+
+/** Authority Dilution: flag for removal; exclude from manifest/sitemap. */
+export const MEDIA_TIER_C_DESCRIPTORS = [
+  'cozy-home',
+  'easter',
+  'glamour',
+  'glamour-photos',
+  'modeling',
+  'luxury-cruise',
+  'casual',
+  'party',
+  'social',
+] as const;
+
+const tierASet = new Set(MEDIA_TIER_A_DESCRIPTORS);
+const tierBSet = new Set(MEDIA_TIER_B_DESCRIPTORS);
+const tierCSet = new Set(MEDIA_TIER_C_DESCRIPTORS);
+const visibleSet = new Set(MEDIA_TIER_A_VISIBLE_DESCRIPTORS);
+
+export function isMediaTierC(descriptor: string): boolean {
+  return tierCSet.has(descriptor as (typeof MEDIA_TIER_C_DESCRIPTORS)[number]);
+}
+
+export function isMediaSitemapEligible(asset: MediaAsset): boolean {
+  return !isMediaTierC(asset.descriptor);
+}
+
+export function isMediaVisibleOnPage(asset: MediaAsset): boolean {
+  return visibleSet.has(
+    asset.descriptor as (typeof MEDIA_TIER_A_VISIBLE_DESCRIPTORS)[number],
+  );
+}
+
+/** Filter manifest to assets eligible for sitemap and structured data (Tier A + B). */
+export function getMediaManifestSitemapEligible(
+  manifest: MediaManifest,
+): MediaAsset[] {
+  return manifest.assets.filter(isMediaSitemapEligible);
+}
+
+/** Filter manifest to assets visible on the media archive page (visible descriptors only). */
+export function getMediaManifestVisible(manifest: MediaManifest): MediaAsset[] {
+  return manifest.assets.filter(isMediaVisibleOnPage);
+}
+
 const publicRootCandidates = [
   path.join(process.cwd(), 'apps', 'web', 'public'),
   path.join(process.cwd(), 'public'),

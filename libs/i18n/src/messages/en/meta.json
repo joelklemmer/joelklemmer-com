@@ -46,6 +46,10 @@
     "title": "Now",
     "description": "Current focus and verified commitments."
   },
+  "media": {
+    "title": "Media Library",
+    "description": "Official imagery archive for authority verification and press use."
+  },
   "mediaKit": {
     "title": "Media kit",
     "description": "Approved assets and usage terms."

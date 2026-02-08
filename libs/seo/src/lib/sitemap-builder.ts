@@ -26,6 +26,7 @@ const DEFAULT_INDEXABLE_PATHS = [
   '/books',
   '/writing',
   '/contact',
+  '/media',
   '/media-kit',
   '/press',
   '/bio',

@@ -46,6 +46,10 @@
     "title": "Ahora",
     "description": "Enfoque actual y compromisos verificados."
   },
+  "media": {
+    "title": "Biblioteca de medios",
+    "description": "Archivo oficial de imágenes para verificación de autoridad y prensa."
+  },
   "mediaKit": {
     "title": "Kit de medios",
     "description": "Activos aprobados y terminos de uso."

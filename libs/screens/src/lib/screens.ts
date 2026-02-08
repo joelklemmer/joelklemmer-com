@@ -16,6 +16,7 @@ export { PressScreen } from './PressScreen';
 export { pressMetadata } from './PressScreen';
 export { MediaKitScreen } from './MediaKitScreen';
 export { mediaKitMetadata } from './MediaKitScreen';
+export { MediaLibraryScreen, mediaLibraryMetadata } from './MediaLibraryScreen';
 export { ProofScreen } from './ProofScreen';
 export { proofMetadata } from './ProofScreen';
 export { PublicRecordScreen } from './PublicRecordScreen';

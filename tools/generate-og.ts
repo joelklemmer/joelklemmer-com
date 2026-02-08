@@ -15,7 +15,14 @@ const SOURCE = path.join(
   'portraits',
   'joel-klemmer__portrait__studio-graphite__2026-01__01.webp',
 );
-const OG_SLUGS = ['home', 'brief', 'publicrecord', 'casestudies', 'books'];
+const OG_SLUGS = [
+  'home',
+  'brief',
+  'publicrecord',
+  'casestudies',
+  'books',
+  'media',
+];
 
 async function main() {
   if (!fs.existsSync(SOURCE)) {

@@ -21,6 +21,7 @@ const indexablePaths = [
   '/books',
   '/writing',
   '/contact',
+  '/media',
   '/media-kit',
   '/press',
   '/bio',

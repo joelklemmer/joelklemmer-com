@@ -46,7 +46,19 @@ const nextConfig = {
       });
     }
 
+    const mediaCacheHeaders = [
+      {
+        source: '/media/:path*',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ];
     return [
+      ...mediaCacheHeaders,
       {
         source: '/(.*)',
         headers: securityHeaders,

@@ -70,6 +70,7 @@ export async function generateMetadata() {
     description: t('brief.description'),
     locale,
     pathname: '/brief',
+    ogImageSlug: 'brief',
   });
 }
 
