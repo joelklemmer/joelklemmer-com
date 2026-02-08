@@ -133,7 +133,7 @@ export function BriefNavigator({
           </legend>
           <label
             htmlFor="brief-nav-category"
-            className="mr-2 text-sm text-muted"
+            className="me-2 text-sm text-muted"
           >
             <span className="sr-only">{labels.filterCategoryLegend}</span>
           </label>
@@ -158,7 +158,7 @@ export function BriefNavigator({
           </legend>
           <label
             htmlFor="brief-nav-strength"
-            className="mr-2 text-sm text-muted"
+            className="me-2 text-sm text-muted"
           >
             <span className="sr-only">{labels.filterStrengthLegend}</span>
           </label>
@@ -178,7 +178,7 @@ export function BriefNavigator({
           </select>
         </fieldset>
         <div role="group" aria-label={labels.viewModeLabel}>
-          <span className="mr-2 text-sm text-muted" id="brief-nav-view-label">
+          <span className="me-2 text-sm text-muted" id="brief-nav-view-label">
             {labels.viewModeLabel}:
           </span>
           <span className="inline-flex rounded border border-border bg-surface">
@@ -187,7 +187,7 @@ export function BriefNavigator({
               onClick={() => setViewMode('grid')}
               aria-pressed={viewMode === 'grid'}
               aria-describedby="brief-nav-view-label"
-              className={`rounded-l border-r border-border px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
+              className={`rounded-s border-e border-border px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'grid'
                   ? 'bg-accent/20 text-accent'
                   : 'text-text hover:bg-muted/50'
@@ -200,7 +200,7 @@ export function BriefNavigator({
               onClick={() => setViewMode('graph')}
               aria-pressed={viewMode === 'graph'}
               aria-describedby="brief-nav-view-label"
-              className={`rounded-r px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
+              className={`rounded-e px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'graph'
                   ? 'bg-accent/20 text-accent'
                   : 'text-text hover:bg-muted/50'
@@ -376,14 +376,14 @@ export function BriefNavigator({
                   <div>
                     <span className="font-medium text-text">{claim.label}</span>
                     {claim.category ? (
-                      <span className="text-xs text-muted ml-1">
+                      <span className="text-xs text-muted ms-1">
                         ({claim.category})
                       </span>
                     ) : null}
                     <p className="text-xs text-muted mt-0.5">{claim.summary}</p>
                   </div>
                 </div>
-                <div className="sm:pl-4 sm:border-l border-border border-l-2 border-t-0 border-b-0 border-r-0 pl-6 sm:pl-4">
+                <div className="sm:ps-4 sm:border-s border-border border-s-2 border-t-0 border-b-0 border-e-0 ps-6 sm:ps-4">
                   <ul className="list-none space-y-1 text-xs text-muted">
                     {claim.supportingLinks.map((link) => (
                       <li key={link.href}>

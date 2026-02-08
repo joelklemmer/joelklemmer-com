@@ -45,7 +45,9 @@ export async function CaseStudiesScreen() {
     <>
       <section className="section-shell">
         <Container className="section-shell">
-          <h1 className="text-title font-semibold">{t('caseStudies.title')}</h1>
+          <h1 className="text-display font-semibold tracking-tight">
+            {t('caseStudies.title')}
+          </h1>
         </Container>
       </section>
       {caseStudies.length ? (

@@ -34,6 +34,11 @@
 
   --leading-tight: 1.2;
   --leading-normal: 1.5;
+
+  --container-max-width: 56rem;
+  --readable-max-width: 42rem;
+  --transition-duration-fast: 150ms;
+  --transition-duration-normal: 200ms;
 }
 
 @media (prefers-color-scheme: dark) {

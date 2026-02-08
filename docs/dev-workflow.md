@@ -2,13 +2,17 @@
 
 Day-to-day commands for developing and validating the web app in this Nx monorepo. All commands assume you are in the repo root and use Node v20+. You can use **npm** or **pnpm** (repo has `packageManager: pnpm`; if `npm install` fails, see [Quality gates](quality-gates.md) Technical notes).
 
+## Visual Authority System
+
+When working on **evaluator-facing surfaces** (Executive Brief, Public Record index/entry, Case Studies index/entry), follow the [Visual Authority System](visual-authority-system.md). It defines typography, layout rhythm, evidence UI patterns, and interaction rules; deviations require documented justification. The spec aligns with [PGF](pgf.md) language governance and does not change verify order or gate behavior. Consult the spec before changing layout, typography, or interaction on those screens.
+
 ## Run all quality gates (recommended before PR)
 
 ```bash
 nx run web:verify
 ```
 
-Runs in order: lint → content-validate → i18n-validate → test → build → a11y. Stops on first failure. See [Quality gates](quality-gates.md) for details.
+Runs in order: lint → content-validate → i18n-validate → pgf-validate → sitemap-validate → seo-validate → test → build → a11y. Stops on first failure. See [Quality gates](quality-gates.md) for details.
 
 ## Individual gates
 
@@ -30,7 +34,7 @@ Runs in order: lint → content-validate → i18n-validate → test → build �
   ```
   Or use the root script: `pnpm build` (same as `nx build web`).
 
-Other useful targets: `nx run web:lint`, `nx run web:i18n-validate`, `nx run web:test`. Full list is in [Quality gates](quality-gates.md).
+Other useful targets: `nx run web:lint`, `nx run web:i18n-validate`, `nx run web:pgf-validate`, `nx run web:test`. Full list is in [Quality gates](quality-gates.md).
 
 ## Development server
 

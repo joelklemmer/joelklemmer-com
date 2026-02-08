@@ -2,6 +2,10 @@
 
 This document describes every quality gate in the repo: how to run it, what it checks, and what success looks like. All gates are designed to run on **Node v20+** (see `engines` in `package.json`).
 
+## Visual Authority System
+
+Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and related proof/evidence UI) are governed by the [Visual Authority System](visual-authority-system.md). That spec defines typography hierarchy, layout rhythm, evidence UI patterns, interaction rules, and an anti-pattern blacklist. **Deviations require documented justification.** When changing layout, typography, or interaction on those surfaces, consult the spec; it works alongside the [PGF](pgf.md) (which governs tone and copy) and does not alter verify order or existing gate behavior.
+
 ## Overview
 
 | Gate             | Nx target                     | What it checks                                            |
@@ -10,6 +14,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 | Lint             | `nx run web:lint`             | ESLint for the web app                                    |
 | Content validate | `nx run web:content-validate` | MDX frontmatter, proofRefs, claims, artifacts, media      |
 | i18n validate    | `nx run web:i18n-validate`    | Translation completeness (chrome + meta + publicRecord)   |
+| PGF validate     | `nx run web:pgf-validate`     | H1/lede uniqueness, claims registry, primary CTA labels   |
 | Sitemap validate | `nx run web:sitemap-validate` | Dynamic public record and case study URLs for all locales |
 | SEO validate     | `nx run web:seo-validate`     | Canonical and hreflang for core routes                    |
 | Test             | `nx run web:test`             | Unit tests (currently a placeholder)                      |
@@ -60,7 +65,21 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 5. Sitemap validate
+## 5. PGF validate
+
+- **Run:** `nx run web:pgf-validate`
+- **Implementation:** Runs `tools/validate-pgf.ts` via **tsx** with `tsconfig.base.json`. Uses default locale messages and `@joelklemmer/content/validate` claim/contact registries.
+- **What it checks:** (Mechanical only; see [PGF](pgf.md).)
+  - **Check 1:** No duplicate page H1 (`meta.title`) across core screens (Home, Brief, Case Studies, Books, Public Record, Contact, Privacy, Terms, Accessibility, Security) for the default locale.
+  - **Check 2:** No duplicate lede (`meta.description`) across those same screens (default locale).
+  - **Check 3:** Claims registry: no duplicate `labelKey` or `summaryKey` in `libs/content/src/lib/claims.ts`.
+  - **Check 4:** Primary CTA labels (contact pathways, home CTA, mailto button) must be unique unless on the allowlist (e.g. "Read more").
+- **Success:** Exit code 0 and stdout: `PGF validation passed.`
+- **Failure output:** Clear report listing each duplicate with file paths or identifiers (e.g. meta key, claim id, CTA source).
+
+---
+
+## 6. Sitemap validate
 
 - **Run:** `nx run web:sitemap-validate`
 - **Implementation:** Runs `tools/validate-sitemap.ts` via **tsx**. Uses sync slug getters from `@joelklemmer/content/validate` and `buildSitemapEntries` from `@joelklemmer/seo`.
@@ -69,7 +88,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 6. SEO validate
+## 7. SEO validate
 
 - **Run:** `nx run web:seo-validate`
 - **Implementation:** Runs `tools/validate-seo.ts` via \*\*tsx`. Calls `getCanonicalUrl`and`hreflangAlternates`from`@joelklemmer/seo` for core pathnames.
@@ -78,7 +97,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 7. Test (web)
+## 8. Test (web)
 
 - **Run:** `nx run web:test`
 - **What it checks:** Currently a placeholder that prints “No web tests configured”. Intended for future unit tests.
@@ -86,7 +105,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 8. Build (web)
+## 9. Build (web)
 
 - **Run:** `nx run web:build` or `nx build web`
 - **What it checks:** Next.js production build. Identity sameAs is required in production (set `NEXT_PUBLIC_IDENTITY_SAME_AS` in CI). Required artifact/media files and checksums are enforced only when `RELEASE_READY=1` (see [CI command sequence and env](#ci-command-sequence-and-env)).
@@ -94,7 +113,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 9. A11y
+## 10. A11y
 
 - **Run:** `nx run web:a11y`
 - **Implementation:** Runs `tools/run-a11y.ts` (tsx). The script **injects safe placeholder env vars only when missing** (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS`, `RELEASE_READY`) so the gate is deterministic without requiring CI or local env. Production identity enforcement in `libs/seo` is unchanged; only the a11y runner supplies these defaults for the spawned build/start process. The script allocates a free port (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL` and `PORT` for Playwright, then runs Playwright a11y (`apps/web-e2e/playwright.a11y.config.ts`). Playwright reads `BASE_URL` and uses `reuseExistingServer: true`, so no port collision with an existing dev server. No manual freeing of port 3000 required.
@@ -104,7 +123,7 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 ---
 
-## 10. E2E
+## 11. E2E
 
 - **Run:** `nx e2e web-e2e`
 - **What it checks:** Full Playwright E2E suite (default config). May depend on a prior build or serve.
@@ -120,12 +139,13 @@ This document describes every quality gate in the repo: how to run it, what it c
   2. `nx run web:lint`
   3. `nx run web:content-validate`
   4. `nx run web:i18n-validate`
-  5. `nx run web:sitemap-validate`
-  6. `nx run web:seo-validate`
-  7. `nx run web:test`
-  8. `nx run web:build`
-  9. `nx run web:restore-generated-typings` (hygiene: restores `next-env.d.ts`; does not affect format)
-  10. `nx run web:a11y`
+  5. `nx run web:pgf-validate`
+  6. `nx run web:sitemap-validate`
+  7. `nx run web:seo-validate`
+  8. `nx run web:test`
+  9. `nx run web:build`
+  10. `nx run web:restore-generated-typings` (hygiene: restores `next-env.d.ts`; does not affect format)
+  11. `nx run web:a11y`
 
 No steps are skipped; all of these targets exist in this repo. If a target were removed in the future, the verify target would need to be updated to match. **Note:** If `web:lint` (or any other step) has existing failures in the codebase, `web:verify` will fail at that step until those issues are fixed. Verify must not create uncommitted changes; see [CI parity](ci-parity.md) (repo must remain clean in CI).
 
@@ -233,8 +253,8 @@ Run from repo root (Node v20+). Use PowerShell on Windows.
 
    Success: exit 0, stdout contains `i18n validation passed.`
 
-4. **Full verify** (lint → content-validate → i18n-validate → sitemap-validate → seo-validate → test → build → a11y)
+4. **Full verify** (lint → content-validate → i18n-validate → pgf-validate → sitemap-validate → seo-validate → test → build → a11y)
    ```bash
    nx run web:verify
    ```
-   Success: exit 0 after all eight steps complete. If lint (or another step) has pre-existing failures, verify will fail at that step; fix those before expecting verify to pass.
+   Success: exit 0 after all steps complete. If lint (or another step) has pre-existing failures, verify will fail at that step; fix those before expecting verify to pass.
