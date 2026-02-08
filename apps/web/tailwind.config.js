@@ -57,7 +57,7 @@ module.exports = {
           'var(--section-heading-size)',
           {
             lineHeight: 'var(--section-heading-line)',
-            letterSpacing: 'var(--section-heading-spacing)',
+            letterSpacing: 'var(--section-heading-letter-spacing)',
           },
         ],
         'body-analytical': [
@@ -82,10 +82,21 @@ module.exports = {
         'authority-elevation': 'var(--authority-surface-elevation)',
         'authority-depth': 'var(--authority-surface-depth)',
         'authority-glow': 'var(--authority-soft-glow)',
+        'authority-layer2': 'var(--authority-surface-layer2)',
+        'authority-card': 'var(--authority-card-elevation)',
+        'authority-card-glow': 'var(--authority-card-glow)',
       },
       transitionDuration: {
         fast: 'var(--transition-duration-fast)',
         normal: 'var(--transition-duration-normal)',
+      },
+      transitionTimingFunction: {
+        authority: 'var(--ease-authority)',
+        'authority-out': 'var(--ease-authority-out)',
+      },
+      fontWeight: {
+        'display-heading': 'var(--display-heading-weight)',
+        'section-heading': 'var(--section-heading-weight)',
       },
     },
   },

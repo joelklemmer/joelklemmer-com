@@ -40,7 +40,7 @@ export function Shell({
           <Container className="py-3">{navContent}</Container>
         </nav>
       </header>
-      <main id={mainId} className="py-8">
+      <main id={mainId} className="vacel-main py-8">
         {children}
       </main>
       <footer
