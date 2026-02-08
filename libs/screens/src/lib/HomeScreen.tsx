@@ -70,8 +70,8 @@ export async function HomeScreen() {
       lede={t('hero.lede')}
       actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
       visual={{
-        src: '/media/portraits/jrk-portrait-studio-2026-01.webp',
-        alt: 'Portrait of Joel R. Klemmer',
+        src: '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp',
+        alt: 'Studio portrait of Joel Klemmer in a dark suit.',
         width: 1200,
         height: 1500,
       }}

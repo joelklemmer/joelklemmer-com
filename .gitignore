@@ -3,6 +3,7 @@
 # compiled output
 dist
 tmp
+tools/tmp
 out-tsc
 
 # E2E / a11y reports (do not track; use tmp/reports/a11y.json)

@@ -41,14 +41,14 @@ export async function MediaKitScreen() {
       title={t('mediaKit.assetsTitle')}
       lede={t('mediaKit.assetsLede')}
       items={manifest.assets.map((asset) => ({
-        title: asset.title,
-        description: asset.usageNotes,
+        title: asset.descriptor.replace(/-/g, ' '),
+        description: asset.alt,
         meta: t('mediaKit.assetMeta', {
-          type: asset.type,
-          version: asset.version,
-          date: asset.date,
+          type: asset.kind,
+          version: '1',
+          date: asset.file.includes('__2026-01__') ? '2026-01' : '—',
         }),
-        href: `/media/${asset.filename}`,
+        href: asset.file,
       }))}
     />
   ) : (

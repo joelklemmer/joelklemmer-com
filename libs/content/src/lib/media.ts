@@ -3,16 +3,24 @@ import { existsSync, readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 
+const recommendedUseSchema = z.enum([
+  'hero',
+  'avatar',
+  'card',
+  'press',
+  'books',
+]);
 const mediaAssetSchema = z.object({
   id: z.string().min(1),
-  title: z.string().min(1),
-  type: z.string().min(1),
-  filename: z.string().min(1),
-  version: z.string().min(1),
-  date: z.string().min(1),
+  file: z.string().min(1),
+  kind: z.enum(['portrait', 'speaking', 'author', 'identity']),
+  descriptor: z.string().min(1),
+  recommendedUse: z.array(recommendedUseSchema),
+  aspectRatio: z.number(),
+  width: z.number(),
+  height: z.number(),
   sha256: z.string().min(1),
-  usageNotes: z.string().min(1),
-  altText: z.string().min(1).optional(),
+  alt: z.string().min(1),
 });
 
 const mediaManifestSchema = z.object({
@@ -63,7 +71,10 @@ export function getMediaManifest() {
   const releaseReady = process.env.RELEASE_READY === '1';
 
   parsed.data.assets.forEach((asset) => {
-    const assetPath = path.join(publicRoot, 'media', asset.filename);
+    const relativePath = asset.file.startsWith('/')
+      ? asset.file.slice(1)
+      : asset.file;
+    const assetPath = path.join(publicRoot, relativePath);
     if (!existsSync(assetPath)) {
       if (releaseReady) {
         errors.push(`Missing media asset file: ${assetPath}`);
@@ -73,13 +84,6 @@ export function getMediaManifest() {
         );
       }
       return;
-    }
-    if (asset.type.startsWith('image') && !asset.altText) {
-      if (releaseReady) {
-        errors.push(`Missing altText for image asset ${asset.id}`);
-      } else {
-        console.warn(`[dev] Missing altText for image asset ${asset.id}`);
-      }
     }
     if (releaseReady) {
       const actual = sha256ForFile(assetPath);
