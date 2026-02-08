@@ -213,9 +213,8 @@
   --section-anchor-radius: 0.5rem;
   --section-anchor-min-height: 6rem;
 
-  /* Media list: thumb derivative size only; list must not load master by default. */
+  /* Media list: thumb derivative size only; 1:1 box; list must not load master by default. */
   --media-thumb-size: 56px;
-  --media-thumb-aspect: 96 / 125;
 
   /* Page Frame: consistent lanes, section spacing, content stage (reduces thin-column float). WCAG-safe. */
   --page-frame-max-width: var(--container-max-width);

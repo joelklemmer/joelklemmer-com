@@ -134,6 +134,7 @@
           "nx run web:sitemap-validate",
           "nx run web:image-sitemap-validate",
           "nx run web:media-manifest-validate",
+          "nx run web:media-derivatives-validate",
           "nx run web:media-authority-validate",
           "nx run web:visual-contract-validate",
           "nx run web:seo-validate",
@@ -151,6 +152,12 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-manifest.ts"
+      }
+    },
+    "media-derivatives-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-derivatives.ts"
       }
     },
     "media-authority-validate": {

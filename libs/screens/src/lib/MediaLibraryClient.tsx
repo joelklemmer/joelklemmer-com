@@ -21,14 +21,28 @@ function getDescriptorDisplayLabel(
   return labels[asset.descriptor] ?? asset.descriptor.replace(/-/g, ' ');
 }
 
-/** Thumb path convention: base.webp → base__thumb.webp. List uses thumb ONLY; master only on error. */
-function getThumbPath(asset: MediaAsset): string {
+/** UI-only labels for recommendedUse values (internal schema → restrained display). */
+const RECOMMENDED_USE_DISPLAY: Record<string, string> = {
+  hero: 'Hero',
+  avatar: 'Avatar',
+  card: 'Card',
+  press: 'Press',
+  books: 'Books',
+};
+
+function getRecommendedUseDisplay(uses: string[]): string {
+  return uses
+    .map((u) => RECOMMENDED_USE_DISPLAY[u] ?? u)
+    .filter(Boolean)
+    .join(', ');
+}
+
+/** List thumbnails use thumb derivative only (convention: base.webp → base__thumb.webp); no master fallback. */
+function getMediaThumbPath(asset: MediaAsset): string {
   return asset.file.replace(/\.webp$/, '__thumb.webp');
 }
 
-/** Token default 56px; responsive 64/72. Used for Next/Image width/height (pixels). */
 const THUMB_SIZE_PX = 56;
-const THUMB_ASPECT = 125 / 96;
 
 export interface MediaLibraryClientLabels {
   filterByKind: string;
@@ -68,7 +82,7 @@ export function MediaLibraryClient({
   const router = useRouter();
   const searchParams = useSearchParams();
   const kind = searchParams.get('kind') ?? initialKind;
-  const [thumbFallback, setThumbFallback] = useState<Set<string>>(new Set());
+  const [missingThumb, setMissingThumb] = useState<Set<string>>(new Set());
   const renderStartRef = useRef<number>(
     typeof performance !== 'undefined' ? performance.now() : 0,
   );
@@ -97,7 +111,7 @@ export function MediaLibraryClient({
   );
 
   const handleThumbError = useCallback((assetId: string) => {
-    setThumbFallback((prev) => new Set(prev).add(assetId));
+    setMissingThumb((prev) => new Set(prev).add(assetId));
   }, []);
 
   return (
@@ -157,35 +171,44 @@ export function MediaLibraryClient({
         </nav>
         <ul className="space-y-8 list-none p-0 m-0" role="list">
           {assets.map((asset, index) => {
-            const thumbPath = getThumbPath(asset);
-            const useMaster = thumbFallback.has(asset.id);
-            const src = useMaster ? asset.file : thumbPath;
+            const thumbPath = getMediaThumbPath(asset);
+            const showPlaceholder = missingThumb.has(asset.id);
             const isFirstViewport = index < 4;
             return (
               <li
                 key={asset.id}
                 id={asset.id}
-                className="flex flex-col sm:flex-row gap-6 sm:gap-8 border-b border-border pb-8 last:border-0 [content-visibility:auto] [contain-intrinsic-size:auto_180px]"
+                className="media-list-item flex flex-col sm:flex-row gap-6 sm:gap-8 border-b border-border pb-8 last:border-0"
               >
-                <div className="shrink-0 relative rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5 media-thumb-frame">
-                  <Link
-                    href={asset.file}
-                    className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg`}
-                    aria-label={asset.alt}
-                  >
-                    <Image
-                      src={src}
-                      alt={asset.alt}
-                      width={THUMB_SIZE_PX}
-                      height={Math.round(THUMB_SIZE_PX * THUMB_ASPECT)}
-                      className="object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none"
-                      sizes="56px"
-                      loading={isFirstViewport ? 'eager' : 'lazy'}
-                      decoding="async"
-                      priority={isFirstViewport}
-                      onError={() => handleThumbError(asset.id)}
-                    />
-                  </Link>
+                <div className="media-thumb-rail shrink-0">
+                  <div className="media-thumb-frame rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5">
+                    {showPlaceholder ? (
+                      <div
+                        className="media-thumb-placeholder"
+                        aria-hidden
+                        title=""
+                      />
+                    ) : (
+                      <Link
+                        href={asset.file}
+                        className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg`}
+                        aria-label={asset.alt}
+                      >
+                        <Image
+                          src={thumbPath}
+                          alt={asset.alt}
+                          width={THUMB_SIZE_PX}
+                          height={THUMB_SIZE_PX}
+                          className="media-thumb-img object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none"
+                          sizes="(min-width: 768px) 72px, (min-width: 640px) 64px, 56px"
+                          loading={isFirstViewport ? 'eager' : 'lazy'}
+                          decoding="async"
+                          priority={isFirstViewport}
+                          onError={() => handleThumbError(asset.id)}
+                        />
+                      </Link>
+                    )}
+                  </div>
                 </div>
                 <div className="min-w-0 flex-1 flex flex-col gap-3">
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted">
@@ -205,7 +228,7 @@ export function MediaLibraryClient({
                       {labels.recommendedUse}
                     </dt>
                     <dd className="text-text">
-                      {asset.recommendedUse.join(', ')}
+                      {getRecommendedUseDisplay(asset.recommendedUse)}
                     </dd>
                   </dl>
                   <details className="mt-1 media-authority-details">

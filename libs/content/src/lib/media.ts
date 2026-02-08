@@ -166,12 +166,32 @@ export function isMediaVisibleOnPage(asset: MediaAsset): boolean {
   );
 }
 
+export type MediaDerivativeVariant = 'thumb' | 'card' | 'hero' | 'master';
+
+/**
+ * Resolve a media file path to a derivative path.
+ * Convention: base.webp → base__thumb.webp | base__card.webp | base__hero.webp; master returns file as-is.
+ */
+export function resolveMediaDerivativePath(
+  file: string,
+  variant: MediaDerivativeVariant,
+): string {
+  if (variant === 'master') return file;
+  const suffix =
+    variant === 'thumb'
+      ? '__thumb.webp'
+      : variant === 'card'
+        ? '__card.webp'
+        : '__hero.webp';
+  return file.replace(/\.webp$/, suffix);
+}
+
 /**
  * Derived thumbnail path (convention: base.webp → base__thumb.webp).
  * Use for list/grid thumbnails to avoid loading full-res in the UI.
  */
 export function getMediaThumbPath(asset: MediaAsset): string {
-  return asset.file.replace(/\.webp$/, '__thumb.webp');
+  return resolveMediaDerivativePath(asset.file, 'thumb');
 }
 
 /** Filter manifest to assets eligible for sitemap and structured data (Tier A + B). */

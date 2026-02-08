@@ -63,6 +63,11 @@ const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
 };
 
 export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
+  const devTimerStart =
+    typeof process !== 'undefined' && process.env.NODE_ENV === 'development'
+      ? Date.now()
+      : 0;
+
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['quiet', 'meta']);
   const tQuiet = createScopedTranslator(locale, messages, 'quiet');
@@ -79,6 +84,17 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
     defaultBaseUrl;
   const siteBase = baseUrl.replace(/\/+$/, '');
   const tierAForStructuredData = getMediaManifestTierAOnly(manifest);
+
+  if (devTimerStart && typeof process !== 'undefined') {
+    const elapsed = Date.now() - devTimerStart;
+    console.log(
+      '[media-library] initial server render',
+      elapsed,
+      'ms',
+      'visible:',
+      filtered.length,
+    );
+  }
 
   const labels = {
     filterByKind: tQuiet('media.filterByKind'),

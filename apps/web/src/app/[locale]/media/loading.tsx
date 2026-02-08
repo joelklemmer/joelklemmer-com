@@ -19,7 +19,10 @@ export default function MediaLoading() {
                 key={i}
                 className="flex flex-col sm:flex-row gap-4 border-b border-border pb-6"
               >
-                <div className="shrink-0 w-32 h-40 rounded overflow-hidden bg-muted/50 animate-pulse" />
+                <div
+                  className="shrink-0 media-thumb-frame rounded overflow-hidden bg-muted/50 animate-pulse"
+                  aria-hidden
+                />
                 <div className="flex-1 min-w-0 space-y-2">
                   <div className="h-4 w-24 bg-muted/50 rounded animate-pulse" />
                   <div className="h-4 w-full max-w-md bg-muted/30 rounded animate-pulse" />
