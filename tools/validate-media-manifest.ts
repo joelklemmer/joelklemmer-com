@@ -12,6 +12,7 @@ const errors: string[] = [];
 
 const manifest = getMediaManifest();
 
+const CANONICAL_PREFIX = 'joel-klemmer';
 for (const asset of manifest.assets) {
   if (!asset.alt || String(asset.alt).trim() === '') {
     errors.push(`Media asset ${asset.id}: missing or empty alt.`);
@@ -19,6 +20,12 @@ for (const asset of manifest.assets) {
   if (!asset.descriptor || String(asset.descriptor).trim() === '') {
     errors.push(
       `Media asset ${asset.id}: missing or empty descriptor (caption).`,
+    );
+  }
+  const filename = asset.file.split('/').pop() ?? asset.file;
+  if (!filename.includes(CANONICAL_PREFIX)) {
+    errors.push(
+      `Media asset ${asset.id}: filename must include "${CANONICAL_PREFIX}" (got ${filename}).`,
     );
   }
 }

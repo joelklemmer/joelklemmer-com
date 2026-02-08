@@ -88,6 +88,14 @@ export function isMediaVisibleOnPage(asset: MediaAsset): boolean {
   );
 }
 
+/**
+ * Derived thumbnail path (convention: base.webp → base__thumb.webp).
+ * Use for list/grid thumbnails to avoid loading full-res in the UI.
+ */
+export function getMediaThumbPath(asset: MediaAsset): string {
+  return asset.file.replace(/\.webp$/, '__thumb.webp');
+}
+
 /** Filter manifest to assets eligible for sitemap and structured data (Tier A + B). */
 export function getMediaManifestSitemapEligible(
   manifest: MediaManifest,

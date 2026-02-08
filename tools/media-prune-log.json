@@ -1,1 +1,27 @@
-[]
+[
+  {
+    "date": "2026-02-08",
+    "action": "prune",
+    "reason": "controlled media removal",
+    "assets": [
+      {
+        "id": "portrait-studio-formal-2026-01-02",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__02.webp",
+        "movedTo": "tools/media-review-delete/"
+      },
+      {
+        "id": "portrait-studio-formal-2026-01-16",
+        "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__16.webp",
+        "movedTo": "tools/media-review-delete/"
+      }
+    ],
+    "derivativesMoved": [
+      "joel-klemmer__portrait__studio-formal__2026-01__02__card.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__02__hero.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__02__thumb.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__16__card.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__16__hero.webp",
+      "joel-klemmer__portrait__studio-formal__2026-01__16__thumb.webp"
+    ]
+  }
+]

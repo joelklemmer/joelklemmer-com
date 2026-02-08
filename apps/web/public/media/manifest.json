@@ -1057,18 +1057,6 @@
       "alt": "Formal headshot of Joel Klemmer."
     },
     {
-      "id": "portrait-studio-formal-2026-01-02",
-      "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__02.webp",
-      "kind": "portrait",
-      "descriptor": "studio-formal",
-      "recommendedUse": ["hero", "card", "press"],
-      "aspectRatio": 0.82,
-      "width": 896,
-      "height": 1088,
-      "sha256": "5096e32814e1978f23dcd40bb4a4c727ab7e487a40f4b589be2614a739d65866",
-      "alt": "Formal headshot of Joel Klemmer."
-    },
-    {
       "id": "portrait-studio-formal-2026-01-03",
       "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__03.webp",
       "kind": "portrait",
@@ -1222,18 +1210,6 @@
       "width": 896,
       "height": 1088,
       "sha256": "2d4737f16af31cc2bea50085efec9cd4f5984e7f4372728b12e8d0064862197a",
-      "alt": "Formal headshot of Joel Klemmer."
-    },
-    {
-      "id": "portrait-studio-formal-2026-01-16",
-      "file": "/media/portraits/joel-klemmer__portrait__studio-formal__2026-01__16.webp",
-      "kind": "portrait",
-      "descriptor": "studio-formal",
-      "recommendedUse": ["hero", "card", "press"],
-      "aspectRatio": 0.82,
-      "width": 896,
-      "height": 1088,
-      "sha256": "a8d3d55f6b282ebb9ad5b691f1745bf72f8c9b76012480dffb4bc4e8c77ba8ba",
       "alt": "Formal headshot of Joel Klemmer."
     },
     {

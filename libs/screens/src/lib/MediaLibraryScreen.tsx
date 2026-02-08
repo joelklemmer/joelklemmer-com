@@ -22,6 +22,22 @@ import { CopySha256Button } from './CopySha256Button';
 const MEDIA_KINDS = ['portrait', 'speaking', 'author', 'identity'] as const;
 type MediaKind = (typeof MEDIA_KINDS)[number];
 
+/**
+ * Presentation-only: descriptor → executive display label.
+ * Does not change filenames or manifest; applied only in UI.
+ */
+const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
+  'studio-graphite': 'Studio portrait',
+  'studio-formal': 'Formal portrait',
+  'studio-tight': 'Identity portrait',
+  'keynote-podium': 'Keynote address',
+  'bookstore-stack': 'Author portrait',
+};
+
+function getDescriptorDisplayLabel(descriptor: string): string {
+  return DESCRIPTOR_DISPLAY_LABELS[descriptor] ?? descriptor.replace(/-/g, ' ');
+}
+
 function filterByKind(assets: MediaAsset[], kind: string | null): MediaAsset[] {
   if (!kind || !MEDIA_KINDS.includes(kind as MediaKind)) return assets;
   return assets.filter((a) => a.kind === kind);
@@ -111,13 +127,13 @@ export async function MediaLibraryScreen({ kind }: MediaLibraryScreenProps) {
               </Link>
             ))}
           </nav>
-          <ul className="space-y-6 list-none p-0 m-0">
+          <ul className="space-y-6 list-none p-0 m-0" role="list">
             {filtered.map((asset) => (
               <li
                 key={asset.id}
-                className="flex flex-col sm:flex-row gap-4 border-b border-border pb-6 last:border-0"
+                className="flex flex-col sm:flex-row gap-4 border-b border-border pb-6 last:border-0 [content-visibility:auto] [contain-intrinsic-size:auto_200px]"
               >
-                <div className="shrink-0 w-32 h-40 relative rounded overflow-hidden bg-muted">
+                <div className="shrink-0 w-32 h-40 relative rounded overflow-hidden border border-border bg-muted">
                   <Image
                     src={asset.file}
                     alt={asset.alt}
@@ -125,18 +141,28 @@ export async function MediaLibraryScreen({ kind }: MediaLibraryScreenProps) {
                     height={160}
                     className="object-cover w-full h-full"
                     sizes="128px"
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm text-muted font-medium capitalize">
-                    {asset.descriptor.replace(/-/g, ' ')}
+                  <p className="text-sm text-muted font-medium">
+                    {getDescriptorDisplayLabel(asset.descriptor)}
                   </p>
                   <p className="text-base text-text mt-0.5">{asset.alt}</p>
-                  <dl className="mt-2 text-xs text-muted grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5">
-                    <dt>{tQuiet('media.dimensions')}</dt>
-                    <dd>{`${asset.width} × ${asset.height}`}</dd>
-                    <dt>{tQuiet('media.recommendedUse')}</dt>
-                    <dd>{asset.recommendedUse.join(', ')}</dd>
+                  <dl className="mt-2 grid grid-cols-[auto_1fr] gap-x-3 gap-y-1">
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-text">
+                      {tQuiet('media.dimensions')}
+                    </dt>
+                    <dd className="text-base text-muted">
+                      {`${asset.width} × ${asset.height}`}
+                    </dd>
+                    <dt className="text-xs font-semibold uppercase tracking-wide text-text">
+                      {tQuiet('media.recommendedUse')}
+                    </dt>
+                    <dd className="text-base text-muted">
+                      {asset.recommendedUse.join(', ')}
+                    </dd>
                   </dl>
                   <details className="mt-2">
                     <summary
