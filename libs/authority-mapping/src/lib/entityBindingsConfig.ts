@@ -197,4 +197,17 @@ export const ENTITY_BINDINGS_CONFIG: EntityBindingConfig[] = [
     entityId: 'operational-transformation-model',
     signalVector: { weights: withPrimary('operational_transformation', 0.4) },
   },
+  {
+    entityKind: 'framework',
+    entityId: 'decision-horizon-compression',
+    signalVector: {
+      weights: {
+        strategic_cognition: 0.4,
+        systems_construction: 0.3,
+        institutional_leadership: 0.2,
+        operational_transformation: 0.05,
+        public_service_statesmanship: 0.05,
+      },
+    },
+  },
 ];

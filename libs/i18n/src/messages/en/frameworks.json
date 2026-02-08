@@ -17,6 +17,12 @@
       "summary": "Three phases: stabilize, align, then scale.",
       "intent10": "Stabilize before you align; align before you scale.",
       "intent60": "Transformation fails when scale is attempted before stability or alignment. Phase one: stop the bleed and establish a baseline. Phase two: align goals, metrics, and incentives. Phase three: scale only what is already working and measured."
+    },
+    "decision-horizon-compression": {
+      "title": "Decision horizon compression",
+      "summary": "Shorten the decision window to the interval where commitments stay reversible and information stays actionable.",
+      "intent10": "Decide over the shortest horizon that remains reversible.",
+      "intent60": "Compress the horizon so governance and delivery share one temporal frame. Long horizons encourage over-planning and lock-in; short horizons force clarity on what must be decided now versus what can wait. Align cadence and reporting to the compressed horizon."
     }
   },
   "section": {

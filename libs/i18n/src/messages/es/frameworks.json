@@ -17,6 +17,12 @@
       "summary": "Tres fases: estabilizar, alinear, luego escalar.",
       "intent10": "Estabilice antes de alinear; alinee antes de escalar.",
       "intent60": "La transformación falla cuando se intenta escalar antes de la estabilidad o la alineación. Fase uno: detener la hemorragia y establecer una línea base. Fase dos: alinear metas, métricas e incentivos. Fase tres: escalar solo lo que ya funciona y se mide."
+    },
+    "decision-horizon-compression": {
+      "title": "Compresión del horizonte de decisión",
+      "summary": "Acorte la ventana de decisión al intervalo en que los compromisos siguen siendo reversibles y la información accionable.",
+      "intent10": "Decida en el horizonte más corto que siga siendo reversible.",
+      "intent60": "Comprima el horizonte para que gobernanza y entrega compartan un mismo marco temporal. Los horizontes largos fomentan sobreplanificación y bloqueo; los cortos obligan a clarificar qué debe decidirse ya y qué puede esperar. Alinee cadencia e informes al horizonte comprimido."
     }
   },
   "section": {
