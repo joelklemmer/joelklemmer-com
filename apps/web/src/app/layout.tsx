@@ -1,11 +1,19 @@
 import type { ReactNode } from 'react';
 
+import { Inter } from 'next/font/google';
 import { getLocale } from 'next-intl/server';
 
 /* Root layout: only sets html lang/dir; exception to route-file import rule. */
 // eslint-disable-next-line no-restricted-imports -- root layout
 import { isRtlLocale } from '@joelklemmer/i18n';
 import { themeScript } from './theme-script';
+
+/** Authority Design Constitution: Primary stack — Inter Variable. */
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+  display: 'swap',
+});
 
 export default async function RootLayout({
   children,
@@ -16,7 +24,7 @@ export default async function RootLayout({
   const dir = isRtlLocale(locale) ? 'rtl' : 'ltr';
 
   return (
-    <html lang={locale} dir={dir}>
+    <html lang={locale} dir={dir} className={inter.variable}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

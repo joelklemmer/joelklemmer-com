@@ -27,7 +27,8 @@ Use this checklist during PR review when design, tokens, layout, navigation, a11
 
 - [ ] New or changed UI uses design tokens for color, spacing, and typography (no ad-hoc hex, RGB, or magic numbers).
 - [ ] Color choices are from the allowed palette; no political or partisan color associations.
-- [ ] Spacing uses the token scale (--space-\*); section rhythm is preserved.
+- [ ] Spacing uses the token scale (--space-\* or --spacing-8 through --spacing-128); section rhythm is preserved.
+- [ ] **Single source of truth for palette and primitives:** `libs/tokens/src/lib/tokens.css`. App overrides only in `apps/web/src/styles/00-tokens.css`.
 - [ ] tokens-validate and visual-contract-validate still pass.
 
 ---

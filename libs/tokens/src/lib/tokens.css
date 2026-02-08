@@ -1,28 +1,41 @@
-/* ACS: Converged Color Intelligence — graphite foundations, layered neutrals, restrained signal accents, tonal hierarchy. Token-driven; no decorative colors. WCAG-safe. */
+/* Authority Design Constitution — Single source of truth for palette and primitives.
+   Deep Navy #0F172A, Slate Core #1E293B, Warm Neutral #F8FAFC, Steel Blue #3B82F6, Muted Cyan #0EA5A4.
+   Token-driven; no decorative colors. WCAG-safe. */
 :root {
-  /* Graphite foundations (cool gray base — depth and composure) */
-  --color-bg: 222 14% 95%;
-  --color-surface: 222 10% 100%;
-  --color-surface-elevated: 222 12% 98%;
-  --color-surface-field: 222 8% 99%;
-  --color-surface-inset: 222 10% 97%;
-  --color-text: 222 26% 9%;
-  --color-muted: 222 14% 38%;
-  --color-border: 222 10% 88%;
-  --color-border-subtle: 222 8% 92%;
-  /* Layered neutrals — full tonal hierarchy, structure only */
-  --color-neutral-50: 222 12% 97%;
-  --color-neutral-100: 222 10% 92%;
-  --color-neutral-200: 222 10% 84%;
+  /* === Authority Design Constitution primitives (hex → HSL, space-separated for alpha) === */
+  --color-deep-navy: 222 47% 11%; /* #0F172A Foundation Dark */
+  --color-slate-core: 222 33% 17%; /* #1E293B */
+  --color-charcoal-text: 222 39% 11%; /* #111827 */
+  --color-warm-neutral: 210 40% 98%; /* #F8FAFC Foundation Light */
+  --color-soft-slate: 214 32% 91%; /* #E2E8F0 */
+  --color-paper-base: 0 0% 100%; /* #FFFFFF */
+  --color-steel-blue: 217 91% 60%; /* #3B82F6 Structural Accent */
+  --color-muted-cyan: 180 84% 35%; /* #0EA5A4 Structural Accent */
+  --color-neutral-divider: 214 20% 84%; /* #CBD5E1 */
+
+  /* Semantic surfaces (light theme) — derived from constitution light foundation */
+  --color-bg: var(--color-warm-neutral);
+  --color-surface: var(--color-paper-base);
+  --color-surface-elevated: var(--color-warm-neutral);
+  --color-surface-field: 210 33% 99%;
+  --color-surface-inset: var(--color-soft-slate);
+  --color-text: var(--color-charcoal-text);
+  --color-muted: 222 14% 35%;
+  --color-border: var(--color-neutral-divider);
+  --color-border-subtle: var(--color-soft-slate);
+  /* Layered neutrals — tonal hierarchy from constitution */
+  --color-neutral-50: var(--color-warm-neutral);
+  --color-neutral-100: var(--color-soft-slate);
+  --color-neutral-200: 214 20% 84%;
   --color-neutral-300: 222 8% 68%;
   --color-neutral-400: 222 8% 50%;
-  --color-neutral-500: 222 10% 38%;
-  /* Restrained signal accents — intelligence, not marketing */
-  --color-accent: 218 48% 34%;
-  --color-accent-strong: 218 54% 26%;
-  --color-accent-muted: 218 36% 44%;
-  --color-focus: 218 58% 38%;
-  /* Tonal hierarchy aliases (semantic) */
+  --color-neutral-500: 222 10% 35%;
+  /* Structural accents — Steel Blue primary (WCAG AA on white), Muted Cyan secondary */
+  --color-accent: 217 91% 52%;
+  --color-accent-strong: 217 91% 45%;
+  --color-accent-muted: var(--color-muted-cyan);
+  --color-focus: 217 91% 52%;
+  /* Semantic aliases (field, surface, inset, text primary/secondary, divider, focus ring) */
   --color-text-primary: var(--color-text);
   --color-text-secondary: var(--color-muted);
   --color-text-muted: var(--color-muted);
@@ -31,18 +44,26 @@
   --color-surface-1: var(--color-surface);
   --color-surface-2: var(--color-surface-elevated);
   --color-surface-primary: var(--color-surface);
-  --color-surface-field: var(--color-surface-field);
-  --color-surface-inset: var(--color-surface-inset);
+  /* field, inset already defined above */
 
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-8: 4rem;
-  --space-10: 5rem;
+  /* Spacing scale: base 8px — 8, 16, 24, 32, 48, 64, 96, 128 (constitution) */
+  --spacing-8: 0.5rem;
+  --spacing-16: 1rem;
+  --spacing-24: 1.5rem;
+  --spacing-32: 2rem;
+  --spacing-48: 3rem;
+  --spacing-64: 4rem;
+  --spacing-96: 6rem;
+  --spacing-128: 8rem;
+  --space-1: var(--spacing-8);
+  --space-2: var(--spacing-16);
+  --space-3: var(--spacing-24);
+  --space-4: var(--spacing-32);
+  --space-5: var(--spacing-48);
+  --space-6: var(--spacing-64);
+  --space-7: var(--spacing-96);
+  --space-8: var(--spacing-128);
+  --space-10: 5rem; /* 80px — layout-specific, not in scale */
 
   --font-sans:
     ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -51,7 +72,15 @@
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
     'Courier New', monospace;
 
-  /* Typography system: authority hierarchy (web-safe / system-first) */
+  /* Typography weight governance (constitution): 350, 400, 500, 600, 700, 800 */
+  --font-weight-meta: 350;
+  --font-weight-body: 400;
+  --font-weight-label: 500;
+  --font-weight-section: 600;
+  --font-weight-hero: 700;
+  --font-weight-hero-identity: 800;
+
+  /* Typography system: authority hierarchy (Inter Variable when provided by app) */
   --display-heading-font: var(--font-sans);
   --display-heading-size: 2rem;
   --display-heading-line: 1.25;
@@ -85,7 +114,7 @@
 
   --typography-h3-size: var(--text-lg);
   --typography-h3-line: var(--leading-tight);
-  --typography-h3-weight: 600;
+  --typography-h3-weight: var(--font-weight-section);
 
   --typography-body-size: var(--body-analytical-size);
   --typography-body-line: var(--body-analytical-line);
@@ -187,10 +216,9 @@
   --hero-inner-surface: hsl(var(--color-surface-elevated) / 0.94);
   --hero-inner-border: hsl(var(--color-border-subtle) / 0.2);
   --hero-inner-blur: 10px;
-  --hero-typography-weight: 600;
+  --hero-typography-weight: var(--font-weight-section);
 
   /* VACEL B) Eye path: heading prominence, content lane, section anchoring. */
-  --section-heading-weight: 600;
   --section-heading-margin-block-end: var(--space-3);
   --content-lane-gap: var(--space-5);
   --section-anchor-gap: var(--space-6);
@@ -213,7 +241,8 @@
   --authority-card-glow: none;
 
   /* VACEL E) Typography amplification: weight, hierarchy, rhythm. */
-  --display-heading-weight: 600;
+  --display-heading-weight: var(--font-weight-section);
+  --section-heading-weight: var(--font-weight-section);
   --section-heading-letter-spacing: -0.02em;
   --body-rhythm-margin: var(--space-3);
   --heading-to-content-gap: var(--space-4);
@@ -222,6 +251,7 @@
   --section-block-margin: var(--space-8);
   --section-inner-gap: var(--space-4);
   --section-heading-margin: var(--space-2);
+  /* Section heading weight was set above with --section-heading-weight */
 
   /* Home page specific: tighter rhythm for briefing interface */
   --home-section-gap: var(--space-6);
@@ -256,7 +286,7 @@
   --hero-display-size: clamp(2.75rem, 6vw + 1.5rem, 3.5rem);
   --hero-display-line: 1.1;
   --hero-display-spacing: -0.04em;
-  --hero-display-weight: 660;
+  --hero-display-weight: var(--font-weight-hero);
   --hero-lede-size: var(--text-lg);
   --hero-lede-line: 1.45;
   --hero-block-gap: var(--space-6);
@@ -337,14 +367,37 @@
   --authority-depth-layer: 1;
 }
 
+/* Deterministic light theme (Authority Design Constitution light foundation) */
+:root[data-theme='light'] {
+  --color-bg: var(--color-warm-neutral);
+  --color-surface: var(--color-paper-base);
+  --color-surface-elevated: var(--color-warm-neutral);
+  --color-surface-field: 210 33% 99%;
+  --color-surface-inset: var(--color-soft-slate);
+  --color-text: var(--color-charcoal-text);
+  --color-muted: 222 14% 35%;
+  --color-border: var(--color-neutral-divider);
+  --color-border-subtle: var(--color-soft-slate);
+  --color-neutral-50: var(--color-warm-neutral);
+  --color-neutral-100: var(--color-soft-slate);
+  --color-neutral-200: 214 20% 84%;
+  --color-neutral-300: 222 8% 68%;
+  --color-neutral-400: 222 8% 50%;
+  --color-neutral-500: 222 10% 35%;
+  --color-accent: 217 91% 52%;
+  --color-accent-strong: 217 91% 45%;
+  --color-accent-muted: var(--color-muted-cyan);
+  --color-focus: 217 91% 52%;
+}
+
 @media (prefers-color-scheme: dark) {
-  :root {
-    --color-bg: 222 18% 10%;
-    --color-surface: 222 16% 14%;
-    --color-surface-elevated: 222 14% 18%;
-    --color-surface-field: 222 12% 16%;
-    --color-surface-inset: 222 15% 12%;
-    --color-text: 220 12% 94%;
+  :root:not([data-theme='light']) {
+    --color-bg: var(--color-deep-navy);
+    --color-surface: var(--color-slate-core);
+    --color-surface-elevated: 222 28% 20%;
+    --color-surface-field: 222 26% 18%;
+    --color-surface-inset: 222 30% 14%;
+    --color-text: 210 40% 98%;
     --color-muted: 220 10% 68%;
     --color-border: 222 10% 22%;
     --color-border-subtle: 222 8% 18%;
@@ -354,11 +407,10 @@
     --color-neutral-300: 220 10% 42%;
     --color-neutral-400: 220 8% 56%;
     --color-neutral-500: 220 8% 68%;
-    --color-accent: 212 60% 58%;
-    --color-accent-strong: 212 66% 66%;
-    --color-accent-muted: 212 50% 52%;
-    --color-focus: 212 64% 62%;
-    /* Reduced border visibility in dark mode */
+    --color-accent: 217 91% 65%;
+    --color-accent-strong: 217 91% 70%;
+    --color-accent-muted: 180 70% 45%;
+    --color-focus: 217 91% 65%;
     --authority-soft-glow: none;
     --authority-card-glow: none;
     --authority-glass-border: hsl(var(--color-border) / 0.08);
@@ -368,12 +420,12 @@
 }
 
 :root[data-theme='dark'] {
-  --color-bg: 222 18% 10%;
-  --color-surface: 222 16% 14%;
-  --color-surface-elevated: 222 14% 18%;
-  --color-surface-field: 222 12% 16%;
-  --color-surface-inset: 222 15% 12%;
-  --color-text: 220 12% 94%;
+  --color-bg: var(--color-deep-navy);
+  --color-surface: var(--color-slate-core);
+  --color-surface-elevated: 222 28% 20%;
+  --color-surface-field: 222 26% 18%;
+  --color-surface-inset: 222 30% 14%;
+  --color-text: 210 40% 98%;
   --color-muted: 220 10% 68%;
   --color-border: 222 10% 22%;
   --color-border-subtle: 222 8% 18%;
@@ -383,11 +435,10 @@
   --color-neutral-300: 220 10% 42%;
   --color-neutral-400: 220 8% 56%;
   --color-neutral-500: 220 8% 68%;
-  --color-accent: 212 60% 58%;
-  --color-accent-strong: 212 66% 66%;
-  --color-accent-muted: 212 50% 52%;
-  --color-focus: 212 64% 62%;
-  /* Reduced border visibility in dark mode */
+  --color-accent: 217 91% 65%;
+  --color-accent-strong: 217 91% 70%;
+  --color-accent-muted: 180 70% 45%;
+  --color-focus: 217 91% 65%;
   --authority-soft-glow: none;
   --authority-card-glow: none;
   --authority-glass-border: hsl(var(--color-border) / 0.08);

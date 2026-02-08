@@ -133,6 +133,12 @@ module.exports = {
         'authority-out': 'var(--ease-authority-out)',
       },
       fontWeight: {
+        meta: 'var(--font-weight-meta)',
+        body: 'var(--font-weight-body)',
+        label: 'var(--font-weight-label)',
+        section: 'var(--font-weight-section)',
+        hero: 'var(--font-weight-hero)',
+        'hero-identity': 'var(--font-weight-hero-identity)',
         'display-heading': 'var(--display-heading-weight)',
         'section-heading': 'var(--section-heading-weight)',
       },

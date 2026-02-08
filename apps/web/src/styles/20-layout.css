@@ -354,7 +354,7 @@ section.section-shell:last-child {
   display: inline-block;
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--font-weight-label);
   color: hsl(var(--color-text));
   background: hsl(var(--color-surface));
   border: 1px solid hsl(var(--color-border));

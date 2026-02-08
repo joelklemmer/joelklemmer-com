@@ -52,7 +52,7 @@ html[data-motion='reduced'] .calc-card-material {
 .mdx-content h3 {
   font-size: var(--text-lg);
   line-height: var(--leading-tight);
-  font-weight: 600;
+  font-weight: var(--font-weight-section);
 }
 
 .mdx-content p {
