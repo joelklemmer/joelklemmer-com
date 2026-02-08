@@ -1,7 +1,5 @@
 import type { ReactNode } from 'react';
 import { Fragment } from 'react';
-import { existsSync } from 'fs';
-import { join } from 'path';
 import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import {
@@ -73,27 +71,17 @@ export async function HomeScreen() {
     (a, b) => (orderMap.get(a) ?? 99) - (orderMap.get(b) ?? 99),
   );
 
-  const cwd = process.cwd();
-  const portraitPath = [
-    join(cwd, 'apps', 'web', 'public', 'media', 'portrait.jpg'),
-    join(cwd, 'public', 'media', 'portrait.jpg'),
-  ].find((p) => existsSync(p));
-  const hasPortrait = Boolean(portraitPath);
   const hero = (
     <HeroSection
       title={t('hero.title')}
       lede={t('hero.lede')}
       actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
-      visual={
-        hasPortrait
-          ? {
-              src: '/media/portrait.jpg',
-              alt: t('hero.portraitAlt'),
-              width: 400,
-              height: 500,
-            }
-          : undefined
-      }
+      visual={{
+        src: '/media/portrait.webp',
+        alt: 'Portrait of Joel R. Klemmer',
+        width: 1200,
+        height: 1500,
+      }}
     />
   );
   const startHere = (

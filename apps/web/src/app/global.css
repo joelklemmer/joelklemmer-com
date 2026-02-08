@@ -254,11 +254,11 @@
 
   @media (min-width: 768px) {
     .hero-authority-grid {
-      grid-template-columns: 1fr minmax(200px, 320px);
+      grid-template-columns: 1fr minmax(240px, 380px);
       align-items: start;
       align-content: start;
       gap: var(--hero-inline-gap);
-      /* Text–image dialogue: content primary, visual anchor secondary */
+      /* Text–image dialogue: content primary, portrait anchor in authority-glass */
     }
   }
 
@@ -325,7 +325,7 @@
     min-height: 0;
   }
 
-  /* ACS E) Identity gravity anchors: photographic presence, compositional hierarchy, lighting realism */
+  /* ACS E) Identity gravity anchors: photographic presence, compositional hierarchy, lighting realism; depth harmonization */
   .hero-authority-visual-frame {
     position: relative;
     overflow: hidden;
@@ -334,6 +334,10 @@
       var(--hero-visual-depth), var(--hero-visual-frame),
       var(--hero-visual-glow), var(--hero-visual-highlight);
     background: hsl(var(--color-neutral-100));
+  }
+
+  .hero-authority-visual-frame.authority-glass {
+    background: var(--authority-glass-bg);
   }
 
   @media (prefers-reduced-motion: reduce) {
