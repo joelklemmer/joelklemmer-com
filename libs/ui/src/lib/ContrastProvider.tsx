@@ -13,11 +13,6 @@ const ContrastContext = createContext<ContrastContextValue | undefined>(undefine
 
 const CONTRAST_STORAGE_KEY = 'joelklemmer-contrast';
 
-function getSystemContrast(): ContrastMode {
-  if (typeof window === 'undefined') return 'default';
-  return window.matchMedia('(prefers-contrast: more)').matches ? 'high' : 'default';
-}
-
 function getStoredContrast(): ContrastMode {
   if (typeof window === 'undefined') return 'default';
   const stored = localStorage.getItem(CONTRAST_STORAGE_KEY);
@@ -35,35 +30,42 @@ function applyContrast(contrast: ContrastMode) {
   }
 }
 
+function getSystemContrast(): ContrastMode {
+  if (typeof window === 'undefined') return 'default';
+  // Check prefers-contrast media query
+  if (window.matchMedia('(prefers-contrast: more)').matches) {
+    return 'high';
+  }
+  return 'default';
+}
+
 export function ContrastProvider({ children }: { children: ReactNode }) {
-  const [contrast, setContrastState] = useState<ContrastMode>(() => {
-    // Initialize synchronously on client
-    if (typeof window !== 'undefined') {
-      const stored = getStoredContrast();
-      const systemContrast = getSystemContrast();
-      return stored !== 'default' ? stored : systemContrast;
-    }
-    return 'default';
-  });
+  const [contrast, setContrastState] = useState<ContrastMode>('default');
+  const [mounted, setMounted] = useState(false);
 
+  // SSR-safe hydration
   useEffect(() => {
-    // Check if user has stored preference, otherwise respect system preference
+    setMounted(true);
     const stored = getStoredContrast();
-    const systemContrast = getSystemContrast();
-    const initialContrast = stored !== 'default' ? stored : systemContrast;
-    setContrastState(initialContrast);
-    applyContrast(initialContrast);
+    // If no stored preference, respect system preference
+    const initial = stored === 'default' && typeof window !== 'undefined' 
+      ? getSystemContrast() 
+      : stored;
+    setContrastState(initial);
+    applyContrast(initial);
   }, []);
-
-  // Listen for system contrast changes when contrast is default
+  
+  // Listen for system contrast changes when contrast is 'default'
   useEffect(() => {
-    if (contrast !== 'default' || typeof window === 'undefined') return;
+    if (!mounted || contrast !== 'default') return;
 
     const mediaQuery = window.matchMedia('(prefers-contrast: more)');
     const handleChange = () => {
       const systemContrast = getSystemContrast();
-      setContrastState(systemContrast);
-      applyContrast(systemContrast);
+      if (systemContrast !== contrast) {
+        setContrastState(systemContrast);
+        applyContrast(systemContrast);
+      }
     };
 
     mediaQuery.addEventListener('change', handleChange);
@@ -81,7 +83,6 @@ export function ContrastProvider({ children }: { children: ReactNode }) {
     setContrastState(newContrast);
   };
 
-  // Prevent flash of wrong contrast on SSR - render immediately but apply contrast synchronously
   return (
     <ContrastContext.Provider value={{ contrast, setContrast }}>
       {children}
