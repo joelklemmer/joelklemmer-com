@@ -13,7 +13,19 @@
     "navLabel": "Navegacion principal",
     "footerLabel": "Pie de pagina",
     "languageSwitcherLabel": "Opciones de idioma",
-    "languageSwitcherAction": "Cambiar idioma a {language}"
+    "languageSwitcherAction": "Cambiar idioma a {language}",
+    "accessibilityPanelLabel": "Configuración de accesibilidad",
+    "themeLabel": "Tema",
+    "themeLight": "Claro",
+    "themeDark": "Oscuro",
+    "themeSystem": "Sistema",
+    "contrastLabel": "Contraste",
+    "contrastDefault": "Predeterminado",
+    "contrastHigh": "Alto",
+    "motionLabel": "Reducir movimiento",
+    "textSizeLabel": "Tamaño del texto",
+    "textSizeDefault": "Predeterminado",
+    "textSizeLarge": "Grande"
   },
   "fallbackNotice": {
     "title": "Aviso de traducción",

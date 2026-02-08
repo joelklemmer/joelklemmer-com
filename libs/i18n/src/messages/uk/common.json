@@ -13,7 +13,19 @@
     "navLabel": "Основна навігація",
     "footerLabel": "Нижній колонтитул",
     "languageSwitcherLabel": "Вибір мови",
-    "languageSwitcherAction": "Змінити мову на {language}"
+    "languageSwitcherAction": "Змінити мову на {language}",
+    "accessibilityPanelLabel": "Налаштування доступності",
+    "themeLabel": "Тема",
+    "themeLight": "Світла",
+    "themeDark": "Темна",
+    "themeSystem": "Системна",
+    "contrastLabel": "Контраст",
+    "contrastDefault": "За замовчуванням",
+    "contrastHigh": "Високий",
+    "motionLabel": "Зменшити рух",
+    "textSizeLabel": "Розмір тексту",
+    "textSizeDefault": "За замовчуванням",
+    "textSizeLarge": "Великий"
   },
   "fallbackNotice": {
     "title": "Попередження про переклад",

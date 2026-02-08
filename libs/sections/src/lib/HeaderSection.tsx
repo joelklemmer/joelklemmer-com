@@ -6,12 +6,16 @@ export interface HeaderSectionProps {
   wordmark: string;
   homeHref: string;
   languageSwitcher?: ReactNode;
+  themeToggle?: ReactNode;
+  accessibilityPanel?: ReactNode;
 }
 
 export function HeaderSection({
   wordmark,
   homeHref,
   languageSwitcher,
+  themeToggle,
+  accessibilityPanel,
 }: HeaderSectionProps) {
   return (
     <div className="flex items-center justify-between gap-4">
@@ -21,7 +25,11 @@ export function HeaderSection({
       >
         {wordmark}
       </Link>
-      {languageSwitcher}
+      <div className="flex items-center gap-2">
+        {languageSwitcher}
+        {themeToggle}
+        {accessibilityPanel}
+      </div>
     </div>
   );
 }

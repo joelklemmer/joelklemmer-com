@@ -13,7 +13,19 @@
     "navLabel": "Primary navigation",
     "footerLabel": "Footer",
     "languageSwitcherLabel": "Language options",
-    "languageSwitcherAction": "Switch language to {language}"
+    "languageSwitcherAction": "Switch language to {language}",
+    "accessibilityPanelLabel": "Accessibility settings",
+    "themeLabel": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System",
+    "contrastLabel": "Contrast",
+    "contrastDefault": "Default",
+    "contrastHigh": "High",
+    "motionLabel": "Reduce motion",
+    "textSizeLabel": "Text size",
+    "textSizeDefault": "Default",
+    "textSizeLarge": "Large"
   },
   "fallbackNotice": {
     "title": "Translation fallback",

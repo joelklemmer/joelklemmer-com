@@ -2,3 +2,24 @@
 .text-muted {
   color: hsl(var(--color-muted));
 }
+
+/* Forced motion reduction (user preference override) */
+.motion-reduce-force,
+.motion-reduce-force *,
+.motion-reduce-force *::before,
+.motion-reduce-force *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Text size control */
+:root[data-text-size='large'] {
+  --body-analytical-size: 1.125rem;
+  --display-heading-size: 2.25rem;
+  --section-heading-size: 1.75rem;
+  --text-base: 1.125rem;
+  --text-sm: 1rem;
+  --text-lg: 1.25rem;
+}
