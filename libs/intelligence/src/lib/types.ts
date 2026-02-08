@@ -26,6 +26,8 @@ export interface ClaimNode {
   recordIds: string[];
   /** Authority signal weights for ranking/traversal (UASIL). */
   signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for ranking/clustering (optional). */
+  signalEntropyContribution?: number;
 }
 
 /** Public record (proof) entity node. */
@@ -38,6 +40,8 @@ export interface RecordNode {
   date: string;
   /** Authority signal weights for ranking/traversal (UASIL). */
   signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for ranking/clustering (optional). */
+  signalEntropyContribution?: number;
 }
 
 /** Case study entity node. */
@@ -52,6 +56,8 @@ export interface CaseStudyNode {
   claimRefs: string[];
   /** Authority signal weights for ranking/traversal (UASIL). */
   signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for ranking/clustering (optional). */
+  signalEntropyContribution?: number;
 }
 
 /** Book entity node. */
@@ -65,6 +71,8 @@ export interface BookNode {
   proofRefs: string[];
   /** Authority signal weights for ranking/traversal (UASIL). */
   signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for ranking/clustering (optional). */
+  signalEntropyContribution?: number;
 }
 
 /** Union of all entity node types. */
@@ -75,6 +83,8 @@ export interface GraphEdge {
   fromId: string;
   toId: string;
   kind: GraphEdgeKind;
+  /** ASTD: optional weight from signal variance (diversity); higher = more orthogonal endpoints. */
+  weight?: number;
 }
 
 /** Normalized entity graph: nodes and edges. No UI; pure data. */
@@ -94,6 +104,8 @@ export interface SemanticIndexEntry {
   url: string;
   /** Authority signal weights for search ranking / AI context (UASIL). */
   signalVector?: SignalWeightVector;
+  /** ASTD: entropy contribution for semantic index ranking (optional). */
+  signalEntropyContribution?: number;
 }
 
 /** Resolver for attaching authority signal vectors to graph/index entities (UASIL). */
@@ -101,3 +113,9 @@ export type SignalVectorResolver = (
   kind: GraphNodeKind,
   id: string,
 ) => SignalWeightVector | undefined;
+
+/** ASTD: optional resolver for variance/entropy (informs ranking and clustering). */
+export type SignalVarianceResolver = (
+  kind: GraphNodeKind,
+  id: string,
+) => number | undefined;

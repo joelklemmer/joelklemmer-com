@@ -11,12 +11,23 @@ import {
 import {
   clearRegistry,
   getAggregateCoverage,
+  getEffectiveWeights,
   getSignalVector,
   registerBinding,
   type SignalWeightVector,
 } from '@joelklemmer/authority-signals';
 import type { ContentEntityKind } from '@joelklemmer/authority-signals';
 import { ENTITY_BINDINGS_CONFIG } from './entityBindingsConfig';
+import {
+  generateDifferentiatedBindings,
+  findVectorDuplication,
+  findLowEntropyClusters,
+  detectSignalFlattening,
+} from './topologyDifferentiation';
+import {
+  getEntropyContribution,
+  getMeanVectorsByKind,
+} from './entropyMetrics';
 
 export type EntityIdSet = {
   claimIds: Set<string>;
@@ -46,13 +57,27 @@ const OVERCONCENTRATION_RATIO = 2.5;
 /** Min ratio of signal aggregate to mean before "starvation" warning (e.g. 0.25). */
 const STARVATION_RATIO = 0.25;
 
+/** Differentiated bindings (ASTD): used for registry and structured mapping. */
+let cachedDifferentiatedBindings: typeof ENTITY_BINDINGS_CONFIG | null = null;
+
+function getDifferentiatedBindings(): typeof ENTITY_BINDINGS_CONFIG {
+  if (!cachedDifferentiatedBindings) {
+    cachedDifferentiatedBindings = generateDifferentiatedBindings(
+      ENTITY_BINDINGS_CONFIG,
+    );
+  }
+  return cachedDifferentiatedBindings;
+}
+
 /**
  * Populate the central registry from the canonical bindings config.
+ * Uses differentiated bindings (ASTD) to eliminate redundancy clusters.
  * Call once before using getSignalVector or running diagnostics.
  */
 export function populateRegistryFromConfig(): void {
   clearRegistry();
-  for (const b of ENTITY_BINDINGS_CONFIG) {
+  const bindings = getDifferentiatedBindings();
+  for (const b of bindings) {
     registerBinding({
       entityKind: b.entityKind,
       entityId: b.entityId,
@@ -63,18 +88,36 @@ export function populateRegistryFromConfig(): void {
 
 /**
  * Get the full structured mapping for Intelligence Layer consumption.
+ * Uses differentiated bindings (ASTD). Does not mutate the registry.
  */
 export function getStructuredMapping(): StructuredMapping {
-  const entries: StructuredMappingEntry[] = [];
-  for (const b of ENTITY_BINDINGS_CONFIG) {
-    entries.push({
-      entityKind: b.entityKind,
-      entityId: b.entityId,
-      signalVector: b.signalVector,
-    });
-  }
-  const aggregateCoverage = getAggregateCoverage();
+  const bindings = getDifferentiatedBindings();
+  const entries: StructuredMappingEntry[] = bindings.map((b) => ({
+    entityKind: b.entityKind,
+    entityId: b.entityId,
+    signalVector: b.signalVector,
+  }));
+  const aggregateCoverage = getAggregateCoverageFromBindings(bindings);
   return { entries, aggregateCoverage };
+}
+
+function getAggregateCoverageFromBindings(
+  bindings: Array<{ signalVector: SignalWeightVector }>,
+): Record<AuthoritySignalId, number> {
+  const agg: Record<AuthoritySignalId, number> = {
+    strategic_cognition: 0,
+    systems_construction: 0,
+    operational_transformation: 0,
+    institutional_leadership: 0,
+    public_service_statesmanship: 0,
+  };
+  for (const b of bindings) {
+    const w = getEffectiveWeights(b.signalVector);
+    for (const id of AUTHORITY_SIGNAL_IDS) {
+      agg[id] += w[id] ?? 0;
+    }
+  }
+  return agg;
 }
 
 /**
@@ -85,6 +128,26 @@ export function getEntitySignalVector(
   entityId: string,
 ): SignalWeightVector | undefined {
   return getSignalVector(entityKind, entityId);
+}
+
+/**
+ * ASTD: entropy contribution for an entity (for semantic index ranking / graph clustering).
+ * Higher = more distinctive vector vs same-kind mean. Call after populateRegistryFromConfig.
+ */
+export function getEntityEntropyContribution(
+  entityKind: ContentEntityKind,
+  entityId: string,
+): number | undefined {
+  const bindings = getDifferentiatedBindings();
+  const meanByKind = getMeanVectorsByKind(bindings);
+  const binding = bindings.find(
+    (b) => b.entityKind === entityKind && b.entityId === entityId,
+  );
+  if (!binding) return undefined;
+  const mean = meanByKind.get(binding.entityKind);
+  if (!mean) return undefined;
+  const vector = getEffectiveWeights(binding.signalVector);
+  return getEntropyContribution(vector, mean);
 }
 
 /**
@@ -184,10 +247,11 @@ export function getMappingDiagnostics(entityIds: EntityIdSet): {
     }
   }
 
+  const mapping = getStructuredMapping();
   const vectorKey = (v: SignalWeightVector) =>
     JSON.stringify(Object.keys(v.weights ?? {}).sort());
   const byVector = new Map<string, StructuredMappingEntry[]>();
-  for (const e of getStructuredMapping().entries) {
+  for (const e of mapping.entries) {
     const k = vectorKey(e.signalVector);
     if (!byVector.has(k)) byVector.set(k, []);
     byVector.get(k)!.push(e);
@@ -198,6 +262,25 @@ export function getMappingDiagnostics(entityIds: EntityIdSet): {
         `Redundancy cluster: ${entries.length} entities share the same signal profile.`,
       );
     }
+  }
+
+  const differentiated = getDifferentiatedBindings();
+  const dups = findVectorDuplication(differentiated);
+  for (const { signature, entityKeys } of dups) {
+    warnings.push(
+      `Vector duplication: ${entityKeys.join(', ')} share signature ${signature.slice(0, 40)}…`,
+    );
+  }
+  const lowEntropy = findLowEntropyClusters(differentiated, 4);
+  for (const { count, entityKeys } of lowEntropy) {
+    warnings.push(
+      `Low entropy cluster: ${count} entities (${entityKeys.slice(0, 3).join(', ')}…) share same vector.`,
+    );
+  }
+  if (detectSignalFlattening(differentiated)) {
+    warnings.push(
+      'Signal flattening detected: entity vectors are too similar (low variance).',
+    );
   }
 
   return { errors, warnings, info };

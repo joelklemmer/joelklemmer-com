@@ -24,12 +24,26 @@ export function getBinding(
   return bindingMap.get(`${entityKind}:${entityId}`);
 }
 
-/** Get signal weight vector for an entity, if registered. */
+/**
+ * Get signal weight vector for an entity, if registered.
+ * If context is provided and the binding has contextOverrides[context], returns a copy
+ * of the vector with weights overridden by that map (contextual override hook).
+ */
 export function getSignalVector(
   entityKind: SignalBinding['entityKind'],
   entityId: string,
+  context?: string,
 ): SignalWeightVector | undefined {
-  return getBinding(entityKind, entityId)?.signalVector;
+  const binding = getBinding(entityKind, entityId);
+  const vector = binding?.signalVector;
+  if (!vector) return undefined;
+  if (context && vector.contextOverrides?.[context]) {
+    return {
+      ...vector,
+      weights: { ...vector.weights, ...vector.contextOverrides[context] },
+    };
+  }
+  return vector;
 }
 
 /** All registered bindings. */

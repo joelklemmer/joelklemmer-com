@@ -17,6 +17,7 @@ import type {
   SemanticIndexEntry,
   SemanticEntryType,
   SignalVectorResolver,
+  SignalVarianceResolver,
 } from './types';
 
 export type { SemanticIndexEntry, SemanticEntryType };
@@ -27,6 +28,8 @@ const DEFAULT_LOCALE = 'en';
 export interface BuildSemanticIndexOptions {
   /** If provided, attach authority signal vectors to each entry (UASIL). */
   getSignalVector?: SignalVectorResolver;
+  /** ASTD: if provided, attach entropy contribution for semantic index ranking. */
+  getSignalVariance?: SignalVarianceResolver;
 }
 
 /**
@@ -46,6 +49,7 @@ export async function buildSemanticIndex(
   ]);
 
   const getVector = options?.getSignalVector;
+  const getVariance = options?.getSignalVariance;
   const entries: SemanticIndexEntry[] = [];
 
   for (const c of claims) {
@@ -57,6 +61,8 @@ export async function buildSemanticIndex(
     };
     const vec = getVector?.('claim', c.id);
     if (vec) entry.signalVector = vec;
+    const contrib = getVariance?.('claim', c.id);
+    if (contrib !== undefined) entry.signalEntropyContribution = contrib;
     entries.push(entry);
   }
 
@@ -70,6 +76,8 @@ export async function buildSemanticIndex(
     };
     const vec = getVector?.('record', id);
     if (vec) entry.signalVector = vec;
+    const contrib = getVariance?.('record', id);
+    if (contrib !== undefined) entry.signalEntropyContribution = contrib;
     entries.push(entry);
   }
 
@@ -85,6 +93,8 @@ export async function buildSemanticIndex(
     };
     const vec = getVector?.('caseStudy', id);
     if (vec) entry.signalVector = vec;
+    const contrib = getVariance?.('caseStudy', id);
+    if (contrib !== undefined) entry.signalEntropyContribution = contrib;
     entries.push(entry);
   }
 
@@ -100,6 +110,8 @@ export async function buildSemanticIndex(
     };
     const vec = getVector?.('book', id);
     if (vec) entry.signalVector = vec;
+    const contrib = getVariance?.('book', id);
+    if (contrib !== undefined) entry.signalEntropyContribution = contrib;
     entries.push(entry);
   }
 

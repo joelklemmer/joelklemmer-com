@@ -18,9 +18,12 @@ import {
 import {
   populateRegistryFromConfig,
   getEntitySignalVector,
+  getStructuredMapping,
+  getEntropyContribution,
 } from '@joelklemmer/authority-mapping';
 import {
-  getDominantSignalId,
+  getDominantSignalIdFromEffective,
+  getEffectiveWeights,
   AUTHORITY_SIGNAL_IDS,
 } from '@joelklemmer/authority-signals';
 import {
@@ -93,6 +96,21 @@ export async function BriefScreen() {
     featuredClaims.map((c) => c.id),
   );
   const signalOrder = new Map(AUTHORITY_SIGNAL_IDS.map((id, i) => [id, i]));
+  const mapping = getStructuredMapping();
+  const claimEntries = mapping.entries.filter((e) => e.entityKind === 'claim');
+  const claimVectors = claimEntries.map((e) => ({
+    entityId: e.entityId,
+    effective: getEffectiveWeights(e.signalVector),
+  }));
+  const meanVector = AUTHORITY_SIGNAL_IDS.reduce(
+    (acc, id) => {
+      const sum = claimVectors.reduce((s, v) => s + v.effective[id], 0);
+      acc[id] = claimVectors.length ? sum / claimVectors.length : 0;
+      return acc;
+    },
+    {} as Record<(typeof AUTHORITY_SIGNAL_IDS)[number], number>,
+  );
+
   const claimCardsUnsorted = featuredClaims.map((claim) => {
     const supportingLinks = claim.recordIds
       .map((recordId) => {
@@ -110,7 +128,13 @@ export async function BriefScreen() {
       recordIdToDate,
     );
     const vector = getEntitySignalVector('claim', claim.id);
-    const dominantSignalId = vector ? getDominantSignalId(vector) : undefined;
+    const effectiveVector = vector ? getEffectiveWeights(vector) : undefined;
+    const dominantSignalId = vector
+      ? getDominantSignalIdFromEffective(vector)
+      : undefined;
+    const entropyContribution = effectiveVector
+      ? getEntropyContribution(effectiveVector, meanVector)
+      : 0;
     return {
       id: claim.id,
       label: t(claim.labelKey),
@@ -127,9 +151,11 @@ export async function BriefScreen() {
       verificationConnectionsLabel: t('claims.verificationConnections'),
       lastVerifiedLabel: t('claims.lastVerified'),
       dominantSignalId,
+      entropyContribution,
     };
   });
-  const claimCards = [...claimCardsUnsorted].sort((a, b) => {
+
+  const bySignalThenEntropy = [...claimCardsUnsorted].sort((a, b) => {
     const orderA = a.dominantSignalId
       ? (signalOrder.get(a.dominantSignalId) ?? 99)
       : 99;
@@ -137,8 +163,31 @@ export async function BriefScreen() {
       ? (signalOrder.get(b.dominantSignalId) ?? 99)
       : 99;
     if (orderA !== orderB) return orderA - orderB;
+    if (b.entropyContribution !== a.entropyContribution)
+      return b.entropyContribution - a.entropyContribution;
     return a.id.localeCompare(b.id);
   });
+
+  const bySignal = new Map<string, typeof bySignalThenEntropy>();
+  for (const card of bySignalThenEntropy) {
+    const key = card.dominantSignalId ?? '_';
+    if (!bySignal.has(key)) bySignal.set(key, []);
+    bySignal.get(key)!.push(card);
+  }
+  const signalOrderList = [...signalOrder.entries()]
+    .sort((a, b) => a[1] - b[1])
+    .map(([id]) => id);
+  const maxLen = Math.max(
+    ...Array.from(bySignal.values()).map((arr) => arr.length),
+    1,
+  );
+  const claimCards: typeof claimCardsUnsorted = [];
+  for (let i = 0; i < maxLen; i++) {
+    for (const signalId of signalOrderList) {
+      const group = bySignal.get(signalId) ?? [];
+      if (group[i]) claimCards.push(group[i]);
+    }
+  }
 
   const categoryOptions = CLAIM_CATEGORIES.map((id) => ({
     id,

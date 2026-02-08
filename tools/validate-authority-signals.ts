@@ -19,6 +19,11 @@ import {
 } from '@joelklemmer/content/validate';
 import {
   getMappingDiagnostics,
+  getStructuredMapping,
+  computeSignalEntropyScore,
+  computeTopologyDimensionalityIndex,
+  getVarianceDistributionReport,
+  isSevereCollapse,
   type EntityIdSet,
 } from '@joelklemmer/authority-mapping';
 
@@ -128,6 +133,44 @@ const entityIds: EntityIdSet = {
 };
 
 const { errors, warnings, info } = getMappingDiagnostics(entityIds);
+
+const mapping = getStructuredMapping();
+const bindingsForEntropy = mapping.entries.map((e) => ({
+  entityKind: e.entityKind,
+  entityId: e.entityId,
+  signalVector: e.signalVector,
+}));
+
+const signalEntropyScore = computeSignalEntropyScore(bindingsForEntropy);
+const topologyDimensionalityIndex =
+  computeTopologyDimensionalityIndex(bindingsForEntropy);
+const varianceReport = getVarianceDistributionReport(bindingsForEntropy);
+
+console.info(
+  '[authority-signals] signal entropy score:',
+  signalEntropyScore.toFixed(4),
+);
+console.info(
+  '[authority-signals] topology dimensionality index:',
+  topologyDimensionalityIndex.toFixed(4),
+);
+console.info(
+  '[authority-signals] variance distribution:',
+  varianceReport.uniqueSignatures,
+  'unique signatures across',
+  varianceReport.totalEntities,
+  'entities; overall variance',
+  varianceReport.overallVariance.toFixed(4),
+);
+
+const collapse = isSevereCollapse(bindingsForEntropy);
+if (collapse.severe) {
+  console.error(
+    '[authority-signals] severe topology collapse:',
+    collapse.reason,
+  );
+  process.exit(1);
+}
 
 if (warnings.length) {
   warnings.forEach((w) => console.warn('[authority-signals]', w));
