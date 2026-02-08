@@ -52,7 +52,7 @@ export function BriefClaimsSection({
             <article
               key={claim.id}
               id={`claim-${claim.id}`}
-              className="authority-card section-shell rounded-card border border-border p-4"
+              className="authority-card section-shell p-4"
             >
               <h3 className="text-lg font-semibold text-text">{claim.label}</h3>
               {claim.category ? (

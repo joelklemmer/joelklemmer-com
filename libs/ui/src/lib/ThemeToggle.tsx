@@ -101,7 +101,8 @@ export function ThemeToggle() {
       type="button"
       onClick={cycleTheme}
       aria-label={getLabel()}
-      className={`${focusRingClass} flex items-center justify-center rounded-sm p-1.5 text-muted hover:text-text`}
+      className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+      title={getLabel()}
     >
       {getIcon()}
       <span className="sr-only">{getLabel()}</span>

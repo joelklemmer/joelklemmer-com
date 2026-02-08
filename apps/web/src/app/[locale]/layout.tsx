@@ -1,7 +1,5 @@
 import '../global.css';
-
 import { Suspense, type ReactNode } from 'react';
-
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
@@ -22,25 +20,23 @@ import {
   ThemeToggle,
   ContrastProvider,
   AccessibilityPanel,
+  Header,
+  Nav,
 } from '@joelklemmer/ui';
+// eslint-disable-next-line no-restricted-imports -- ACP internals (Agent 2 owns)
+import { ACPProvider } from '@joelklemmer/a11y';
 import {
   EvaluatorModeProvider,
   resolveEvaluatorMode,
 } from '@joelklemmer/evaluator-mode';
 import { DensityViewProvider } from '@joelklemmer/authority-density';
-import {
-  FooterSection,
-  HeaderSection,
-  PrimaryNavSection,
-} from '@joelklemmer/sections';
+import { FooterSection } from '@joelklemmer/sections';
 
 import { routing } from '../../i18n/routing';
-
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
-
-/* eslint-disable max-lines-per-function -- layout composes shell and sections in one place */
+/* eslint-disable max-lines-per-function,max-lines -- layout composes shell and sections */
 export default async function LocaleLayout({
   children,
   params,
@@ -56,7 +52,6 @@ export default async function LocaleLayout({
   const resolvedLocale = routing.locales.includes(locale as never)
     ? (locale as typeof defaultLocale)
     : defaultLocale;
-
   setRequestLocale(resolvedLocale);
   const cookieStore = await cookies();
   const initialEvaluatorMode = resolveEvaluatorMode({
@@ -96,37 +91,42 @@ export default async function LocaleLayout({
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
       <ThemeProvider>
         <ContrastProvider>
-          <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
-            <DensityViewProvider syncWithHash>
-              <Shell
-                headerContent={
-                  <HeaderSection
-                    wordmark={common('wordmark')}
-                    homeHref={`/${resolvedLocale}`}
-                    headerControls={
-                      <>
-                        <Suspense fallback={<div className="w-8 h-8" />}>
-                          <LanguageSwitcherPopover />
-                        </Suspense>
-                        <ThemeToggle />
-                        <AccessibilityPanel />
-                      </>
-                    }
-                  />
-                }
-                navContent={
-                  <Suspense fallback={null}>
-                    <PrimaryNavSection items={navItems} />
-                  </Suspense>
-                }
-                footerContent={
-                  <FooterSection label={footer('label')} links={footerItems} />
-                }
-              >
-                {children}
-              </Shell>
-            </DensityViewProvider>
-          </EvaluatorModeProvider>
+          <ACPProvider>
+            <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
+              <DensityViewProvider syncWithHash>
+                <Shell
+                  headerContent={
+                    <Header
+                      wordmark={common('wordmark')}
+                      homeHref={`/${resolvedLocale}`}
+                      headerControls={
+                        <>
+                          <Suspense fallback={<div className="w-8 h-8" />}>
+                            <LanguageSwitcherPopover />
+                          </Suspense>
+                          <ThemeToggle />
+                          <AccessibilityPanel />
+                        </>
+                      }
+                    />
+                  }
+                  navContent={
+                    <Suspense fallback={null}>
+                      <Nav items={navItems} />
+                    </Suspense>
+                  }
+                  footerContent={
+                    <FooterSection
+                      label={footer('label')}
+                      links={footerItems}
+                    />
+                  }
+                >
+                  {children}
+                </Shell>
+              </DensityViewProvider>
+            </EvaluatorModeProvider>
+          </ACPProvider>
         </ContrastProvider>
       </ThemeProvider>
     </NextIntlClientProvider>

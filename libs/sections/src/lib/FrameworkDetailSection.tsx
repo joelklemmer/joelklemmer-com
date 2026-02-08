@@ -48,10 +48,7 @@ export function FrameworkDetailSection({
         </div>
         <div className="mt-6 space-y-8">
           {items.map((item) => (
-            <div
-              key={item.title}
-              className="authority-card rounded-card border border-border p-4"
-            >
+            <div key={item.title} className="authority-card p-4">
               <h3 className="text-lg font-semibold text-text mb-3">
                 {item.title}
               </h3>

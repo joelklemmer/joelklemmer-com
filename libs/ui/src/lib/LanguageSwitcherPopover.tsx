@@ -39,7 +39,8 @@ export function LanguageSwitcherPopover() {
   const { restSegments } = resolvePathname(pathname, locale);
   const queryString = searchParams?.toString();
 
-  const currentLanguageLabel = nativeLanguageNames[locale as AppLocale];
+  const currentLanguageLabel =
+    nativeLanguageNames[locale as AppLocale] ?? nativeLanguageNames.en;
 
   const handleToggle = useCallback(() => {
     setIsOpen((prev) => !prev);

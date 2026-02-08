@@ -223,7 +223,7 @@ export function BriefNavigator({
               <article
                 key={claim.id}
                 id={`claim-${claim.id}`}
-                className="authority-card section-shell rounded-card border border-border overflow-hidden"
+                className="authority-card section-shell overflow-hidden"
                 {...(claim.dominantSignalId
                   ? { 'data-dominant-signal': claim.dominantSignalId }
                   : {})}
@@ -362,7 +362,7 @@ export function BriefNavigator({
 
       {viewMode === 'graph' && (
         <div
-          className="space-y-0 border border-border rounded-card overflow-hidden bg-surface"
+          className="space-y-0 authority-panel overflow-hidden"
           role="list"
           aria-label="Verification graph"
         >

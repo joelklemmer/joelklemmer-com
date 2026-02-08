@@ -13,14 +13,15 @@ import {
   WebSiteJsonLd,
 } from '@joelklemmer/seo';
 import {
-  CardGridSection,
   FrameworkCard,
   HeroSection,
   ListSection,
   SectionVisualAnchor,
-  StartHereSection,
+  VerificationRailsSection,
 } from '@joelklemmer/sections';
+import Link from 'next/link';
 import { Container } from '@joelklemmer/ui';
+import { focusRingClass } from '@joelklemmer/a11y';
 import { getFrameworkList } from '@joelklemmer/content';
 
 export async function generateMetadata() {
@@ -38,22 +39,10 @@ export async function generateMetadata() {
 
 export const homeMetadata = generateMetadata;
 
-const HOME_SECTION_IDS: SectionId[] = [
-  'hero',
-  'startHere',
-  'claims',
-  'doctrine',
-  'routes',
-];
+const HOME_SECTION_IDS: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
 
-/** Fixed IA order: Hero first, then Start Here / Primary routes, Claim summary, Frameworks & doctrine. */
-const HOME_IA_ORDER: SectionId[] = [
-  'hero',
-  'startHere',
-  'routes',
-  'claims',
-  'doctrine',
-];
+/** Fixed IA order: Hero first, then Executive Brief (dominant) + Verification rails, Claim summary, Frameworks & doctrine. */
+const HOME_IA_ORDER: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
 
 export async function HomeScreen() {
   const locale = (await getLocale()) as AppLocale;
@@ -82,13 +71,7 @@ export async function HomeScreen() {
       }}
     />
   );
-  const startHere = (
-    <StartHereSection
-      sentence={t('startHere.sentence')}
-      linkLabel={t('startHere.linkLabel')}
-      href={`/${locale}/brief`}
-    />
-  );
+
   const claims = <ListSection title={t('claims.title')} items={claimItems} />;
   const doctrine =
     frameworks.length > 0 ? (
@@ -117,20 +100,60 @@ export async function HomeScreen() {
         </Container>
       </section>
     ) : null;
+
+  // Routes section: Executive Brief (dominant) + Verification rails (other routes)
+  const executiveBriefItem = routeItems.find((item) =>
+    item.path.includes('/brief'),
+  );
+  const otherRoutes = routeItems.filter(
+    (item) => !item.path.includes('/brief'),
+  );
   const routes = (
-    <CardGridSection
-      title={t('routes.title')}
-      items={routeItems.map((item) => ({
-        title: item.title,
-        description: item.description,
-        href: `/${locale}${item.path}`,
-      }))}
-    />
+    <section id="routes" className="section-shell">
+      <Container className="section-shell">
+        {/* Executive Brief - dominant entry point */}
+        {executiveBriefItem ? (
+          <div className="mb-6">
+            <Link
+              href={`/${locale}/brief`}
+              className={`${focusRingClass} block rounded-lg border-2 border-accent bg-surface-elevated p-6 transition-all motion-reduce:transition-none hover:border-accent-strong hover:shadow-lg`}
+            >
+              <div className="flex items-start gap-4">
+                <span
+                  aria-hidden="true"
+                  className="text-accent font-bold text-xl shrink-0 mt-0.5"
+                >
+                  →
+                </span>
+                <div className="flex-1">
+                  <h2 className="text-xl font-bold text-text mb-2">
+                    {executiveBriefItem.title}
+                  </h2>
+                  <p className="text-base text-muted leading-relaxed">
+                    {executiveBriefItem.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ) : null}
+        {/* Verification rails - other routes */}
+        {otherRoutes.length > 0 ? (
+          <VerificationRailsSection
+            title={t('routes.title')}
+            items={otherRoutes.map((item) => ({
+              title: item.title,
+              description: item.description,
+              href: `/${locale}${item.path}`,
+            }))}
+          />
+        ) : null}
+      </Container>
+    </section>
   );
 
   const byId: Partial<Record<SectionId, ReactNode>> = {
     hero,
-    startHere,
     claims,
     doctrine,
     routes,

@@ -95,22 +95,20 @@ html[data-motion='reduced'] .calc-card-material {
   -webkit-backdrop-filter: blur(var(--authority-glass-blur));
   box-shadow:
     var(--authority-depth-layer1),
-    0 0 0 1px var(--authority-glass-border),
-    var(--authority-soft-light);
+    0 0 0 1px var(--authority-glass-border);
+  border-radius: var(--radius-md);
 }
 
 .authority-panel {
   background: hsl(var(--color-surface) / var(--authority-surface-translucency));
-  box-shadow:
-    var(--authority-depth-layer1), var(--authority-soft-glow),
-    var(--authority-soft-light);
+  box-shadow: var(--authority-depth-layer1), var(--authority-soft-glow);
+  border-radius: var(--radius-md);
 }
 
 .authority-card {
   background: hsl(var(--color-surface) / var(--authority-surface-translucency));
-  box-shadow:
-    var(--authority-card-elevation), var(--authority-card-glow),
-    var(--authority-controlled-glow);
+  box-shadow: var(--authority-card-elevation), var(--authority-card-glow);
+  border-radius: var(--radius-card);
   transition:
     box-shadow var(--transition-duration-normal) var(--ease-authority),
     background-color var(--transition-duration-fast) var(--ease-authority),
@@ -136,6 +134,7 @@ html[data-motion='reduced'] .calc-card-material {
   box-shadow:
     var(--authority-card-elevation), var(--authority-surface-layer2),
     var(--authority-card-glow);
+  --authority-card-glow: 0 0 0 1px hsl(var(--color-border) / 0.25);
 }
 
 [data-density='on'] .authority-card {

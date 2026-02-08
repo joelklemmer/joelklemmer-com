@@ -24,19 +24,26 @@ export default async function RootLayout({
                 try {
                   const theme = localStorage.getItem('joelklemmer-theme');
                   const contrast = localStorage.getItem('joelklemmer-contrast');
+                  const motion = localStorage.getItem('joelklemmer-motion');
                   const underlineLinks = localStorage.getItem('joelklemmer-underline-links');
                   const textSize = localStorage.getItem('joelklemmer-text-size');
+                  const root = document.documentElement;
+                  
                   if (theme && theme !== 'system') {
-                    document.documentElement.setAttribute('data-theme', theme);
+                    root.setAttribute('data-theme', theme);
                   }
                   if (contrast === 'high') {
-                    document.documentElement.setAttribute('data-contrast', 'high');
+                    root.setAttribute('data-contrast', 'high');
+                  }
+                  if (motion === 'reduced') {
+                    root.setAttribute('data-motion', 'reduced');
+                    root.classList.add('motion-reduce-force');
                   }
                   if (underlineLinks === 'true') {
-                    document.documentElement.setAttribute('data-underline-links', 'true');
+                    root.setAttribute('data-underline-links', 'true');
                   }
                   if (textSize === 'large') {
-                    document.documentElement.setAttribute('data-text-size', 'large');
+                    root.setAttribute('data-text-size', 'large');
                   }
                 } catch (e) {}
               })();

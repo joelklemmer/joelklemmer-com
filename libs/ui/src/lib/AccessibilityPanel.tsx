@@ -1,111 +1,75 @@
 'use client';
 
+/**
+ * Accessibility Control Panel (ACP)
+ *
+ * Governed popover dialog for managing accessibility preferences:
+ * - Theme (via ThemeProvider)
+ * - Contrast (via ContrastProvider)
+ * - Motion reduction (via ACPProvider)
+ * - Text sizing (via ACPProvider)
+ * - Underline links (via ACPProvider)
+ *
+ * Features:
+ * - Full keyboard operation
+ * - Focus trap when open
+ * - Focus returns to trigger on close
+ * - Proper ARIA attributes
+ * - Persistence across reloads
+ */
+
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useTheme } from './ThemeProvider';
 import { useContrast } from './ContrastProvider';
+import { useACP } from '@joelklemmer/a11y';
 import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 
-const UNDERLINE_LINKS_STORAGE_KEY = 'joelklemmer-underline-links';
-
-function getStoredUnderlineLinks(): boolean {
-  if (typeof window === 'undefined') return false;
-  const stored = localStorage.getItem(UNDERLINE_LINKS_STORAGE_KEY);
-  return stored === 'true';
-}
-
-function applyUnderlineLinks(enabled: boolean) {
-  if (typeof document === 'undefined') return;
-  const root = document.documentElement;
-  if (enabled) {
-    root.setAttribute('data-underline-links', 'true');
-  } else {
-    root.removeAttribute('data-underline-links');
-  }
-}
+const PANEL_ID = 'accessibility-panel';
+const TRIGGER_ID = 'accessibility-panel-trigger';
+const TITLE_ID = 'accessibility-panel-title';
 
 export function AccessibilityPanel() {
   const common = useTranslations('common');
-  const { theme, setTheme, resolvedTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
   const { contrast, setContrast } = useContrast();
-  const [motionReduced, setMotionReduced] = useState(false);
-  const [textSize, setTextSize] = useState<'default' | 'large'>('default');
-  const [underlineLinks, setUnderlineLinks] = useState(false);
+  const { preferences, setMotion, setTextSize, setUnderlineLinks } = useACP();
 
   const [isOpen, setIsOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
-
-  const panelId = 'accessibility-panel';
-  const triggerId = 'accessibility-panel-trigger';
+  const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
 
   const handleToggle = useCallback(() => {
-    setIsOpen((prev) => !prev);
+    setIsOpen((prev) => {
+      const newIsOpen = !prev;
+      if (newIsOpen) {
+        // Store the currently focused element before opening
+        previouslyFocusedElementRef.current =
+          document.activeElement as HTMLElement;
+      }
+      return newIsOpen;
+    });
   }, []);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    triggerRef.current?.focus();
+    // Return focus to trigger or previously focused element
+    requestAnimationFrame(() => {
+      const elementToFocus =
+        triggerRef.current || previouslyFocusedElementRef.current;
+      elementToFocus?.focus();
+      previouslyFocusedElementRef.current = null;
+    });
   }, []);
 
-  // Apply motion reduction
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    if (motionReduced) {
-      root.classList.add('motion-reduce-force');
-    } else {
-      root.classList.remove('motion-reduce-force');
-    }
-  }, [motionReduced]);
-
-  // Initialize stored preferences
-  useEffect(() => {
-    const storedMotion =
-      typeof document !== 'undefined' &&
-      document.documentElement.classList.contains('motion-reduce-force');
-    const storedTextSize =
-      typeof document !== 'undefined' &&
-      document.documentElement.getAttribute('data-text-size') === 'large'
-        ? 'large'
-        : 'default';
-    const storedUnderline = getStoredUnderlineLinks();
-
-    setMotionReduced(storedMotion);
-    setTextSize(storedTextSize);
-    setUnderlineLinks(storedUnderline);
-    applyUnderlineLinks(storedUnderline);
-  }, []);
-
-  // Apply text size
-  useEffect(() => {
-    if (typeof document === 'undefined') return;
-    const root = document.documentElement;
-    if (textSize === 'large') {
-      root.setAttribute('data-text-size', 'large');
-    } else {
-      root.removeAttribute('data-text-size');
-    }
-    // Persist to localStorage
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('joelklemmer-text-size', textSize);
-    }
-  }, [textSize]);
-
-  // Apply underline links
-  useEffect(() => {
-    applyUnderlineLinks(underlineLinks);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(UNDERLINE_LINKS_STORAGE_KEY, String(underlineLinks));
-    }
-  }, [underlineLinks]);
-
-  // Close on Escape
+  // Close on Escape key
   useEffect(() => {
     if (!isOpen) return;
 
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
         handleClose();
       }
     };
@@ -119,18 +83,21 @@ export function AccessibilityPanel() {
     if (!isOpen) return;
 
     const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node;
       if (
         panelRef.current &&
-        !panelRef.current.contains(event.target as Node) &&
+        !panelRef.current.contains(target) &&
         triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
+        !triggerRef.current.contains(target)
       ) {
         handleClose();
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // Use capture phase to handle clicks before they bubble
+    document.addEventListener('mousedown', handleClickOutside, true);
+    return () =>
+      document.removeEventListener('mousedown', handleClickOutside, true);
   }, [isOpen, handleClose]);
 
   // Focus trap: keep focus within panel when open
@@ -140,23 +107,41 @@ export function AccessibilityPanel() {
     const handleTabKey = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return;
 
-      const focusableElements = panelRef.current?.querySelectorAll(
-        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
-      );
-      if (!focusableElements || focusableElements.length === 0) return;
+      const focusableSelectors = [
+        'button:not([disabled])',
+        '[href]',
+        'input:not([disabled])',
+        'select:not([disabled])',
+        'textarea:not([disabled])',
+        '[tabindex]:not([tabindex="-1"])',
+      ].join(', ');
 
-      const firstElement = focusableElements[0] as HTMLElement;
-      const lastElement = focusableElements[
-        focusableElements.length - 1
-      ] as HTMLElement;
+      const focusableElements = Array.from(
+        panelRef.current?.querySelectorAll<HTMLElement>(focusableSelectors) ||
+          [],
+      );
+
+      if (focusableElements.length === 0) return;
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement as HTMLElement;
 
       if (e.shiftKey) {
-        if (document.activeElement === firstElement) {
+        // Shift+Tab: if focus is on first element, wrap to last
+        if (
+          activeElement === firstElement ||
+          !focusableElements.includes(activeElement)
+        ) {
           e.preventDefault();
           lastElement.focus();
         }
       } else {
-        if (document.activeElement === lastElement) {
+        // Tab: if focus is on last element, wrap to first
+        if (
+          activeElement === lastElement ||
+          !focusableElements.includes(activeElement)
+        ) {
           e.preventDefault();
           firstElement.focus();
         }
@@ -169,33 +154,33 @@ export function AccessibilityPanel() {
 
   // Focus first control when opening
   useEffect(() => {
-    if (isOpen && panelRef.current) {
-      requestAnimationFrame(() => {
-        const firstControl = panelRef.current?.querySelector(
-          'button, select, input',
-        );
-        if (firstControl instanceof HTMLElement) {
-          firstControl.focus();
-        }
-      });
-    }
+    if (!isOpen || !panelRef.current) return;
+
+    requestAnimationFrame(() => {
+      const firstControl = panelRef.current?.querySelector<HTMLElement>(
+        'button:not([disabled]), select:not([disabled]), input:not([disabled])',
+      );
+      if (firstControl) {
+        firstControl.focus();
+      }
+    });
   }, [isOpen]);
 
   return (
     <div className="relative">
       <button
         ref={triggerRef}
-        id={triggerId}
+        id={TRIGGER_ID}
         type="button"
         aria-expanded={isOpen}
-        aria-controls={panelId}
-        aria-haspopup="true"
+        aria-controls={PANEL_ID}
+        aria-haspopup="dialog"
         aria-label={common('a11y.accessibilityPanelLabel')}
         onClick={handleToggle}
         className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={common('a11y.accessibilityPanelLabel')}
       >
-        ♿
+        <span aria-hidden="true">♿</span>
         <span className="sr-only">
           {common('a11y.accessibilityPanelLabel')}
         </span>
@@ -204,13 +189,14 @@ export function AccessibilityPanel() {
       {isOpen && (
         <div
           ref={panelRef}
-          id={panelId}
+          id={PANEL_ID}
           role="dialog"
-          aria-labelledby={triggerId}
           aria-modal="true"
-          className="absolute end-0 top-full mt-1 w-64 rounded-md border border-border bg-surface shadow-lg z-50 p-4"
+          aria-labelledby={TITLE_ID}
+          aria-describedby={TRIGGER_ID}
+          className="absolute end-0 top-full mt-1 z-50 w-64 rounded-md border border-border bg-surface shadow-lg p-4 focus:outline-none"
         >
-          <h2 className={visuallyHiddenClass}>
+          <h2 id={TITLE_ID} className={visuallyHiddenClass}>
             {common('a11y.accessibilityPanelLabel')}
           </h2>
 
@@ -267,8 +253,10 @@ export function AccessibilityPanel() {
               <label className="flex items-center gap-2 text-sm text-text">
                 <input
                   type="checkbox"
-                  checked={motionReduced}
-                  onChange={(e) => setMotionReduced(e.target.checked)}
+                  checked={preferences.motion === 'reduced'}
+                  onChange={(e) =>
+                    setMotion(e.target.checked ? 'reduced' : 'default')
+                  }
                   className={`${focusRingClass} rounded border-border text-accent`}
                   aria-label={common('a11y.motionLabel')}
                 />
@@ -286,7 +274,7 @@ export function AccessibilityPanel() {
               </label>
               <select
                 id="a11y-text-size"
-                value={textSize}
+                value={preferences.textSize}
                 onChange={(e) =>
                   setTextSize(e.target.value as 'default' | 'large')
                 }
@@ -305,7 +293,7 @@ export function AccessibilityPanel() {
               <label className="flex items-center gap-2 text-sm text-text">
                 <input
                   type="checkbox"
-                  checked={underlineLinks}
+                  checked={preferences.underlineLinks}
                   onChange={(e) => setUnderlineLinks(e.target.checked)}
                   className={`${focusRingClass} rounded border-border text-accent`}
                   aria-label={common('a11y.underlineLinksLabel')}

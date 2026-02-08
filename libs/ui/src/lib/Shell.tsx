@@ -31,17 +31,13 @@ export function Shell({
         aria-label={a11y('a11y.headerLabel')}
         className="border-b border-border"
       >
-        <Container className="flex items-center justify-between">
-          {headerContent}
-        </Container>
+        <Container>{headerContent}</Container>
         {navContent && (
           <nav
             aria-label={a11y('a11y.navLabel')}
             className="border-t border-border relative"
           >
-            <Container className="flex items-center justify-between">
-              {navContent}
-            </Container>
+            <Container>{navContent}</Container>
           </nav>
         )}
       </header>

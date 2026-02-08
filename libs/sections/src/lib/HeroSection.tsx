@@ -1,8 +1,7 @@
 import type { ReactNode } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { focusRingClass } from '@joelklemmer/a11y';
-import { Container } from '@joelklemmer/ui';
+import { Container, PortraitImage } from '@joelklemmer/ui';
 
 export interface HeroAction {
   label: string;
@@ -40,23 +39,18 @@ export function HeroSection({
         width?: number;
         height?: number;
       };
-      // Reserve space to prevent CLS - use aspect ratio from dimensions
-      const aspectRatio = v.width && v.height ? v.width / v.height : 0.8;
+      // Use PortraitImage component for institutional presentation
       visualNode = (
         <div className="hero-authority-visual-frame hero-portrait-composition">
-          <div
-            className="hero-portrait-wrapper"
-            style={{ aspectRatio: aspectRatio || '4/5' }}
-          >
-            <Image
+          <div className="hero-portrait-wrapper">
+            <PortraitImage
               src={v.src}
               alt={v.alt}
               width={v.width ?? 1200}
               height={v.height ?? 1500}
-              className="hero-portrait-image"
               priority
-              sizes="(max-width: 768px) 100vw, min(380px, 40vw)"
               quality={90}
+              objectPosition="center top"
             />
           </div>
         </div>

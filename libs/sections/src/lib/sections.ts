@@ -36,6 +36,11 @@ export { SectionVisualAnchor } from './SectionVisualAnchor';
 export type { SectionVisualAnchorProps } from './SectionVisualAnchor';
 export { StartHereSection } from './StartHereSection';
 export { VerificationGuidanceSection } from './VerificationGuidanceSection';
+export { VerificationRailsSection } from './VerificationRailsSection';
+export type {
+  VerificationRailsSectionProps,
+  VerificationRailItem,
+} from './VerificationRailsSection';
 export { AECBriefingPanel } from './AECBriefingPanel.client';
 export type {
   AECBriefingPanelProps,

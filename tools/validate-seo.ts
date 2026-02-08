@@ -1,5 +1,6 @@
 /**
  * Build-time SEO validation: canonical and hreflang correctness for core routes.
+ * Asserts home page emits WebSite + Person JSON-LD (with non-empty sameAs).
  * Asserts /brief emits both Person and Report JSON-LD. No server required.
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts
  */
@@ -18,7 +19,11 @@ import {
   getMediaManifestTierAOnly,
 } from '@joelklemmer/content/validate';
 
-const baseUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+// Set placeholder env vars if missing (like run-a11y.ts) so validator doesn't crash
+process.env.NEXT_PUBLIC_SITE_URL ??= 'http://localhost:3000';
+process.env.NEXT_PUBLIC_IDENTITY_SAME_AS ??= 'https://example.invalid/ci';
+
+const baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
 const base = baseUrl.replace(/\/+$/, '');
 
 const corePathnames: string[] = [
@@ -117,6 +122,56 @@ if (!webSiteLd.url || typeof webSiteLd.url !== 'string') {
   errors.push('Home WebSite JSON-LD: must include url');
 }
 
+// Home hreflang validation: ensure all locales (en, uk, es, he) + x-default are present
+const homeAlternates = hreflangAlternates('/', baseUrl, locales, defaultLocale);
+const homeHrefLangLocales = new Set(
+  homeAlternates
+    .filter((a) => a.hrefLang !== 'x-default')
+    .map((a) => a.hrefLang),
+);
+for (const loc of locales) {
+  if (!homeHrefLangLocales.has(loc as AppLocale)) {
+    errors.push(`Home page missing hreflang for locale: ${loc}`);
+  }
+}
+const homeXDefault = homeAlternates.find((a) => a.hrefLang === 'x-default');
+if (!homeXDefault) {
+  errors.push('Home page missing x-default hreflang');
+} else {
+  const expectedHomeDefault = `${base}/${defaultLocale}`;
+  if (homeXDefault.href !== expectedHomeDefault) {
+    errors.push(
+      `Home page x-default hreflang: expected ${expectedHomeDefault}, got ${homeXDefault.href}`,
+    );
+  }
+}
+
+// Home must emit Person JSON-LD (author identity, entity graph)
+const homePersonLd = getPersonJsonLd({ baseUrl });
+if (homePersonLd['@type'] !== 'Person') {
+  errors.push(
+    `Home Person JSON-LD: expected @type "Person", got ${homePersonLd['@type']}`,
+  );
+}
+if (!homePersonLd.name || typeof homePersonLd.name !== 'string') {
+  errors.push('Home Person JSON-LD: must include name');
+}
+if (!homePersonLd.url || typeof homePersonLd.url !== 'string') {
+  errors.push('Home Person JSON-LD: must include url');
+}
+if (!homePersonLd.sameAs || !Array.isArray(homePersonLd.sameAs)) {
+  errors.push('Home Person JSON-LD: must include sameAs array');
+} else if (homePersonLd.sameAs.length === 0) {
+  errors.push('Home Person JSON-LD: sameAs must not be empty');
+} else {
+  // Validate all sameAs URLs are valid
+  for (const url of homePersonLd.sameAs) {
+    if (typeof url !== 'string' || !url.startsWith('http')) {
+      errors.push(`Home Person JSON-LD: sameAs contains invalid URL: ${url}`);
+    }
+  }
+}
+
 // /brief must emit both Person and Report JSON-LD (author identity + entity graph)
 const personLd = getPersonJsonLd({ baseUrl });
 if (personLd['@type'] !== 'Person') {
@@ -193,5 +248,5 @@ if (errors.length) {
 }
 
 console.log(
-  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite JSON-LD; /brief Person + Report JSON-LD; /media CollectionPage + ItemList JSON-LD.`,
+  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite + Person JSON-LD (with sameAs); /brief Person + Report JSON-LD; /media CollectionPage + ItemList JSON-LD.`,
 );

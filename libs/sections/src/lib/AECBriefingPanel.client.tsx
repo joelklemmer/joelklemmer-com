@@ -85,7 +85,7 @@ export function AECBriefingPanel({
 
   return (
     <section
-      className="authority-card section-shell border border-border/60 rounded-lg overflow-hidden"
+      className="authority-card section-shell overflow-hidden"
       aria-label={title}
       onKeyDown={handleKeyDown}
     >

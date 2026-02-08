@@ -36,7 +36,7 @@ export function ArtifactSingleSection({
       <Container className="section-shell">
         <h2 className="text-section-heading font-semibold">{title}</h2>
         {lede ? <p className="text-base text-muted">{lede}</p> : null}
-        <div className="mt-3 rounded-card border border-border bg-surface p-4">
+        <div className="mt-3 authority-card p-4">
           {artifact ? (
             <>
               <p className="font-medium text-text">{artifact.title}</p>

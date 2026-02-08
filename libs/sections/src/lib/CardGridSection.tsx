@@ -47,7 +47,7 @@ export function CardGridSection({
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => {
             const content = (
-              <div className="authority-card section-shell rounded-lg border border-border h-full flex flex-col">
+              <div className="authority-card section-shell h-full flex flex-col">
                 <div className="section-shell flex-1">
                   <h3 className="text-lg font-semibold text-text mb-2">
                     {item.title}
@@ -59,7 +59,7 @@ export function CardGridSection({
                   ) : null}
                 </div>
                 {item.meta ? (
-                  <p className="text-xs text-muted mt-4 pt-4 border-t border-border">
+                  <p className="text-xs text-muted mt-4 pt-4 border-t border-border/20">
                     {item.meta}
                   </p>
                 ) : null}
@@ -70,7 +70,7 @@ export function CardGridSection({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`${focusRingClass} block rounded-lg transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
+                className={`${focusRingClass} block transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
               >
                 {content}
               </Link>

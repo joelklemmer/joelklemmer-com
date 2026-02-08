@@ -78,6 +78,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content-os.ts"
       }
     },
+    "home-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-home.ts"
+      }
+    },
     "sitemap-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -131,6 +137,7 @@
           "nx run web:aec-validate",
           "nx run web:orchestration-validate",
           "nx run web:content-os-validate",
+          "nx run web:home-validate",
           "nx run web:sitemap-validate",
           "nx run web:image-sitemap-validate",
           "nx run web:media-manifest-validate",

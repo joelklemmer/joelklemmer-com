@@ -16,7 +16,7 @@ export function StartHereSection({
   return (
     <section className="section-shell">
       <Container className="section-shell">
-        <div className="authority-card rounded-lg border border-border bg-surface-elevated">
+        <div className="authority-card">
           <p className="text-base text-muted">
             {sentence}{' '}
             <Link
