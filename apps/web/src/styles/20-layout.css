@@ -330,6 +330,7 @@ section.section-shell:last-child {
 }
 
 .hero-display {
+  font-family: var(--display-heading-font);
   font-size: var(--hero-display-size);
   line-height: var(--hero-display-line);
   letter-spacing: var(--hero-display-spacing);
@@ -339,9 +340,11 @@ section.section-shell:last-child {
 }
 
 .hero-lede {
+  font-family: var(--body-analytical-font);
   font-size: var(--hero-lede-size);
   line-height: var(--hero-lede-line);
   margin: 0;
+  max-width: var(--readable-max-width);
 }
 
 .hero-actions {
@@ -355,10 +358,11 @@ section.section-shell:last-child {
   padding: var(--space-2) var(--space-4);
   font-size: var(--text-sm);
   font-weight: var(--font-weight-label);
+  letter-spacing: var(--hero-cta-letter-spacing);
   color: hsl(var(--color-text));
   background: hsl(var(--color-surface));
   border: 1px solid hsl(var(--color-border));
-  border-radius: 0.375rem;
+  border-radius: var(--radius-sm);
   transition:
     color var(--transition-duration-fast) var(--ease-authority),
     border-color var(--transition-duration-fast) var(--ease-authority),
@@ -437,10 +441,27 @@ section.section-shell:last-child {
   min-height: var(--masthead-touch-min);
 }
 
+.masthead-nav .masthead-touch-target,
 .masthead-utilities .masthead-touch-target,
 .masthead-utilities button[type='button'] {
   min-width: var(--masthead-touch-min);
   min-height: var(--masthead-touch-min);
+}
+
+/* Masthead icons: same size, stroke, and baseline alignment (no float) */
+.masthead-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.masthead-icon svg {
+  width: var(--masthead-icon-size);
+  height: var(--masthead-icon-size);
+  min-width: var(--masthead-icon-size);
+  min-height: var(--masthead-icon-size);
+  display: block;
+  stroke-width: var(--masthead-icon-stroke);
 }
 
 /* Header: Fortune 10 / statesman briefing interface */

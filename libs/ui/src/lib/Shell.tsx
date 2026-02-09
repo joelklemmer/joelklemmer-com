@@ -33,13 +33,13 @@ export function Shell({
         aria-label={a11y('a11y.headerLabel')}
         className="border-b border-border"
       >
-        <Container className="py-2 md:py-2.5">{headerContent}</Container>
+        <Container className="py-2 md:py-3">{headerContent}</Container>
         {navContent && (
           <nav
             aria-label={a11y('a11y.navLabel')}
             className="border-t border-border relative"
           >
-            <Container className="py-1.5 md:py-2">{navContent}</Container>
+            <Container className="py-2 md:py-2">{navContent}</Container>
           </nav>
         )}
       </header>

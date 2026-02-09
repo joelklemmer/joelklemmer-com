@@ -7,7 +7,9 @@
 export const themeScript = `
 (function() {
   try {
-    const theme = localStorage.getItem('joelklemmer-theme') || 'system';
+    const raw = localStorage.getItem('joelklemmer-theme');
+    const theme =
+      raw === 'light' || raw === 'dark' || raw === 'system' ? raw : 'system';
     const contrast = localStorage.getItem('joelklemmer-contrast') || 'default';
     const motion = localStorage.getItem('joelklemmer-motion') || 'default';
     const textSize = localStorage.getItem('joelklemmer-text-size') || 'default';

@@ -4,7 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { locales, type AppLocale } from '@joelklemmer/i18n';
-import { focusRingClass } from '@joelklemmer/a11y';
+import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 import Link from 'next/link';
 
 function resolvePathname(pathname: string | null, currentLocale: string) {
@@ -167,27 +167,27 @@ export function LanguageSwitcherPopover() {
         aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
         aria-haspopup="true"
-        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width={20}
+          height={20}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
           className="shrink-0"
         >
           <circle cx="12" cy="12" r="10" />
-          <path d="M2 12h20" />
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+          <path d="M2 12h20" />
         </svg>
-        <span className="sr-only">{currentLanguageLabel}</span>
+        <span className={visuallyHiddenClass}>{currentLanguageLabel}</span>
       </button>
 
       {isOpen && (

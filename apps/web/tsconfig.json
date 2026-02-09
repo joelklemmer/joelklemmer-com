@@ -24,8 +24,8 @@
     "**/*.js",
     "**/*.jsx",
 
-    "../../apps/web/.next/types/**/*.ts",
-    "../../dist/apps/web/.next/types/**/*.ts",
+    "../../apps/web/.next/types/routes.d.ts",
+    "../../dist/apps/web/.next/types/routes.d.ts",
 
     "next-env.d.ts"
   ],

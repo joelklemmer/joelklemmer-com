@@ -41,16 +41,13 @@ function getStoredTheme(): Theme {
   }
 }
 
+/** Always sets data-theme to "light" or "dark". System mode uses resolved OS preference. */
 function applyTheme(theme: Theme) {
   if (typeof document === 'undefined') return;
 
   const root = document.documentElement;
-
-  if (theme === 'system') {
-    root.removeAttribute('data-theme');
-  } else {
-    root.setAttribute('data-theme', theme);
-  }
+  const resolved = theme === 'system' ? getSystemTheme() : theme;
+  root.setAttribute('data-theme', resolved);
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -89,6 +86,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const handleChange = () => {
       const resolved = getSystemTheme();
       setResolvedTheme(resolved);
+      applyTheme('system');
     };
 
     mediaQuery.addEventListener('change', handleChange);

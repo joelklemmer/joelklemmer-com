@@ -331,6 +331,13 @@
   --nav-item-padding-y: var(--space-1);
   --nav-active-indicator-height: 2px;
   --header-baseline-offset: 0.125em;
+
+  /* Masthead utility icons: single size and stroke for optical consistency */
+  --masthead-icon-size: 1.25rem;
+  --masthead-icon-stroke: 2;
+
+  /* Hero CTA: letter spacing for executive clarity */
+  --hero-cta-letter-spacing: 0.02em;
 }
 
 @media (min-width: 640px) {
@@ -390,6 +397,7 @@
   --color-focus: 217 91% 52%;
 }
 
+/* Fallback when no data-theme (e.g. no-JS). With theme script + provider, root always has data-theme="light"|"dark". */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme='light']) {
     --color-bg: var(--color-deep-navy);

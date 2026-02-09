@@ -181,27 +181,24 @@ export function AccessibilityPanel() {
         aria-haspopup="dialog"
         aria-label={common('a11y.accessibilityPanelLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={common('a11y.accessibilityPanelLabel')}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="20"
-          height="20"
+          width={20}
+          height={20}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2"
+          strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
           className="shrink-0"
         >
-          <circle cx="12" cy="4" r="2" />
-          <path d="M12 6v6" />
-          <path d="M8 12h8" />
-          <path d="M10 12v4" />
-          <path d="M14 12v4" />
+          <circle cx="12" cy="7" r="4" />
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
         </svg>
         <span className={visuallyHiddenClass}>
           {common('a11y.accessibilityPanelLabel')}

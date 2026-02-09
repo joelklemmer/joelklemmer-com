@@ -121,9 +121,9 @@ export function Nav({ items }: NavProps) {
     </ul>
   );
 
-  // Mobile: menu button + panel
+  // Mobile: menu button + panel (44×44 touch target per Figma parity)
   const mobileNav = (
-    <div className="relative md:hidden h-9 flex items-center">
+    <div className="relative md:hidden flex items-center">
       <button
         ref={triggerRef}
         id={triggerId}
@@ -133,11 +133,25 @@ export function Nav({ items }: NavProps) {
         aria-haspopup="true"
         aria-label={a11y('a11y.navLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} flex items-center justify-center w-10 h-10 rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
       >
-        <span aria-hidden="true" className="text-xl leading-none">
-          ☰
-        </span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width={20}
+          height={20}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+          className="shrink-0"
+        >
+          <path d="M4 6h16" />
+          <path d="M4 12h16" />
+          <path d="M4 18h16" />
+        </svg>
         <span className={visuallyHiddenClass}>{a11y('a11y.navLabel')}</span>
       </button>
 
