@@ -109,7 +109,9 @@ export async function CaseStudiesScreen() {
             const contextStr = study.frontmatter.context;
             const verificationCount = study.frontmatter.proofRefs?.length ?? 0;
             const meta = study.frontmatter.date
-              ? tWithParams('caseStudies.meta', { date: study.frontmatter.date }) +
+              ? tWithParams('caseStudies.meta', {
+                  date: study.frontmatter.date,
+                }) +
                 ' · ' +
                 tWithParams('caseStudies.verificationCount', {
                   count: verificationCount,

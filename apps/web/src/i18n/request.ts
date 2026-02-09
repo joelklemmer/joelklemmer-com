@@ -18,6 +18,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       'nav',
       'footer',
       'meta',
+      'consent',
     ]),
   };
 });

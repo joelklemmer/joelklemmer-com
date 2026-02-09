@@ -39,6 +39,11 @@ export async function PublicRecordScreen() {
   const tProof = createScopedTranslator(locale, messages, 'proof');
   const tIndex = createScopedTranslator(locale, messages, 'publicRecord');
   const tCommon = createScopedTranslator(locale, messages, 'common');
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tIndexWithParams = tIndex as TWithParams;
   const entries = await getPublicRecordList(locale);
 
   return (
@@ -63,7 +68,7 @@ export async function PublicRecordScreen() {
               items={entries.map((entry) => ({
                 title: entry.frontmatter.title,
                 description: entry.frontmatter.claimSupported,
-                meta: tIndex('index.meta', {
+                meta: tIndexWithParams('index.meta', {
                   type: entry.frontmatter.artifactType,
                   date: entry.frontmatter.date,
                   source:

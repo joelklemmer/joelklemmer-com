@@ -6,12 +6,30 @@
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts
  */
 import { spawn } from 'node:child_process';
-import { existsSync } from 'node:fs';
+import { existsSync, readdirSync } from 'node:fs';
 import path from 'node:path';
 import getPort from 'get-port';
 
 const workspaceRoot = process.cwd();
 const webAppDir = path.join(workspaceRoot, 'apps', 'web');
+
+/** Find BUILD_ID under dir (recursive); returns path or null. */
+function findBuildId(dir: string, depth = 0): string | null {
+  if (depth > 10) return null;
+  const buildIdPath = path.join(dir, 'BUILD_ID');
+  if (existsSync(buildIdPath)) return buildIdPath;
+  try {
+    for (const name of readdirSync(dir)) {
+      if (name === '.next' || name === 'node_modules') {
+        const found = findBuildId(path.join(dir, name), depth + 1);
+        if (found) return found;
+      }
+    }
+  } catch {
+    // ignore
+  }
+  return null;
+}
 
 /** Safe defaults for a11y run only; applied only when env vars are not already set. */
 function applyA11yEnvDefaults(): void {
@@ -49,14 +67,15 @@ async function main(): Promise<number> {
   const env = { ...process.env, PORT: String(port) };
   let server: ReturnType<typeof spawn>;
   if (skipBuild) {
-    const buildIdPath = path.join(webAppDir, '.next', '.next', '.next', 'BUILD_ID');
-    if (!existsSync(buildIdPath)) {
+    const nextDir = path.join(webAppDir, '.next');
+    const buildIdPath = findBuildId(nextDir);
+    if (!buildIdPath) {
       throw new Error(
-        `a11y: BUILD_ID not found at ${buildIdPath}. Run web:build first or run verify without SKIP_A11Y_BUILD.`,
+        `a11y: BUILD_ID not found under ${nextDir}. Run web:build first or run verify without SKIP_A11Y_BUILD.`,
       );
     }
     const nextBin = require.resolve('next/dist/bin/next');
-    // No directory arg: run from apps/web so Next uses cwd and finds .next/.next/BUILD_ID
+    // No directory arg: run from apps/web so Next uses cwd and finds build output (e.g. .next/.next/.next/.next/BUILD_ID)
     server = spawn(
       process.execPath,
       [nextBin, 'start', '--port', String(port)],
