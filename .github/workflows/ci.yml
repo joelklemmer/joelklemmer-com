@@ -335,14 +335,11 @@ jobs:
         env:
           BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA: '1'
 
-      - name: 'Run Lighthouse CI (performance gate: LCP &lt; 1.8s, CLS ≤ 0.1, performance ≥ 0.7)'
-        run: pnpm nx run web:lighthouse --verbose
+      - name: 'Run Lighthouse timespan (INP + assertions: LCP &lt; 1.8s, CLS ≤ 0.05, performance ≥ 0.7)'
+        run: pnpm nx run web:lighthouse-timespan --verbose
         env:
           RATE_LIMIT_MODE: off
           SKIP_LH_BUILD: '1'
-          LHCI_COLLECT__NUMBER_OF_RUNS: '1'
-          LHCI_UPLOAD__TARGET: 'filesystem'
-          LHCI_UPLOAD__OUTPUT_DIR: 'tmp/lighthouse'
 
       - name: Upload Lighthouse reports
         uses: actions/upload-artifact@v4

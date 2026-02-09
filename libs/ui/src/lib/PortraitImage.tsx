@@ -106,6 +106,7 @@ export function PortraitImage({
         width={width}
         height={height}
         priority={priority}
+        fetchPriority={priority ? 'high' : undefined}
         quality={quality}
         sizes={sizes}
         style={imageStyle}

@@ -93,6 +93,9 @@ importers:
       baseline-browser-mapping:
         specifier: ^2.9.19
         version: 2.9.19
+      chrome-launcher:
+        specifier: ^1.2.0
+        version: 1.2.1
       cross-env:
         specifier: ^10.1.0
         version: 10.1.0
@@ -105,6 +108,9 @@ importers:
       get-port:
         specifier: ^7.1.0
         version: 7.1.0
+      lighthouse:
+        specifier: 12.6.1
+        version: 12.6.1
       nx:
         specifier: 22.4.5
         version: 22.4.5(@swc-node/register@1.9.2(@swc/core@1.5.29(@swc/helpers@0.5.18))(@swc/types@0.1.25)(typescript@5.9.3))(@swc/core@1.5.29(@swc/helpers@0.5.18))
