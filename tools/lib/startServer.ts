@@ -45,9 +45,9 @@ function assertReadinessBody(path: string, body: string): void {
       `Readiness check failed: response at ${path} must contain <html and lang="en".`,
     );
   }
-  if (!body.includes('masthead-bar')) {
+  if (!body.includes('data-system="masthead-bar"')) {
     throw new Error(
-      `Readiness check failed: response at ${path} must contain masthead-bar (app shell).`,
+      `Readiness check failed: response at ${path} must contain data-system="masthead-bar" (app shell).`,
     );
   }
 }
