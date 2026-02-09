@@ -2,17 +2,34 @@
  * Lighthouse CI runner: starts web via Nx (production), polls /en/ until 200,
  * runs lhci with serverless config (no built-in server start), then tears down.
  * Run from repo root. In CI set RATE_LIMIT_MODE=off, SKIP_LH_BUILD=1 after build job.
+ * Port: use PORT env if set; otherwise dynamic free port (avoids EADDRINUSE).
  */
 import { spawn } from 'node:child_process';
 import { startServer } from './lib/startServer';
 
 const workspaceRoot = process.cwd();
-const LIGHTHOUSE_PORT = 3000;
+
+/** CI-like env so build produces valid app (NEXT_PUBLIC_* are baked at build time). */
+function ensureCiLikeEnv(): void {
+  process.env.NEXT_PUBLIC_SITE_URL ??= 'https://example.invalid';
+  process.env.NEXT_PUBLIC_IDENTITY_SAME_AS ??= 'https://example.invalid/ci';
+}
 
 async function main(): Promise<number> {
+  ensureCiLikeEnv();
   const skipBuild =
     process.env.SKIP_LH_BUILD === '1' || process.env.SKIP_LH_BUILD === 'true';
-  const env = { ...process.env, PORT: String(LIGHTHOUSE_PORT) };
+  const envPort = process.env.PORT;
+  const requestedPort =
+    envPort !== undefined && envPort !== '' ? parseInt(envPort, 10) : undefined;
+  if (
+    requestedPort !== undefined &&
+    (Number.isNaN(requestedPort) || requestedPort <= 0)
+  ) {
+    throw new Error(`lighthouse: invalid PORT=${envPort}`);
+  }
+  const env = { ...process.env };
+  if (requestedPort !== undefined) env.PORT = String(requestedPort);
 
   if (!skipBuild) {
     const build = spawn('pnpm', ['nx', 'run', 'web:build', '--skip-nx-cache'], {
@@ -32,7 +49,7 @@ async function main(): Promise<number> {
     await new Promise((r) => setTimeout(r, 1500));
   }
 
-  const { baseUrl, stop } = await startServer(LIGHTHOUSE_PORT);
+  const { baseUrl, stop } = await startServer(requestedPort);
 
   process.on('SIGINT', () => {
     void stop();

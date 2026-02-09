@@ -45,6 +45,14 @@ function assertReadinessBody(path: string, body: string): void {
       `Readiness check failed: response at ${path} must contain <html and lang="en".`,
     );
   }
+  if (
+    lower.includes('application error') ||
+    lower.includes('applicationerror')
+  ) {
+    throw new Error(
+      `Readiness check failed: response at ${path} contains application error (runtime crash).`,
+    );
+  }
   const hasMasthead =
     body.includes('data-system="masthead-bar"') ||
     body.includes("data-system='masthead-bar'") ||
@@ -58,18 +66,21 @@ function assertReadinessBody(path: string, body: string): void {
 }
 
 /**
- * Resolve port: explicit number > env PORT (if valid) > free port from getPort.
+ * Resolve port: prefer requested or env PORT, but always use getPort so the returned
+ * port is available (avoids EADDRINUSE when preferred port is in use).
  */
 async function resolvePort(requested?: number): Promise<number> {
+  let preferred = 3000;
   if (requested !== undefined && Number.isInteger(requested) && requested > 0) {
-    return requested;
+    preferred = requested;
+  } else {
+    const envPort = process.env.PORT;
+    if (envPort !== undefined && envPort !== '') {
+      const n = parseInt(envPort, 10);
+      if (Number.isFinite(n) && n > 0) preferred = n;
+    }
   }
-  const envPort = process.env.PORT;
-  if (envPort !== undefined && envPort !== '') {
-    const n = parseInt(envPort, 10);
-    if (Number.isFinite(n) && n > 0) return n;
-  }
-  return getPort({ port: 3000 });
+  return getPort({ port: preferred });
 }
 
 /**

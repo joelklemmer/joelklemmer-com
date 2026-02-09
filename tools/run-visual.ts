@@ -1,20 +1,36 @@
 /**
  * Visual/presentation-integrity runner: starts web via Nx (production), polls /en/ until 200,
  * runs Playwright visual suite with BASE_URL, then tears down. Same server boot as a11y/lighthouse.
- * Run from repo root. In CI set RATE_LIMIT_MODE=off, PORT=3000, SKIP_VISUAL_BUILD=1 (after build job).
+ * Run from repo root. In CI set RATE_LIMIT_MODE=off, PORT=3000 optional; dynamic port when unset.
  */
 import { spawn } from 'node:child_process';
 import { startServer } from './lib/startServer';
 
 const workspaceRoot = process.cwd();
 
+/** CI-like env so build produces valid app (NEXT_PUBLIC_* are baked at build time). */
+function ensureCiLikeEnv(): void {
+  process.env.NEXT_PUBLIC_SITE_URL ??= 'https://example.invalid';
+  process.env.NEXT_PUBLIC_IDENTITY_SAME_AS ??= 'https://example.invalid/ci';
+}
+
 async function main(): Promise<number> {
-  const port = Number(process.env.PORT) || 3000;
+  ensureCiLikeEnv();
+  const envPort = process.env.PORT;
+  const requestedPort =
+    envPort !== undefined && envPort !== '' ? parseInt(envPort, 10) : undefined;
+  if (
+    requestedPort !== undefined &&
+    (Number.isNaN(requestedPort) || requestedPort <= 0)
+  ) {
+    throw new Error(`visual: invalid PORT=${envPort}`);
+  }
 
   const skipBuild =
     process.env.SKIP_VISUAL_BUILD === '1' ||
     process.env.SKIP_VISUAL_BUILD === 'true';
-  const env = { ...process.env, PORT: String(port) };
+  const env = { ...process.env };
+  if (requestedPort !== undefined) env.PORT = String(requestedPort);
 
   if (!skipBuild) {
     const build = spawn('pnpm', ['nx', 'run', 'web:build', '--skip-nx-cache'], {
@@ -34,7 +50,7 @@ async function main(): Promise<number> {
     await new Promise((r) => setTimeout(r, 1500));
   }
 
-  const { baseUrl, stop } = await startServer(port);
+  const { baseUrl, port, stop } = await startServer(requestedPort);
 
   process.on('SIGINT', () => {
     void stop();
