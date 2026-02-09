@@ -90,6 +90,7 @@ jobs:
           pnpm nx run web:media-authority-validate
           pnpm nx run web:media-governance-validate
           pnpm nx run web:visual-contract-validate
+          pnpm nx run web:lighthouse-config-validate
           pnpm nx run web:seo-validate
           pnpm nx run web:tokens-validate
           pnpm nx run web:token-drift-validate
@@ -207,6 +208,11 @@ jobs:
         run: pnpm nx run web:a11y --verbose
         env:
           RATE_LIMIT_MODE: off
+
+      - name: Rate-limit verification (429 shell + RTL)
+        run: pnpm nx run web:rate-limit-verify
+        env:
+          SKIP_RATE_LIMIT_BUILD: '1'
 
       - name: Upload a11y report
         uses: actions/upload-artifact@v4
