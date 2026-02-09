@@ -154,16 +154,25 @@ export function createPageMetadata({
   const descriptionValue =
     description?.trim() ||
     'Authority verification ecosystem for executive evaluation and institutional review.';
+  const siteUrl = normalizeBaseUrl(baseUrl);
   const canonical =
     canonicalOverride ??
-    canonicalUrl(canonicalLocale ?? locale, pathname, baseUrl);
-  const siteUrl = normalizeBaseUrl(baseUrl);
+    getCanonicalUrl({
+      baseUrl,
+      pathname,
+      locale: canonicalLocale ?? locale,
+    });
   const languages = Object.fromEntries(
     hreflangAlternates(pathname, baseUrl).map((alt) => [
       alt.hrefLang,
       alt.href,
     ]),
   );
+  // When baseUrl is set, emit canonical + languages. When undefined, omit alternates
+  // so root layout's generateMetadata (request-based canonical) is not overwritten and LHCI passes.
+  const alternates = baseUrl
+    ? { canonical, languages }
+    : undefined;
   const openGraph: {
     title: string;
     description: string;
@@ -210,10 +219,7 @@ export function createPageMetadata({
   const metadata: Metadata = {
     title,
     description: descriptionValue,
-    alternates: {
-      canonical,
-      languages,
-    },
+    ...(alternates && { alternates }),
     openGraph,
     twitter,
   };

@@ -24,7 +24,7 @@ import { getFrameworkList } from '@joelklemmer/content';
 const HOME_HERO_IMAGE_PATH =
   '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp';
 
-export async function generateMetadata() {
+export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['meta']);
   const t = createScopedTranslator(locale, messages, 'meta');
@@ -33,6 +33,7 @@ export async function generateMetadata() {
     description: t('home.description'),
     locale,
     pathname: '/',
+    baseUrl: options?.baseUrl,
     ogImageSlug: 'home',
     criticalPreloadLinks: getCriticalPreloadLinks({
       heroImageHref: HOME_HERO_IMAGE_PATH,

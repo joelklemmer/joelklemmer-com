@@ -1,6 +1,10 @@
 import { MediaLibraryScreen, mediaLibraryMetadata } from '@joelklemmer/screens';
+import { getRequestBaseUrl } from '../../../lib/requestBaseUrl';
 
-export const generateMetadata = mediaLibraryMetadata;
+export async function generateMetadata() {
+  const baseUrl = await getRequestBaseUrl();
+  return mediaLibraryMetadata({ baseUrl });
+}
 
 export default async function MediaPage({
   searchParams,

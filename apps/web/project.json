@@ -324,6 +324,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-lighthouse-configs.ts"
       }
     },
+    "lighthouse-runtime-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-lighthouse-runtime.ts"
+      }
+    },
     "rate-limit-verify": {
       "executor": "nx:run-commands",
       "options": {

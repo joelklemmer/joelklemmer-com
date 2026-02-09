@@ -49,7 +49,7 @@ export function ClaimProofMapView({
             entry.claimHref ??
             (entry.claimId ? `#claim-${entry.claimId}` : undefined);
           return (
-            <article
+            <div
               key={entry.claimId}
               role="listitem"
               className="border border-border rounded-card overflow-hidden bg-surface"
@@ -96,7 +96,7 @@ export function ClaimProofMapView({
                   </ul>
                 ) : null}
               </div>
-            </article>
+            </div>
           );
         })}
       </div>

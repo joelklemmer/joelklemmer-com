@@ -69,7 +69,7 @@ import {
 import { DensityAwarePage } from '@joelklemmer/authority-density';
 import { BriefNavigator } from './BriefNavigator.client';
 
-export async function generateMetadata() {
+export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['meta']);
   const t = createScopedTranslator(locale, messages, 'meta');
@@ -78,6 +78,7 @@ export async function generateMetadata() {
     description: t('brief.description'),
     locale,
     pathname: '/brief',
+    baseUrl: options?.baseUrl,
     ogImageSlug: 'brief',
   });
 }

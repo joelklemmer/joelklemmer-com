@@ -48,6 +48,12 @@ test.describe('responsive layout stability', () => {
     await page.goto('/en', { waitUntil: 'networkidle' });
     const header = page.locator('header[aria-label]').first();
     await expect(header).toBeVisible();
+    // Ensure mobile nav menu is closed so we measure single-row height only
+    const menuTrigger = page.locator('#primary-nav-trigger');
+    if (await menuTrigger.getAttribute('aria-expanded') === 'true') {
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(100);
+    }
     const box = await header.boundingBox();
     expect(box).toBeTruthy();
     expect(box!.height).toBeLessThanOrEqual(200);

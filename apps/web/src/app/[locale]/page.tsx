@@ -6,9 +6,11 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { HomeScreen, homeMetadata } from '@joelklemmer/screens';
+import { getRequestBaseUrl } from '../../lib/requestBaseUrl';
 
 export async function generateMetadata(): Promise<Metadata> {
-  return homeMetadata();
+  const baseUrl = await getRequestBaseUrl();
+  return homeMetadata({ baseUrl });
 }
 
 export default function LocaleIndex() {

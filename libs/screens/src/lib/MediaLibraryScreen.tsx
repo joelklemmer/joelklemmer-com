@@ -17,7 +17,9 @@ import { Container } from '@joelklemmer/ui';
 import { focusRingClass } from '@joelklemmer/a11y';
 import { MediaLibraryClient } from './MediaLibraryClient';
 
-export async function createMediaLibraryMetadata() {
+export async function createMediaLibraryMetadata(options?: {
+  baseUrl?: string;
+}) {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['meta']);
   const t = createScopedTranslator(locale, messages, 'meta');
@@ -26,6 +28,7 @@ export async function createMediaLibraryMetadata() {
     description: t('media.description'),
     locale,
     pathname: '/media',
+    baseUrl: options?.baseUrl,
     ogImageSlug: 'media',
   });
 }

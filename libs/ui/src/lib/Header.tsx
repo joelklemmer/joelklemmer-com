@@ -20,7 +20,7 @@ export function Header({
   return (
     <div
       data-system="masthead-bar"
-      className="masthead-bar flex items-center w-full gap-4"
+      className="masthead-bar flex flex-nowrap items-center w-full gap-6"
     >
       <div className="masthead-identity flex-shrink-0">
         <Link
