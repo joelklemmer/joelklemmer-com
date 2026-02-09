@@ -53,7 +53,7 @@ export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
 
-/** Deterministic default title per locale so document-title is never empty. */
+/** Deterministic default title and description per locale so document meta is never empty (LHCI meta-description). */
 export async function generateMetadata({
   params,
 }: {
@@ -64,13 +64,20 @@ export async function generateMetadata({
     ? (locale as AppLocale)
     : defaultLocale;
   const messages = await loadMessages(appLocale, ['meta']);
-  const meta = messages.meta as { defaultTitle?: string };
+  const meta = messages.meta as {
+    defaultTitle?: string;
+    defaultDescription?: string;
+  };
   const defaultTitle = meta?.defaultTitle ?? 'Joel R. Klemmer';
+  const defaultDescription =
+    meta?.defaultDescription ??
+    'Authority verification ecosystem for executive evaluation and institutional review.';
   return {
     title: {
       default: defaultTitle,
       template: `%s | ${defaultTitle}`,
     },
+    description: defaultDescription,
   };
 }
 

@@ -151,6 +151,9 @@ export function createPageMetadata({
   ogImageSlug,
   criticalPreloadLinks,
 }: PageMetadataInput): Metadata {
+  const descriptionValue =
+    description?.trim() ||
+    'Authority verification ecosystem for executive evaluation and institutional review.';
   const canonical =
     canonicalOverride ??
     canonicalUrl(canonicalLocale ?? locale, pathname, baseUrl);
@@ -176,7 +179,7 @@ export function createPageMetadata({
     }>;
   } = {
     title,
-    description,
+    description: descriptionValue,
     url: canonical,
     siteName: title,
     locale,
@@ -196,7 +199,7 @@ export function createPageMetadata({
   const twitter = {
     card: 'summary_large_image' as const,
     title,
-    description,
+    description: descriptionValue,
     ...(ogImageSlug && {
       images: [
         `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`,
@@ -206,7 +209,7 @@ export function createPageMetadata({
 
   const metadata: Metadata = {
     title,
-    description,
+    description: descriptionValue,
     alternates: {
       canonical,
       languages,

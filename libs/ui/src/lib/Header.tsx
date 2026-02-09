@@ -36,7 +36,7 @@ export function Header({
         </div>
       )}
       {headerControls && (
-        <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-1">
+        <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-6">
           {headerControls}
         </div>
       )}

@@ -21,10 +21,11 @@ export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
   if (choiceMade) return null;
 
   return (
-    <aside
+    <div
       role="dialog"
       aria-labelledby="consent-surface-title"
       aria-describedby="consent-surface-desc"
+      aria-modal="true"
       className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-bg p-4 shadow-lg"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -62,6 +63,6 @@ export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
           </Link>
         </div>
       </div>
-    </aside>
+    </div>
   );
 }

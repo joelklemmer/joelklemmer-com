@@ -45,7 +45,6 @@ export function FrameworkCard({
         href={href}
         prefetch={prefetch}
         className={`${focusRingClass} block transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
-        aria-label={title}
       >
         {content}
       </Link>
