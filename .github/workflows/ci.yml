@@ -70,6 +70,9 @@ jobs:
           pnpm nx run web:content-validate
           pnpm nx run web:docs-integrity-validate
           pnpm nx run web:governance-validate
+          pnpm nx run web:compliance-registry-validate
+          pnpm nx run web:tracker-usage-validate
+          pnpm nx run web:telemetry-governance-validate
           pnpm nx run web:i18n-validate
           pnpm nx run web:pgf-validate
           pnpm nx run web:intelligence-validate

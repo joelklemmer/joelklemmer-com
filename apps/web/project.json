@@ -16,8 +16,8 @@
     "start": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "next start",
-        "cwd": "apps/web"
+        "command": "npx next start",
+        "cwd": "{projectRoot}"
       },
       "configurations": {
         "production": {}
@@ -45,6 +45,24 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-governance.ts"
+      }
+    },
+    "compliance-registry-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-compliance-registry.ts"
+      }
+    },
+    "tracker-usage-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-tracker-usage.ts"
+      }
+    },
+    "telemetry-governance-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-telemetry-governance.ts"
       }
     },
     "i18n-validate": {
@@ -171,6 +189,9 @@
           "nx run web:cookie-compliance-validate",
           "nx run web:docs-integrity-validate",
           "nx run web:governance-validate",
+          "nx run web:compliance-registry-validate",
+          "nx run web:tracker-usage-validate",
+          "nx run web:telemetry-governance-validate",
           "nx run web:i18n-validate",
           "nx run web:pgf-validate",
           "nx run web:intelligence-validate",
@@ -215,6 +236,9 @@
           "nx run web:content-validate",
           "nx run web:docs-integrity-validate",
           "nx run web:governance-validate",
+          "nx run web:compliance-registry-validate",
+          "nx run web:tracker-usage-validate",
+          "nx run web:telemetry-governance-validate",
           "nx run web:i18n-validate",
           "nx run web:pgf-validate",
           "nx run web:intelligence-validate",

@@ -69,6 +69,12 @@ export async function CaseStudiesScreen() {
     references: t('caseStudies.labels.references'),
   };
 
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tWithParams = t as TWithParams;
+
   return (
     <>
       <DensityAwarePage
@@ -103,10 +109,12 @@ export async function CaseStudiesScreen() {
             const contextStr = study.frontmatter.context;
             const verificationCount = study.frontmatter.proofRefs?.length ?? 0;
             const meta = study.frontmatter.date
-              ? t('caseStudies.meta', { date: study.frontmatter.date }) +
+              ? tWithParams('caseStudies.meta', { date: study.frontmatter.date }) +
                 ' · ' +
-                t('caseStudies.verificationCount', { count: verificationCount })
-              : t('caseStudies.verificationCount', {
+                tWithParams('caseStudies.verificationCount', {
+                  count: verificationCount,
+                })
+              : tWithParams('caseStudies.verificationCount', {
                   count: verificationCount,
                 });
 

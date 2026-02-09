@@ -60,7 +60,7 @@ export function createScopedTranslator(
 ) {
   return createTranslator({
     locale,
-    messages: messages as Record<string, any>,
+    messages: messages as Record<string, string | Record<string, unknown>>,
     namespace,
   });
 }

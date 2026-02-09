@@ -33,10 +33,11 @@ import {
 import { DensityViewProvider } from '@joelklemmer/authority-density';
 import { TelemetryProvider } from '@joelklemmer/authority-telemetry';
 import {
-  getConsentFromCookie,
-  ConsentProvider,
-  canLoadAnalytics,
+  getConsentFromCookieV2,
+  ConsentProviderV2,
+  canLoadAnalyticsV2,
   CookiePreferencesTrigger,
+  ConsentSurfaceV2,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
 
@@ -83,8 +84,10 @@ export default async function LocaleLayout({
     label: nav(entry.labelKey),
     ...(entry.rank && { rank: entry.rank }),
   }));
-  const initialConsentState = getConsentFromCookie(cookieStore.toString());
-  const initialAnalyticsConsent = canLoadAnalytics(initialConsentState ?? null);
+  const initialConsentState = getConsentFromCookieV2(cookieStore.toString());
+  const initialAnalyticsConsent = canLoadAnalyticsV2(
+    initialConsentState ?? null,
+  );
 
   const footerItems = [
     'media',
@@ -111,7 +114,7 @@ export default async function LocaleLayout({
           <ACPProvider>
             <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
               <DensityViewProvider syncWithHash>
-                <ConsentProvider initialConsentState={initialConsentState}>
+                <ConsentProviderV2 initialConsentState={initialConsentState}>
                   <Shell
                     headerContent={
                       <Header
@@ -167,7 +170,10 @@ export default async function LocaleLayout({
                       {children}
                     </TelemetryProvider>
                   </Shell>
-                </ConsentProvider>
+                  <ConsentSurfaceV2
+                    preferencesHref={`/${resolvedLocale}/preferences`}
+                  />
+                </ConsentProviderV2>
               </DensityViewProvider>
             </EvaluatorModeProvider>
           </ACPProvider>

@@ -40,6 +40,12 @@ export async function MediaKitScreen() {
     />
   ) : null;
 
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tWithParams = t as TWithParams;
+
   const manifest = await getMediaManifest();
   const tierAVisible = getMediaManifestVisible(manifest);
   const assetsSection = tierAVisible.length ? (
@@ -49,7 +55,7 @@ export async function MediaKitScreen() {
       items={tierAVisible.map((asset) => ({
         title: asset.descriptor.replace(/-/g, ' '),
         description: asset.alt,
-        meta: t('mediaKit.assetMeta', {
+        meta: tWithParams('mediaKit.assetMeta', {
           type: asset.kind,
           version: '1',
           date: asset.file.includes('__2026-01__') ? '2026-01' : '—',

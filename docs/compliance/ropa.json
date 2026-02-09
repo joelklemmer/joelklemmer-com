@@ -1,0 +1,70 @@
+{
+  "generatedAt": "2026-02-09T02:56:34.912Z",
+  "vendors": [
+    {
+      "id": "internal-essential",
+      "name": "Internal essential",
+      "owner": "JoelKlemmer.com",
+      "category": "essential",
+      "purposeScopes": ["security"],
+      "sensitivity": ["operational"],
+      "retention": "Session or 365 days for consent cookie",
+      "transferRegions": [],
+      "subprocessors": [],
+      "role": "controller",
+      "riskTier": "low",
+      "planned": false
+    },
+    {
+      "id": "internal-telemetry",
+      "name": "Internal telemetry (first-party)",
+      "owner": "JoelKlemmer.com",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "retention": "As per privacy policy",
+      "transferRegions": [],
+      "subprocessors": [],
+      "role": "controller",
+      "riskTier": "low",
+      "planned": false
+    },
+    {
+      "id": "third-party-analytics-planned",
+      "name": "Third-party analytics (planned)",
+      "owner": "TBD",
+      "category": "analytics",
+      "purposeScopes": ["measurement", "experimentation"],
+      "sensitivity": ["behavioral", "inferred"],
+      "retention": "TBD",
+      "transferRegions": ["US", "EU"],
+      "subprocessors": [],
+      "role": "processor",
+      "riskTier": "medium",
+      "planned": true
+    }
+  ],
+  "telemetryEvents": [
+    {
+      "eventName": "route_view",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "piiRisk": "none"
+    },
+    {
+      "eventName": "brief_open",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "piiRisk": "none"
+    },
+    {
+      "eventName": "case_study_engagement",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "piiRisk": "none"
+    }
+  ]
+}

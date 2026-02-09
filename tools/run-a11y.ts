@@ -6,9 +6,12 @@
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts
  */
 import { spawn } from 'node:child_process';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import getPort from 'get-port';
 
 const workspaceRoot = process.cwd();
+const webAppDir = path.join(workspaceRoot, 'apps', 'web');
 
 /** Safe defaults for a11y run only; applied only when env vars are not already set. */
 function applyA11yEnvDefaults(): void {
@@ -39,19 +42,43 @@ async function main(): Promise<number> {
 
   // Use production server: build + start when run standalone; start only when
   // SKIP_A11Y_BUILD=1 (e.g. verify already ran build). Avoids Next lock and output conflicts.
+  // Start Next with cwd=apps/web (no shell) so it always finds .next on all platforms.
   const skipBuild =
     process.env.SKIP_A11Y_BUILD === '1' ||
     process.env.SKIP_A11Y_BUILD === 'true';
-  const serverCommand = skipBuild
-    ? `pnpm nx run web:start --port=${port}`
-    : `pnpm nx run web:build --skip-nx-cache && pnpm nx run web:start --port=${port}`;
-
-  const server = spawn(serverCommand, [], {
-    cwd: workspaceRoot,
-    stdio: 'pipe',
-    env: { ...process.env, PORT: String(port) },
-    shell: true,
-  });
+  const env = { ...process.env, PORT: String(port) };
+  let server: ReturnType<typeof spawn>;
+  if (skipBuild) {
+    const buildIdPath = path.join(webAppDir, '.next', '.next', '.next', 'BUILD_ID');
+    if (!existsSync(buildIdPath)) {
+      throw new Error(
+        `a11y: BUILD_ID not found at ${buildIdPath}. Run web:build first or run verify without SKIP_A11Y_BUILD.`,
+      );
+    }
+    const nextBin = require.resolve('next/dist/bin/next');
+    // No directory arg: run from apps/web so Next uses cwd and finds .next/.next/BUILD_ID
+    server = spawn(
+      process.execPath,
+      [nextBin, 'start', '--port', String(port)],
+      {
+        cwd: webAppDir,
+        stdio: 'pipe',
+        env,
+        shell: false,
+      },
+    );
+  } else {
+    server = spawn(
+      `pnpm nx run web:build --skip-nx-cache && (cd apps/web && npx next start --port=${port})`,
+      [],
+      {
+        cwd: workspaceRoot,
+        stdio: 'pipe',
+        env,
+        shell: true,
+      },
+    );
+  }
 
   let serverExited = false;
   let serverExitCode: number | null = null;

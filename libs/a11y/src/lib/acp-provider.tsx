@@ -21,7 +21,6 @@ import {
   type MotionPreference,
   type TextSizePreference,
   type UnderlineLinksPreference,
-  getStoredPreferences,
   applyMotionPreference,
   applyTextSizePreference,
   applyUnderlineLinksPreference,

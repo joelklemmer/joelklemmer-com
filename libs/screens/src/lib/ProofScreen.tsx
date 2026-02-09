@@ -30,6 +30,11 @@ export async function ProofScreen() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['proof']);
   const t = createScopedTranslator(locale, messages, 'proof');
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tWithParams = t as TWithParams;
   const entries = await getPublicRecordList(locale);
 
   return (
@@ -42,7 +47,7 @@ export async function ProofScreen() {
           items={entries.map((entry) => ({
             title: entry.frontmatter.title,
             description: entry.frontmatter.claimSupported,
-            meta: t('list.meta', {
+            meta: tWithParams('list.meta', {
               date: entry.frontmatter.date,
               source:
                 typeof entry.frontmatter.source === 'string'

@@ -45,6 +45,12 @@ export async function WorkScreen() {
     references: t('caseStudies.labels.references'),
   };
 
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tWithParams = t as TWithParams;
+
   return (
     <>
       <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
@@ -74,7 +80,9 @@ export async function WorkScreen() {
               summary={study.frontmatter.summary}
               meta={
                 study.frontmatter.date
-                  ? t('caseStudies.meta', { date: study.frontmatter.date })
+                  ? tWithParams('caseStudies.meta', {
+                      date: study.frontmatter.date,
+                    })
                   : undefined
               }
               detailLink={{

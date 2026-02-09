@@ -40,6 +40,20 @@ export { CookiePolicyScreen } from './CookiePolicyScreen';
 export { cookiesMetadata } from './CookiePolicyScreen';
 export { PreferencesScreen } from './PreferencesScreen';
 export { preferencesMetadata } from './PreferencesScreen';
+export {
+  SubprocessorsScreen,
+  subprocessorsMetadata,
+  type SubprocessorsScreenProps,
+} from './SubprocessorsScreen';
+export {
+  RetentionScreen,
+  retentionMetadata,
+  type RetentionScreenProps,
+} from './RetentionScreen';
+export {
+  PrivacyRequestsScreen,
+  privacyRequestsMetadata,
+} from './PrivacyRequestsScreen';
 export { QuietScreen } from './QuietScreen';
 export { WritingPostScreen } from './WritingPostScreen';
 export {

@@ -10,7 +10,7 @@ import {
 } from './authoritySignalTypes';
 
 /** Weight per signal: 0–1 normalized. Sum typically 1.0 but not required. */
-const signalWeightSchema = z.record(
+export const signalWeightSchema = z.record(
   z.string(),
   z.number().min(0).max(1),
 ) as z.ZodType<Partial<Record<AuthoritySignalId, number>>>;
@@ -140,7 +140,7 @@ export function getEffectiveWeights(
   const neg = v.negative ?? {};
   const out = {} as Record<AuthoritySignalId, number>;
   for (const id of AUTHORITY_SIGNAL_IDS) {
-    let val =
+    const val =
       base[id] +
       (sec[id] ?? 0) * SECONDARY_FACTOR +
       (ter[id] ?? 0) * TERTIARY_FACTOR -

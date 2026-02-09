@@ -9,8 +9,8 @@ import {
 } from 'react';
 import { useTranslations } from 'next-intl';
 import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
-import { useConsent } from './ConsentContext';
-import type { ConsentState } from './consent-state';
+import { useConsentV2 } from './ConsentContextV2';
+import type { ConsentState } from './consent-state-v2';
 
 export interface CookiePreferencesModalProps {
   isOpen: boolean;
@@ -30,7 +30,7 @@ export function CookiePreferencesModal({
     acceptAll,
     rejectNonEssential,
     withdraw,
-  } = useConsent();
+  } = useConsentV2();
   const modalRef = useRef<HTMLDivElement>(null);
   const firstFocusableRef = useRef<HTMLButtonElement>(null);
 
@@ -48,27 +48,43 @@ export function CookiePreferencesModal({
     return () => document.removeEventListener('keydown', handleEscape);
   }, [isOpen, onClose]);
 
-  const [localAnalytics, setLocalAnalytics] = useState(consentState.analytics);
-  const [localFunctional, setLocalFunctional] = useState(
-    consentState.functional,
+  const [localAnalytics, setLocalAnalytics] = useState(
+    consentState.categories.analytics,
   );
-  const [localMarketing, setLocalMarketing] = useState(consentState.marketing);
+  const [localFunctional, setLocalFunctional] = useState(
+    consentState.categories.functional,
+  );
+  const [localExperience, setLocalExperience] = useState(
+    consentState.categories.experience,
+  );
+  const [localMarketing, setLocalMarketing] = useState(
+    consentState.categories.marketing,
+  );
 
   useEffect(() => {
-    setLocalAnalytics(consentState.analytics);
-    setLocalFunctional(consentState.functional);
-    setLocalMarketing(consentState.marketing);
-  }, [consentState.analytics, consentState.functional, consentState.marketing]);
+    setLocalAnalytics(consentState.categories.analytics);
+    setLocalFunctional(consentState.categories.functional);
+    setLocalExperience(consentState.categories.experience);
+    setLocalMarketing(consentState.categories.marketing);
+  }, [
+    consentState.categories.analytics,
+    consentState.categories.functional,
+    consentState.categories.experience,
+    consentState.categories.marketing,
+  ]);
 
   const handleSave = useCallback(() => {
     const state: ConsentState = {
       ...consentState,
-      version: consentState.version,
       timestamp: Date.now(),
       choiceMade: true,
-      analytics: localAnalytics,
-      functional: localFunctional,
-      marketing: localMarketing,
+      categories: {
+        ...consentState.categories,
+        analytics: localAnalytics,
+        functional: localFunctional,
+        experience: localExperience,
+        marketing: localMarketing,
+      },
     };
     updateConsent(state);
     onClose();
@@ -76,6 +92,7 @@ export function CookiePreferencesModal({
     consentState,
     localAnalytics,
     localFunctional,
+    localExperience,
     localMarketing,
     updateConsent,
     onClose,
@@ -132,6 +149,17 @@ export function CookiePreferencesModal({
             />
             <span className="text-sm font-medium text-text">
               {t('cookiePreferences.functionalLabel')}
+            </span>
+          </label>
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              checked={localExperience}
+              onChange={(e) => setLocalExperience(e.target.checked)}
+              className={focusRingClass}
+            />
+            <span className="text-sm font-medium text-text">
+              {t('cookiePreferences.experienceLabel')}
             </span>
           </label>
           <label className="flex items-center gap-3">

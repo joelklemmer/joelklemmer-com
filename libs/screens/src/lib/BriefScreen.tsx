@@ -260,17 +260,24 @@ export async function BriefScreen(props?: BriefScreenProps) {
   const maxCaseStudies = claimCards.length
     ? Math.max(...claimCards.map((c) => c.caseStudies.length), 0)
     : 0;
+  type TWithParams = (
+    key: string,
+    values?: Record<string, string | number>,
+  ) => string;
+  const tWithParams = t as TWithParams;
   const strengthMinByCount: Record<number, string> = {};
   for (let n = 1; n <= maxStrength; n++) {
-    strengthMinByCount[n] = t('navigator.strengthMin', { count: n });
+    strengthMinByCount[n] = tWithParams('navigator.strengthMin', { count: n });
   }
   const recordCountByCount: Record<number, string> = {};
   for (let n = 0; n <= maxStrength; n++) {
-    recordCountByCount[n] = t('navigator.recordCount', { count: n });
+    recordCountByCount[n] = tWithParams('navigator.recordCount', { count: n });
   }
   const caseStudyCountByCount: Record<number, string> = {};
   for (let n = 0; n <= maxCaseStudies; n++) {
-    caseStudyCountByCount[n] = t('navigator.caseStudyCount', { count: n });
+    caseStudyCountByCount[n] = tWithParams('navigator.caseStudyCount', {
+      count: n,
+    });
   }
   const navigatorLabels = {
     viewGrid: t('navigator.viewGrid'),
