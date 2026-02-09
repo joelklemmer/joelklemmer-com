@@ -14,10 +14,10 @@
   }
 }
 
-/* Page Frame: consistent max-width lane, section spacing, reading rhythm. */
+/* Page Frame: full viewport width; section spacing and rhythm. Lane constraint is per-section via Container. */
 .page-frame {
   width: 100%;
-  max-width: var(--page-frame-max-width);
+  max-width: none;
   margin-inline: auto;
   padding-inline: var(--container-padding-x);
   display: grid;
@@ -29,6 +29,19 @@
   .page-frame {
     padding-inline: var(--container-padding-x-wide);
   }
+}
+
+/* Ultra-wide (1920px+): increase padding; line length unchanged per responsive contract */
+@media (min-width: 1920px) {
+  :root {
+    --container-padding-x: var(--space-8);
+    --container-padding-x-wide: var(--space-10);
+  }
+}
+
+/* Full-bleed: section content wrapper; inner lane via Container. See docs/authority/responsive-contract.md */
+.full-bleed {
+  width: 100%;
 }
 
 /* Content stage: subtle materiality so center column does not float; does not harm contrast. */
@@ -117,10 +130,13 @@ section.section-shell:last-child {
   }
 }
 
+/* Grid of sections: full width; each section uses Container (lane) inside. */
 .content-lane-grid {
   display: grid;
   gap: var(--section-block-margin);
   grid-template-columns: 1fr;
+  width: 100%;
+  max-width: none;
 }
 
 .hero-authority {

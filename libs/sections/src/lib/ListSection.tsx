@@ -1,14 +1,21 @@
+import type { ContainerVariant } from '@joelklemmer/ui';
 import { Container } from '@joelklemmer/ui';
 
 export interface ListSectionProps {
   title: string;
   items: string[];
+  /** Lane variant for content; default readable for list copy. */
+  containerVariant?: ContainerVariant;
 }
 
-export function ListSection({ title, items }: ListSectionProps) {
+export function ListSection({
+  title,
+  items,
+  containerVariant = 'readable',
+}: ListSectionProps) {
   return (
     <section className="section-shell">
-      <Container className="section-shell">
+      <Container variant={containerVariant} className="section-shell">
         <div className="authority-card">
           <h2 className="text-section-heading font-semibold mb-4">{title}</h2>
           <ul className="grid gap-3 text-base text-muted">

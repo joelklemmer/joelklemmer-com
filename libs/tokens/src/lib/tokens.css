@@ -278,6 +278,13 @@
   --readable-line-length: var(--readable-max-width);
   --container-padding-x: var(--space-6);
   --container-padding-x-wide: var(--space-8);
+  /* Optional: safe-area aware gutters (use in calc for notched devices) */
+  --gutter-inline-start: calc(
+    var(--container-padding-x) + env(safe-area-inset-inline-start, 0px)
+  );
+  --gutter-inline-end: calc(
+    var(--container-padding-x) + env(safe-area-inset-inline-end, 0px)
+  );
   --optical-inset: var(--space-4);
   --column-cadence: var(--space-6);
   --row-cadence: var(--space-5);

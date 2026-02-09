@@ -70,7 +70,7 @@ export async function HomeScreen() {
   const doctrine =
     frameworks.length > 0 ? (
       <section id="doctrine" className="section-shell">
-        <Container className="section-shell">
+        <Container variant="wide" className="section-shell">
           <div className="mb-6">
             <h2 className="text-section-heading font-semibold">
               {tFw('section.title')}
@@ -103,7 +103,7 @@ export async function HomeScreen() {
   );
   const routes = (
     <section id="routes" className="section-shell">
-      <Container className="section-shell">
+      <Container variant="wide" className="section-shell">
         {/* Executive Brief - dominant entry point */}
         {executiveBriefItem ? (
           <div className="mb-8">
@@ -181,7 +181,7 @@ export async function HomeScreen() {
     <>
       <WebSiteJsonLd locale={locale} />
       <PersonJsonLd />
-      <div className="content-lane content-lane-grid">
+      <div className="content-lane-grid">
         {HOME_IA_ORDER.filter((id) => HOME_SECTION_IDS.includes(id)).map(
           (id) => {
             const node = byId[id];

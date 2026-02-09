@@ -67,7 +67,10 @@ export function HeroSection({
       aria-labelledby="hero-title"
     >
       <div className="hero-authority-atmosphere" aria-hidden />
-      <Container className="hero-authority-inner hero-authority-plate">
+      <Container
+        variant="wide"
+        className="hero-authority-inner hero-authority-plate"
+      >
         <div
           className={useGrid ? 'hero-authority-grid' : 'hero-authority-stack'}
         >
