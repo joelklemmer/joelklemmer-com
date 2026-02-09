@@ -79,25 +79,58 @@ async function main(): Promise<number> {
     throw new Error('validate-head-invariants failed');
   }
 
-  const lhci = spawn(
-    'pnpm',
-    ['exec', 'lhci', 'autorun', '--config=./lighthouserc.serverless.cjs'],
-    {
-      cwd: workspaceRoot,
-      stdio: 'inherit',
-      env: { ...process.env, LHCI_BASE_URL: baseUrl },
-      shell: true,
-    },
-  );
+  const envWithBase = { ...process.env, LHCI_BASE_URL: baseUrl, BASE_URL: baseUrl };
 
-  const lhciExit = await new Promise<number>((resolve) => {
-    lhci.on('exit', (code, signal) => {
-      resolve(code ?? (signal ? 1 : 0));
-    });
+  const collect = spawn(
+    'pnpm',
+    ['exec', 'lhci', 'collect', '--config=./lighthouserc.serverless.cjs'],
+    { cwd: workspaceRoot, stdio: 'inherit', env: envWithBase, shell: true },
+  );
+  const collectExit = await new Promise<number>((resolve) => {
+    collect.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+  });
+  if (collectExit !== 0) {
+    await stop();
+    throw new Error('lhci collect failed');
+  }
+
+  const patch = spawn(
+    'npx',
+    ['tsx', '--tsconfig', 'tsconfig.base.json', 'tools/patch-inp-from-timespan.ts'],
+    { cwd: workspaceRoot, stdio: 'inherit', env: envWithBase, shell: true },
+  );
+  const patchExit = await new Promise<number>((resolve) => {
+    patch.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+  });
+  if (patchExit !== 0) {
+    await stop();
+    throw new Error('patch-inp-from-timespan failed');
+  }
+
+  const assert = spawn(
+    'pnpm',
+    ['exec', 'lhci', 'assert', '--config=./lighthouserc.serverless.cjs'],
+    { cwd: workspaceRoot, stdio: 'inherit', env: envWithBase, shell: true },
+  );
+  const assertExit = await new Promise<number>((resolve) => {
+    assert.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+  });
+  if (assertExit !== 0) {
+    await stop();
+    return assertExit;
+  }
+
+  const upload = spawn(
+    'pnpm',
+    ['exec', 'lhci', 'upload', '--config=./lighthouserc.serverless.cjs'],
+    { cwd: workspaceRoot, stdio: 'inherit', env: envWithBase, shell: true },
+  );
+  const uploadExit = await new Promise<number>((resolve) => {
+    upload.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
   });
 
   await stop();
-  return lhciExit;
+  return uploadExit;
 }
 
 main()

@@ -41,6 +41,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/run-lighthouse.ts"
       }
     },
+    "lighthouse-timespan": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/run-lighthouse-timespan.ts"
+      }
+    },
     "content-validate": {
       "executor": "nx:run-commands",
       "options": {
