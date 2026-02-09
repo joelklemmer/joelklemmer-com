@@ -17,11 +17,14 @@ function localeFromPath(pathname: string): string {
   return routing.defaultLocale ?? 'en';
 }
 
-/** Accessible 429 body: valid HTML document with lang and title (locale from path or default). */
+const RTL_LOCALES = ['he', 'ar'] as const;
+
+/** Accessible 429 body: valid HTML document with lang, dir, and title (locale from path or default). */
 function rateLimitResponseBody(pathname: string): string {
   const lang = localeFromPath(pathname);
+  const dir = (RTL_LOCALES as readonly string[]).includes(lang) ? 'rtl' : 'ltr';
   return `<!DOCTYPE html>
-<html lang="${lang}">
+<html lang="${lang}" dir="${dir}">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />

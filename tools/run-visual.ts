@@ -1,34 +1,19 @@
 /**
- * Collision-proof a11y runner: picks a free port, starts the web server via Nx
- * (production parity), runs Playwright a11y tests with BASE_URL set, then cleans up.
- * Injects safe placeholder env vars only when missing so the gate is deterministic
- * without requiring local or CI env; production deploys still enforce real identity.
- * Run with: npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts
- *
- * Server boot: uses shared tools/lib/startServer.ts (Nx start + poll GET /en/ until 200).
- * RATE_LIMIT_MODE is not set here so CI can set RATE_LIMIT_MODE=off for stable runs.
+ * Visual/presentation-integrity runner: starts web via Nx (production), polls /en/ until 200,
+ * runs Playwright visual suite with BASE_URL, then tears down. Same server boot as a11y/lighthouse.
+ * Run from repo root. In CI set RATE_LIMIT_MODE=off, PORT=3000, SKIP_VISUAL_BUILD=1 (after build job).
  */
 import { spawn } from 'node:child_process';
-import getPort from 'get-port';
 import { startServer } from './lib/startServer';
 
 const workspaceRoot = process.cwd();
 
-/** Safe defaults for a11y run only; applied only when env vars are not already set. */
-function applyA11yEnvDefaults(): void {
-  process.env.NEXT_PUBLIC_SITE_URL ??= 'https://example.invalid';
-  process.env.NEXT_PUBLIC_IDENTITY_SAME_AS ??= 'https://example.invalid/ci';
-  process.env.RELEASE_READY ??= '0';
-}
-
 async function main(): Promise<number> {
-  applyA11yEnvDefaults();
-
-  const port = await getPort({ port: 4300 });
+  const port = Number(process.env.PORT) || 3000;
 
   const skipBuild =
-    process.env.SKIP_A11Y_BUILD === '1' ||
-    process.env.SKIP_A11Y_BUILD === 'true';
+    process.env.SKIP_VISUAL_BUILD === '1' ||
+    process.env.SKIP_VISUAL_BUILD === 'true';
   const env = { ...process.env, PORT: String(port) };
 
   if (!skipBuild) {
@@ -44,7 +29,7 @@ async function main(): Promise<number> {
       });
     });
     if (buildExit !== 0) {
-      throw new Error(`a11y: web:build exited with ${buildExit}`);
+      throw new Error(`visual: web:build exited with ${buildExit}`);
     }
     await new Promise((r) => setTimeout(r, 1500));
   }
@@ -60,7 +45,7 @@ async function main(): Promise<number> {
 
   const playwright = spawn(
     'npx',
-    ['playwright', 'test', '--config=apps/web-e2e/playwright.a11y.config.ts'],
+    ['playwright', 'test', '--config=apps/web-e2e/playwright.visual.config.ts'],
     {
       cwd: workspaceRoot,
       stdio: 'inherit',

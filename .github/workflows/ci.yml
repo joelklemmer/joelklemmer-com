@@ -275,9 +275,10 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Visual (presentation-integrity + screenshots)
-        run: pnpm nx run web-e2e:visual --verbose
+        run: pnpm nx run web:visual --verbose
         env:
           RATE_LIMIT_MODE: off
+          PORT: '3000'
 
   lighthouse:
     name: lighthouse
@@ -323,10 +324,10 @@ jobs:
           BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA: '1'
 
       - name: 'Run Lighthouse CI (performance gate: LCP &lt; 1.8s, CLS ≤ 0.1, performance ≥ 0.7)'
-        run: pnpm exec lhci autorun --config=./lighthouserc.cjs
+        run: pnpm nx run web:lighthouse --verbose
         env:
           RATE_LIMIT_MODE: off
-          PORT: '3000'
+          SKIP_LH_BUILD: '1'
           LHCI_COLLECT__NUMBER_OF_RUNS: '1'
           LHCI_UPLOAD__TARGET: 'filesystem'
           LHCI_UPLOAD__OUTPUT_DIR: 'tmp/lighthouse'

@@ -29,6 +29,18 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts"
       }
     },
+    "visual": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/run-visual.ts"
+      }
+    },
+    "lighthouse": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/run-lighthouse.ts"
+      }
+    },
     "content-validate": {
       "executor": "nx:run-commands",
       "options": {
