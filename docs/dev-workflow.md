@@ -50,6 +50,10 @@ Or: `pnpm dev`.
 - Format check: `pnpm format:check`
 - Format write: `pnpm format`
 
+## Nx and Next.js output (distDir)
+
+The web app uses a custom `distDir` in `apps/web/next.config.js` (multiple nested `.next` levels) so that the Nx build output matches what `next start` expects when run via `nx start web` from the project root. The exact level count is determined by how Nx/Next resolve the output path; see the comment in `next.config.js`. Do not change or remove `distDir` without verifying that `nx start web` and the a11y harness (`nx run web:a11y`) still find the build.
+
 ## Windows (PowerShell)
 
 All of the above commands work in PowerShell. Content and i18n validation use `npx tsx`, which avoids PATH issues when `tsx` is installed as a devDependency.

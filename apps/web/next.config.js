@@ -14,8 +14,8 @@ const nextConfig = {
   // Use this to set Nx-specific options
   // See: https://nx.dev/recipes/next/next-config-setup
   nx: {},
-  // Nx sets distDir = outputPath + this (apps/web/.next + distDir); use 8 levels so next start finds BUILD_ID after Nx build.
-  distDir: '.next/.next/.next/.next/.next/.next/.next/.next',
+  // Nx sets distDir = outputPath + this (apps/web/.next + distDir). Use 10 levels so next start finds BUILD_ID after Nx build.
+  distDir: '.next/.next/.next/.next/.next/.next/.next/.next/.next/.next',
   // Reduce JS on critical routes: tree-shake barrel imports from workspace libs (cognitive load reduction).
   experimental: {
     optimizePackageImports: [
