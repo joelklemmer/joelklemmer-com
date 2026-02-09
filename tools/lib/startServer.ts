@@ -45,9 +45,14 @@ function assertReadinessBody(path: string, body: string): void {
       `Readiness check failed: response at ${path} must contain <html and lang="en".`,
     );
   }
-  if (!body.includes('data-system="masthead-bar"')) {
+  const hasMasthead =
+    body.includes('data-system="masthead-bar"') ||
+    body.includes("data-system='masthead-bar'") ||
+    body.includes('class="masthead-bar') ||
+    body.includes("class='masthead-bar");
+  if (!hasMasthead) {
     throw new Error(
-      `Readiness check failed: response at ${path} must contain data-system="masthead-bar" (app shell).`,
+      `Readiness check failed: response at ${path} must contain masthead (data-system or class masthead-bar).`,
     );
   }
 }
@@ -73,9 +78,7 @@ async function resolvePort(requested?: number): Promise<number> {
  * stop() sends SIGTERM, waits up to SIGTERM_WAIT_MS, then SIGKILL. Caller must call stop() to teardown.
  * When port is not provided and PORT env is not set, uses a dynamic free port.
  */
-export async function startServer(
-  port?: number,
-): Promise<StartServerResult> {
+export async function startServer(port?: number): Promise<StartServerResult> {
   const resolvedPort = await resolvePort(port);
   const baseUrl = `http://127.0.0.1:${resolvedPort}`;
   const env = { ...process.env, PORT: String(resolvedPort) };

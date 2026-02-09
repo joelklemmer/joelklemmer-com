@@ -11,13 +11,13 @@
 
 ## CI jobs (evidence from .github/workflows/ci.yml)
 
-| Job         | What runs                                                 | Failure if                                            |
-| ----------- | --------------------------------------------------------- | ----------------------------------------------------- |
-| verify-fast | format:check, lint, all validators below (including lighthouse-config-validate), web:test | Any step exits non-zero                               |
-| build       | nx run web:build, restore next-env.d.ts, git status clean | Build fails or uncommitted changes                    |
+| Job         | What runs                                                                                          | Failure if                                                          |
+| ----------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| verify-fast | format:check, lint, all validators below (including lighthouse-config-validate), web:test          | Any step exits non-zero                                             |
+| build       | nx run web:build, restore next-env.d.ts, git status clean                                          | Build fails or uncommitted changes                                  |
 | a11y        | nx run web:a11y (RATE_LIMIT_MODE=off), then nx run web:rate-limit-verify (SKIP_RATE_LIMIT_BUILD=1) | A11y violations, rate-limit verification failure, or script failure |
-| visual      | nx run web-e2e:visual                                     | Visual regression / presentation-integrity specs fail |
-| lighthouse  | build then lhci autorun                                   | Performance/accessibility assertions fail             |
+| visual      | nx run web-e2e:visual                                                                              | Visual regression / presentation-integrity specs fail               |
+| lighthouse  | build then lhci autorun                                                                            | Performance/accessibility assertions fail                           |
 
 ## Validators (nx run web:<target>)
 
@@ -45,7 +45,7 @@ Each runs `npx tsx --tsconfig tsconfig.base.json tools/<script>` unless noted.
 | media-derivatives-validate       | validate-media-derivatives.ts       | Media derivatives presence/consistency                                                                | throw new Error (Media derivatives validation failed)                          |
 | media-authority-validate         | validate-media-authority.ts         | Tier C excluded from sitemap-eligible, authority rules                                                | throw new Error (Media authority validation failed)                            |
 | visual-contract-validate         | validate-visual-contract.ts         | Visual contract (design tokens / layout)                                                              | throw new Error (Visual contract validation failed)                            |
-| lighthouse-config-validate      | validate-lighthouse-configs.ts      | ci.assert.assertions match between lighthouserc.cjs and lighthouserc.serverless.cjs                   | process.exit(1) on drift                                                        |
+| lighthouse-config-validate       | validate-lighthouse-configs.ts      | ci.assert.assertions match between lighthouserc.cjs and lighthouserc.serverless.cjs                   | process.exit(1) on drift                                                       |
 | seo-validate                     | validate-seo.ts                     | SEO: JSON-LD, sameAs, meta; placeholder env if missing                                                | throw new Error (SEO validation failed)                                        |
 | tokens-validate                  | validate-tokens.ts                  | Token file exists, required tokens present (25)                                                       | throw new Error (Tokens file not found / Token completeness failed)            |
 | token-drift-validate             | validate-token-drift.ts             | No literal colors / non-token Tailwind in components                                                  | throw new Error (Token drift validation failed)                                |
@@ -53,7 +53,7 @@ Each runs `npx tsx --tsconfig tsconfig.base.json tools/<script>` unless noted.
 | authority-constitution-validate  | validate-authority-constitution.ts  | Authority constitution docs/rules                                                                     | process.exit(1)                                                                |
 | telemetry-scoring-validate       | validate-telemetry-scoring.ts       | Telemetry event names, decisive-action list, signal count, scoring determinism                        | process.exit(1) or throw                                                       |
 | test                             | (inline)                            | `node -e "console.log('No web tests configured')"`                                                    | Never fails                                                                    |
-| rate-limit-verify                | test-rate-limit.ts                  | 429 under limit, 429 HTML title/lang, dir=rtl for /he/ (RATE_LIMIT_MODE=always)                       | process.exit(1) on assertion failure                                            |
+| rate-limit-verify                | test-rate-limit.ts                  | 429 under limit, 429 HTML title/lang, dir=rtl for /he/ (RATE_LIMIT_MODE=always)                       | process.exit(1) on assertion failure                                           |
 
 ## E2E / runtime checks
 

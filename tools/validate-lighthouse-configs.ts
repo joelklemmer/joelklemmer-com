@@ -20,13 +20,19 @@ function main(): number {
   try {
     canonical = require(canonicalPath);
   } catch (e) {
-    console.error('validate-lighthouse-configs: failed to load lighthouserc.cjs:', e);
+    console.error(
+      'validate-lighthouse-configs: failed to load lighthouserc.cjs:',
+      e,
+    );
     return 1;
   }
   try {
     serverless = require(serverlessPath);
   } catch (e) {
-    console.error('validate-lighthouse-configs: failed to load lighthouserc.serverless.cjs:', e);
+    console.error(
+      'validate-lighthouse-configs: failed to load lighthouserc.serverless.cjs:',
+      e,
+    );
     return 1;
   }
 
@@ -34,11 +40,15 @@ function main(): number {
   const serverAssertions = serverless?.ci?.assert?.assertions;
 
   if (!canonAssertions || typeof canonAssertions !== 'object') {
-    console.error('validate-lighthouse-configs: lighthouserc.cjs ci.assert.assertions missing or not an object');
+    console.error(
+      'validate-lighthouse-configs: lighthouserc.cjs ci.assert.assertions missing or not an object',
+    );
     return 1;
   }
   if (!serverAssertions || typeof serverAssertions !== 'object') {
-    console.error('validate-lighthouse-configs: lighthouserc.serverless.cjs ci.assert.assertions missing or not an object');
+    console.error(
+      'validate-lighthouse-configs: lighthouserc.serverless.cjs ci.assert.assertions missing or not an object',
+    );
     return 1;
   }
 
@@ -53,7 +63,9 @@ function main(): number {
   const serverJson = toSortedJson(serverAssertions as Record<string, unknown>);
 
   if (canonJson !== serverJson) {
-    console.error('validate-lighthouse-configs: ci.assert.assertions differ between lighthouserc.cjs and lighthouserc.serverless.cjs.');
+    console.error(
+      'validate-lighthouse-configs: ci.assert.assertions differ between lighthouserc.cjs and lighthouserc.serverless.cjs.',
+    );
     console.error('Canonical (lighthouserc.cjs):', canonJson);
     console.error('Serverless (lighthouserc.serverless.cjs):', serverJson);
     return 1;

@@ -20,16 +20,12 @@ function applyRateLimitEnvDefaults(): void {
 
 function runBuild(): Promise<number> {
   return new Promise((resolve) => {
-    const build = spawn(
-      'pnpm',
-      ['nx', 'run', 'web:build', '--skip-nx-cache'],
-      {
-        cwd: workspaceRoot,
-        stdio: 'inherit',
-        env: { ...process.env, PORT: '0' },
-        shell: true,
-      },
-    );
+    const build = spawn('pnpm', ['nx', 'run', 'web:build', '--skip-nx-cache'], {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: { ...process.env, PORT: '0' },
+      shell: true,
+    });
     build.on('exit', (code, signal) => {
       resolve(code ?? (signal ? 1 : 0));
     });
@@ -71,9 +67,7 @@ async function main(): Promise<number> {
     const enRes = await fetch(baseUrl + '/en/', { headers });
 
     if (enRes.status !== 429) {
-      console.error(
-        `Expected 429 for /en/ third request, got ${enRes.status}`,
-      );
+      console.error(`Expected 429 for /en/ third request, got ${enRes.status}`);
       return 1;
     }
     const retryAfter = enRes.headers.get('retry-after');
@@ -108,9 +102,7 @@ async function main(): Promise<number> {
     await fetch(baseUrl + '/he/', { headers });
     const heRes = await fetch(baseUrl + '/he/', { headers });
     if (heRes.status !== 429) {
-      console.error(
-        `Expected 429 for /he/ third request, got ${heRes.status}`,
-      );
+      console.error(`Expected 429 for /he/ third request, got ${heRes.status}`);
       return 1;
     }
     const heBody = await heRes.text();
@@ -123,7 +115,9 @@ async function main(): Promise<number> {
       return 1;
     }
 
-    console.log('Rate-limit verification passed: 429, HTML invariants, and RTL for /he/.');
+    console.log(
+      'Rate-limit verification passed: 429, HTML invariants, and RTL for /he/.',
+    );
     return 0;
   } finally {
     if (origMode !== undefined) process.env.RATE_LIMIT_MODE = origMode;
