@@ -1,4 +1,14 @@
 {
+  "layers": {
+    "scan": "En resumen",
+    "substantiation": "Substantación",
+    "artifact": "Artefactos y cuerpo"
+  },
+  "doctrine": {
+    "howToReadHeading": "Cómo leer esta página",
+    "howToReadBody": "Esta página sigue una revelación en tres capas: resumen breve (en resumen), verificación y fuente (substantación), luego archivos enlazados y texto (artefactos). El método y nivel de confianza se indican cuando están disponibles. Las afirmaciones enlazadas están indexadas en la página Brief."
+  },
+  "substantiates": "Sustenta",
   "supportsClaims": {
     "heading": "Apoya afirmaciones",
     "empty": "No hay afirmaciones vinculadas registradas."

@@ -1,0 +1,12 @@
+﻿
+> nx run web:security-validate
+
+> npx tsx --tsconfig tsconfig.base.json tools/validate-security-txt.ts
+
+security.txt: valid (Contact, Expires present; Expires in future)
+
+
+
+ NX   Successfully ran target security-validate for project web
+
+

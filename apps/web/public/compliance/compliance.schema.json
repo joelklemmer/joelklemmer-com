@@ -1,0 +1,109 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "compliance.schema.json",
+  "title": "Compliance registry schema",
+  "definitions": {
+    "VendorEntry": {
+      "type": "object",
+      "required": ["id", "name", "category", "riskTier"],
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "owner": { "type": "string" },
+        "category": {
+          "enum": [
+            "essential",
+            "functional",
+            "analytics",
+            "experience",
+            "marketing"
+          ]
+        },
+        "purposeScopes": { "type": "array", "items": { "type": "string" } },
+        "sensitivity": { "type": "array", "items": { "type": "string" } },
+        "storageTypes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "cookie",
+              "localStorage",
+              "fingerprinting",
+              "server-side",
+              "none"
+            ]
+          }
+        },
+        "retention": { "type": "string" },
+        "transferRegions": { "type": "array", "items": { "type": "string" } },
+        "subprocessors": { "type": "array", "items": { "type": "string" } },
+        "role": { "enum": ["processor", "controller", "joint"] },
+        "modelTrainingUsage": { "enum": ["allowed", "prohibited", "unknown"] },
+        "riskTier": { "enum": ["low", "medium", "high"] },
+        "dependencyIds": { "type": "array", "items": { "type": "string" } },
+        "activationRules": {
+          "type": "object",
+          "properties": {
+            "category": { "type": "string" },
+            "purposes": { "type": "array", "items": { "type": "string" } }
+          }
+        },
+        "planned": { "type": "boolean", "default": false }
+      }
+    },
+    "TelemetryEventEntry": {
+      "type": "object",
+      "required": ["eventName", "category", "sensitivity"],
+      "properties": {
+        "eventName": { "type": "string" },
+        "category": {
+          "enum": [
+            "essential",
+            "functional",
+            "analytics",
+            "experience",
+            "marketing"
+          ]
+        },
+        "purposeScopes": { "type": "array", "items": { "type": "string" } },
+        "sensitivity": { "type": "array", "items": { "type": "string" } },
+        "fieldClassifications": {
+          "type": "object",
+          "additionalProperties": {
+            "enum": [
+              "operational",
+              "behavioral",
+              "inferred",
+              "identityLinked",
+              "crossContext"
+            ]
+          }
+        },
+        "piiRisk": {
+          "type": "string",
+          "enum": ["none", "low", "medium", "high"]
+        },
+        "allowedContexts": { "type": "array", "items": { "type": "string" } }
+      }
+    }
+  },
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "vendors": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/VendorEntry" }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "properties": {
+        "events": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TelemetryEventEntry" }
+        }
+      }
+    }
+  ]
+}

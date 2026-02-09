@@ -1,0 +1,27 @@
+{
+  "name": "docs",
+  "$schema": "../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "docs",
+  "tags": ["scope:docs", "type:docs"],
+  "targets": {
+    "arch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/docs/generate-architecture.ts"
+      },
+      "outputs": [
+        "{workspaceRoot}/docs/architecture/nx-graph.html",
+        "{workspaceRoot}/docs/architecture/workspace-map.json",
+        "{workspaceRoot}/docs/architecture/workspace-map.md",
+        "{workspaceRoot}/docs/architecture/.stamp.json"
+      ]
+    },
+    "arch:check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/docs/generate-architecture.ts --check"
+      }
+    }
+  }
+}

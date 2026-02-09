@@ -249,6 +249,81 @@ export function authorityScoreForAsset(asset: MediaAsset): number {
   return 0.5;
 }
 
+// --- Media governance (Agent 8: file naming, alt doctrine, variants) ---
+
+/** Canonical prefix required in all media filenames. */
+export const MEDIA_GOVERNANCE_CANONICAL_PREFIX = 'joel-klemmer';
+
+/**
+ * Master filename pattern: joel-klemmer__<kind>__<descriptor>__<YYYY-MM>__<NN>.webp
+ * Manifest file field must reference master only (no __thumb, __card, __hero suffix).
+ */
+export const MEDIA_GOVERNANCE_MASTER_FILENAME_REGEX =
+  /^joel-klemmer__[a-z0-9-]+__[a-z0-9-]+__\d{4}-\d{2}__\d+\.webp$/;
+
+/** Allowed derivative suffixes (predictable variants). */
+export const MEDIA_GOVERNANCE_VARIANT_SUFFIXES = [
+  '__thumb.webp',
+  '__card.webp',
+  '__hero.webp',
+] as const;
+
+/** Alt text placeholders that fail governance (non-institutional). */
+export const MEDIA_GOVERNANCE_ALT_PLACEHOLDERS = [
+  'image',
+  'photo',
+  'picture',
+  'img',
+  'placeholder',
+  'alt',
+  'todo',
+  'tbd',
+];
+
+/**
+ * Validates that a manifest file path is a master filename (no variant suffix).
+ * Returns error message or null if valid.
+ */
+export function validateMediaGovernanceMasterFilename(
+  file: string,
+): string | null {
+  const filename = file.split('/').pop() ?? file;
+  if (MEDIA_GOVERNANCE_VARIANT_SUFFIXES.some((s) => filename.endsWith(s))) {
+    return `Manifest file must be master, not variant: ${filename}`;
+  }
+  if (!MEDIA_GOVERNANCE_MASTER_FILENAME_REGEX.test(filename)) {
+    return `Filename must match pattern joel-klemmer__<kind>__<descriptor>__YYYY-MM__NN.webp: ${filename}`;
+  }
+  return null;
+}
+
+/**
+ * Validates alt text per governance: non-empty, not placeholder.
+ * Returns error message or null if valid.
+ */
+export function validateMediaGovernanceAlt(
+  alt: string,
+  assetId?: string,
+): string | null {
+  const trimmed = alt?.trim() ?? '';
+  if (!trimmed)
+    return assetId
+      ? `Asset ${assetId}: missing or empty alt.`
+      : 'Missing or empty alt.';
+  const lower = trimmed.toLowerCase();
+  if (
+    MEDIA_GOVERNANCE_ALT_PLACEHOLDERS.some(
+      (p) =>
+        lower === p || lower.startsWith(p + ' ') || lower.endsWith(' ' + p),
+    )
+  ) {
+    return assetId
+      ? `Asset ${assetId}: alt must not be a placeholder (e.g. "image", "photo").`
+      : 'Alt must not be a placeholder.';
+  }
+  return null;
+}
+
 /**
  * Manifest completeness audit: schema-level and governance checks.
  * Use for reporting; getMediaManifest() already validates schema and files.
@@ -258,7 +333,7 @@ export function auditManifestCompleteness(manifest: MediaManifest): {
   errors: string[];
 } {
   const errors: string[] = [];
-  const CANONICAL_PREFIX = 'joel-klemmer';
+  const CANONICAL_PREFIX = MEDIA_GOVERNANCE_CANONICAL_PREFIX;
   for (const asset of manifest.assets) {
     if (!asset.alt?.trim())
       errors.push(`Asset ${asset.id}: missing or empty alt.`);

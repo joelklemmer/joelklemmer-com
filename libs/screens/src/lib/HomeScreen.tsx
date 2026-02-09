@@ -9,6 +9,9 @@ import {
 import type { SectionId } from '@joelklemmer/authority-orchestration';
 import {
   createPageMetadata,
+  getCriticalPreloadLinks,
+  BreadcrumbJsonLd,
+  OrganizationJsonLd,
   PersonJsonLd,
   WebSiteJsonLd,
 } from '@joelklemmer/seo';
@@ -17,6 +20,9 @@ import Link from 'next/link';
 import { Container } from '@joelklemmer/ui';
 import { focusRingClass } from '@joelklemmer/a11y';
 import { getFrameworkList } from '@joelklemmer/content';
+
+const HOME_HERO_IMAGE_PATH =
+  '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp';
 
 export async function generateMetadata() {
   const locale = (await getLocale()) as AppLocale;
@@ -28,6 +34,9 @@ export async function generateMetadata() {
     locale,
     pathname: '/',
     ogImageSlug: 'home',
+    criticalPreloadLinks: getCriticalPreloadLinks({
+      heroImageHref: HOME_HERO_IMAGE_PATH,
+    }),
   });
 }
 
@@ -58,11 +67,12 @@ export async function HomeScreen() {
       lede={t('hero.lede')}
       actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
       visual={{
-        src: '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp',
+        src: HOME_HERO_IMAGE_PATH,
         alt: t('hero.portraitAlt'),
         width: 1200,
         height: 1500,
       }}
+      imagePriority
     />
   );
 
@@ -87,6 +97,7 @@ export async function HomeScreen() {
                 summary={tFw(fw.frontmatter.summaryKey)}
                 intent10={tFw(fw.frontmatter.intent10Key)}
                 href={briefDoctrineAnchor}
+                prefetch={false}
               />
             ))}
           </div>
@@ -119,7 +130,7 @@ export async function HomeScreen() {
                   →
                 </span>
                 <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-text mb-3">
+                  <h2 className="text-section-heading font-semibold text-text mb-3">
                     {executiveBriefItem.title}
                   </h2>
                   <p className="text-base text-muted leading-relaxed">
@@ -141,6 +152,7 @@ export async function HomeScreen() {
                 <Link
                   key={`/${locale}${item.path}`}
                   href={`/${locale}${item.path}`}
+                  prefetch={false}
                   className={`${focusRingClass} block rounded-md border border-border bg-surface-elevated p-4 transition-colors motion-reduce:transition-none hover:border-accent hover:bg-surface`}
                 >
                   <div className="flex items-start gap-3">
@@ -179,8 +191,10 @@ export async function HomeScreen() {
 
   return (
     <>
+      <OrganizationJsonLd />
       <WebSiteJsonLd locale={locale} />
       <PersonJsonLd />
+      <BreadcrumbJsonLd locale={locale} pathSegments={[]} />
       <div className="content-lane-grid">
         {HOME_IA_ORDER.filter((id) => HOME_SECTION_IDS.includes(id)).map(
           (id) => {

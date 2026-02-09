@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "events": [
+    {
+      "eventName": "route_view",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "fieldClassifications": {
+        "pathname": "operational",
+        "locale": "operational"
+      },
+      "piiRisk": "none",
+      "allowedContexts": ["post-consent-analytics"]
+    },
+    {
+      "eventName": "brief_open",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "fieldClassifications": {
+        "locale": "operational"
+      },
+      "piiRisk": "none",
+      "allowedContexts": ["post-consent-analytics"]
+    },
+    {
+      "eventName": "case_study_engagement",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "fieldClassifications": {
+        "slug": "operational",
+        "locale": "operational"
+      },
+      "piiRisk": "none",
+      "allowedContexts": ["post-consent-analytics"]
+    }
+  ]
+}

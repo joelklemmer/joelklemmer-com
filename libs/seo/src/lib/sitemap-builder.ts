@@ -15,6 +15,7 @@ export interface BuildSitemapEntriesInput {
   publicRecordSlugs: string[];
   caseStudySlugs: string[];
   bookSlugs: string[];
+  writingSlugs: string[];
   lastModified?: Date;
 }
 
@@ -22,6 +23,7 @@ const DEFAULT_INDEXABLE_PATHS = [
   '',
   '/brief',
   '/work',
+  '/proof',
   '/publicrecord',
   '/books',
   '/writing',
@@ -36,6 +38,8 @@ const DEFAULT_INDEXABLE_PATHS = [
   '/terms',
   '/accessibility',
   '/security',
+  '/cookies',
+  '/operating-system',
 ];
 
 export function buildSitemapEntries({
@@ -45,18 +49,21 @@ export function buildSitemapEntries({
   publicRecordSlugs,
   caseStudySlugs,
   bookSlugs,
+  writingSlugs,
   lastModified = new Date(),
 }: BuildSitemapEntriesInput): SitemapEntry[] {
   const base = baseUrl.replace(/\/+$/, '');
   const dynamicPaths = [
     ...caseStudySlugs.map((slug) => `/casestudies/${slug}`),
     ...publicRecordSlugs.map((slug) => `/publicrecord/${slug}`),
+    ...publicRecordSlugs.map((slug) => `/proof/${slug}`),
     ...bookSlugs.map((slug) => `/books/${slug}`),
+    ...writingSlugs.map((slug) => `/writing/${slug}`),
   ];
   const allPaths = [...indexablePaths, ...dynamicPaths];
   return locales.flatMap((locale) =>
-    allPaths.map((pathSegment) => ({
-      url: `${base}/${locale}${pathSegment}`,
+    allPaths.map((normalizedPath) => ({
+      url: `${base}/${locale}${normalizedPath}`,
       lastModified,
     })),
   );

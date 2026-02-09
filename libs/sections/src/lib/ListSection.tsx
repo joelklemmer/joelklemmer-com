@@ -14,17 +14,17 @@ export function ListSection({
   containerVariant = 'readable',
 }: ListSectionProps) {
   return (
-    <section className="section-shell">
+    <section className="section-shell authority-list-section">
       <Container variant={containerVariant} className="section-shell">
-        <div className="authority-card">
-          <h2 className="text-section-heading font-semibold mb-4">{title}</h2>
-          <ul className="grid gap-3 text-base text-muted">
+        <div className="authority-card authority-card-inner">
+          <h2 className="text-section-heading font-semibold">{title}</h2>
+          <ul className="authority-list text-base">
             {items.map((item) => (
-              <li key={item} className="flex gap-3">
-                <span aria-hidden="true" className="text-accent font-semibold">
+              <li key={item}>
+                <span aria-hidden="true" className="authority-list-bullet">
                   •
                 </span>
-                <span className="flex-1">{item}</span>
+                <span className="authority-list-item-text flex-1">{item}</span>
               </li>
             ))}
           </ul>

@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "contracts": [
+    {
+      "id": "briefing",
+      "sourcePath": "libs/content/src/lib/briefing-contracts.ts",
+      "validatorPath": "tools/validate-briefing-contracts.ts"
+    }
+  ]
+}

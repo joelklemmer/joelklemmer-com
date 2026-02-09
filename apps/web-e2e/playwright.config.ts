@@ -19,6 +19,11 @@ const webServerCommand = isCi
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
+  expect: {
+    toHaveScreenshot: {
+      snapshotPathTemplate: '__screenshots__/{testFileDir}/{arg}{ext}',
+    },
+  },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,

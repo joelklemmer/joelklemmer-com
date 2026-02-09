@@ -7,6 +7,7 @@ The Public Record is a **verification-only** evidence system. It is not narrativ
 - **Evidence only**: dates, sources, artifact type, verification notes.
 - **Deterministic IDs**: stable `recordId` (frontmatter `id` or `slug`) for linking.
 - **Bidirectional links**: each entry shows which claims it supports and which case studies reference it.
+- **Proof density**: proof is not isolated; it binds to claims where they appear. Credibility weight is distributed via a consistent three-layer disclosure (scan → substantiation → artifact). See [Public record doctrine](public-record-doctrine.md).
 
 ## What belongs in Public Record
 
@@ -159,3 +160,13 @@ See [Quality gates](quality-gates.md) for details.
   Use the lowercase hex string in the manifest.
 
 - **Proof attachments**: `apps/web/public/proof/manifest.json` lists proof files; each item has `id`, `filename`, `sha256`, `kind: "public-record"`. Files live in `apps/web/public/proof/files/`. See [RELEASE_READY behavior](#release_ready-behavior-proof-files) and [How to add an attachment](#how-to-add-an-attachment).
+
+## Information layering and verification method (doctrine)
+
+- **List page** (`/publicrecord`): The index is the **scan layer** (`data-layer="scan"`). A short **doctrine** block (`data-doctrine="how-to-read-list"`) explains how to read the list and that proof binds to claims on the Brief page.
+- **Entry page** (`/publicrecord/[slug]`): Three layers are exposed for consumption and testing:
+  1. **Scan**: Title, lede (claim supported), one-line type/date/source, and **Substantiates:** links to the indexed claims (proof–claim binding at top).
+  2. **Substantiation**: Artifact metadata, verification method/confidence, source details, “Supports claims”, “Referenced by case studies”, “Referenced by books”.
+  3. **Artifact**: Attachments (download link, truncated SHA-256, copy-full-hash button with `data-attachment-sha` on the row) and body MDX.
+- **Doctrine**: A “How to read this page” block (`data-doctrine="how-to-read"`) states the three-layer disclosure and verification method in plain language (no marketing tone).
+- **Non-duplication (Content OS)**: Attachment `id` is unique within an entry (schema). The same manifest attachment `id` may be referenced by multiple entries; filename/sha256 are single source of truth in the manifest. Do not duplicate the same proof narrative in two entries without distinct substantiation.

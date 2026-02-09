@@ -1,0 +1,360 @@
+{
+  "generatedAt": "2026-02-09T02:07:58.714Z",
+  "projects": [
+    {
+      "name": "a11y",
+      "type": "lib",
+      "root": "libs/a11y",
+      "targetCount": 1
+    },
+    {
+      "name": "aec",
+      "type": "lib",
+      "root": "libs/aec",
+      "targetCount": 1
+    },
+    {
+      "name": "authority-density",
+      "type": "lib",
+      "root": "libs/authority-density",
+      "targetCount": 1
+    },
+    {
+      "name": "authority-mapping",
+      "type": "lib",
+      "root": "libs/authority-mapping",
+      "targetCount": 1
+    },
+    {
+      "name": "authority-orchestration",
+      "type": "lib",
+      "root": "libs/authority-orchestration",
+      "targetCount": 1
+    },
+    {
+      "name": "authority-signals",
+      "type": "lib",
+      "root": "libs/authority-signals",
+      "targetCount": 1
+    },
+    {
+      "name": "authority-telemetry",
+      "type": "lib",
+      "root": "libs/authority-telemetry",
+      "targetCount": 1
+    },
+    {
+      "name": "content",
+      "type": "lib",
+      "root": "libs/content",
+      "targetCount": 1
+    },
+    {
+      "name": "docs",
+      "type": "lib",
+      "root": "docs",
+      "targetCount": 3
+    },
+    {
+      "name": "evaluator-mode",
+      "type": "lib",
+      "root": "libs/evaluator-mode",
+      "targetCount": 1
+    },
+    {
+      "name": "i18n",
+      "type": "lib",
+      "root": "libs/i18n",
+      "targetCount": 1
+    },
+    {
+      "name": "intelligence",
+      "type": "lib",
+      "root": "libs/intelligence",
+      "targetCount": 1
+    },
+    {
+      "name": "screens",
+      "type": "lib",
+      "root": "libs/screens",
+      "targetCount": 1
+    },
+    {
+      "name": "sections",
+      "type": "lib",
+      "root": "libs/sections",
+      "targetCount": 1
+    },
+    {
+      "name": "seo",
+      "type": "lib",
+      "root": "libs/seo",
+      "targetCount": 1
+    },
+    {
+      "name": "tokens",
+      "type": "lib",
+      "root": "libs/tokens",
+      "targetCount": 1
+    },
+    {
+      "name": "ui",
+      "type": "lib",
+      "root": "libs/ui",
+      "targetCount": 1
+    },
+    {
+      "name": "web",
+      "type": "app",
+      "root": "apps/web",
+      "targetCount": 43
+    },
+    {
+      "name": "web-e2e",
+      "type": "e2e",
+      "root": "apps/web-e2e",
+      "targetCount": 19
+    }
+  ],
+  "dependencies": [
+    {
+      "source": "aec",
+      "target": "authority-orchestration",
+      "type": "static"
+    },
+    {
+      "source": "aec",
+      "target": "authority-signals",
+      "type": "static"
+    },
+    {
+      "source": "aec",
+      "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "aec",
+      "target": "intelligence",
+      "type": "static"
+    },
+    {
+      "source": "authority-density",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "authority-mapping",
+      "target": "authority-signals",
+      "type": "static"
+    },
+    {
+      "source": "authority-orchestration",
+      "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "content",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "intelligence",
+      "target": "authority-signals",
+      "type": "static"
+    },
+    {
+      "source": "intelligence",
+      "target": "content",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "aec",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "authority-density",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "authority-mapping",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "authority-orchestration",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "authority-signals",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "content",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "intelligence",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "sections",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "seo",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "ui",
+      "type": "static"
+    },
+    {
+      "source": "sections",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "sections",
+      "target": "aec",
+      "type": "static"
+    },
+    {
+      "source": "sections",
+      "target": "authority-density",
+      "type": "static"
+    },
+    {
+      "source": "sections",
+      "target": "ui",
+      "type": "static"
+    },
+    {
+      "source": "seo",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "ui",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "ui",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "aec",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "authority-density",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "authority-mapping",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "authority-orchestration",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "authority-telemetry",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "content",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "intelligence",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "screens",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "sections",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "seo",
+      "type": "static"
+    },
+    {
+      "source": "web",
+      "target": "ui",
+      "type": "static"
+    },
+    {
+      "source": "web-e2e",
+      "target": "content",
+      "type": "static"
+    },
+    {
+      "source": "web-e2e",
+      "target": "i18n",
+      "type": "static"
+    },
+    {
+      "source": "web-e2e",
+      "target": "web",
+      "type": "implicit"
+    }
+  ],
+  "stats": {
+    "projectCount": 19,
+    "dependencyCount": 47
+  }
+}

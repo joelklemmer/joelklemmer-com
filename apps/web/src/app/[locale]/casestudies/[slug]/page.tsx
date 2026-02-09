@@ -3,6 +3,7 @@ import {
   caseStudyEntryMetadata,
   caseStudyEntryStaticParams,
 } from '@joelklemmer/screens';
+import { CaseStudyEngagementTracker } from '../../../../lib/telemetry';
 
 export const generateMetadata = caseStudyEntryMetadata;
 export const generateStaticParams = caseStudyEntryStaticParams;
@@ -13,5 +14,10 @@ export default async function CaseStudyEntryPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return <CaseStudyEntryScreen slug={slug} />;
+  return (
+    <>
+      <CaseStudyEngagementTracker slug={slug} />
+      <CaseStudyEntryScreen slug={slug} />
+    </>
+  );
 }

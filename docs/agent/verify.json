@@ -1,0 +1,159 @@
+{
+  "schemaVersion": 1,
+  "steps": [
+    { "index": 0, "target": "web:lint", "scriptPath": null },
+    {
+      "index": 1,
+      "target": "web:security-validate",
+      "scriptPath": "tools/validate-security-txt.ts"
+    },
+    {
+      "index": 2,
+      "target": "web:content-validate",
+      "scriptPath": "tools/validate-content.ts"
+    },
+    {
+      "index": 3,
+      "target": "web:docs-integrity-validate",
+      "scriptPath": "tools/validate-docs-integrity.ts"
+    },
+    {
+      "index": 4,
+      "target": "web:governance-validate",
+      "scriptPath": "tools/validate-governance.ts"
+    },
+    {
+      "index": 5,
+      "target": "web:i18n-validate",
+      "scriptPath": "tools/validate-i18n.ts"
+    },
+    {
+      "index": 6,
+      "target": "web:pgf-validate",
+      "scriptPath": "tools/validate-pgf.ts"
+    },
+    {
+      "index": 7,
+      "target": "web:intelligence-validate",
+      "scriptPath": "tools/validate-intelligence.ts"
+    },
+    {
+      "index": 8,
+      "target": "web:briefing-contracts-validate",
+      "scriptPath": "tools/validate-briefing-contracts.ts"
+    },
+    {
+      "index": 9,
+      "target": "web:authority-signals-validate",
+      "scriptPath": "tools/validate-authority-signals.ts"
+    },
+    {
+      "index": 10,
+      "target": "web:experience-intelligence-validate",
+      "scriptPath": "tools/validate-experience-intelligence.ts"
+    },
+    {
+      "index": 11,
+      "target": "web:frameworks-validate",
+      "scriptPath": "tools/validate-frameworks.ts"
+    },
+    {
+      "index": 12,
+      "target": "web:aec-validate",
+      "scriptPath": "tools/validate-aec.ts"
+    },
+    {
+      "index": 13,
+      "target": "web:orchestration-validate",
+      "scriptPath": "tools/validate-orchestration.ts"
+    },
+    {
+      "index": 14,
+      "target": "web:content-os-validate",
+      "scriptPath": "tools/validate-content-os.ts"
+    },
+    {
+      "index": 15,
+      "target": "web:home-validate",
+      "scriptPath": "tools/validate-home.ts"
+    },
+    {
+      "index": 16,
+      "target": "web:sitemap-validate",
+      "scriptPath": "tools/validate-sitemap.ts"
+    },
+    {
+      "index": 17,
+      "target": "web:image-sitemap-validate",
+      "scriptPath": "tools/validate-image-sitemap.ts"
+    },
+    {
+      "index": 18,
+      "target": "web:media-manifest-validate",
+      "scriptPath": "tools/validate-media-manifest.ts"
+    },
+    {
+      "index": 19,
+      "target": "web:media-derivatives-validate",
+      "scriptPath": "tools/validate-media-derivatives.ts"
+    },
+    {
+      "index": 20,
+      "target": "web:media-authority-validate",
+      "scriptPath": "tools/validate-media-authority.ts"
+    },
+    {
+      "index": 21,
+      "target": "web:media-governance-validate",
+      "scriptPath": "tools/validate-media-governance.ts"
+    },
+    {
+      "index": 22,
+      "target": "web:visual-contract-validate",
+      "scriptPath": "tools/validate-visual-contract.ts"
+    },
+    {
+      "index": 23,
+      "target": "web:seo-validate",
+      "scriptPath": "tools/validate-seo.ts"
+    },
+    {
+      "index": 24,
+      "target": "web:tokens-validate",
+      "scriptPath": "tools/validate-tokens.ts"
+    },
+    {
+      "index": 25,
+      "target": "web:token-drift-validate",
+      "scriptPath": "tools/validate-token-drift.ts"
+    },
+    {
+      "index": 26,
+      "target": "web:authority-program-validate",
+      "scriptPath": "tools/validate-authority-program.ts"
+    },
+    {
+      "index": 27,
+      "target": "web:authority-constitution-validate",
+      "scriptPath": "tools/validate-authority-constitution.ts"
+    },
+    {
+      "index": 28,
+      "target": "web:agent-overlay-validate",
+      "scriptPath": "tools/validate-agent-overlay.ts"
+    },
+    {
+      "index": 29,
+      "target": "web:telemetry-scoring-validate",
+      "scriptPath": null
+    },
+    { "index": 30, "target": "web:test", "scriptPath": null },
+    { "index": 31, "target": "web:build", "scriptPath": null },
+    {
+      "index": 32,
+      "target": "web:restore-generated-typings",
+      "scriptPath": null
+    },
+    { "index": 33, "target": "web:a11y", "scriptPath": "tools/run-a11y.ts" }
+  ]
+}

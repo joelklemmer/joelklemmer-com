@@ -9,7 +9,11 @@ import {
   getPublicRecordList,
   renderMdx,
 } from '@joelklemmer/content';
-import { createPageMetadata } from '@joelklemmer/seo';
+import {
+  BookJsonLd,
+  BreadcrumbJsonLd,
+  createPageMetadata,
+} from '@joelklemmer/seo';
 import { createScopedTranslator, loadMessages } from '@joelklemmer/i18n';
 import { focusRingClass } from '@joelklemmer/a11y';
 import {
@@ -108,8 +112,26 @@ export async function BookEntryScreen({ slug }: { slug: string }) {
     { label: t('entry.labels.language'), value: entry.frontmatter.language },
   ];
 
+  const bookTitle = entry.frontmatter.subtitle
+    ? `${entry.frontmatter.title}: ${entry.frontmatter.subtitle}`
+    : entry.frontmatter.title;
+
   return (
     <>
+      <BookJsonLd
+        locale={locale}
+        pathname={`/books/${entry.frontmatter.slug}`}
+        name={bookTitle}
+        description={entry.frontmatter.summary}
+        author={entry.frontmatter.author}
+        publisher={entry.frontmatter.publisher}
+        datePublished={entry.frontmatter.publicationDate}
+        isbn={entry.frontmatter.isbn13 ?? entry.frontmatter.isbn10}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        pathSegments={['books', entry.frontmatter.slug]}
+      />
       {showFallbackNotice ? (
         <FallbackNoticeSection
           title={tCommon('fallbackNotice.title')}

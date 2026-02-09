@@ -270,6 +270,7 @@ const INSTITUTIONAL_IDS = [
   'terms',
   'accessibility',
   'security',
+  'cookies',
 ] as const;
 
 export function getInstitutionalPageIds(): readonly string[] {

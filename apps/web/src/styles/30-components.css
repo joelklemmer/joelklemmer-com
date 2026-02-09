@@ -1,6 +1,58 @@
 /* 30-components: authority-card, authority-glass, panel patterns, mdx-content */
 /* CALC: Authority composition anchors — hero, section headings, route list, claims, doctrine; consistent card material */
 
+/* --------------------------------------------------------------------------- */
+/* Interaction microphysics: timing, hover, focus, reduced-motion (no color)   */
+/* --------------------------------------------------------------------------- */
+/* Token-driven: --motion-duration-feedback, --motion-ease-out. Decisive feel. */
+/* Micro-delay: 0s — no staggered response. Reduced-motion overrides in tokens. */
+a,
+button,
+[role='button'],
+input:not([type='hidden']),
+select,
+textarea,
+[tabindex]:not([tabindex='-1']) {
+  transition-duration: var(--motion-duration-feedback);
+  transition-timing-function: var(--motion-ease-out);
+  transition-property: outline-width, outline-offset;
+  transition-delay: 0s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  a,
+  button,
+  [role='button'],
+  input:not([type='hidden']),
+  select,
+  textarea,
+  [tabindex]:not([tabindex='-1']) {
+    transition: none;
+  }
+}
+
+html[data-motion='reduced'] a,
+html[data-motion='reduced'] button,
+html[data-motion='reduced'] [role='button'],
+html[data-motion='reduced'] input:not([type='hidden']),
+html[data-motion='reduced'] select,
+html[data-motion='reduced'] textarea,
+html[data-motion='reduced'] [tabindex]:not([tabindex='-1']) {
+  transition: none;
+}
+
+/* Focus visibility: token-driven ring width/offset; deterministic, no invisible focus. */
+a:focus-visible,
+button:focus-visible,
+[role='button']:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:not([tabindex='-1']):focus-visible {
+  outline-width: var(--focus-ring-width);
+  outline-offset: var(--focus-ring-offset);
+}
+
 .calc-card-material {
   background: hsl(var(--color-surface));
   box-shadow: var(--authority-card-elevation);
@@ -22,7 +74,7 @@ html[data-motion='reduced'] .calc-card-material {
 .calc-section-heading {
   font-size: var(--section-heading-size);
   line-height: var(--section-heading-line);
-  letter-spacing: var(--section-heading-letter-spacing);
+  letter-spacing: -0.03em;
   font-weight: var(--section-heading-weight);
   margin-block-end: var(--section-heading-margin-block-end);
 }
@@ -37,15 +89,17 @@ html[data-motion='reduced'] .calc-card-material {
 .mdx-content h1 {
   font-size: var(--display-heading-size);
   line-height: var(--display-heading-line);
-  letter-spacing: var(--display-heading-spacing);
-  font-weight: var(--display-heading-weight);
+  letter-spacing: -0.035em;
+  font-weight: var(--font-weight-hero);
+  margin-block-end: var(--heading-to-content-gap);
 }
 
 .mdx-content h2 {
   font-size: var(--section-heading-size);
   line-height: var(--section-heading-line);
-  letter-spacing: var(--section-heading-letter-spacing);
+  letter-spacing: -0.03em;
   font-weight: var(--section-heading-weight);
+  margin-block-start: var(--heading-to-content-gap);
   margin-block-end: var(--section-heading-margin-block-end);
 }
 
@@ -53,23 +107,31 @@ html[data-motion='reduced'] .calc-card-material {
   font-size: var(--text-lg);
   line-height: var(--leading-tight);
   font-weight: var(--font-weight-section);
+  letter-spacing: -0.015em;
+  margin-block-start: var(--space-4);
+  margin-block-end: var(--space-2);
 }
 
 .mdx-content p {
   color: hsl(var(--color-text));
+  letter-spacing: 0.01em;
+  margin-block-end: var(--body-rhythm-margin);
+}
+
+.mdx-content p:last-child {
+  margin-block-end: 0;
 }
 
 .mdx-content a {
   color: hsl(var(--color-accent-strong));
   text-decoration: underline;
   text-underline-offset: 2px;
-  transition: color var(--transition-duration-fast) var(--ease-authority);
 }
 
 .mdx-content ul {
   display: grid;
   gap: var(--space-2);
-  padding-left: var(--space-5);
+  padding-inline-start: var(--space-5);
 }
 
 .mdx-content li {
@@ -154,6 +216,73 @@ html[data-motion='reduced'] .calc-card-material {
   box-shadow: var(--authority-surface-depth);
 }
 
+/* Proof density: card inner rhythm — tighter vertical flow, no token changes */
+.authority-card-inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.authority-card-inner .text-section-heading,
+.authority-card-inner .authority-card-title {
+  margin-block-end: var(--space-2);
+}
+
+/* Claims/list section: contrast emphasis, vertical rhythm tightening, scanning flow */
+.authority-list-section .authority-card {
+  padding-block-end: var(--space-5);
+}
+
+.authority-list-section .text-section-heading {
+  color: hsl(var(--color-text));
+  margin-block-end: var(--space-2);
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.authority-list-section .authority-list {
+  display: grid;
+  gap: var(--space-1);
+  margin-block-start: 0;
+}
+
+.authority-list-section .authority-list li {
+  display: flex;
+  gap: var(--space-2);
+  align-items: baseline;
+  line-height: 1.5;
+  color: hsl(var(--color-text));
+}
+
+.authority-list-section .authority-list .authority-list-bullet {
+  color: hsl(var(--color-accent-strong));
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.authority-list-section .authority-list .authority-list-item-text {
+  font-weight: 450;
+}
+
+/* Doctrine card hierarchy: primary content emphasis, reading flow optimization */
+.authority-card-doctrine.authority-card {
+  border-inline-start: 3px solid hsl(var(--color-accent-strong) / 0.6);
+}
+
+.authority-card-doctrine .authority-card-title {
+  color: hsl(var(--color-text));
+  margin-block-end: var(--space-2);
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+.authority-card-doctrine .authority-card-body {
+  font-size: var(--body-analytical-size);
+  line-height: 1.55;
+  color: hsl(var(--color-muted));
+  margin-block-end: 0;
+}
+
 /* Media list: thumb rail fixed; 1:1 box; thumb derivative only (56 / 64 / 72px). */
 .media-thumb-rail {
   flex: 0 0 auto;
@@ -183,4 +312,228 @@ html[data-motion='reduced'] .calc-card-material {
 .media-list-item {
   content-visibility: auto;
   contain-intrinsic-size: 1px 120px;
+}
+
+/* Masthead and utility icons: optical alignment, consistent baseline, stroke polish.
+   Size and stroke weight from layout; hover/focus from button classes; no color overrides. */
+.masthead-icon svg {
+  flex-shrink: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Navigation cognition: primary vs secondary weight, spacing rhythm, active clarity, hover legibility, RTL-safe */
+/* Primary = institutional nav (routes); secondary = utilities (theme, language). Logical properties throughout. */
+.masthead-nav-primary {
+  --nav-primary-gap: 0.5rem;
+  --nav-primary-padding-inline: 1rem;
+  --nav-primary-padding-block: 0.5rem;
+  --nav-primary-active-border-width: 2px;
+}
+
+.nav-primary-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nav-primary-gap);
+  margin-inline: 0;
+  padding-inline: 0;
+  list-style: none;
+}
+
+/* Cognitive hierarchy: rank encodes hub (primary), verification (secondary), institutional (tertiary). No design flourishes. */
+.nav-primary-link {
+  font-weight: 600;
+  font-size: var(--text-base);
+  color: hsl(var(--color-muted));
+  padding-inline: var(--nav-primary-padding-inline);
+  padding-block: var(--nav-primary-padding-block);
+  border-block-end: var(--nav-primary-active-border-width) solid transparent;
+  transition:
+    color var(--transition-duration-fast) var(--ease-authority),
+    border-color var(--transition-duration-fast) var(--ease-authority);
+}
+
+.nav-primary-link[data-nav-rank='primary'] {
+  font-weight: 700;
+}
+
+.nav-primary-link[data-nav-rank='tertiary'] {
+  font-weight: 500;
+}
+
+.nav-primary-link:hover {
+  color: hsl(var(--color-text));
+}
+
+.nav-primary-link--active,
+.nav-primary-link[aria-current='page'] {
+  color: hsl(var(--color-text));
+  font-weight: 700;
+  border-block-end-color: hsl(var(--color-accent-strong));
+}
+
+.nav-primary-menu-item {
+  padding-inline: var(--space-4);
+  padding-block: 0.625rem;
+  color: hsl(var(--color-text));
+  transition:
+    background-color var(--transition-duration-fast) var(--ease-authority),
+    color var(--transition-duration-fast) var(--ease-authority);
+}
+
+.nav-primary-menu-item:hover {
+  background-color: hsl(var(--color-muted) / 0.5);
+  color: hsl(var(--color-text));
+}
+
+.nav-primary-menu-item[data-nav-rank='primary'] {
+  font-weight: 600;
+}
+
+.nav-primary-menu-item[data-nav-rank='tertiary'] {
+  font-weight: 500;
+}
+
+.nav-primary-menu-item--active,
+.nav-primary-menu-item[aria-current='page'] {
+  font-weight: 700;
+  background-color: hsl(var(--color-muted) / 0.35);
+  border-inline-start: 3px solid hsl(var(--color-accent-strong));
+}
+
+.masthead-nav-secondary .masthead-touch-target,
+.masthead-nav-secondary button[type='button'] {
+  font-weight: 500;
+  font-size: var(--text-sm);
+  color: hsl(var(--color-muted));
+  transition: color var(--transition-duration-fast) var(--ease-authority);
+}
+
+.masthead-nav-secondary .masthead-touch-target:hover,
+.masthead-nav-secondary button[type='button']:hover {
+  color: hsl(var(--color-text));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-primary-link,
+  .nav-primary-menu-item,
+  .masthead-nav-secondary .masthead-touch-target,
+  .masthead-nav-secondary button[type='button'] {
+    transition: none;
+  }
+}
+
+html[data-motion='reduced'] .nav-primary-link,
+html[data-motion='reduced'] .nav-primary-menu-item {
+  transition: none;
+}
+
+/* Hero authority calibration: institutional perception alignment (token-only) */
+.hero-authority-content {
+  gap: var(--hero-block-gap);
+  align-content: start;
+  align-items: start;
+  max-width: var(--readable-line-length);
+}
+
+.hero-display {
+  margin-block-start: 0;
+  margin-block-end: var(--heading-to-content-gap);
+}
+
+.hero-lede {
+  max-width: min(var(--readable-line-length), 48ch);
+  margin-block-start: 0;
+  margin-block-end: 0;
+}
+
+.hero-actions {
+  gap: var(--space-4);
+  margin-block-start: 0;
+  align-items: baseline;
+}
+
+.hero-action-link {
+  font-size: var(--text-base);
+  font-weight: var(--font-weight-section);
+  letter-spacing: var(--hero-cta-letter-spacing);
+  padding: var(--space-3) var(--space-5);
+}
+
+/* Hero portrait & media: elevation, surface contrast, framing, responsive (token-only) */
+.hero-authority-visual-frame {
+  border-radius: var(--radius-md);
+  padding-block: var(--focus-ring-width);
+  padding-inline: var(--focus-ring-width);
+  background: hsl(var(--color-surface));
+  box-shadow: var(--authority-depth-layer1);
+  border: 1px solid hsl(var(--color-border) / 0.4);
+  transition:
+    box-shadow var(--transition-duration-normal) var(--ease-authority),
+    background-color var(--transition-duration-fast) var(--ease-authority),
+    border-color var(--transition-duration-fast) var(--ease-authority);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-authority-visual-frame {
+    transition: none;
+  }
+}
+
+.hero-portrait-wrapper {
+  background: hsl(var(--color-surface));
+  border: 1px solid hsl(var(--color-border));
+  border-radius: calc(var(--radius-md) - 1px);
+  box-shadow: var(--hero-visual-depth);
+  transition:
+    box-shadow var(--transition-duration-normal) var(--ease-authority),
+    border-color var(--transition-duration-fast) var(--ease-authority);
+}
+
+/* Responsive elevation: step up by breakpoint for balance */
+@media (min-width: 768px) {
+  .hero-authority-visual-frame {
+    box-shadow: var(--authority-depth-layer2);
+  }
+
+  .hero-portrait-wrapper {
+    box-shadow: var(--authority-depth-layer2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-authority-visual-frame {
+    box-shadow: var(--authority-card-elevation);
+    padding-inline: var(--space-2);
+  }
+
+  .hero-portrait-wrapper {
+    box-shadow: var(--authority-depth-layer3);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-authority-visual-frame {
+    padding-inline: var(--space-3);
+  }
+}
+
+/* Surface contrast: dark theme alignment */
+@media (prefers-color-scheme: dark) {
+  .hero-authority-visual-frame {
+    border-color: hsl(var(--color-border) / 0.5);
+  }
+
+  .hero-portrait-wrapper {
+    border-color: hsl(var(--color-border));
+  }
+}
+
+:root[data-theme='dark'] .hero-authority-visual-frame {
+  border-color: hsl(var(--color-border) / 0.5);
+}
+
+:root[data-theme='dark'] .hero-portrait-wrapper {
+  border-color: hsl(var(--color-border));
 }

@@ -1,0 +1,34 @@
+{
+  "banner": {
+    "title": "Consentimiento y uso de datos",
+    "description": "Utilizamos cookies y tecnologías similares para el funcionamiento esencial, análisis y funciones opcionales. Elija cómo podemos procesar sus datos.",
+    "acceptAll": "Aceptar todo",
+    "rejectNonEssential": "Rechazar no esenciales",
+    "customise": "Personalizar"
+  },
+  "preferences": {
+    "title": "Preferencias de consentimiento",
+    "intro": "Gestione su consentimiento por categoría y finalidad. Puede retirarlo en cualquier momento.",
+    "categories": "Categorías",
+    "purposes": "Finalidades",
+    "essential": "Esenciales (siempre activas)",
+    "functional": "Funcionales",
+    "analytics": "Analíticas",
+    "experience": "Experiencia",
+    "marketing": "Marketing",
+    "measurement": "Medición",
+    "experimentation": "Experimentación",
+    "personalization": "Personalización",
+    "security": "Seguridad",
+    "fraud": "Prevención de fraude",
+    "recommendation": "Recomendación",
+    "profiling": "Perfilado",
+    "withdraw": "Retirar consentimiento",
+    "save": "Guardar elección",
+    "modelParticipation": "Permitir el uso de mis datos para entrenamiento de IA/modelos"
+  },
+  "meta": {
+    "preferencesTitle": "Preferencias de consentimiento",
+    "preferencesDescription": "Gestione las categorías y finalidades del consentimiento."
+  }
+}

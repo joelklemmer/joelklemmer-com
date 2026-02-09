@@ -16,6 +16,7 @@ export function Header({
   centerContent,
   headerControls,
 }: HeaderProps) {
+  // Tab order: identity → primary nav (centerContent) → secondary utilities (headerControls). Hierarchy via masthead-nav-primary / masthead-nav-secondary.
   return (
     <div className="masthead-bar flex items-center w-full gap-4">
       <div className="masthead-identity flex-shrink-0">
@@ -27,12 +28,12 @@ export function Header({
         </Link>
       </div>
       {centerContent && (
-        <div className="masthead-nav flex-1 min-w-0 flex items-center justify-center">
+        <div className="masthead-nav masthead-nav-primary flex-1 min-w-0 flex items-center justify-center">
           {centerContent}
         </div>
       )}
       {headerControls && (
-        <div className="masthead-utilities flex-shrink-0 flex items-center gap-1">
+        <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-1">
           {headerControls}
         </div>
       )}

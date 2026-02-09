@@ -15,6 +15,10 @@
     "title": "Seguridad",
     "lede": "Postura de seguridad, reporte y divulgación."
   },
+  "cookies": {
+    "title": "Política de cookies",
+    "lede": "Cookies y consentimiento; sus elecciones y cómo las usamos."
+  },
   "governance": {
     "heading": "Gobernanza",
     "version": "Versión",

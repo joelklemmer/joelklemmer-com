@@ -138,6 +138,8 @@
   --readable-max-width: 42rem;
   --transition-duration-fast: 150ms;
   --transition-duration-normal: 200ms;
+  /** Interaction micro-physics: hover/focus/press feedback — low-latency, decisive. */
+  --motion-duration-feedback: 80ms;
 
   /* Focus ring token (high visibility, theme-aware) */
   --focus-ring-width: 2px;
@@ -226,8 +228,10 @@
   /* VACEL C) Motion: eased transitions, focus reinforcement (respects reduced-motion). */
   --ease-authority: cubic-bezier(0.25, 0.1, 0.25, 1);
   --ease-authority-out: cubic-bezier(0.33, 1, 0.68, 1);
+  /** Decisive interaction: no mushy easing; crisp response. */
+  --motion-ease-out: cubic-bezier(0.33, 1, 0.68, 1);
 
-  /* Motion tokens with reduced-motion support */
+  /* Motion tokens: durations resolve under prefers-reduced-motion via override below. */
   --motion-duration-fast: var(--transition-duration-fast);
   --motion-duration-normal: var(--transition-duration-normal);
   --motion-ease: var(--ease-authority);
@@ -345,6 +349,15 @@
 
   /* Hero CTA: letter spacing for executive clarity */
   --hero-cta-letter-spacing: 0.02em;
+}
+
+/* Motion governance: prefers-reduced-motion alters behavior — token-driven. */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --transition-duration-fast: 0.01ms;
+    --transition-duration-normal: 0.01ms;
+    --motion-duration-feedback: 0.01ms;
+  }
 }
 
 @media (min-width: 640px) {

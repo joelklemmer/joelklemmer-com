@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "vendors": [
+    {
+      "id": "internal-essential",
+      "name": "Internal essential",
+      "owner": "JoelKlemmer.com",
+      "category": "essential",
+      "purposeScopes": ["security"],
+      "sensitivity": ["operational"],
+      "storageTypes": ["cookie", "server-side"],
+      "retention": "Session or 365 days for consent cookie",
+      "transferRegions": [],
+      "subprocessors": [],
+      "role": "controller",
+      "modelTrainingUsage": "prohibited",
+      "riskTier": "low",
+      "dependencyIds": [],
+      "planned": false
+    },
+    {
+      "id": "internal-telemetry",
+      "name": "Internal telemetry (first-party)",
+      "owner": "JoelKlemmer.com",
+      "category": "analytics",
+      "purposeScopes": ["measurement"],
+      "sensitivity": ["behavioral"],
+      "storageTypes": ["none", "server-side"],
+      "retention": "As per privacy policy",
+      "transferRegions": [],
+      "subprocessors": [],
+      "role": "controller",
+      "modelTrainingUsage": "prohibited",
+      "riskTier": "low",
+      "dependencyIds": [],
+      "activationRules": {
+        "category": "analytics",
+        "purposes": ["measurement"]
+      },
+      "planned": false
+    },
+    {
+      "id": "third-party-analytics-planned",
+      "name": "Third-party analytics (planned)",
+      "owner": "TBD",
+      "category": "analytics",
+      "purposeScopes": ["measurement", "experimentation"],
+      "sensitivity": ["behavioral", "inferred"],
+      "storageTypes": ["cookie", "localStorage"],
+      "retention": "TBD",
+      "transferRegions": ["US", "EU"],
+      "subprocessors": [],
+      "role": "processor",
+      "modelTrainingUsage": "unknown",
+      "riskTier": "medium",
+      "dependencyIds": [],
+      "activationRules": {
+        "category": "analytics",
+        "purposes": ["measurement"]
+      },
+      "planned": true
+    }
+  ]
+}

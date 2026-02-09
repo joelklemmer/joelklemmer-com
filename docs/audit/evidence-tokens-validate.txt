@@ -1,0 +1,12 @@
+﻿
+> nx run web:tokens-validate
+
+> npx tsx --tsconfig tsconfig.base.json tools/validate-tokens.ts
+
+Token completeness passed: 25 required tokens present.
+
+
+
+ NX   Successfully ran target tokens-validate for project web
+
+

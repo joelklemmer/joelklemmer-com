@@ -16,6 +16,8 @@ export interface HeroSectionProps {
   visual?:
     | ReactNode
     | { src: string; alt: string; width?: number; height?: number };
+  /** Set true only for the LCP hero (e.g. home) to avoid multiple priority images */
+  imagePriority?: boolean;
   children?: ReactNode;
 }
 
@@ -24,6 +26,7 @@ export function HeroSection({
   lede,
   actions,
   visual,
+  imagePriority = false,
   children,
 }: HeroSectionProps) {
   let visualNode: ReactNode = null;
@@ -39,16 +42,19 @@ export function HeroSection({
         width?: number;
         height?: number;
       };
-      // Use PortraitImage component for institutional presentation
+      // Use PortraitImage component for institutional presentation; frame + wrapper for elevation and framing balance
       visualNode = (
-        <div className="hero-authority-visual-frame hero-portrait-composition">
+        <div
+          className="hero-authority-visual-frame hero-portrait-composition"
+          data-hero-visual
+        >
           <div className="hero-portrait-wrapper">
             <PortraitImage
               src={v.src}
               alt={v.alt}
               width={v.width ?? 1200}
               height={v.height ?? 1500}
-              priority
+              priority={imagePriority}
               quality={90}
               objectPosition="center top"
             />
@@ -68,7 +74,7 @@ export function HeroSection({
     >
       <div className="hero-authority-atmosphere" aria-hidden />
       <Container
-        variant="wide"
+        variant="full"
         className="hero-authority-inner hero-authority-plate"
       >
         <div

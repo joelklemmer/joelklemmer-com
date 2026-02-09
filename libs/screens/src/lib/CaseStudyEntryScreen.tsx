@@ -9,7 +9,11 @@ import {
   getPublicRecordList,
   renderMdx,
 } from '@joelklemmer/content';
-import { createPageMetadata } from '@joelklemmer/seo';
+import {
+  ArticleJsonLd,
+  BreadcrumbJsonLd,
+  createPageMetadata,
+} from '@joelklemmer/seo';
 import { createScopedTranslator, loadMessages } from '@joelklemmer/i18n';
 import {
   DefinitionListSection,
@@ -92,6 +96,17 @@ export async function CaseStudyEntryScreen({ slug }: { slug: string }) {
 
   return (
     <>
+      <ArticleJsonLd
+        locale={locale}
+        pathname={`/casestudies/${entry.frontmatter.slug}`}
+        headline={entry.frontmatter.title}
+        description={entry.frontmatter.summary}
+        datePublished={entry.frontmatter.date}
+      />
+      <BreadcrumbJsonLd
+        locale={locale}
+        pathSegments={['casestudies', entry.frontmatter.slug]}
+      />
       {showFallbackNotice ? (
         <FallbackNoticeSection
           title={tCommon('fallbackNotice.title')}

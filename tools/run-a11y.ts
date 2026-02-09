@@ -37,9 +37,14 @@ async function main(): Promise<number> {
   const port = await getPort({ port: 4300 });
   const baseURL = `http://127.0.0.1:${port}`;
 
-  // Always use production server (build + start) to avoid Next dev lock and port
-  // collision; same as CI and deterministic. Spawn inherits process.env (with a11y defaults).
-  const serverCommand = `pnpm nx build web && pnpm nx start web --port=${port}`;
+  // Use production server: build + start when run standalone; start only when
+  // SKIP_A11Y_BUILD=1 (e.g. verify already ran build). Avoids Next lock and output conflicts.
+  const skipBuild =
+    process.env.SKIP_A11Y_BUILD === '1' ||
+    process.env.SKIP_A11Y_BUILD === 'true';
+  const serverCommand = skipBuild
+    ? `pnpm nx run web:start --port=${port}`
+    : `pnpm nx run web:build --skip-nx-cache && pnpm nx run web:start --port=${port}`;
 
   const server = spawn(serverCommand, [], {
     cwd: workspaceRoot,

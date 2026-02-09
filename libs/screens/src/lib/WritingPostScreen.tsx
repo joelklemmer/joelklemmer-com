@@ -7,7 +7,7 @@ import {
   getWritingSlugs,
   renderMdx,
 } from '@joelklemmer/content';
-import { createPageMetadata } from '@joelklemmer/seo';
+import { ArticleJsonLd, createPageMetadata } from '@joelklemmer/seo';
 import { createScopedTranslator, loadMessages } from '@joelklemmer/i18n';
 import { focusRingClass } from '@joelklemmer/a11y';
 import {
@@ -105,6 +105,13 @@ export async function WritingPostScreen({ slug }: { slug: string }) {
 
   return (
     <>
+      <ArticleJsonLd
+        locale={locale}
+        pathname={`/writing/${entry.frontmatter.slug}`}
+        headline={entry.frontmatter.title}
+        description={entry.frontmatter.summary}
+        datePublished={entry.frontmatter.date}
+      />
       {showFallbackNotice ? (
         <FallbackNoticeSection
           title={tCommon('fallbackNotice.title')}

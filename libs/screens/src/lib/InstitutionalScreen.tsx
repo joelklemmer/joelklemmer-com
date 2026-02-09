@@ -13,7 +13,8 @@ export type InstitutionalPageKey =
   | 'privacy'
   | 'terms'
   | 'accessibility'
-  | 'security';
+  | 'security'
+  | 'cookies';
 
 export interface InstitutionalScreenProps {
   pageKey: InstitutionalPageKey;

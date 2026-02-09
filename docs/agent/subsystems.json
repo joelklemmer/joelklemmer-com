@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "subsystems": [
+    {
+      "id": "navigation-cognition",
+      "docPath": "docs/subsystems/01-navigation-cognition.md"
+    },
+    {
+      "id": "interaction-micro-physics",
+      "docPath": "docs/subsystems/02-interaction-micro-physics.md"
+    },
+    { "id": "proof-density", "docPath": "docs/subsystems/03-proof-density.md" },
+    {
+      "id": "authority-telemetry",
+      "docPath": "docs/subsystems/04-authority-telemetry.md"
+    },
+    {
+      "id": "intelligence-surface",
+      "docPath": "docs/subsystems/05-intelligence-surface.md"
+    },
+    {
+      "id": "performance-perception",
+      "docPath": "docs/subsystems/06-performance-perception.md"
+    },
+    {
+      "id": "media-governance",
+      "docPath": "docs/subsystems/07-media-governance.md"
+    }
+  ]
+}

@@ -1,6 +1,18 @@
 import Image from 'next/image';
 import { type CSSProperties } from 'react';
 
+/** Alt placeholders that fail media governance (dev-only warning). */
+const ALT_PLACEHOLDERS = [
+  'image',
+  'photo',
+  'picture',
+  'img',
+  'placeholder',
+  'alt',
+  'todo',
+  'tbd',
+];
+
 export interface PortraitImageProps {
   src: string;
   alt: string;
@@ -23,6 +35,8 @@ export interface PortraitImageProps {
  * Enforces consistent 4:5 portrait aspect ratio contract (1200x1500 = 0.8).
  * Face-safe cropping with 'center top' positioning ensures head/face remains visible.
  * Optimized for 2x displays with proper Next.js Image sizing.
+ *
+ * Media governance: in development, warns when alt is missing or placeholder-like.
  */
 export function PortraitImage({
   src,
@@ -34,6 +48,30 @@ export function PortraitImage({
   className = '',
   objectPosition = 'center top',
 }: PortraitImageProps) {
+  if (
+    typeof process !== 'undefined' &&
+    process.env.NODE_ENV === 'development'
+  ) {
+    const trimmed = alt?.trim() ?? '';
+    if (!trimmed) {
+      console.warn(
+        `[PortraitImage] Missing alt (media governance). src: ${src}`,
+      );
+    } else {
+      const lower = trimmed.toLowerCase();
+      if (
+        ALT_PLACEHOLDERS.some(
+          (p) =>
+            lower === p || lower.startsWith(p + ' ') || lower.endsWith(' ' + p),
+        )
+      ) {
+        console.warn(
+          `[PortraitImage] Alt should not be a placeholder (media governance). src: ${src}, alt: "${alt}"`,
+        );
+      }
+    }
+  }
+
   // Enforce consistent 4:5 portrait aspect ratio contract
   // Standard institutional portrait: 1200x1500 = 0.8 (4:5)
   const aspectRatio = width / height;

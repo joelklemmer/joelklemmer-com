@@ -10,6 +10,7 @@ import {
   getInstitutionalPage,
   renderMdx,
 } from '@joelklemmer/content';
+import { ProfilePageJsonLd } from '@joelklemmer/seo';
 import {
   DefinitionListSection,
   FallbackNoticeSection,
@@ -60,18 +61,21 @@ export async function BioScreen() {
     : [];
 
   return (
-    <QuietScreen
-      pageKey="bio"
-      notice={notice}
-      supplemental={
-        artifactItems.length ? (
-          <DefinitionListSection
-            title={tQuiet('bio.artifactsTitle')}
-            items={artifactItems}
-          />
-        ) : null
-      }
-      content={content ?? undefined}
-    />
+    <>
+      <ProfilePageJsonLd locale={locale} pathname="/bio" />
+      <QuietScreen
+        pageKey="bio"
+        notice={notice}
+        supplemental={
+          artifactItems.length ? (
+            <DefinitionListSection
+              title={tQuiet('bio.artifactsTitle')}
+              items={artifactItems}
+            />
+          ) : null
+        }
+        content={content ?? undefined}
+      />
+    </>
   );
 }

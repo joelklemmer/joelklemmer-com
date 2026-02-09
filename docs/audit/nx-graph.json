@@ -1,0 +1,1915 @@
+{
+  "graph": {
+    "nodes": {
+      "authority-orchestration": {
+        "name": "authority-orchestration",
+        "type": "lib",
+        "data": {
+          "root": "libs/authority-orchestration",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/authority-orchestration",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "authority-orchestration",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/authority-orchestration/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:authority-orchestration"],
+          "implicitDependencies": []
+        }
+      },
+      "authority-telemetry": {
+        "name": "authority-telemetry",
+        "type": "lib",
+        "data": {
+          "root": "libs/authority-telemetry",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/authority-telemetry",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/authority-telemetry/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "authority-telemetry",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/authority-telemetry/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:authority-telemetry"],
+          "implicitDependencies": []
+        }
+      },
+      "authority-density": {
+        "name": "authority-density",
+        "type": "lib",
+        "data": {
+          "root": "libs/authority-density",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/authority-density",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/authority-density/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "authority-density",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/authority-density/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:authority-density"],
+          "implicitDependencies": []
+        }
+      },
+      "authority-mapping": {
+        "name": "authority-mapping",
+        "type": "lib",
+        "data": {
+          "root": "libs/authority-mapping",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/authority-mapping",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/authority-mapping/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "authority-mapping",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/authority-mapping/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:authority-mapping"],
+          "implicitDependencies": []
+        }
+      },
+      "authority-signals": {
+        "name": "authority-signals",
+        "type": "lib",
+        "data": {
+          "root": "libs/authority-signals",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/authority-signals",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/authority-signals/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "authority-signals",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/authority-signals/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:authority-signals"],
+          "implicitDependencies": []
+        }
+      },
+      "evaluator-mode": {
+        "name": "evaluator-mode",
+        "type": "lib",
+        "data": {
+          "root": "libs/evaluator-mode",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/evaluator-mode",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/evaluator-mode/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "evaluator-mode",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/evaluator-mode/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:evaluator-mode"],
+          "implicitDependencies": []
+        }
+      },
+      "intelligence": {
+        "name": "intelligence",
+        "type": "lib",
+        "data": {
+          "root": "libs/intelligence",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/intelligence",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/intelligence/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "intelligence",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/intelligence/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:intelligence"],
+          "implicitDependencies": []
+        }
+      },
+      "sections": {
+        "name": "sections",
+        "type": "lib",
+        "data": {
+          "root": "libs/sections",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/sections",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/sections/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "sections",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/sections/src",
+          "projectType": "library",
+          "tags": ["type:section", "type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "content": {
+        "name": "content",
+        "type": "lib",
+        "data": {
+          "root": "libs/content",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/content",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/content/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "content",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/content/src",
+          "projectType": "library",
+          "tags": ["type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "screens": {
+        "name": "screens",
+        "type": "lib",
+        "data": {
+          "root": "libs/screens",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/screens",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/screens/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "screens",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/screens/src",
+          "projectType": "library",
+          "tags": ["type:screen", "type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "web-e2e": {
+        "name": "web-e2e",
+        "type": "e2e",
+        "data": {
+          "root": "apps/web-e2e",
+          "metadata": {
+            "targetGroups": {
+              "E2E (CI)": [
+                "e2e-ci--src/a11y/a11y.spec.ts",
+                "e2e-ci--src/example.spec.ts",
+                "e2e-ci--src/presentation-integrity/i18n-overflow.spec.ts",
+                "e2e-ci--src/presentation-integrity/i18n-rtl-stress.spec.ts",
+                "e2e-ci--src/presentation-integrity/responsive-layout.spec.ts",
+                "e2e-ci--src/presentation-integrity/theme-prepaint.spec.ts",
+                "e2e-ci--src/presentation-integrity/visual-regression.spec.ts",
+                "e2e-ci",
+                "e2e-ci--merge-reports"
+              ]
+            }
+          },
+          "targets": {
+            "e2e": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "command": "playwright test"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/a11y/a11y.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-a11y-a11y-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-a11y-a11y-spec-ts"
+                },
+                "command": "playwright test src/a11y/a11y.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-a11y-a11y-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/a11y/a11y.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-a11y-a11y-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-a11y-a11y-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/example.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-example-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-example-spec-ts"
+                },
+                "command": "playwright test src/example.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-example-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/example.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-example-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-example-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/presentation-integrity/i18n-overflow.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-i18n-overflow-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-i18n-overflow-spec-ts"
+                },
+                "command": "playwright test src/presentation-integrity/i18n-overflow.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-presentation-integrity-i18n-overflow-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/presentation-integrity/i18n-overflow.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-presentation-integrity-i18n-overflow-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-presentation-integrity-i18n-overflow-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/presentation-integrity/i18n-rtl-stress.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-i18n-rtl-stress-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-i18n-rtl-stress-spec-ts"
+                },
+                "command": "playwright test src/presentation-integrity/i18n-rtl-stress.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-presentation-integrity-i18n-rtl-stress-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/presentation-integrity/i18n-rtl-stress.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-presentation-integrity-i18n-rtl-stress-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-presentation-integrity-i18n-rtl-stress-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/presentation-integrity/responsive-layout.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-responsive-layout-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-responsive-layout-spec-ts"
+                },
+                "command": "playwright test src/presentation-integrity/responsive-layout.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-presentation-integrity-responsive-layout-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/presentation-integrity/responsive-layout.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-presentation-integrity-responsive-layout-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-presentation-integrity-responsive-layout-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/presentation-integrity/theme-prepaint.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-theme-prepaint-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-theme-prepaint-spec-ts"
+                },
+                "command": "playwright test src/presentation-integrity/theme-prepaint.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-presentation-integrity-theme-prepaint-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/presentation-integrity/theme-prepaint.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-presentation-integrity-theme-prepaint-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-presentation-integrity-theme-prepaint-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci--src/presentation-integrity/visual-regression.spec.ts": {
+              "options": {
+                "cwd": "apps/web-e2e",
+                "env": {
+                  "PLAYWRIGHT_HTML_OUTPUT_DIR": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-visual-regression-spec-ts",
+                  "PLAYWRIGHT_HTML_REPORT": "..\\..\\dist\\.playwright\\apps\\web-e2e\\playwright-report\\src-presentation-integrity-visual-regression-spec-ts"
+                },
+                "command": "playwright test src/presentation-integrity/visual-regression.spec.ts --output=..\\..\\dist\\.playwright\\apps\\web-e2e\\test-output\\src-presentation-integrity-visual-regression-spec-ts"
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in src/presentation-integrity/visual-regression.spec.ts in CI",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output/src-presentation-integrity-visual-regression-spec-ts",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report/src-presentation-integrity-visual-regression-spec-ts"
+              ],
+              "executor": "nx:run-commands",
+              "configurations": {}
+            },
+            "e2e-ci": {
+              "executor": "nx:noop",
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output",
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report"
+              ],
+              "dependsOn": [
+                {
+                  "target": "e2e-ci--src/a11y/a11y.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/example.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/presentation-integrity/i18n-overflow.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/presentation-integrity/i18n-rtl-stress.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/presentation-integrity/responsive-layout.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/presentation-integrity/theme-prepaint.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                },
+                {
+                  "target": "e2e-ci--src/presentation-integrity/visual-regression.spec.ts",
+                  "projects": "self",
+                  "params": "forward",
+                  "options": "forward"
+                }
+              ],
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Runs Playwright Tests in CI",
+                "nonAtomizedTarget": "e2e",
+                "help": {
+                  "command": "pnpm exec playwright test --help",
+                  "example": {
+                    "options": {
+                      "workers": 1
+                    }
+                  }
+                }
+              },
+              "parallelism": false,
+              "configurations": {},
+              "options": {}
+            },
+            "e2e-ci--merge-reports": {
+              "executor": "@nx/playwright:merge-reports",
+              "cache": true,
+              "inputs": [
+                "default",
+                "^production",
+                {
+                  "externalDependencies": ["@playwright/test"]
+                }
+              ],
+              "outputs": [
+                "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report"
+              ],
+              "options": {
+                "config": "playwright.config.ts",
+                "expectedSuites": 7
+              },
+              "metadata": {
+                "technologies": ["playwright"],
+                "description": "Merges Playwright blob reports from atomized tasks to produce unified reports for the configured reporters."
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "apps/web-e2e",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "a11y": {
+              "executor": "@nx/playwright:playwright",
+              "options": {
+                "config": "apps/web-e2e/playwright.a11y.config.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "visual": {
+              "executor": "@nx/playwright:playwright",
+              "options": {
+                "config": "apps/web-e2e/playwright.visual.config.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "web-e2e",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "projectType": "application",
+          "sourceRoot": "apps/web-e2e/src",
+          "tags": ["type:app"],
+          "implicitDependencies": ["web"]
+        }
+      },
+      "tokens": {
+        "name": "tokens",
+        "type": "lib",
+        "data": {
+          "root": "libs/tokens",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/tokens",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/tokens/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "tokens",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/tokens/src",
+          "projectType": "library",
+          "tags": ["type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "a11y": {
+        "name": "a11y",
+        "type": "lib",
+        "data": {
+          "root": "libs/a11y",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/a11y",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/a11y/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "a11y",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/a11y/src",
+          "projectType": "library",
+          "tags": ["type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "i18n": {
+        "name": "i18n",
+        "type": "lib",
+        "data": {
+          "root": "libs/i18n",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/i18n",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/i18n/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "i18n",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/i18n/src",
+          "projectType": "library",
+          "tags": ["type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "aec": {
+        "name": "aec",
+        "type": "lib",
+        "data": {
+          "root": "libs/aec",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/aec",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "aec",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/aec/src",
+          "projectType": "library",
+          "tags": ["type:lib", "scope:aec"],
+          "implicitDependencies": []
+        }
+      },
+      "seo": {
+        "name": "seo",
+        "type": "lib",
+        "data": {
+          "root": "libs/seo",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/seo",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/seo/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "seo",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/seo/src",
+          "projectType": "library",
+          "tags": ["type:lib"],
+          "implicitDependencies": []
+        }
+      },
+      "web": {
+        "name": "web",
+        "type": "app",
+        "data": {
+          "root": "apps/web",
+          "targets": {
+            "build": {
+              "executor": "@nx/next:build",
+              "outputs": ["{options.outputPath}"],
+              "options": {
+                "outputPath": "apps/web/.next"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "dev": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/web",
+                "command": "next dev"
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "start": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/web",
+                "command": "next start"
+              },
+              "dependsOn": ["build"],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "serve-static": {
+              "continuous": true,
+              "options": {
+                "cwd": "apps/web",
+                "command": "next start"
+              },
+              "dependsOn": ["build"],
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "build-deps": {
+              "dependsOn": ["^build"],
+              "configurations": {},
+              "options": {},
+              "parallelism": true,
+              "executor": "nx:noop"
+            },
+            "watch-deps": {
+              "continuous": true,
+              "dependsOn": ["build-deps"],
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "pnpm exec nx watch --projects web --includeDependentProjects -- pnpm exec nx build-deps web"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "apps/web",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            },
+            "a11y": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "content-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "governance-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-governance.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "i18n-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-i18n.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "pgf-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-pgf.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "intelligence-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-intelligence.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "authority-signals-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-signals.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "experience-intelligence-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-experience-intelligence.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "frameworks-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-frameworks.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "aec-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-aec.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "orchestration-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-orchestration.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "content-os-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content-os.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "home-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-home.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "sitemap-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-sitemap.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "image-sitemap-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-image-sitemap.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "seo-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "tokens-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-tokens.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "token-drift-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-token-drift.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "test": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "node -e \"console.log('No web tests configured')\""
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "restore-generated-typings": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "git checkout -- apps/web/next-env.d.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "nx format:check --all",
+                  "nx run web:lint",
+                  "nx run web:content-validate",
+                  "nx run web:governance-validate",
+                  "nx run web:i18n-validate",
+                  "nx run web:pgf-validate",
+                  "nx run web:intelligence-validate",
+                  "nx run web:authority-signals-validate",
+                  "nx run web:experience-intelligence-validate",
+                  "nx run web:frameworks-validate",
+                  "nx run web:aec-validate",
+                  "nx run web:orchestration-validate",
+                  "nx run web:content-os-validate",
+                  "nx run web:home-validate",
+                  "nx run web:sitemap-validate",
+                  "nx run web:image-sitemap-validate",
+                  "nx run web:media-manifest-validate",
+                  "nx run web:media-derivatives-validate",
+                  "nx run web:media-authority-validate",
+                  "nx run web:visual-contract-validate",
+                  "nx run web:seo-validate",
+                  "nx run web:tokens-validate",
+                  "nx run web:token-drift-validate",
+                  "nx run web:authority-program-validate",
+                  "nx run web:authority-constitution-validate",
+                  "nx run web:test"
+                ],
+                "parallel": false
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "verify": {
+              "executor": "nx:run-commands",
+              "options": {
+                "commands": [
+                  "node -e \"try{require('fs').rmSync(require('path').join(process.cwd(),'apps/web/.next'),{recursive:true,force:true});}catch(e){}\"",
+                  "nx format:check --all",
+                  "pnpm audit --audit-level=critical",
+                  "nx run web:lint",
+                  "nx run web:security-validate",
+                  "nx run web:content-validate",
+                  "nx run web:governance-validate",
+                  "nx run web:i18n-validate",
+                  "nx run web:pgf-validate",
+                  "nx run web:intelligence-validate",
+                  "nx run web:authority-signals-validate",
+                  "nx run web:experience-intelligence-validate",
+                  "nx run web:frameworks-validate",
+                  "nx run web:aec-validate",
+                  "nx run web:orchestration-validate",
+                  "nx run web:content-os-validate",
+                  "nx run web:home-validate",
+                  "nx run web:sitemap-validate",
+                  "nx run web:image-sitemap-validate",
+                  "nx run web:media-manifest-validate",
+                  "nx run web:media-derivatives-validate",
+                  "nx run web:media-authority-validate",
+                  "nx run web:visual-contract-validate",
+                  "nx run web:seo-validate",
+                  "nx run web:tokens-validate",
+                  "nx run web:token-drift-validate",
+                  "nx run web:authority-program-validate",
+                  "nx run web:authority-constitution-validate",
+                  "nx run web:test",
+                  "nx run web:build",
+                  "nx run web:restore-generated-typings",
+                  "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y"
+                ],
+                "parallel": false
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "media-manifest-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-manifest.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "media-derivatives-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-derivatives.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "media-authority-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-authority.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "visual-contract-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-visual-contract.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "authority-program-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-program.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "authority-constitution-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-constitution.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "security-validate": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-security-txt.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            },
+            "lighthouse-budget": {
+              "executor": "nx:run-commands",
+              "options": {
+                "command": "npx tsx --tsconfig tsconfig.base.json tools/lighthouse-budget-stub.ts"
+              },
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "web",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "apps/web",
+          "projectType": "application",
+          "tags": ["scope:web", "type:app"],
+          "implicitDependencies": []
+        }
+      },
+      "ui": {
+        "name": "ui",
+        "type": "lib",
+        "data": {
+          "root": "libs/ui",
+          "targets": {
+            "lint": {
+              "cache": true,
+              "options": {
+                "cwd": "libs/ui",
+                "command": "eslint ."
+              },
+              "inputs": [
+                "default",
+                "^default",
+                "{workspaceRoot}/eslint.config.mjs",
+                "{workspaceRoot}/libs/ui/eslint.config.mjs",
+                "{workspaceRoot}/tools/eslint-rules/**/*",
+                {
+                  "externalDependencies": ["eslint"]
+                }
+              ],
+              "outputs": ["{options.outputFile}"],
+              "metadata": {
+                "technologies": ["eslint"],
+                "description": "Runs ESLint on project",
+                "help": {
+                  "command": "pnpm exec eslint --help",
+                  "example": {
+                    "options": {
+                      "max-warnings": 0
+                    }
+                  }
+                }
+              },
+              "executor": "nx:run-commands",
+              "configurations": {},
+              "parallelism": true
+            }
+          },
+          "name": "ui",
+          "$schema": "../../node_modules/nx/schemas/project-schema.json",
+          "sourceRoot": "libs/ui/src",
+          "projectType": "library",
+          "tags": ["type:ui", "type:lib"],
+          "implicitDependencies": []
+        }
+      }
+    },
+    "dependencies": {
+      "authority-orchestration": [
+        {
+          "source": "authority-orchestration",
+          "target": "evaluator-mode",
+          "type": "static"
+        }
+      ],
+      "authority-telemetry": [],
+      "authority-density": [
+        {
+          "source": "authority-density",
+          "target": "a11y",
+          "type": "static"
+        }
+      ],
+      "authority-mapping": [
+        {
+          "source": "authority-mapping",
+          "target": "authority-signals",
+          "type": "static"
+        }
+      ],
+      "authority-signals": [],
+      "evaluator-mode": [],
+      "intelligence": [
+        {
+          "source": "intelligence",
+          "target": "content",
+          "type": "static"
+        },
+        {
+          "source": "intelligence",
+          "target": "authority-signals",
+          "type": "static"
+        }
+      ],
+      "sections": [
+        {
+          "source": "sections",
+          "target": "a11y",
+          "type": "static"
+        },
+        {
+          "source": "sections",
+          "target": "aec",
+          "type": "static"
+        },
+        {
+          "source": "sections",
+          "target": "ui",
+          "type": "static"
+        },
+        {
+          "source": "sections",
+          "target": "authority-density",
+          "type": "static"
+        }
+      ],
+      "content": [
+        {
+          "source": "content",
+          "target": "i18n",
+          "type": "static"
+        }
+      ],
+      "screens": [
+        {
+          "source": "screens",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "content",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "sections",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "seo",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "a11y",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "authority-density",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "evaluator-mode",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "authority-mapping",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "authority-signals",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "authority-orchestration",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "aec",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "intelligence",
+          "type": "static"
+        },
+        {
+          "source": "screens",
+          "target": "ui",
+          "type": "static"
+        }
+      ],
+      "web-e2e": [
+        {
+          "source": "web-e2e",
+          "target": "web",
+          "type": "implicit"
+        },
+        {
+          "source": "web-e2e",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "web-e2e",
+          "target": "content",
+          "type": "static"
+        }
+      ],
+      "tokens": [],
+      "a11y": [],
+      "i18n": [],
+      "aec": [
+        {
+          "source": "aec",
+          "target": "intelligence",
+          "type": "static"
+        },
+        {
+          "source": "aec",
+          "target": "authority-orchestration",
+          "type": "static"
+        },
+        {
+          "source": "aec",
+          "target": "authority-signals",
+          "type": "static"
+        },
+        {
+          "source": "aec",
+          "target": "evaluator-mode",
+          "type": "static"
+        }
+      ],
+      "seo": [
+        {
+          "source": "seo",
+          "target": "i18n",
+          "type": "static"
+        }
+      ],
+      "web": [
+        {
+          "source": "web",
+          "target": "screens",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "i18n",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "evaluator-mode",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "authority-orchestration",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "authority-mapping",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "intelligence",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "aec",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "ui",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "a11y",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "authority-density",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "authority-telemetry",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "sections",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "content",
+          "type": "static"
+        },
+        {
+          "source": "web",
+          "target": "seo",
+          "type": "static"
+        }
+      ],
+      "ui": [
+        {
+          "source": "ui",
+          "target": "a11y",
+          "type": "static"
+        },
+        {
+          "source": "ui",
+          "target": "i18n",
+          "type": "static"
+        }
+      ]
+    }
+  }
+}

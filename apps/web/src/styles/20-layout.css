@@ -1,47 +1,165 @@
-/* 20-layout: container widths, section-shell rhythm, hero grid, content lanes */
-/* CALC: Cinematic Authority Layout Contract — consistent page frame, section cadence, eye-path control */
+/* 20-layout: full-bleed layout engine, governed lanes, section rhythm, hero grid */
+/* Layout contract: viewport-spanning root; lanes (full | wide | readable) govern inner content. RTL-safe. */
+/* All layout uses logical properties (margin-inline, padding-inline, inset) for RTL safety. */
 
+/* --------------------------------------------------------------------------- */
+/* Breakpoints (mobile-first). No horizontal scroll; gutters scale; no clipping. */
+/* mobile: 0–639px | tablet: 640px+ | desktop: 1024px+ | wide: 1280px+ | ultrawide: 1920px+ */
+/* --------------------------------------------------------------------------- */
+:root {
+  --bp-mobile: 0;
+  --bp-tablet: 640px;
+  --bp-desktop: 1024px;
+  --bp-wide: 1280px;
+  --bp-ultrawide: 1920px;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Governed lane system (token-driven). Full = edge-to-edge; wide = large display; readable = line length */
+/* --------------------------------------------------------------------------- */
+:root {
+  --lane-full: none;
+  --lane-wide: var(--container-max-width);
+  --lane-readable: var(--readable-max-width);
+}
+
+/* Layout root: full bleed, spans viewport; no fixed max-width wrapper. Prevents horizontal scroll. */
+.layout-root {
+  width: 100%;
+  min-width: 0;
+  max-width: none;
+  margin-inline: 0;
+  overflow-x: clip;
+}
+
+/* Lane utilities: centered content with governed max-width; RTL-safe (logical properties only) */
+.lane-full {
+  width: 100%;
+  max-width: none; /* full bleed: edge-to-edge; --lane-full is none */
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
+}
+
+.lane-wide {
+  width: 100%;
+  max-width: var(--lane-wide);
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
+}
+
+.lane-readable {
+  width: 100%;
+  max-width: var(--lane-readable);
+  min-width: 0;
+  margin-inline: auto;
+  padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
+}
+
+/* Legacy alias: optional boxed frame (not used as root) */
 .calc-page-frame {
   width: 100%;
-  max-width: var(--container-max-width);
+  max-width: var(--lane-wide);
   margin-inline: auto;
-  padding-inline: var(--container-padding-x);
+  padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
 }
 
-@media (min-width: 640px) {
-  .calc-page-frame {
-    padding-inline: var(--container-padding-x-wide);
-  }
-}
-
-/* Page Frame: full viewport width; section spacing and rhythm. Lane constraint is per-section via Container. */
+/* Page Frame: full-bleed; no max-width wrapper; section spacing and rhythm. Lane constraint per-section via Container. */
 .page-frame {
   width: 100%;
   max-width: none;
-  margin-inline: auto;
-  padding-inline: var(--container-padding-x);
+  min-width: 0;
+  margin-inline: 0;
+  padding-inline: 0;
   display: grid;
   gap: var(--section-block-margin);
   grid-template-columns: 1fr;
+  overflow-x: clip;
 }
 
+/* Full-bleed: section content wrapper; inner lane via Container. */
+.full-bleed {
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Responsive gutter scaling: no collapsed gutters; no horizontal scroll 320px→ultrawide */
+/* Mobile (< 640px): gutters from tokens (--gutter-inline-*). Tablet+: wider gutters. */
+/* --------------------------------------------------------------------------- */
 @media (min-width: 640px) {
-  .page-frame {
-    padding-inline: var(--container-padding-x-wide);
+  :root {
+    --gutter-inline-start: calc(
+      var(--container-padding-x-wide) + env(safe-area-inset-inline-start, 0px)
+    );
+    --gutter-inline-end: calc(
+      var(--container-padding-x-wide) + env(safe-area-inset-inline-end, 0px)
+    );
   }
 }
 
-/* Ultra-wide (1920px+): increase padding; line length unchanged per responsive contract */
+/* --------------------------------------------------------------------------- */
+/* Ultrawide scaling (1600px+): authority perception; no stretched paragraphs; balanced composition */
+/* Wide scaling rules, readable lane preservation, whitespace balancing, hero positioning. No floats. */
+/* --------------------------------------------------------------------------- */
+@media (min-width: 1600px) {
+  /* No floating elements: all layout is grid/flex; explicit float containment */
+  .layout-root,
+  .page-frame,
+  .full-bleed,
+  .section-shell,
+  .content-lane,
+  .content-lane-grid,
+  .hero-authority,
+  .hero-authority-inner {
+    float: none;
+  }
+
+  /* Readable lane preservation: paragraphs and content stay within readable width */
+  .content-lane,
+  .lane-readable {
+    max-width: var(--lane-readable);
+    width: 100%;
+  }
+
+  /* Hero positioning: center hero inner in wide lane; prevents edge-to-edge stretch */
+  .hero-authority-inner {
+    max-width: var(--lane-wide);
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  /* Prevent stretched paragraphs: section content obeys lane; no full-bleed text */
+  .section-shell .content-lane {
+    max-width: var(--lane-readable);
+  }
+
+  /* Whitespace balancing: step up gutters so content does not hug edges */
+  :root {
+    --container-padding-x: var(--space-6);
+    --container-padding-x-wide: var(--space-8);
+    --gutter-inline-start: calc(
+      var(--space-8) + env(safe-area-inset-inline-start, 0px)
+    );
+    --gutter-inline-end: calc(
+      var(--space-8) + env(safe-area-inset-inline-end, 0px)
+    );
+  }
+}
+
 @media (min-width: 1920px) {
   :root {
     --container-padding-x: var(--space-8);
     --container-padding-x-wide: var(--space-10);
+    --gutter-inline-start: calc(
+      var(--space-10) + env(safe-area-inset-inline-start, 0px)
+    );
+    --gutter-inline-end: calc(
+      var(--space-10) + env(safe-area-inset-inline-end, 0px)
+    );
   }
-}
-
-/* Full-bleed: section content wrapper; inner lane via Container. See docs/authority/responsive-contract.md */
-.full-bleed {
-  width: 100%;
 }
 
 /* Content stage: subtle materiality so center column does not float; does not harm contrast. */
@@ -63,6 +181,7 @@
 .section-shell {
   display: grid;
   gap: var(--section-inner-gap);
+  min-width: 0;
 }
 
 .section-shell > * + * {
@@ -117,33 +236,32 @@ section.section-shell:last-child {
   margin-block-start: var(--heading-to-content-gap);
 }
 
+/* Content lane: readable max-width governed by tokens; full-bleed surfaces unaffected */
 .content-lane {
   width: 100%;
-  max-width: var(--content-lane-max-width);
+  max-width: var(--lane-readable);
+  min-width: 0;
   margin-inline: auto;
-  padding-inline: var(--container-padding-x);
-}
-
-@media (min-width: 640px) {
-  .content-lane {
-    padding-inline: var(--container-padding-x-wide);
-  }
+  padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
 }
 
 /* Grid of sections: full width; each section uses Container (lane) inside. */
 .content-lane-grid {
   display: grid;
-  gap: var(--section-block-margin);
   grid-template-columns: 1fr;
   width: 100%;
   max-width: none;
+  min-width: 0;
 }
 
+/* Full-width hero: section spans viewport; inner lane from Container variant=full */
 .hero-authority {
   position: relative;
   margin-block-end: var(--section-block-margin);
   padding-block: var(--space-8);
   isolation: isolate;
+  width: 100%;
+  min-width: 0;
 }
 
 @media (min-width: 768px) {
@@ -188,9 +306,10 @@ section.section-shell:last-child {
   border-radius: 0.5rem;
   box-shadow: var(--hero-depth-shadow), var(--authority-soft-light);
   overflow: hidden;
+  width: 100%;
 }
 
-/* Hero plate: premium spacing and visual dominance */
+/* Hero plate: premium spacing and visual dominance; RTL-safe logical padding */
 .hero-authority-plate {
   padding: var(--space-6);
   min-height: min(500px, 65vh);
@@ -198,14 +317,22 @@ section.section-shell:last-child {
 
 @media (min-width: 768px) {
   .hero-authority-plate {
-    padding: var(--space-8) calc(var(--space-8) * 1.25);
+    padding-block: var(--space-8);
+    padding-inline: calc(var(--space-8) * 1.25);
     min-height: min(600px, 70vh);
   }
 }
 
 @media (min-width: 1024px) {
   .hero-authority-plate {
-    padding: var(--space-10) calc(var(--space-10) * 1.25);
+    padding-block: var(--space-10);
+    padding-inline: calc(var(--space-10) * 1.25);
+  }
+}
+
+@media (min-width: 1600px) {
+  .hero-authority-plate {
+    padding-inline: calc(var(--space-10) * 1.5);
   }
 }
 
@@ -360,7 +487,7 @@ section.section-shell:last-child {
   font-size: var(--hero-lede-size);
   line-height: var(--hero-lede-line);
   margin: 0;
-  max-width: var(--readable-max-width);
+  max-width: min(var(--readable-max-width), 52ch);
 }
 
 .hero-actions {

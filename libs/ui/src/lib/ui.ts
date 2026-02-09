@@ -11,7 +11,7 @@ export type { HeaderProps } from './Header';
 export { LanguageSwitcher } from './LanguageSwitcher';
 export { LanguageSwitcherPopover } from './LanguageSwitcherPopover';
 export { Nav } from './Nav';
-export type { NavProps, NavItem } from './Nav';
+export type { NavProps, NavItem, NavItemRank } from './Nav';
 export { PageFrame } from './PageFrame';
 export type { PageFrameProps } from './PageFrame';
 export { Shell } from './Shell';
@@ -22,3 +22,16 @@ export { ContrastProvider, useContrast } from './ContrastProvider';
 export { AccessibilityPanel } from './AccessibilityPanel';
 export { PortraitImage } from './PortraitImage';
 export type { PortraitImageProps } from './PortraitImage';
+export { ContextualPanel } from './ContextualPanel';
+export type { ContextualPanelProps } from './ContextualPanel';
+export { ClaimProofMapView } from './ClaimProofMapView';
+export type {
+  ClaimProofMapViewProps,
+  ClaimProofMapViewEntry,
+  ClaimProofMapViewProof,
+} from './ClaimProofMapView';
+export { WhatMattersBlock } from './WhatMattersBlock';
+export type {
+  WhatMattersBlockProps,
+  WhatMattersBlockItem,
+} from './WhatMattersBlock';

@@ -19,6 +19,8 @@
     "themeLight": "Light",
     "themeDark": "Dark",
     "themeSystem": "System",
+    "themeSwitchToLight": "Switch to light theme",
+    "themeSwitchToDark": "Switch to dark theme",
     "contrastLabel": "Contrast",
     "contrastDefault": "Default",
     "contrastHigh": "High",
@@ -35,5 +37,18 @@
   },
   "density": {
     "toggleLabel": "Density view"
+  },
+  "cookiePreferences": {
+    "openLabel": "Cookie preferences",
+    "modalTitle": "Cookie preferences",
+    "acceptAll": "Accept all",
+    "rejectNonEssential": "Reject non-essential",
+    "save": "Save choices",
+    "withdraw": "Withdraw consent",
+    "analyticsLabel": "Analytics",
+    "functionalLabel": "Functional",
+    "experienceLabel": "Experience",
+    "marketingLabel": "Marketing",
+    "essentialNote": "Essential cookies are always on and cannot be disabled."
   }
 }

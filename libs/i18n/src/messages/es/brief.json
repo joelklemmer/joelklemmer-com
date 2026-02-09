@@ -1,4 +1,11 @@
 {
+  "briefing": {
+    "contextualPanelTitle": "Contexto del briefing",
+    "contextualPanelExpand": "Mostrar contexto",
+    "contextualPanelCollapse": "Ocultar contexto",
+    "whatMattersTitle": "Lo que importa de un vistazo",
+    "claimProofMapTitle": "Mapa afirmación–prueba"
+  },
   "hero": {
     "title": "Informe ejecutivo",
     "lede": "Centro de autoridad para revisión estructurada y enrutamiento de evidencia."

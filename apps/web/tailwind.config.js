@@ -127,10 +127,12 @@ module.exports = {
       transitionDuration: {
         fast: 'var(--transition-duration-fast)',
         normal: 'var(--transition-duration-normal)',
+        feedback: 'var(--motion-duration-feedback)',
       },
       transitionTimingFunction: {
         authority: 'var(--ease-authority)',
         'authority-out': 'var(--ease-authority-out)',
+        'ease-out': 'var(--motion-ease-out)',
       },
       fontWeight: {
         meta: 'var(--font-weight-meta)',

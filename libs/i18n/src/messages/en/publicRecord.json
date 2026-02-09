@@ -1,4 +1,14 @@
 {
+  "layers": {
+    "scan": "At a glance",
+    "substantiation": "Substantiation",
+    "artifact": "Artifacts and body"
+  },
+  "doctrine": {
+    "howToReadHeading": "How to read this page",
+    "howToReadBody": "This page follows a three-layer disclosure: a short summary (at a glance), verification and source (substantiation), then linked files and body text (artifacts). Verification method and confidence are stated when available. Claims linked here are indexed on the Brief page."
+  },
+  "substantiates": "Substantiates",
   "supportsClaims": {
     "heading": "Supports claims",
     "empty": "No linked claims are recorded."

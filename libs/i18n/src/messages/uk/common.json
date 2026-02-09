@@ -19,6 +19,8 @@
     "themeLight": "Світла",
     "themeDark": "Темна",
     "themeSystem": "Системна",
+    "themeSwitchToLight": "Перемкнути на світлу тему",
+    "themeSwitchToDark": "Перемкнути на темну тему",
     "contrastLabel": "Контраст",
     "contrastDefault": "За замовчуванням",
     "contrastHigh": "Високий",
@@ -35,5 +37,17 @@
   },
   "density": {
     "toggleLabel": "Режим щільності"
+  },
+  "cookiePreferences": {
+    "openLabel": "Налаштування файлів cookie",
+    "modalTitle": "Налаштування файлів cookie",
+    "acceptAll": "Прийняти всі",
+    "rejectNonEssential": "Відхилити необов'язкові",
+    "save": "Зберегти вибір",
+    "withdraw": "Відкликати згоду",
+    "analyticsLabel": "Аналітика",
+    "functionalLabel": "Функціональні",
+    "marketingLabel": "Маркетинг",
+    "essentialNote": "Необхідні файли cookie завжди ввімкнені."
   }
 }

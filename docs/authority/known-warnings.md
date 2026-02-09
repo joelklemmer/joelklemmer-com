@@ -32,7 +32,7 @@ This document records non-fatal warnings that may appear during `nx run web:veri
 
 **Why tolerated.** The package is a devDependency used by the build or tooling. Updating it is a dependency and compatibility decision; the build and verify pipeline currently succeed. The notice is informational.
 
-**Change boundary to remove.** Run `pnpm add -D baseline-browser-mapping@latest` (or equivalent) and re-run build and verify. If a major version bumps, check release notes for breaking changes and update any code that depends on the package.
+**Change boundary to remove.** Run `pnpm add -D baseline-browser-mapping@latest` (or equivalent) and re-run build and verify. If a major version bumps, check release notes for breaking changes and update any code that depends on the package. **CI:** Build and Lighthouse jobs set `BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA=1` so the pipeline runs without this notice.
 
 ---
 

@@ -1,0 +1,34 @@
+{
+  "banner": {
+    "title": "Consent and data use",
+    "description": "We use cookies and similar technologies for essential operation, analytics, and optional features. Choose how we may process your data.",
+    "acceptAll": "Accept all",
+    "rejectNonEssential": "Reject non-essential",
+    "customise": "Customise"
+  },
+  "preferences": {
+    "title": "Consent preferences",
+    "intro": "Manage your consent by category and purpose. Withdraw at any time.",
+    "categories": "Categories",
+    "purposes": "Purposes",
+    "essential": "Essential (always on)",
+    "functional": "Functional",
+    "analytics": "Analytics",
+    "experience": "Experience",
+    "marketing": "Marketing",
+    "measurement": "Measurement",
+    "experimentation": "Experimentation",
+    "personalization": "Personalization",
+    "security": "Security",
+    "fraud": "Fraud prevention",
+    "recommendation": "Recommendation",
+    "profiling": "Profiling",
+    "withdraw": "Withdraw consent",
+    "save": "Save choices",
+    "modelParticipation": "Allow use of my data for AI/model training"
+  },
+  "meta": {
+    "preferencesTitle": "Consent preferences",
+    "preferencesDescription": "Manage your consent categories and purposes."
+  }
+}

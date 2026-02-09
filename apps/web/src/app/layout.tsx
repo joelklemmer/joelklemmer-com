@@ -8,11 +8,13 @@ import { getLocale } from 'next-intl/server';
 import { isRtlLocale } from '@joelklemmer/i18n';
 import { themeScript } from './theme-script';
 
-/** Authority Design Constitution: Primary stack — Inter Variable. */
+/** Authority Design Constitution: Primary stack — Inter Variable. Subset + swap to minimize FOIT/FOUT. */
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export default async function RootLayout({
@@ -26,6 +28,7 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={dir} className={inter.variable}>
       <head>
+        {/* next/font self-hosts Inter; no external font CDN requests */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
       <body>{children}</body>

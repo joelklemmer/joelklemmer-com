@@ -1,0 +1,7 @@
+{
+  "name": "telemetry-governance",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/telemetry-governance/src",
+  "projectType": "library",
+  "tags": ["type:lib"]
+}

@@ -11,6 +11,7 @@ import {
   HeroSection,
   ListSection,
 } from '@joelklemmer/sections';
+import { Container } from '@joelklemmer/ui';
 import { DensityAwarePage } from '@joelklemmer/authority-density';
 
 export async function generateMetadata() {
@@ -43,31 +44,43 @@ export async function PublicRecordScreen() {
   return (
     <>
       <HeroSection title={tProof('hero.title')} lede={tProof('hero.lede')} />
+      <section data-doctrine="how-to-read-list" className="section-shell">
+        <Container className="section-shell">
+          <h2 className="text-section-heading font-semibold">
+            {tProof('doctrine.listHeading')}
+          </h2>
+          <p className="text-body-analytical text-muted">
+            {tProof('doctrine.listBody')}
+          </p>
+        </Container>
+      </section>
       <DensityAwarePage toggleLabel={tCommon('density.toggleLabel')}>
-        {entries.length ? (
-          <CardGridSection
-            title={tProof('list.title')}
-            lede={tProof('list.lede')}
-            items={entries.map((entry) => ({
-              title: entry.frontmatter.title,
-              description: entry.frontmatter.claimSupported,
-              meta: tIndex('index.meta', {
-                type: entry.frontmatter.artifactType,
-                date: entry.frontmatter.date,
-                source:
-                  typeof entry.frontmatter.source === 'string'
-                    ? entry.frontmatter.source
-                    : entry.frontmatter.source.sourceName,
-              }),
-              href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
-            }))}
-          />
-        ) : (
-          <ListSection
-            title={tProof('list.title')}
-            items={[tProof('list.empty')]}
-          />
-        )}
+        <section data-layer="scan" aria-label={tIndex('layers.scan')}>
+          {entries.length ? (
+            <CardGridSection
+              title={tProof('list.title')}
+              lede={tProof('list.lede')}
+              items={entries.map((entry) => ({
+                title: entry.frontmatter.title,
+                description: entry.frontmatter.claimSupported,
+                meta: tIndex('index.meta', {
+                  type: entry.frontmatter.artifactType,
+                  date: entry.frontmatter.date,
+                  source:
+                    typeof entry.frontmatter.source === 'string'
+                      ? entry.frontmatter.source
+                      : entry.frontmatter.source.sourceName,
+                }),
+                href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
+              }))}
+            />
+          ) : (
+            <ListSection
+              title={tProof('list.title')}
+              items={[tProof('list.empty')]}
+            />
+          )}
+        </section>
       </DensityAwarePage>
     </>
   );

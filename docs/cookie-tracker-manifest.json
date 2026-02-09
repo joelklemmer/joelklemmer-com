@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "description": "Active trackers and cookies; must match cookie policy and gating.",
+  "policyUrlPath": "/cookies",
+  "categories": {
+    "essential": {
+      "purpose": "Strictly necessary (e.g. consent storage). No consent required.",
+      "scripts": []
+    },
+    "analytics": {
+      "purpose": "First-party or consented analytics.",
+      "scripts": [],
+      "gated": true
+    },
+    "functional": {
+      "purpose": "Preference or non-essential functionality.",
+      "scripts": [],
+      "gated": true
+    },
+    "marketing": {
+      "purpose": "Marketing or advertising. None in use.",
+      "scripts": [],
+      "gated": true
+    }
+  },
+  "blockedWithoutConsent": [
+    "google-analytics.com",
+    "googletagmanager.com",
+    "facebook.net",
+    "doubleclick.net",
+    "analytics.js",
+    "gtag",
+    "ga("
+  ]
+}

@@ -60,6 +60,16 @@ All checks must pass for `nx run web:verify` to succeed.
 - It depends only on libs with `type:lib` (content, i18n, seo). No boundary violations.
 - Route files and UI continue to use only `@joelklemmer/screens` and `@joelklemmer/sections`; the intelligence layer is not yet referenced from routes or feature flags.
 
+## Briefing-mode surface (readiness)
+
+The **Intelligence Layer Surface** adds briefing-mode groundwork without AI:
+
+- **Contracts** in `libs/content/src/lib/briefing-contracts.ts`: `BriefingContext`, `ClaimProofMap`, `WhatMattersSummary`, `IntelligenceProvider` (extension point). Deterministic builders: `buildClaimProofMap`, `buildWhatMattersSummary`, `buildBriefingPanelContext`.
+- **UI primitives** in `libs/ui`: `ContextualPanel`, `ClaimProofMapView`, `WhatMattersBlock`. Used on the Executive Brief page for contextual panel, “what matters” compression, and claim–proof map.
+- **Runtime:** Brief page builds context from content and renders the primitives; reading flow is context → what matters → claims → claim–proof map. No LLM; all behavior is deterministic.
+
+See **docs/intelligence-layer/readiness-doctrine.md** and **docs/intelligence-layer/extension-points.md** for readiness doctrine, extension points, and non-degradation rules.
+
 ## Compliance
 
 The layer is designed to comply with:

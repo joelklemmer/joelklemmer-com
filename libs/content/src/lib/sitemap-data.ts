@@ -68,3 +68,24 @@ export function getBookSlugsSync(): string[] {
   }
   return Array.from(new Set(getSlugsFromDir(dir)));
 }
+
+/** Sync: slugs of writing posts (excludes draft). */
+export function getWritingSlugsSync(): string[] {
+  const dir = path.join(contentRoot, 'writing');
+  const files = getMdxFiles(dir);
+  const slugs: string[] = [];
+  for (const filePath of files) {
+    try {
+      const raw = readFileSync(filePath, 'utf-8');
+      const { data } = matter(raw);
+      if (data?.draft === true) continue;
+      const slug = data?.slug;
+      if (typeof slug === 'string' && slug.trim()) {
+        slugs.push(slug.trim());
+      }
+    } catch {
+      // skip invalid files
+    }
+  }
+  return Array.from(new Set(slugs));
+}

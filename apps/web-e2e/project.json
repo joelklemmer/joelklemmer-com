@@ -5,13 +5,19 @@
   "sourceRoot": "apps/web-e2e/src",
   "tags": ["type:app"],
   "implicitDependencies": ["web"],
-  "// targets": "to see all targets run: nx show project web-e2e --web",
+  "// targets": "to see targets run: nx show project web-e2e --web",
   "targets": {
     "a11y": {
       "executor": "@nx/playwright:playwright",
-      "options": {
-        "config": "apps/web-e2e/playwright.a11y.config.ts"
-      }
+      "options": { "config": "apps/web-e2e/playwright.a11y.config.ts" }
+    },
+    "visual": {
+      "executor": "@nx/playwright:playwright",
+      "options": { "config": "apps/web-e2e/playwright.visual.config.ts" }
+    },
+    "interaction": {
+      "executor": "@nx/playwright:playwright",
+      "options": { "config": "apps/web-e2e/playwright.interaction.config.ts" }
     }
   }
 }

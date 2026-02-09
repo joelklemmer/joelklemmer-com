@@ -36,6 +36,10 @@ export { AccessibilityScreen } from './AccessibilityScreen';
 export { accessibilityMetadata } from './AccessibilityScreen';
 export { SecurityScreen } from './SecurityScreen';
 export { securityMetadata } from './SecurityScreen';
+export { CookiePolicyScreen } from './CookiePolicyScreen';
+export { cookiesMetadata } from './CookiePolicyScreen';
+export { PreferencesScreen } from './PreferencesScreen';
+export { preferencesMetadata } from './PreferencesScreen';
 export { QuietScreen } from './QuietScreen';
 export { WritingPostScreen } from './WritingPostScreen';
 export {

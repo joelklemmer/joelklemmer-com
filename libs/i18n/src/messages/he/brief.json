@@ -1,4 +1,11 @@
 {
+  "briefing": {
+    "contextualPanelTitle": "הקשר בריף",
+    "contextualPanelExpand": "הצג הקשר",
+    "contextualPanelCollapse": "הסתר הקשר",
+    "whatMattersTitle": "מה חשוב במבט אחד",
+    "claimProofMapTitle": "מפת טענה–הוכחה"
+  },
   "hero": {
     "title": "בריף מנהלים",
     "lede": "מרכז סמכות לסקירה מובנית וניווט ראיות."

@@ -147,6 +147,7 @@ export function LanguageMenu() {
                     itemRefs.current[index] = el;
                   }}
                   href={href}
+                  prefetch={false}
                   lang={targetLocale}
                   role="menuitem"
                   aria-current={isCurrent ? 'page' : undefined}

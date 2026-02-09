@@ -1,4 +1,11 @@
 {
+  "briefing": {
+    "contextualPanelTitle": "Briefing context",
+    "contextualPanelExpand": "Show context",
+    "contextualPanelCollapse": "Hide context",
+    "whatMattersTitle": "What matters at a glance",
+    "claimProofMapTitle": "Claim–proof map"
+  },
   "hero": {
     "title": "Executive brief",
     "lede": "Primary authority hub for structured review and evidence routing."

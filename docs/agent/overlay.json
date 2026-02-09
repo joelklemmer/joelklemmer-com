@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "routesPath": "docs/agent/routes.json",
+  "subsystemsPath": "docs/agent/subsystems.json",
+  "verifyPath": "docs/agent/verify.json",
+  "contractsPath": "docs/agent/contracts.json"
+}

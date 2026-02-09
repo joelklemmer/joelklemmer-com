@@ -1,0 +1,381 @@
+﻿{
+  "root": "apps/web",
+  "targets": {
+    "build": {
+      "executor": "@nx/next:build",
+      "outputs": ["{options.outputPath}"],
+      "options": { "outputPath": "apps/web/.next" },
+      "configurations": {},
+      "parallelism": true
+    },
+    "dev": {
+      "continuous": true,
+      "options": { "cwd": "apps/web", "command": "next dev" },
+      "executor": "nx:run-commands",
+      "configurations": {},
+      "parallelism": true
+    },
+    "start": {
+      "continuous": true,
+      "options": { "cwd": "apps/web", "command": "next start" },
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "configurations": {},
+      "parallelism": true
+    },
+    "serve-static": {
+      "continuous": true,
+      "options": { "cwd": "apps/web", "command": "next start" },
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "configurations": {},
+      "parallelism": true
+    },
+    "build-deps": {
+      "dependsOn": ["^build"],
+      "configurations": {},
+      "options": {},
+      "parallelism": true,
+      "executor": "nx:noop"
+    },
+    "watch-deps": {
+      "continuous": true,
+      "dependsOn": ["build-deps"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec nx watch --projects web --includeDependentProjects -- pnpm exec nx build-deps web"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "lint": {
+      "cache": true,
+      "options": { "cwd": "apps/web", "command": "eslint ." },
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        { "externalDependencies": ["eslint"] }
+      ],
+      "outputs": ["{options.outputFile}"],
+      "metadata": {
+        "technologies": ["eslint"],
+        "description": "Runs ESLint on project",
+        "help": {
+          "command": "pnpm exec eslint --help",
+          "example": { "options": { "max-warnings": 0 } }
+        }
+      },
+      "executor": "nx:run-commands",
+      "configurations": {},
+      "parallelism": true
+    },
+    "a11y": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "content-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "governance-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-governance.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "i18n-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-i18n.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "pgf-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-pgf.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "intelligence-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-intelligence.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "authority-signals-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-signals.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "experience-intelligence-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-experience-intelligence.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "frameworks-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-frameworks.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "aec-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-aec.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "orchestration-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-orchestration.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "content-os-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content-os.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "home-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-home.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "sitemap-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-sitemap.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "image-sitemap-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-image-sitemap.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "seo-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "tokens-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-tokens.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "token-drift-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-token-drift.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -e \"console.log('No web tests configured')\""
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "restore-generated-typings": {
+      "executor": "nx:run-commands",
+      "options": { "command": "git checkout -- apps/web/next-env.d.ts" },
+      "configurations": {},
+      "parallelism": true
+    },
+    "validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx format:check --all",
+          "nx run web:lint",
+          "nx run web:content-validate",
+          "nx run web:governance-validate",
+          "nx run web:i18n-validate",
+          "nx run web:pgf-validate",
+          "nx run web:intelligence-validate",
+          "nx run web:authority-signals-validate",
+          "nx run web:experience-intelligence-validate",
+          "nx run web:frameworks-validate",
+          "nx run web:aec-validate",
+          "nx run web:orchestration-validate",
+          "nx run web:content-os-validate",
+          "nx run web:home-validate",
+          "nx run web:sitemap-validate",
+          "nx run web:image-sitemap-validate",
+          "nx run web:media-manifest-validate",
+          "nx run web:media-derivatives-validate",
+          "nx run web:media-authority-validate",
+          "nx run web:visual-contract-validate",
+          "nx run web:seo-validate",
+          "nx run web:tokens-validate",
+          "nx run web:token-drift-validate",
+          "nx run web:authority-program-validate",
+          "nx run web:authority-constitution-validate",
+          "nx run web:test"
+        ],
+        "parallel": false
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "verify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node -e \"try{require('fs').rmSync(require('path').join(process.cwd(),'apps/web/.next'),{recursive:true,force:true});}catch(e){}\"",
+          "nx format:check --all",
+          "pnpm audit --audit-level=critical",
+          "nx run web:lint",
+          "nx run web:security-validate",
+          "nx run web:content-validate",
+          "nx run web:governance-validate",
+          "nx run web:i18n-validate",
+          "nx run web:pgf-validate",
+          "nx run web:intelligence-validate",
+          "nx run web:authority-signals-validate",
+          "nx run web:experience-intelligence-validate",
+          "nx run web:frameworks-validate",
+          "nx run web:aec-validate",
+          "nx run web:orchestration-validate",
+          "nx run web:content-os-validate",
+          "nx run web:home-validate",
+          "nx run web:sitemap-validate",
+          "nx run web:image-sitemap-validate",
+          "nx run web:media-manifest-validate",
+          "nx run web:media-derivatives-validate",
+          "nx run web:media-authority-validate",
+          "nx run web:visual-contract-validate",
+          "nx run web:seo-validate",
+          "nx run web:tokens-validate",
+          "nx run web:token-drift-validate",
+          "nx run web:authority-program-validate",
+          "nx run web:authority-constitution-validate",
+          "nx run web:test",
+          "nx run web:build",
+          "nx run web:restore-generated-typings",
+          "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y"
+        ],
+        "parallel": false
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "media-manifest-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-manifest.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "media-derivatives-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-derivatives.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "media-authority-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-authority.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "visual-contract-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-visual-contract.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "authority-program-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-program.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "authority-constitution-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-constitution.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "security-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-security-txt.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    },
+    "lighthouse-budget": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/lighthouse-budget-stub.ts"
+      },
+      "configurations": {},
+      "parallelism": true
+    }
+  },
+  "name": "web",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/web",
+  "projectType": "application",
+  "tags": ["scope:web", "type:app"],
+  "implicitDependencies": []
+}

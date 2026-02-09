@@ -3,7 +3,7 @@
 import type { ReactNode } from 'react';
 
 import { useTranslations } from 'next-intl';
-import { skipLinkClass } from '@joelklemmer/a11y';
+import { MAIN_CONTENT_ID, skipLinkClass } from '@joelklemmer/a11y';
 import { Container } from './Container';
 import { PageFrame } from './PageFrame';
 
@@ -20,13 +20,14 @@ export function Shell({
   headerContent,
   navContent,
   footerContent,
-  mainId = 'main-content',
+  mainId = MAIN_CONTENT_ID,
 }: ShellProps) {
   const a11y = useTranslations('common');
 
+  // Tab order contract: skip link → identity → nav → utilities (headerContent order in Header)
   return (
-    <div className="min-h-screen bg-bg text-text">
-      <a href={`#${mainId}`} className={skipLinkClass}>
+    <div className="layout-root min-h-screen bg-bg text-text">
+      <a href={`#${mainId}`} className={skipLinkClass} data-skip-link>
         {a11y('a11y.skipToContent')}
       </a>
       <header
@@ -43,7 +44,7 @@ export function Shell({
           </nav>
         )}
       </header>
-      <main id={mainId} className="vacel-main py-8">
+      <main id={mainId} className="vacel-main py-8" tabIndex={-1}>
         <PageFrame contentStage>{children}</PageFrame>
       </main>
       <footer

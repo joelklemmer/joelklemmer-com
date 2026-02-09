@@ -19,6 +19,7 @@ export function FooterSection({ label, links }: FooterSectionProps) {
           <li key={link.href}>
             <Link
               href={link.href}
+              prefetch={false}
               className={`${focusRingClass} rounded-sm px-1 py-0.5 hover:text-text transition-colors`}
             >
               {link.label}

@@ -6,11 +6,14 @@
  */
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 import {
+  getBreadcrumbListJsonLd,
   getBriefPageJsonLd,
   getCanonicalUrl,
   getHrefLangs,
   getMediaPageJsonLd,
+  getOrganizationJsonLd,
   getPersonJsonLd,
+  getProfilePageJsonLd,
   getWebSiteJsonLd,
   hreflangAlternates,
 } from '@joelklemmer/seo';
@@ -33,6 +36,7 @@ const corePathnames: string[] = [
   '/work',
   '/books',
   '/writing',
+  '/proof',
   '/publicrecord',
   '/contact',
   '/media-kit',
@@ -44,6 +48,7 @@ const corePathnames: string[] = [
   '/terms',
   '/accessibility',
   '/security',
+  '/operating-system',
 ];
 
 const errors: string[] = [];
@@ -107,6 +112,17 @@ for (const key of expectedKeys) {
   }
 }
 
+// Home must emit Organization JSON-LD (entity authority, sameAs consolidation)
+const organizationLd = getOrganizationJsonLd({ baseUrl });
+if (organizationLd['@type'] !== 'Organization') {
+  errors.push(
+    `Home Organization JSON-LD: expected @type "Organization", got ${organizationLd['@type']}`,
+  );
+}
+if (!organizationLd['@id'] || typeof organizationLd['@id'] !== 'string') {
+  errors.push('Home Organization JSON-LD: must include @id');
+}
+
 // Home must emit WebSite JSON-LD (entity graph, discoverability)
 const webSiteLd = getWebSiteJsonLd({
   baseUrl,
@@ -120,6 +136,10 @@ if (webSiteLd['@type'] !== 'WebSite') {
 }
 if (!webSiteLd.url || typeof webSiteLd.url !== 'string') {
   errors.push('Home WebSite JSON-LD: must include url');
+}
+const publisher = webSiteLd.publisher as { '@id'?: string } | undefined;
+if (!publisher?.['@id'] || typeof publisher['@id'] !== 'string') {
+  errors.push('Home WebSite JSON-LD: must include publisher @id');
 }
 
 // Home hreflang validation: ensure all locales (en, uk, es, he) + x-default are present
@@ -151,6 +171,11 @@ const homePersonLd = getPersonJsonLd({ baseUrl });
 if (homePersonLd['@type'] !== 'Person') {
   errors.push(
     `Home Person JSON-LD: expected @type "Person", got ${homePersonLd['@type']}`,
+  );
+}
+if (!homePersonLd['@id'] || typeof homePersonLd['@id'] !== 'string') {
+  errors.push(
+    'Home Person JSON-LD: must include @id for identity consolidation',
   );
 }
 if (!homePersonLd.name || typeof homePersonLd.name !== 'string') {
@@ -248,10 +273,48 @@ if (
   errors.push('Media page JSON-LD: ItemList must include numberOfItems');
 }
 
+// Home must emit BreadcrumbList (single item "Home") for entity graph
+const homeBreadcrumbLd = getBreadcrumbListJsonLd({
+  baseUrl,
+  locale: defaultLocale as AppLocale,
+  pathSegments: [],
+});
+if (homeBreadcrumbLd['@type'] !== 'BreadcrumbList') {
+  errors.push(
+    `Home BreadcrumbList JSON-LD: expected @type "BreadcrumbList", got ${homeBreadcrumbLd['@type']}`,
+  );
+}
+const breadcrumbItems = homeBreadcrumbLd.itemListElement as Array<{
+  position?: number;
+  name?: string;
+  item?: string;
+}>;
+if (!Array.isArray(breadcrumbItems) || breadcrumbItems.length < 1) {
+  errors.push('Home BreadcrumbList JSON-LD: must include at least one item');
+}
+
+// /bio must emit ProfilePage with mainEntity Person @id
+const profileLd = getProfilePageJsonLd({
+  baseUrl,
+  locale: defaultLocale as AppLocale,
+  pathname: '/bio',
+});
+if (profileLd['@type'] !== 'ProfilePage') {
+  errors.push(
+    `Bio ProfilePage JSON-LD: expected @type "ProfilePage", got ${profileLd['@type']}`,
+  );
+}
+if (
+  !profileLd.mainEntity ||
+  typeof (profileLd.mainEntity as { '@id'?: string })['@id'] !== 'string'
+) {
+  errors.push('Bio ProfilePage JSON-LD: must include mainEntity @id (Person)');
+}
+
 if (errors.length) {
   throw new Error(`SEO validation failed:\n- ${errors.join('\n- ')}`);
 }
 
 console.log(
-  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home WebSite + Person JSON-LD (with sameAs); /brief Person + Report JSON-LD; /media CollectionPage + ItemList JSON-LD.`,
+  `SEO validation passed: canonical and hreflang for ${corePathnames.length} core routes; home Organization + WebSite + Person + BreadcrumbList JSON-LD; /brief Person + Report JSON-LD; /bio ProfilePage; /media CollectionPage + ItemList JSON-LD.`,
 );

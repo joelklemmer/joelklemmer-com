@@ -1,0 +1,62 @@
+'use client';
+
+import { focusRingClass } from '@joelklemmer/a11y';
+
+/** Single item for "what matters" compression. */
+export interface WhatMattersBlockItem {
+  id: string;
+  label: string;
+  summary: string;
+  refId: string;
+  verificationStrength: number;
+}
+
+export interface WhatMattersBlockProps {
+  items: WhatMattersBlockItem[];
+  title: string;
+  /** Optional anchor for each item (e.g. #claim-{refId}). */
+  getItemHref?: (item: WhatMattersBlockItem) => string;
+}
+
+/**
+ * Deterministic "what matters" block: compressed highlights for briefing-at-a-glance.
+ * No AI; content is precomputed from claim/proof map.
+ */
+export function WhatMattersBlock({
+  items,
+  title,
+  getItemHref,
+}: WhatMattersBlockProps) {
+  if (items.length === 0) return null;
+
+  return (
+    <section className="section-shell" aria-label={title}>
+      <h2 className="text-section-heading font-semibold">{title}</h2>
+      <ul className="mt-3 list-none space-y-2" role="list">
+        {items.map((item) => {
+          const href = getItemHref?.(item);
+          const baseClass =
+            'block p-3 rounded-card border border-border bg-muted/10 transition-colors motion-reduce:transition-none';
+          return (
+            <li key={item.id} role="listitem">
+              {href ? (
+                <a
+                  href={href}
+                  className={`${baseClass} hover:bg-muted/20 ${focusRingClass}`}
+                >
+                  <span className="font-medium text-text">{item.label}</span>
+                  <p className="text-sm text-muted mt-1">{item.summary}</p>
+                </a>
+              ) : (
+                <span className={baseClass}>
+                  <span className="font-medium text-text">{item.label}</span>
+                  <p className="text-sm text-muted mt-1">{item.summary}</p>
+                </span>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}

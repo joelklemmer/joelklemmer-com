@@ -1,11 +1,15 @@
 /**
- * Lighthouse CI budget gate stub. When Lighthouse CI is added to the repo,
- * replace this with a real runner (e.g. @lhci/cli or lighthouse-ci) that:
- * - Runs Lighthouse on key routes (/, /brief, /media)
- * - Enforces performance/budget thresholds (e.g. LCP, FCP, bundle size)
- * - Fails the build if budgets are exceeded.
- * See docs/program/authority-platform-program.md (Step 5 / Phase 5) for TODO.
+ * Lighthouse CI budget gate. Runs @lhci/cli with lighthouserc.cjs.
+ * - Key routes: /en, /en/brief, /en/media
+ * - Assertions: performance (warn), accessibility (error), LCP, CLS
+ * Run via: pnpm exec lhci autorun --config=./lighthouserc.cjs
+ * CI runs this in the lighthouse job; this target invokes the same for local checks.
  */
-console.log(
-  'Lighthouse budget gate: stub (TODO add Lighthouse CI and budget thresholds).',
-);
+import { execSync } from 'child_process';
+import { resolve } from 'path';
+
+const root = resolve(__dirname, '..');
+execSync('pnpm exec lhci autorun --config=./lighthouserc.cjs', {
+  cwd: root,
+  stdio: 'inherit',
+});

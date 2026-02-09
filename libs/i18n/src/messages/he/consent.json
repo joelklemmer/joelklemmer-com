@@ -1,0 +1,34 @@
+{
+  "banner": {
+    "title": "הסכמה ושימוש בנתונים",
+    "description": "אנו משתמשים בעוגיות ובטכנולוגיות דומות לתפעול חיוני, אנליטיקה ותכונות אופציונליות. בחר כיצד נוכל לעבד את הנתונים שלך.",
+    "acceptAll": "קבל הכל",
+    "rejectNonEssential": "דחה לא חיוני",
+    "customise": "התאמה"
+  },
+  "preferences": {
+    "title": "העדפות הסכמה",
+    "intro": "נהל את ההסכמה לפי קטגוריה ומטרה. ניתן למשוך בכל עת.",
+    "categories": "קטגוריות",
+    "purposes": "מטרות",
+    "essential": "חיוני (תמיד פעיל)",
+    "functional": "פונקציונלי",
+    "analytics": "אנליטיקה",
+    "experience": "חוויית משתמש",
+    "marketing": "שיווק",
+    "measurement": "מדידה",
+    "experimentation": "ניסויים",
+    "personalization": "התאמה אישית",
+    "security": "אבטחה",
+    "fraud": "מניעת הונאה",
+    "recommendation": "המלצות",
+    "profiling": "פרופיל",
+    "withdraw": "משוך הסכמה",
+    "save": "שמור בחירה",
+    "modelParticipation": "אפשר שימוש בנתונים שלי לאימון בינה מלאכותית/מודלים"
+  },
+  "meta": {
+    "preferencesTitle": "העדפות הסכמה",
+    "preferencesDescription": "ניהול קטגוריות ומטרות ההסכמה."
+  }
+}

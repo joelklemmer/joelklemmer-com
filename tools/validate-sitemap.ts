@@ -7,6 +7,7 @@ import {
   getBookSlugsSync,
   getCaseStudySlugsSync,
   getPublicRecordSlugsSync,
+  getWritingSlugsSync,
 } from '@joelklemmer/content/validate';
 import { buildSitemapEntries } from '@joelklemmer/seo';
 import { locales } from '@joelklemmer/i18n';
@@ -17,6 +18,7 @@ const indexablePaths = [
   '',
   '/brief',
   '/work',
+  '/proof',
   '/publicrecord',
   '/books',
   '/writing',
@@ -31,6 +33,7 @@ const indexablePaths = [
   '/terms',
   '/accessibility',
   '/security',
+  '/operating-system',
 ];
 
 const errors: string[] = [];
@@ -38,6 +41,7 @@ const errors: string[] = [];
 const publicRecordSlugs = getPublicRecordSlugsSync();
 const caseStudySlugs = getCaseStudySlugsSync();
 const bookSlugs = getBookSlugsSync();
+const writingSlugs = getWritingSlugsSync();
 
 const entries = buildSitemapEntries({
   baseUrl,
@@ -46,6 +50,7 @@ const entries = buildSitemapEntries({
   publicRecordSlugs,
   caseStudySlugs,
   bookSlugs,
+  writingSlugs,
 });
 
 const urlSet = new Set(entries.map((e) => e.url));
@@ -57,9 +62,10 @@ if (urlSet.size !== entries.length) {
 
 const expectedPerLocale =
   indexablePaths.length +
-  publicRecordSlugs.length +
+  publicRecordSlugs.length * 2 + // publicrecord + proof
   caseStudySlugs.length +
-  bookSlugs.length;
+  bookSlugs.length +
+  writingSlugs.length;
 const expectedTotal = locales.length * expectedPerLocale;
 if (entries.length !== expectedTotal) {
   errors.push(
@@ -89,6 +95,18 @@ for (const locale of locales) {
   }
   for (const slug of bookSlugs) {
     const url = `${prefix}/books/${slug}`;
+    if (!urlSet.has(url)) {
+      errors.push(`Missing sitemap URL: ${url}`);
+    }
+  }
+  for (const slug of publicRecordSlugs) {
+    const proofUrl = `${prefix}/proof/${slug}`;
+    if (!urlSet.has(proofUrl)) {
+      errors.push(`Missing sitemap URL: ${proofUrl}`);
+    }
+  }
+  for (const slug of writingSlugs) {
+    const url = `${prefix}/writing/${slug}`;
     if (!urlSet.has(url)) {
       errors.push(`Missing sitemap URL: ${url}`);
     }

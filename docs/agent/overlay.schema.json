@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://joelklemmer.com/schemas/agent-overlay.json",
+  "title": "Agent overlay schema",
+  "description": "Schema for agent-readable overlay and related manifests. Unknown values: omit or set intent to 'unknown'; do not speculate.",
+  "$defs": {
+    "Overlay": {
+      "type": "object",
+      "description": "Root overlay manifest; references overlay documents and declares file/Nx refs for enforcement.",
+      "required": [
+        "schemaVersion",
+        "routesPath",
+        "subsystemsPath",
+        "verifyPath",
+        "contractsPath"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "type": "integer",
+          "const": 1,
+          "description": "Overlay schema version."
+        },
+        "routesPath": {
+          "type": "string",
+          "description": "Path to routes.json relative to repo root."
+        },
+        "subsystemsPath": {
+          "type": "string",
+          "description": "Path to subsystems.json relative to repo root."
+        },
+        "verifyPath": {
+          "type": "string",
+          "description": "Path to verify.json relative to repo root."
+        },
+        "contractsPath": {
+          "type": "string",
+          "description": "Path to contracts.json relative to repo root."
+        }
+      }
+    },
+    "Routes": {
+      "type": "object",
+      "description": "Locale-scoped route manifest; paths relative to repo root.",
+      "required": ["schemaVersion", "routes"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "routes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["segment", "pagePath"],
+            "additionalProperties": false,
+            "properties": {
+              "segment": {
+                "type": "string",
+                "description": "URL segment under [locale] (e.g. brief, proof)."
+              },
+              "pagePath": {
+                "type": "string",
+                "description": "Path to page.tsx (or route) relative to repo root."
+              }
+            }
+          }
+        }
+      }
+    },
+    "Subsystems": {
+      "type": "object",
+      "description": "Subsystem doctrine manifest; doc paths relative to repo root.",
+      "required": ["schemaVersion", "subsystems"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "subsystems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "docPath"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Short identifier (e.g. navigation-cognition)."
+              },
+              "docPath": {
+                "type": "string",
+                "description": "Path to subsystem doc relative to repo root."
+              }
+            }
+          }
+        }
+      }
+    },
+    "Verify": {
+      "type": "object",
+      "description": "Verify chain manifest; order must match web:verify. Nx target format: project:target.",
+      "required": ["schemaVersion", "steps"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "steps": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["index", "target"],
+            "additionalProperties": false,
+            "properties": {
+              "index": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Zero-based step order."
+              },
+              "target": {
+                "type": "string",
+                "pattern": "^[a-z0-9-]+:[a-z0-9-]+$",
+                "description": "Nx target (project:target). Omit for non-Nx steps; use intent 'unknown' if not applicable."
+              },
+              "scriptPath": {
+                "type": ["string", "null"],
+                "description": "Path to validator script if any; null or omit when unknown."
+              }
+            }
+          }
+        }
+      }
+    },
+    "Contracts": {
+      "type": "object",
+      "description": "Contract manifest; file paths relative to repo root.",
+      "required": ["schemaVersion", "contracts"],
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": { "type": "integer", "const": 1 },
+        "contracts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "sourcePath"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Contract identifier (e.g. briefing)."
+              },
+              "sourcePath": {
+                "type": "string",
+                "description": "Path to source file defining the contract."
+              },
+              "validatorPath": {
+                "type": ["string", "null"],
+                "description": "Path to validator script; null when unknown."
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

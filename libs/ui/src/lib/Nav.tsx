@@ -3,12 +3,21 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
+import {
+  focusRingClass,
+  interactionTransitionClass,
+  visuallyHiddenClass,
+} from '@joelklemmer/a11y';
 import { useTranslations } from 'next-intl';
+
+/** Perceptual rank for cognitive hierarchy (primary = hub, secondary = verification, tertiary = institutional). */
+export type NavItemRank = 'primary' | 'secondary' | 'tertiary';
 
 export interface NavItem {
   href: string;
   label: string;
+  /** Encodes executive scan hierarchy; omitted = identity (e.g. home). */
+  rank?: NavItemRank;
 }
 
 export interface NavProps {
@@ -84,6 +93,39 @@ export function Nav({ items }: NavProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, handleClose]);
 
+  // Focus trap: keep focus within menu when open
+  useEffect(() => {
+    if (!isOpen || !menuRef.current) return;
+
+    const handleTabKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return;
+      const menu = menuRef.current;
+      if (!menu) return;
+      const focusable = menu.querySelectorAll(
+        'a[href], button, [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusable.length) return;
+
+      const first = focusable[0] as HTMLElement;
+      const last = focusable[focusable.length - 1] as HTMLElement;
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener('keydown', handleTabKey);
+    return () => document.removeEventListener('keydown', handleTabKey);
+  }, [isOpen]);
+
   // Focus first item when opening
   useEffect(() => {
     if (isOpen && itemRefs.current[0]) {
@@ -99,17 +141,22 @@ export function Nav({ items }: NavProps) {
     setIsOpen(false);
   }, [pathname]);
 
-  // Desktop: horizontal nav with understated active state (no bright boxes)
+  // Desktop: primary nav — semantic classes + data-nav-rank for cognitive hierarchy (weight/spacing in 30-components). RTL: logical props in CSS.
   const desktopNav = (
-    <ul className="hidden md:flex flex-wrap items-center gap-1 text-sm min-h-[var(--masthead-bar-height)]">
+    <ul
+      className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]"
+      role="list"
+    >
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
           <li key={item.href} className="flex items-center h-full">
             <Link
               href={item.href}
-              className={`${focusRingClass} rounded-sm px-3 py-1.5 h-full flex items-center transition-colors motion-reduce:transition-none relative text-muted hover:text-text ${
-                isActive ? 'text-text font-medium border-b-2 border-border' : ''
+              prefetch={false}
+              {...(item.rank && { 'data-nav-rank': item.rank })}
+              className={`nav-primary-link ${focusRingClass} rounded-sm h-full flex items-center ${interactionTransitionClass} relative ${
+                isActive ? 'nav-primary-link--active' : ''
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -130,27 +177,29 @@ export function Nav({ items }: NavProps) {
         type="button"
         aria-expanded={isOpen}
         aria-controls={menuId}
-        aria-haspopup="true"
+        aria-haspopup="menu"
         aria-label={a11y('a11y.navLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            handleClose();
+          }
+          if (e.key === ' ') e.preventDefault(); // Prevent scroll when activating with Space
+        }}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text ${interactionTransitionClass}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          aria-hidden="true"
-          className="shrink-0"
+          aria-hidden
         >
-          <path d="M4 6h16" />
-          <path d="M4 12h16" />
-          <path d="M4 18h16" />
+          <path d="M4 6h16M4 12h16M4 18h16" />
         </svg>
         <span className={visuallyHiddenClass}>{a11y('a11y.navLabel')}</span>
       </button>
@@ -162,7 +211,7 @@ export function Nav({ items }: NavProps) {
           role="menu"
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50"
+          className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start"
         >
           <div className="py-1" role="none">
             {items.map((item, index) => {
@@ -174,13 +223,13 @@ export function Nav({ items }: NavProps) {
                     itemRefs.current[index] = el;
                   }}
                   href={item.href}
+                  prefetch={false}
                   lang={undefined}
                   role="menuitem"
+                  {...(item.rank && { 'data-nav-rank': item.rank })}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`${focusRingClass} block w-full px-4 py-2.5 text-sm text-start transition-colors motion-reduce:transition-none relative ${
-                    isActive
-                      ? 'text-text font-medium bg-muted/30 border-s-2 border-border'
-                      : 'text-text hover:bg-muted/50'
+                  className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start ${interactionTransitionClass} relative ${
+                    isActive ? 'nav-primary-menu-item--active' : ''
                   }`}
                   onClick={handleClose}
                 >
@@ -195,7 +244,10 @@ export function Nav({ items }: NavProps) {
   );
 
   return (
-    <nav aria-label={a11y('a11y.navLabel')} className="flex items-center">
+    <nav
+      aria-label={a11y('a11y.navLabel')}
+      className="nav-primary flex items-center"
+    >
       {desktopNav}
       {mobileNav}
     </nav>

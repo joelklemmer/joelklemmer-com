@@ -3,6 +3,10 @@
     "title": "Public record",
     "lede": "Verification artifacts with dates, sources, and notes."
   },
+  "doctrine": {
+    "listHeading": "How to read this list",
+    "listBody": "Each row is a verification artifact (scan layer). Open an entry for full substantiation and linked files. Claims are indexed on the Brief page; proof binds to those claims where they appear."
+  },
   "list": {
     "title": "Artifacts",
     "lede": "Entries are evidence-forward and link to indexed claims.",

@@ -30,6 +30,11 @@ export { LinkListSection } from './LinkListSection';
 export { ListSection } from './ListSection';
 export { MdxSection } from './MdxSection';
 export { PrimaryNavSection } from './PrimaryNavSection';
+export {
+  PRIMARY_NAV_ENTRIES,
+  type NavRank,
+  type PrimaryNavEntry,
+} from './navigation';
 export { QuantifiedOutcomesSection } from './QuantifiedOutcomesSection';
 export { ReadPathSection } from './ReadPathSection';
 export { SectionVisualAnchor } from './SectionVisualAnchor';

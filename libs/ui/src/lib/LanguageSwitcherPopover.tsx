@@ -162,26 +162,26 @@ export function LanguageSwitcherPopover() {
         id={triggerId}
         type="button"
         onClick={handleToggle}
-        onKeyDown={handleKeyDown}
+        onKeyDown={(e) => {
+          if (e.key === ' ') e.preventDefault(); // Prevent scroll when activating with Space
+          handleKeyDown(e);
+        }}
         aria-expanded={isOpen}
         aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
-        aria-haspopup="true"
+        aria-haspopup="menu"
         className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          aria-hidden="true"
-          className="shrink-0"
+          aria-hidden
         >
           <circle cx="12" cy="12" r="10" />
           <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
@@ -219,6 +219,7 @@ export function LanguageSwitcherPopover() {
                     }
                   }}
                   href={href}
+                  prefetch={false}
                   lang={targetLocale}
                   role="menuitem"
                   aria-current={isCurrent ? 'page' : undefined}

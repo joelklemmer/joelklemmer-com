@@ -1,0 +1,14 @@
+{
+  "workspaceHash": "f65f13ac02e1fe9e1849cc73005bed08fdc1f249b1d3f73066105f67992c64aa",
+  "generatedAt": "2026-02-09T02:08:04.555Z",
+  "tools": {
+    "node": "v20.19.0",
+    "pnpm": "10.28.2",
+    "nx": "Nx Version:\n- Local: v22.4.5\n- Global: Not found"
+  },
+  "outputs": [
+    "nx-graph.html",
+    "workspace-map.json",
+    "workspace-map.md"
+  ]
+}

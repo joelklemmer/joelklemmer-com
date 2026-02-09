@@ -4,6 +4,10 @@
 
 **Execution date:** 2026-02-08
 
+**Workflow reference:** [Figma parity workflow](figma-parity-workflow.md) — capture frame specs (measurements, type, spacing, variants, breakpoints), map to repo components, run manual screenshot parity checks (dev server, consistent viewport sizes), use the [parity checklist](figma-parity-checklist.md) template.
+
+**Process:** Follow the workflow above for each parity run.
+
 ---
 
 ## 1. Visual deltas discovered and resolved
@@ -70,6 +74,7 @@
 - Run: `pnpm run ci:verify`
 - Fix any type errors, token misuse, a11y failures, i18n, ESLint, formatting, tests until both pass.
 - **Note:** If `web:build` fails with "Unable to acquire lock at .next/lock", remove `apps/web/.next/lock` (or delete `.next`) and re-run. Ensure no other `next build` or dev server is using the same repo.
+- **Screenshot parity:** Use the [Figma parity workflow](figma-parity-workflow.md) (dev server, consistent viewports, [checklist](figma-parity-checklist.md)) for manual visual checks.
 
 ---
 

@@ -17,6 +17,9 @@ import {
   getBriefContent,
   getPublicRecordList,
   getExecutiveBriefArtifact,
+  buildClaimProofMap,
+  buildBriefingPanelContext,
+  buildWhatMattersSummary,
 } from '@joelklemmer/content';
 import {
   populateRegistryFromConfig,
@@ -57,7 +60,12 @@ import type { AECFormattedResult } from '@joelklemmer/aec';
 import { AEC_QUERY_INTENTS } from '@joelklemmer/aec';
 import { getEntityGraph } from '@joelklemmer/intelligence';
 import type { EntityGraph } from '@joelklemmer/intelligence';
-import { Container } from '@joelklemmer/ui';
+import {
+  Container,
+  ContextualPanel,
+  WhatMattersBlock,
+  ClaimProofMapView,
+} from '@joelklemmer/ui';
 import { DensityAwarePage } from '@joelklemmer/authority-density';
 import { BriefNavigator } from './BriefNavigator.client';
 
@@ -286,6 +294,28 @@ export async function BriefScreen(props?: BriefScreenProps) {
     }>
   ).map((r) => ({ label: r.label, href: `/${locale}${r.path}` }));
 
+  const claimProofMapInput = claimCards.map((c) => ({
+    claimId: c.id,
+    claimLabel: c.label,
+    claimSummary: c.summary,
+    categoryId: c.categoryId ?? 'evidence_verification',
+    proofLinks: c.supportingLinks.map((l, i) => ({
+      id: `${c.id}-proof-${i}`,
+      label: l.label,
+      href: l.href,
+    })),
+    caseStudyCount: c.caseStudies.length,
+    lastVerified: c.lastVerified,
+  }));
+  const claimProofMap = buildClaimProofMap(claimProofMapInput);
+  const briefingPanel = buildBriefingPanelContext(
+    t('identityScope'),
+    readPathRoutes,
+  );
+  const whatMatters = buildWhatMattersSummary(claimProofMap.entries, {
+    maxItems: 6,
+  });
+
   const caseStudies = (await getCaseStudies(locale)).slice(0, CASE_STUDIES_MAX);
   const recordHighlights = publicRecords.slice(0, PUBLIC_RECORD_HIGHLIGHTS_MAX);
   const frameworkList = await getFrameworkList();
@@ -379,6 +409,28 @@ export async function BriefScreen(props?: BriefScreenProps) {
         toggleLabel={tCommon('density.toggleLabel')}
         densityDefault={orchestrationHints.densityDefaultSuggestion}
       >
+        <Container className="section-shell">
+          <ContextualPanel
+            scopeSummary={briefingPanel.scopeSummary}
+            readPathLinks={briefingPanel.readPathLinks}
+            title={t('briefing.contextualPanelTitle')}
+            expandLabel={t('briefing.contextualPanelExpand')}
+            collapseLabel={t('briefing.contextualPanelCollapse')}
+            defaultExpanded={true}
+          />
+          <WhatMattersBlock
+            title={t('briefing.whatMattersTitle')}
+            items={whatMatters.items.map((item) => ({
+              id: item.id,
+              label: item.label,
+              summary: item.summary,
+              refId: item.refId,
+              verificationStrength: item.verificationStrength,
+            }))}
+            getItemHref={(item) => `/${locale}/brief#claim-${item.refId}`}
+          />
+        </Container>
+
         <IdentityScopeSection
           body={t('identityScope')}
           visualAnchor={<SectionVisualAnchor />}
@@ -433,6 +485,21 @@ export async function BriefScreen(props?: BriefScreenProps) {
                 {t('claims.allClaimsExpander')}
               </p>
             ) : null}
+            <ClaimProofMapView
+              title={t('briefing.claimProofMapTitle')}
+              entries={claimProofMap.entries.map((e) => ({
+                claimId: e.claimId,
+                claimLabel: e.claimLabel,
+                claimSummary: e.claimSummary,
+                proofs: e.proofs,
+                caseStudyCount: e.caseStudyCount,
+                lastVerified: e.lastVerified,
+              }))}
+              claimAnchorId={(id) => `claim-${id}`}
+              supportingRecordsLabel={t('claims.supportingRecords')}
+              caseStudiesLabel={t('claims.supportingCaseStudies')}
+              lastVerifiedLabel={t('claims.lastVerified')}
+            />
           </Container>
         </section>
 

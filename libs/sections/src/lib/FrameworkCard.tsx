@@ -10,6 +10,8 @@ export interface FrameworkCardProps {
   intent10?: string;
   /** Optional anchor or path for deep link (e.g. #doctrine or /brief#doctrine). */
   href?: string;
+  /** Optional prefetch control for performance (default true when href set). */
+  prefetch?: boolean;
 }
 
 /**
@@ -21,14 +23,15 @@ export function FrameworkCard({
   summary,
   intent10,
   href,
+  prefetch = true,
 }: FrameworkCardProps) {
   const description = intent10 ?? summary;
   const content = (
-    <div className="authority-card section-shell h-full flex flex-col">
-      <div className="section-shell flex-1">
-        <h3 className="text-lg font-semibold text-text mb-3">{title}</h3>
+    <div className="authority-card authority-card-doctrine section-shell h-full flex flex-col">
+      <div className="authority-card-inner section-shell flex-1">
+        <h3 className="authority-card-title text-lg font-semibold">{title}</h3>
         {description ? (
-          <p className="text-body-analytical text-sm text-muted leading-relaxed">
+          <p className="authority-card-body text-body-analytical text-sm">
             {description}
           </p>
         ) : null}
@@ -40,6 +43,7 @@ export function FrameworkCard({
     return (
       <Link
         href={href}
+        prefetch={prefetch}
         className={`${focusRingClass} block transition-transform motion-reduce:transition-none hover:scale-[1.02]`}
         aria-label={title}
       >

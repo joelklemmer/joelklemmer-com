@@ -70,6 +70,10 @@
     "title": "Seguridad",
     "description": "Postura de seguridad y divulgacion."
   },
+  "cookies": {
+    "title": "Política de cookies",
+    "description": "Cookies y consentimiento; sus elecciones y cómo las usamos."
+  },
   "books": {
     "title": "Libros",
     "description": "Volumenes publicados con referencias de verificacion."

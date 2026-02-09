@@ -18,6 +18,7 @@ export const messageNamespaces = [
   'quiet',
   'institutional',
   'frameworks',
+  'consent',
 ] as const;
 
 export type MessageNamespace = (typeof messageNamespaces)[number];

@@ -1,4 +1,11 @@
 {
+  "briefing": {
+    "contextualPanelTitle": "Контекст брифу",
+    "contextualPanelExpand": "Показати контекст",
+    "contextualPanelCollapse": "Приховати контекст",
+    "whatMattersTitle": "Що важливо з одного погляду",
+    "claimProofMapTitle": "Карта твердження–доказ"
+  },
   "hero": {
     "title": "Виконавчий бриф",
     "lede": "Центр авторитету для структурованого огляду та маршрутизації доказів."

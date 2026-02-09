@@ -3,6 +3,10 @@
     "title": "Registro publico",
     "lede": "Artefactos de verificacion con fechas, fuentes y notas."
   },
+  "doctrine": {
+    "listHeading": "Como leer esta lista",
+    "listBody": "Cada fila es un artefacto de verificacion (capa de resumen). Abra una entrada para la substantacion completa y archivos enlazados. Las afirmaciones estan indexadas en la pagina Brief; la prueba se vincula a esas afirmaciones donde aparecen."
+  },
   "list": {
     "title": "Artefactos",
     "lede": "Las entradas se centran en evidencia y enlazan afirmaciones indexadas.",

@@ -60,6 +60,7 @@ const footerSchema = z
       terms: z.string().min(1),
       accessibility: z.string().min(1),
       security: z.string().min(1),
+      cookies: z.string().min(1),
     }),
   })
   .passthrough();
@@ -86,6 +87,7 @@ const metaSchema = z
     terms: pageSchema,
     accessibility: pageSchema,
     security: pageSchema,
+    cookies: pageSchema,
   })
   .passthrough();
 

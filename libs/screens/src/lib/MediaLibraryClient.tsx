@@ -193,7 +193,6 @@ export function MediaLibraryClient({
           {assets.map((asset, index) => {
             const thumbPath = getMediaThumbPath(asset);
             const showPlaceholder = missingThumb.has(asset.id);
-            const isFirstViewport = index < 4;
             return (
               <li
                 key={asset.id}
@@ -219,11 +218,10 @@ export function MediaLibraryClient({
                           alt={asset.alt}
                           width={THUMB_SIZE_PX}
                           height={THUMB_SIZE_PX}
-                          className="media-thumb-img object-cover w-full h-full transition-transform duration-200 hover:scale-[1.02] motion-reduce:transition-none"
+                          className="media-thumb-img object-cover w-full h-full"
                           sizes="(min-width: 768px) 64px, (min-width: 640px) 56px, 48px"
-                          loading={isFirstViewport ? 'eager' : 'lazy'}
+                          loading="lazy"
                           decoding="async"
-                          priority={isFirstViewport}
                           onError={() => handleThumbError(asset.id)}
                         />
                       </Link>

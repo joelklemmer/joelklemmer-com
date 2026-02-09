@@ -4,7 +4,6 @@
  * Accessibility Control Panel (ACP)
  *
  * Governed popover dialog for managing accessibility preferences:
- * - Theme (via ThemeProvider)
  * - Contrast (via ContrastProvider)
  * - Motion reduction (via ACPProvider)
  * - Text sizing (via ACPProvider)
@@ -20,7 +19,6 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { useTheme } from './ThemeProvider';
 import { useContrast } from './ContrastProvider';
 import { useACP } from '@joelklemmer/a11y';
 import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
@@ -31,7 +29,6 @@ const TITLE_ID = 'accessibility-panel-title';
 
 export function AccessibilityPanel() {
   const common = useTranslations('common');
-  const { theme, setTheme } = useTheme();
   const { contrast, setContrast } = useContrast();
   const { preferences, setMotion, setTextSize, setUnderlineLinks } = useACP();
 
@@ -181,21 +178,21 @@ export function AccessibilityPanel() {
         aria-haspopup="dialog"
         aria-label={common('a11y.accessibilityPanelLabel')}
         onClick={handleToggle}
+        onKeyDown={(e) => {
+          if (e.key === ' ') e.preventDefault(); // Prevent scroll when activating with Space
+        }}
         className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={common('a11y.accessibilityPanelLabel')}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width={20}
-          height={20}
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
-          aria-hidden="true"
-          className="shrink-0"
+          aria-hidden
         >
           <circle cx="12" cy="7" r="4" />
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
@@ -212,7 +209,6 @@ export function AccessibilityPanel() {
           role="dialog"
           aria-modal="true"
           aria-labelledby={TITLE_ID}
-          aria-describedby={TRIGGER_ID}
           className="absolute end-0 top-full mt-1 z-50 w-64 rounded-md border border-border bg-surface shadow-lg p-4 focus:outline-none"
         >
           <h2 id={TITLE_ID} className={visuallyHiddenClass}>
@@ -220,28 +216,7 @@ export function AccessibilityPanel() {
           </h2>
 
           <div className="space-y-4">
-            {/* Theme */}
-            <div>
-              <label
-                htmlFor="a11y-theme"
-                className="block text-sm font-medium text-text mb-2"
-              >
-                {common('a11y.themeLabel')}
-              </label>
-              <select
-                id="a11y-theme"
-                value={theme}
-                onChange={(e) =>
-                  setTheme(e.target.value as 'light' | 'dark' | 'system')
-                }
-                className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
-                aria-label={common('a11y.themeLabel')}
-              >
-                <option value="light">{common('a11y.themeLight')}</option>
-                <option value="dark">{common('a11y.themeDark')}</option>
-                <option value="system">{common('a11y.themeSystem')}</option>
-              </select>
-            </div>
+            {/* Theme controlled by masthead toggle only; no duplicate control here */}
 
             {/* Contrast */}
             <div>

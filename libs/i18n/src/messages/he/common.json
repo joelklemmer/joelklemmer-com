@@ -19,6 +19,8 @@
     "themeLight": "בהיר",
     "themeDark": "כהה",
     "themeSystem": "מערכת",
+    "themeSwitchToLight": "החלף לערכת נושא בהירה",
+    "themeSwitchToDark": "החלף לערכת נושא כהה",
     "contrastLabel": "ניגודיות",
     "contrastDefault": "ברירת מחדל",
     "contrastHigh": "גבוה",
@@ -35,5 +37,17 @@
   },
   "density": {
     "toggleLabel": "תצוגת צפיפות"
+  },
+  "cookiePreferences": {
+    "openLabel": "העדפות עוגיות",
+    "modalTitle": "העדפות עוגיות",
+    "acceptAll": "קבל הכל",
+    "rejectNonEssential": "דחה לא חיוני",
+    "save": "שמור בחירה",
+    "withdraw": "משוך הסכמה",
+    "analyticsLabel": "אנליטיקה",
+    "functionalLabel": "פונקציונלי",
+    "marketingLabel": "שיווק",
+    "essentialNote": "עוגיות חיוניות תמיד פעילות."
   }
 }

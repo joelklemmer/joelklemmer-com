@@ -12,6 +12,7 @@ import {
 /* Locale layout is the single composition point for shell; allowed to import i18n/ui. */
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import { defaultLocale } from '@joelklemmer/i18n';
+import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import {
   LanguageSwitcherPopover,
@@ -30,8 +31,20 @@ import {
   resolveEvaluatorMode,
 } from '@joelklemmer/evaluator-mode';
 import { DensityViewProvider } from '@joelklemmer/authority-density';
+import { TelemetryProvider } from '@joelklemmer/authority-telemetry';
+import {
+  getConsentFromCookie,
+  ConsentProvider,
+  canLoadAnalytics,
+  CookiePreferencesTrigger,
+} from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
 
+import {
+  RouteViewTracker,
+  AuthorityTelemetryListener,
+} from '../../lib/telemetry';
+import { SyncConsentToTelemetry } from '../../lib/SyncConsentToTelemetry';
 import { routing } from '../../i18n/routing';
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -63,14 +76,16 @@ export default async function LocaleLayout({
   const footer = await getTranslations('footer');
   const messages = await getMessages();
 
-  const navItems = [
-    { href: `/${resolvedLocale}`, label: nav('home') },
-    { href: `/${resolvedLocale}/brief`, label: nav('brief') },
-    { href: `/${resolvedLocale}/work`, label: nav('work') },
-    { href: `/${resolvedLocale}/writing`, label: nav('writing') },
-    { href: `/${resolvedLocale}/proof`, label: nav('proof') },
-    { href: `/${resolvedLocale}/contact`, label: nav('contact') },
-  ];
+  const navItems = PRIMARY_NAV_ENTRIES.map((entry) => ({
+    href: entry.path
+      ? `/${resolvedLocale}/${entry.path}`
+      : `/${resolvedLocale}`,
+    label: nav(entry.labelKey),
+    ...(entry.rank && { rank: entry.rank }),
+  }));
+  const initialConsentState = getConsentFromCookie(cookieStore.toString());
+  const initialAnalyticsConsent = canLoadAnalytics(initialConsentState ?? null);
+
   const footerItems = [
     'media',
     'media-kit',
@@ -82,6 +97,8 @@ export default async function LocaleLayout({
     'terms',
     'accessibility',
     'security',
+    'cookies',
+    'preferences',
   ].map((slug) => ({
     href: `/${resolvedLocale}/${slug}`,
     label: footer(`links.${slug}`),
@@ -94,41 +111,63 @@ export default async function LocaleLayout({
           <ACPProvider>
             <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
               <DensityViewProvider syncWithHash>
-                <Shell
-                  headerContent={
-                    <Header
-                      wordmark={common('wordmark')}
-                      homeHref={`/${resolvedLocale}`}
-                      centerContent={
-                        <Suspense fallback={<div className="h-10 w-32" />}>
-                          <Nav items={navItems} />
-                        </Suspense>
-                      }
-                      headerControls={
-                        <>
+                <ConsentProvider initialConsentState={initialConsentState}>
+                  <Shell
+                    headerContent={
+                      <Header
+                        wordmark={common('wordmark')}
+                        homeHref={`/${resolvedLocale}`}
+                        centerContent={
                           <Suspense
                             fallback={
-                              <div className="masthead-touch-target w-11" />
+                              <div
+                                className="min-h-[var(--masthead-bar-height)] w-32"
+                                aria-hidden
+                              />
                             }
                           >
-                            <LanguageSwitcherPopover />
+                            <Nav items={navItems} />
                           </Suspense>
-                          <ThemeToggle />
-                          <AccessibilityPanel />
-                        </>
-                      }
-                    />
-                  }
-                  navContent={null}
-                  footerContent={
-                    <FooterSection
-                      label={footer('label')}
-                      links={footerItems}
-                    />
-                  }
-                >
-                  {children}
-                </Shell>
+                        }
+                        headerControls={
+                          <>
+                            <Suspense
+                              fallback={
+                                <div
+                                  className="masthead-touch-target w-11 min-h-[var(--masthead-bar-height)]"
+                                  aria-hidden
+                                />
+                              }
+                            >
+                              <LanguageSwitcherPopover />
+                            </Suspense>
+                            <ThemeToggle />
+                            <CookiePreferencesTrigger />
+                            <AccessibilityPanel />
+                          </>
+                        }
+                      />
+                    }
+                    navContent={null}
+                    footerContent={
+                      <FooterSection
+                        label={footer('label')}
+                        links={footerItems}
+                      />
+                    }
+                  >
+                    <TelemetryProvider
+                      initialConsent={initialAnalyticsConsent}
+                      trackInputMode
+                      persistToStorage={false}
+                    >
+                      <SyncConsentToTelemetry />
+                      <RouteViewTracker />
+                      <AuthorityTelemetryListener />
+                      {children}
+                    </TelemetryProvider>
+                  </Shell>
+                </ConsentProvider>
               </DensityViewProvider>
             </EvaluatorModeProvider>
           </ACPProvider>

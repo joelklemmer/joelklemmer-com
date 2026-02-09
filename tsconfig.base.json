@@ -41,6 +41,13 @@
       "@joelklemmer/aec": ["libs/aec/src/index.ts"],
       "@joelklemmer/authority-orchestration": [
         "libs/authority-orchestration/src/index.ts"
+      ],
+      "@joelklemmer/authority-telemetry": [
+        "libs/authority-telemetry/src/index.ts"
+      ],
+      "@joelklemmer/compliance": ["libs/compliance/src/index.ts"],
+      "@joelklemmer/telemetry-governance": [
+        "libs/telemetry-governance/src/index.ts"
       ]
     }
   },

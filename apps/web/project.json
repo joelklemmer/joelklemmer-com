@@ -13,6 +13,16 @@
         "outputPath": "apps/web/.next"
       }
     },
+    "start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "next start",
+        "cwd": "apps/web"
+      },
+      "configurations": {
+        "production": {}
+      }
+    },
     "a11y": {
       "executor": "nx:run-commands",
       "options": {
@@ -23,6 +33,12 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-content.ts"
+      }
+    },
+    "docs-integrity-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-docs-integrity.ts"
       }
     },
     "governance-validate": {
@@ -49,10 +65,22 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-intelligence.ts"
       }
     },
+    "briefing-contracts-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-briefing-contracts.ts"
+      }
+    },
     "authority-signals-validate": {
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-signals.ts"
+      }
+    },
+    "telemetry-scoring-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-telemetry-scoring.ts"
       }
     },
     "experience-intelligence-validate": {
@@ -115,6 +143,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-tokens.ts"
       }
     },
+    "token-drift-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-token-drift.ts"
+      }
+    },
     "test": {
       "executor": "nx:run-commands",
       "options": {
@@ -127,17 +161,20 @@
         "command": "git checkout -- apps/web/next-env.d.ts"
       }
     },
-    "verify": {
+    "validate": {
       "executor": "nx:run-commands",
       "options": {
         "commands": [
           "nx format:check --all",
           "nx run web:lint",
           "nx run web:content-validate",
+          "nx run web:cookie-compliance-validate",
+          "nx run web:docs-integrity-validate",
           "nx run web:governance-validate",
           "nx run web:i18n-validate",
           "nx run web:pgf-validate",
           "nx run web:intelligence-validate",
+          "nx run web:briefing-contracts-validate",
           "nx run web:authority-signals-validate",
           "nx run web:experience-intelligence-validate",
           "nx run web:frameworks-validate",
@@ -150,15 +187,64 @@
           "nx run web:media-manifest-validate",
           "nx run web:media-derivatives-validate",
           "nx run web:media-authority-validate",
+          "nx run web:media-governance-validate",
           "nx run web:visual-contract-validate",
           "nx run web:seo-validate",
           "nx run web:tokens-validate",
+          "nx run web:token-drift-validate",
           "nx run web:authority-program-validate",
           "nx run web:authority-constitution-validate",
+          "nx run web:agent-overlay-validate",
+          "nx run web:telemetry-scoring-validate",
+          "nx run docs:arch:check",
+          "nx run web:test"
+        ],
+        "parallel": false
+      }
+    },
+    "verify": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "node -e \"try{require('fs').rmSync(require('path').join(process.cwd(),'apps/web/.next'),{recursive:true,force:true});}catch(e){}\"",
+          "nx format:check --all",
+          "pnpm audit --audit-level=critical",
+          "nx run web:lint",
+          "nx run web:security-validate",
+          "nx run web:cookie-compliance-validate",
+          "nx run web:content-validate",
+          "nx run web:docs-integrity-validate",
+          "nx run web:governance-validate",
+          "nx run web:i18n-validate",
+          "nx run web:pgf-validate",
+          "nx run web:intelligence-validate",
+          "nx run web:briefing-contracts-validate",
+          "nx run web:authority-signals-validate",
+          "nx run web:experience-intelligence-validate",
+          "nx run web:frameworks-validate",
+          "nx run web:aec-validate",
+          "nx run web:orchestration-validate",
+          "nx run web:content-os-validate",
+          "nx run web:home-validate",
+          "nx run web:sitemap-validate",
+          "nx run web:image-sitemap-validate",
+          "nx run web:media-manifest-validate",
+          "nx run web:media-derivatives-validate",
+          "nx run web:media-authority-validate",
+          "nx run web:media-governance-validate",
+          "nx run web:visual-contract-validate",
+          "nx run web:seo-validate",
+          "nx run web:tokens-validate",
+          "nx run web:token-drift-validate",
+          "nx run web:authority-program-validate",
+          "nx run web:authority-constitution-validate",
+          "nx run web:agent-overlay-validate",
+          "nx run web:telemetry-scoring-validate",
+          "nx run docs:arch:check",
           "nx run web:test",
           "nx run web:build",
           "nx run web:restore-generated-typings",
-          "nx run web:a11y"
+          "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y"
         ],
         "parallel": false
       }
@@ -181,6 +267,12 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-authority.ts"
       }
     },
+    "media-governance-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-media-governance.ts"
+      }
+    },
     "visual-contract-validate": {
       "executor": "nx:run-commands",
       "options": {
@@ -199,10 +291,34 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-authority-constitution.ts"
       }
     },
+    "agent-overlay-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-agent-overlay.ts"
+      }
+    },
+    "cookie-compliance-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-cookie-compliance.ts"
+      }
+    },
+    "security-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-security-txt.ts"
+      }
+    },
     "lighthouse-budget": {
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/lighthouse-budget-stub.ts"
+      }
+    },
+    "perf-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-perf.ts"
       }
     }
   }

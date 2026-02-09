@@ -70,6 +70,10 @@
     "title": "Security",
     "description": "Security posture, reporting, and disclosure."
   },
+  "cookies": {
+    "title": "Cookie policy",
+    "description": "Cookies and consent; your choices and how we use them."
+  },
   "books": {
     "title": "Books",
     "description": "Published volumes with verification-linked references."

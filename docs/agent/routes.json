@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 1,
+  "routes": [
+    { "segment": "", "pagePath": "apps/web/src/app/[locale]/page.tsx" },
+    {
+      "segment": "accessibility",
+      "pagePath": "apps/web/src/app/[locale]/accessibility/page.tsx"
+    },
+    { "segment": "bio", "pagePath": "apps/web/src/app/[locale]/bio/page.tsx" },
+    {
+      "segment": "books",
+      "pagePath": "apps/web/src/app/[locale]/books/page.tsx"
+    },
+    {
+      "segment": "books/[slug]",
+      "pagePath": "apps/web/src/app/[locale]/books/[slug]/page.tsx"
+    },
+    {
+      "segment": "brief",
+      "pagePath": "apps/web/src/app/[locale]/brief/page.tsx"
+    },
+    {
+      "segment": "casestudies",
+      "pagePath": "apps/web/src/app/[locale]/casestudies/page.tsx"
+    },
+    {
+      "segment": "casestudies/[slug]",
+      "pagePath": "apps/web/src/app/[locale]/casestudies/[slug]/page.tsx"
+    },
+    {
+      "segment": "contact",
+      "pagePath": "apps/web/src/app/[locale]/contact/page.tsx"
+    },
+    { "segment": "faq", "pagePath": "apps/web/src/app/[locale]/faq/page.tsx" },
+    {
+      "segment": "media",
+      "pagePath": "apps/web/src/app/[locale]/media/page.tsx"
+    },
+    {
+      "segment": "media-kit",
+      "pagePath": "apps/web/src/app/[locale]/media-kit/page.tsx"
+    },
+    { "segment": "now", "pagePath": "apps/web/src/app/[locale]/now/page.tsx" },
+    {
+      "segment": "operating-system",
+      "pagePath": "apps/web/src/app/[locale]/operating-system/page.tsx"
+    },
+    {
+      "segment": "press",
+      "pagePath": "apps/web/src/app/[locale]/press/page.tsx"
+    },
+    {
+      "segment": "privacy",
+      "pagePath": "apps/web/src/app/[locale]/privacy/page.tsx"
+    },
+    {
+      "segment": "proof",
+      "pagePath": "apps/web/src/app/[locale]/proof/page.tsx"
+    },
+    {
+      "segment": "proof/[slug]",
+      "pagePath": "apps/web/src/app/[locale]/proof/[slug]/page.tsx"
+    },
+    {
+      "segment": "publicrecord",
+      "pagePath": "apps/web/src/app/[locale]/publicrecord/page.tsx"
+    },
+    {
+      "segment": "publicrecord/[slug]",
+      "pagePath": "apps/web/src/app/[locale]/publicrecord/[slug]/page.tsx"
+    },
+    {
+      "segment": "security",
+      "pagePath": "apps/web/src/app/[locale]/security/page.tsx"
+    },
+    {
+      "segment": "terms",
+      "pagePath": "apps/web/src/app/[locale]/terms/page.tsx"
+    },
+    {
+      "segment": "work",
+      "pagePath": "apps/web/src/app/[locale]/work/page.tsx"
+    },
+    {
+      "segment": "writing",
+      "pagePath": "apps/web/src/app/[locale]/writing/page.tsx"
+    },
+    {
+      "segment": "writing/[slug]",
+      "pagePath": "apps/web/src/app/[locale]/writing/[slug]/page.tsx"
+    }
+  ]
+}

@@ -17,7 +17,8 @@ export type QuietPageKey =
   | 'privacy'
   | 'terms'
   | 'accessibility'
-  | 'security';
+  | 'security'
+  | 'cookies';
 
 export interface QuietScreenProps {
   pageKey: QuietPageKey;

@@ -1,0 +1,71 @@
+import { test, expect } from '@playwright/test';
+import { getPublicRecordEntries } from '@joelklemmer/content';
+import { defaultLocale } from '@joelklemmer/i18n';
+
+/**
+ * Proof density amplification: layering (scan → substantiation → artifact) and
+ * doctrine clarity are runtime-visible. Attachment rows expose data-attachment-sha
+ * and copy-hash button for verification.
+ */
+test.describe('Proof density layering and doctrine', () => {
+  test('public record list shows scan layer and doctrine', async ({ page }) => {
+    await page.goto(`/${defaultLocale}/publicrecord`, {
+      waitUntil: 'domcontentloaded',
+    });
+    await expect(page.locator('[data-layer="scan"]')).toBeVisible();
+    await expect(
+      page.locator('[data-doctrine="how-to-read-list"]'),
+    ).toBeVisible();
+  });
+
+  test('public record entry shows three layers and how-to-read doctrine', async ({
+    page,
+  }) => {
+    const entries = await getPublicRecordEntries();
+    const slug = entries[0]?.frontmatter.slug;
+    if (!slug) {
+      test.skip();
+      return;
+    }
+    await page.goto(`/${defaultLocale}/publicrecord/${slug}`, {
+      waitUntil: 'domcontentloaded',
+    });
+    const scan = page.locator('[data-layer="scan"]');
+    const substantiation = page.locator('[data-layer="substantiation"]');
+    const artifact = page.locator('[data-layer="artifact"]');
+    const doctrine = page.locator('[data-doctrine="how-to-read"]');
+    await expect(scan).toBeVisible();
+    await expect(substantiation).toBeVisible();
+    await expect(artifact).toBeVisible();
+    await expect(doctrine).toBeVisible();
+  });
+
+  test('entry with attachments has attachment row and copy-hash button', async ({
+    page,
+  }) => {
+    const entries = await getPublicRecordEntries();
+    const entryWithAttachments = entries.find(
+      (e) => (e.frontmatter.attachments?.length ?? 0) > 0,
+    );
+    if (!entryWithAttachments?.frontmatter.slug) {
+      test.skip();
+      return;
+    }
+    const slug = entryWithAttachments.frontmatter.slug;
+    const firstAtt = entryWithAttachments.frontmatter.attachments?.[0];
+    if (!firstAtt) {
+      test.skip();
+      return;
+    }
+    await page.goto(`/${defaultLocale}/publicrecord/${slug}`, {
+      waitUntil: 'domcontentloaded',
+    });
+    const row = page.locator(`[data-attachment-id="${firstAtt.id}"]`);
+    await expect(row).toBeVisible();
+    await expect(row.getAttribute('data-attachment-sha')).toBe(firstAtt.sha256);
+    const copyButton = row.getByRole('button', {
+      name: /copy|hash|full hash/i,
+    });
+    await expect(copyButton).toBeVisible();
+  });
+});

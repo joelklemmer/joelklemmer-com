@@ -9,13 +9,18 @@ html {
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
   font-optical-sizing: auto;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
   background: var(--authority-atmosphere-subtle);
   color: hsl(var(--color-text));
   font-size: var(--body-analytical-size);
+  font-weight: var(--font-weight-body);
   line-height: var(--body-analytical-line);
   letter-spacing: var(--body-analytical-spacing);
 }
@@ -36,6 +41,7 @@ body > * {
 
 main.vacel-main {
   box-shadow: var(--authority-depth-illusion);
+  min-width: 0; /* prevent overflow in full-bleed layout at narrow viewports */
 }
 
 html[dir='rtl'],
@@ -54,11 +60,27 @@ html[data-underline-links='true'] a:not([class*='no-underline']) {
   text-underline-offset: 2px;
 }
 
-p,
-h1,
-h2,
+/* Typography hierarchy: weight and tracking baseline (institutional authority) */
+h1 {
+  font-weight: var(--display-heading-weight);
+  letter-spacing: var(--display-heading-spacing);
+  margin: 0;
+}
+
+h2 {
+  font-weight: var(--section-heading-weight);
+  letter-spacing: var(--section-heading-letter-spacing);
+  margin: 0;
+}
+
 h3,
 h4 {
+  font-weight: var(--font-weight-section);
+  letter-spacing: -0.015em;
+  margin: 0;
+}
+
+p {
   margin: 0;
 }
 
@@ -70,8 +92,8 @@ h4 {
   outline: var(--focus-ring-width, 2px) solid hsl(var(--color-focus));
   outline-offset: var(--focus-ring-offset, 2px);
   transition:
-    outline-color var(--transition-duration-fast) var(--ease-authority),
-    outline-offset var(--transition-duration-fast) var(--ease-authority);
+    outline-color var(--motion-duration-feedback) var(--motion-ease-out),
+    outline-offset var(--motion-duration-feedback) var(--motion-ease-out);
 }
 
 /* Enhanced focus visibility in high contrast mode */

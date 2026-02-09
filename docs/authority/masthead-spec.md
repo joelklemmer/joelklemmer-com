@@ -122,3 +122,4 @@ Breakpoints and exact pixel values should align with existing app breakpoints (e
 | Composition        | `apps/web/src/app/[locale]/layout.tsx`                                                     |
 | Masthead styles    | `apps/web/src/styles/20-layout.css`, `30-components.css`, `40-utilities.css`               |
 | Skip link / focus  | `libs/ui/src/lib/Shell.tsx`, `libs/a11y` (focusRingClass, skipLinkClass)                   |
+| Nav hierarchy      | [Navigation cognitive hierarchy](navigation-cognitive-hierarchy.md) (rank, order, e2e)     |
