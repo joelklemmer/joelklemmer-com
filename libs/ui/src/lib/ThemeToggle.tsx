@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from './ThemeProvider';
-import { focusRingClass } from '@joelklemmer/a11y';
+import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 import { useTranslations } from 'next-intl';
 
 export function ThemeToggle() {
@@ -25,20 +25,22 @@ export function ThemeToggle() {
   };
 
   const getIcon = () => {
+    const iconProps = {
+      xmlns: 'http://www.w3.org/2000/svg' as const,
+      width: 20,
+      height: 20,
+      viewBox: '0 0 24 24',
+      fill: 'none' as const,
+      stroke: 'currentColor',
+      strokeWidth: 2,
+      strokeLinecap: 'round' as const,
+      strokeLinejoin: 'round' as const,
+      'aria-hidden': true,
+      className: 'shrink-0',
+    };
     if (theme === 'light') {
       return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
+        <svg {...iconProps}>
           <circle cx="12" cy="12" r="4" />
           <path d="M12 2v2" />
           <path d="M12 20v2" />
@@ -53,35 +55,13 @@ export function ThemeToggle() {
     }
     if (theme === 'dark') {
       return (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-        >
+        <svg {...iconProps}>
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
         </svg>
       );
     }
     return (
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
+      <svg {...iconProps}>
         <rect width="18" height="18" x="3" y="3" rx="2" />
         <path d="M8 12h.01" />
         <path d="M12 12h.01" />
@@ -101,11 +81,11 @@ export function ThemeToggle() {
       type="button"
       onClick={cycleTheme}
       aria-label={getLabel()}
-      className={`${focusRingClass} flex items-center justify-center w-9 h-9 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+      className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
       title={getLabel()}
     >
       {getIcon()}
-      <span className="sr-only">{getLabel()}</span>
+      <span className={visuallyHiddenClass}>{getLabel()}</span>
     </button>
   );
 }

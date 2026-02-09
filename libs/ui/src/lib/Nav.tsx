@@ -99,19 +99,17 @@ export function Nav({ items }: NavProps) {
     setIsOpen(false);
   }, [pathname]);
 
-  // Desktop: horizontal nav with institutional active state
+  // Desktop: horizontal nav with understated active state (no bright boxes)
   const desktopNav = (
-    <ul className="hidden md:flex flex-wrap items-center gap-1 text-sm h-10">
+    <ul className="hidden md:flex flex-wrap items-center gap-1 text-sm min-h-[var(--masthead-bar-height)]">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (
           <li key={item.href} className="flex items-center h-full">
             <Link
               href={item.href}
-              className={`${focusRingClass} rounded-sm px-3 py-1.5 h-full flex items-center transition-colors motion-reduce:transition-none relative ${
-                isActive
-                  ? 'text-text font-semibold bg-surface-elevated before:absolute before:inset-x-0 before:bottom-0 before:h-[2px] before:bg-accent before:rounded-t-sm'
-                  : 'text-muted hover:text-text'
+              className={`${focusRingClass} rounded-sm px-3 py-1.5 h-full flex items-center transition-colors motion-reduce:transition-none relative text-muted hover:text-text ${
+                isActive ? 'text-text font-medium border-b-2 border-border' : ''
               }`}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -167,7 +165,7 @@ export function Nav({ items }: NavProps) {
                   aria-current={isActive ? 'page' : undefined}
                   className={`${focusRingClass} block w-full px-4 py-2.5 text-sm text-start transition-colors motion-reduce:transition-none relative ${
                     isActive
-                      ? 'bg-surface-elevated text-text font-semibold before:absolute before:inset-y-0 before:start-0 before:w-[2px] before:bg-accent'
+                      ? 'text-text font-medium bg-muted/30 border-s-2 border-border'
                       : 'text-text hover:bg-muted/50'
                   }`}
                   onClick={handleClose}
@@ -183,9 +181,9 @@ export function Nav({ items }: NavProps) {
   );
 
   return (
-    <>
+    <nav aria-label={a11y('a11y.navLabel')} className="flex items-center">
       {desktopNav}
       {mobileNav}
-    </>
+    </nav>
   );
 }

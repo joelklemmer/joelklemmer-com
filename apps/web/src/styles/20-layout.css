@@ -423,13 +423,28 @@ section.section-shell:last-child {
   padding-inline-start: var(--optical-inset);
 }
 
-/* Header and Navigation: Fortune 10 / statesman briefing interface */
+/* Masthead: single institutional bar (identity | nav | utilities) */
+:root {
+  --masthead-bar-height: 3rem;
+  --masthead-touch-min: 44px;
+}
+
+.masthead-bar {
+  min-height: var(--masthead-bar-height);
+}
+
+.masthead-touch-target {
+  min-height: var(--masthead-touch-min);
+}
+
+.masthead-utilities .masthead-touch-target,
+.masthead-utilities button[type='button'] {
+  min-width: var(--masthead-touch-min);
+  min-height: var(--masthead-touch-min);
+}
+
+/* Header: Fortune 10 / statesman briefing interface */
 header[aria-label] {
   background: hsl(var(--color-surface));
   border-bottom-color: hsl(var(--color-border-subtle));
-}
-
-header[aria-label] nav {
-  background: hsl(var(--color-surface-elevated));
-  border-top-color: hsl(var(--color-border-subtle));
 }

@@ -5,20 +5,34 @@ import { focusRingClass } from '@joelklemmer/a11y';
 export interface HeaderProps {
   wordmark: string;
   homeHref: string;
+  /** Center region: typically primary Nav. Omit for identity-only bar. */
+  centerContent?: ReactNode;
   headerControls?: ReactNode;
 }
 
-export function Header({ wordmark, homeHref, headerControls }: HeaderProps) {
+export function Header({
+  wordmark,
+  homeHref,
+  centerContent,
+  headerControls,
+}: HeaderProps) {
   return (
-    <div className="flex items-center justify-between gap-3 w-full h-10 md:h-11">
-      <Link
-        href={homeHref}
-        className={`${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center`}
-      >
-        {wordmark}
-      </Link>
+    <div className="masthead-bar flex items-center w-full gap-4">
+      <div className="masthead-identity flex-shrink-0">
+        <Link
+          href={homeHref}
+          className={`masthead-identity-link ${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center masthead-touch-target`}
+        >
+          {wordmark}
+        </Link>
+      </div>
+      {centerContent && (
+        <div className="masthead-nav flex-1 min-w-0 flex items-center justify-center">
+          {centerContent}
+        </div>
+      )}
       {headerControls && (
-        <div className="flex items-center gap-1 flex-shrink-0">
+        <div className="masthead-utilities flex-shrink-0 flex items-center gap-1">
           {headerControls}
         </div>
       )}

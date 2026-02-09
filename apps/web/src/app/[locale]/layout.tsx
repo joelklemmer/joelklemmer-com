@@ -99,9 +99,18 @@ export default async function LocaleLayout({
                     <Header
                       wordmark={common('wordmark')}
                       homeHref={`/${resolvedLocale}`}
+                      centerContent={
+                        <Suspense fallback={<div className="h-10 w-32" />}>
+                          <Nav items={navItems} />
+                        </Suspense>
+                      }
                       headerControls={
                         <>
-                          <Suspense fallback={<div className="w-8 h-8" />}>
+                          <Suspense
+                            fallback={
+                              <div className="masthead-touch-target w-11" />
+                            }
+                          >
                             <LanguageSwitcherPopover />
                           </Suspense>
                           <ThemeToggle />
@@ -110,11 +119,7 @@ export default async function LocaleLayout({
                       }
                     />
                   }
-                  navContent={
-                    <Suspense fallback={null}>
-                      <Nav items={navItems} />
-                    </Suspense>
-                  }
+                  navContent={null}
                   footerContent={
                     <FooterSection
                       label={footer('label')}

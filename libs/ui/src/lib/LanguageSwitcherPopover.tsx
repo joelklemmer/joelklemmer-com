@@ -167,13 +167,13 @@ export function LanguageSwitcherPopover() {
         aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
         aria-haspopup="true"
-        className={`${focusRingClass} flex items-center justify-center w-9 h-9 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
+          width="20"
+          height="20"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -181,6 +181,7 @@ export function LanguageSwitcherPopover() {
           strokeLinecap="round"
           strokeLinejoin="round"
           aria-hidden="true"
+          className="shrink-0"
         >
           <circle cx="12" cy="12" r="10" />
           <path d="M2 12h20" />
@@ -224,7 +225,7 @@ export function LanguageSwitcherPopover() {
                   aria-label={common('a11y.languageSwitcherAction', {
                     language: languageLabel,
                   })}
-                  className={`${focusRingClass} block w-full px-4 py-2 text-sm text-left transition-colors motion-reduce:transition-none ${
+                  className={`${focusRingClass} block w-full px-4 py-2 text-sm text-start transition-colors motion-reduce:transition-none ${
                     isCurrent
                       ? 'bg-accent/10 text-accent font-semibold'
                       : 'text-text hover:bg-muted/50'
