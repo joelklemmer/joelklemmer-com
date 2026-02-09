@@ -282,6 +282,7 @@
           "nx run web:test",
           "nx run web:build",
           "nx run web:restore-generated-typings",
+          "nx run web:head-invariants-validate",
           "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y",
           "npx cross-env SKIP_RATE_LIMIT_BUILD=1 nx run web:rate-limit-verify"
         ],
@@ -328,6 +329,18 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-lighthouse-runtime.ts"
+      }
+    },
+    "head-invariants-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-head-invariants.ts"
+      }
+    },
+    "head-invariants-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-head-invariants.ts"
       }
     },
     "rate-limit-verify": {

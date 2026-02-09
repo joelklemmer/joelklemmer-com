@@ -58,6 +58,27 @@ async function main(): Promise<number> {
     void stop();
   });
 
+  // Head invariants: meta description and canonical on /en, /en/brief, /en/media
+  const headInvariants = spawn(
+    'npx',
+    ['tsx', '--tsconfig', 'tsconfig.base.json', 'tools/validate-head-invariants.ts'],
+    {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: { ...process.env, BASE_URL: baseUrl },
+      shell: true,
+    },
+  );
+  const headExit = await new Promise<number>((resolve) => {
+    headInvariants.on('exit', (code, signal) => {
+      resolve(code ?? (signal ? 1 : 0));
+    });
+  });
+  if (headExit !== 0) {
+    await stop();
+    throw new Error('validate-head-invariants failed');
+  }
+
   const lhci = spawn(
     'pnpm',
     ['exec', 'lhci', 'autorun', '--config=./lighthouserc.serverless.cjs'],

@@ -73,13 +73,10 @@ export default async function RootLayout({
   const safeLocale = locale || defaultLocale;
   const dir = isRtlLocale(safeLocale) ? 'rtl' : 'ltr';
 
-  const host = headerStore.get('host') ?? 'localhost:3000';
-  const proto =
-    headerStore.get('x-forwarded-proto')?.split(',')[0]?.trim() ?? 'http';
   return (
     <html lang={safeLocale} dir={dir} className={inter.variable}>
       <head>
-        {/* description + canonical come from root generateMetadata for LHCI/SEO */}
+        {/* description + canonical from root generateMetadata only (single source for LHCI/SEO) */}
         {/* next/font self-hosts Inter; no external font CDN requests */}
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

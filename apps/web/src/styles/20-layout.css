@@ -254,17 +254,15 @@ section.section-shell:last-child {
   min-width: 0;
 }
 
-/* Full-width hero: section spans viewport; inner lane from Container variant=full */
+/* Full-width hero: section spans viewport; inner lane from Container variant=full.
+   Mobile: reduced padding and min-height so hero fits viewport without internal scroll. */
 .hero-authority {
   position: relative;
   margin-block-end: var(--section-block-margin);
-  padding-block: var(--space-8);
+  padding-block: var(--space-6);
   isolation: isolate;
   width: 100%;
   min-width: 0;
-  /* Keep hero within viewport on small screens to avoid overflow (visual/LHCI) */
-  max-height: 100vh;
-  overflow-y: auto;
 }
 
 @media (min-width: 768px) {
@@ -312,10 +310,11 @@ section.section-shell:last-child {
   width: 100%;
 }
 
-/* Hero plate: premium spacing and visual dominance; RTL-safe logical padding */
+/* Hero plate: premium spacing and visual dominance; RTL-safe logical padding.
+   Mobile: fit within viewport (min-height caps at 50vh) so no scroll-container workaround. */
 .hero-authority-plate {
-  padding: var(--space-6);
-  min-height: min(500px, 65vh);
+  padding: var(--space-4);
+  min-height: min(320px, 50vh);
 }
 
 @media (min-width: 768px) {

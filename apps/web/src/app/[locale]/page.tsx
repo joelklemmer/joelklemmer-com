@@ -8,6 +8,9 @@ import { Suspense } from 'react';
 import { HomeScreen, homeMetadata } from '@joelklemmer/screens';
 import { getRequestBaseUrl } from '../../lib/requestBaseUrl';
 
+/** Force dynamic so generateMetadata runs with request headers and canonical matches served URL (LHCI/SEO). */
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata(): Promise<Metadata> {
   const baseUrl = await getRequestBaseUrl();
   return homeMetadata({ baseUrl });

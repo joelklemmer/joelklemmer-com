@@ -1,6 +1,9 @@
 import { MediaLibraryScreen, mediaLibraryMetadata } from '@joelklemmer/screens';
 import { getRequestBaseUrl } from '../../../lib/requestBaseUrl';
 
+/** Force dynamic so generateMetadata runs with request headers and canonical matches served URL (LHCI/SEO). */
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() {
   const baseUrl = await getRequestBaseUrl();
   return mediaLibraryMetadata({ baseUrl });

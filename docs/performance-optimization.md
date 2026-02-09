@@ -25,6 +25,14 @@ For every change or audit, provide:
 
 ## Implemented changes
 
+### 0) LHCI SEO and a11y fixes (no threshold changes)
+
+- **Meta description:** Root layout `generateMetadata()` and default in `createPageMetadata()` (libs/seo) so every route has a meta description; root also injects request-based canonical in `<head>`.
+- **Canonical:** Request origin from `getRequestBaseUrl()` (apps/web/src/lib/requestBaseUrl.ts) passed into screen metadata so canonical matches document URL in LHCI; when `baseUrl` is undefined, segment metadata omits `alternates` so root canonical is preserved.
+- **aria-allowed-role:** Consent surface uses `<div role="dialog">` instead of `<aside role="dialog">` (ConsentSurfaceV2); claim list uses `<div role="listitem">` instead of `<article role="listitem">` (ClaimProofMapView).
+- **label-content-name-mismatch:** Removed redundant `aria-label` from FrameworkCard links so accessible name comes from visible text.
+- **Touch targets:** Masthead utilities gap increased (gap-6) for 24px spacing between controls (Header.tsx).
+
 ### 1) Image optimization
 
 - **Next/Image** used everywhere applicable: `PortraitImage` (hero), `MediaLibraryClient` (thumbnails).
