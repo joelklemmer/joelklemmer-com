@@ -10,6 +10,8 @@ const isCi = !!process.env['CI'];
 const webServerCommand = isCi
   ? 'pnpm nx build web && pnpm nx start web --port=3000'
   : 'pnpm nx dev web --port=3000';
+/** Deterministic ready check: wait for locale route /en/ to return 200 (no redirect). */
+const serverReadyURL = `${baseURL.replace(/\/?$/, '')}/en/`;
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src/presentation-integrity' }),
@@ -26,7 +28,7 @@ export default defineConfig({
     ? { url: baseURL, reuseExistingServer: true, timeout: 120000 }
     : {
         command: webServerCommand,
-        url: baseURL,
+        url: serverReadyURL,
         reuseExistingServer: false,
         timeout: 120000,
         cwd: workspaceRoot,

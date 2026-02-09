@@ -9,7 +9,7 @@ module.exports = {
   ci: {
     collect: {
       numberOfRuns: 3,
-      startServerCommand: 'cd apps/web && pnpm exec next start --port 3000',
+      startServerCommand: 'pnpm nx start web',
       startServerReadyPattern: 'Ready in|started server',
       startServerReadyTimeout: 120000,
       url: [

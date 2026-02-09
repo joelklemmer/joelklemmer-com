@@ -205,6 +205,8 @@ jobs:
 
       - name: A11y (Playwright + axe)
         run: pnpm nx run web:a11y --verbose
+        env:
+          RATE_LIMIT_MODE: off
 
       - name: Upload a11y report
         uses: actions/upload-artifact@v4
@@ -274,6 +276,8 @@ jobs:
 
       - name: Visual (presentation-integrity + screenshots)
         run: pnpm nx run web-e2e:visual --verbose
+        env:
+          RATE_LIMIT_MODE: off
 
   lighthouse:
     name: lighthouse
@@ -321,6 +325,8 @@ jobs:
       - name: 'Run Lighthouse CI (performance gate: LCP &lt; 1.8s, CLS ≤ 0.1, performance ≥ 0.7)'
         run: pnpm exec lhci autorun --config=./lighthouserc.cjs
         env:
+          RATE_LIMIT_MODE: off
+          PORT: '3000'
           LHCI_COLLECT__NUMBER_OF_RUNS: '1'
           LHCI_UPLOAD__TARGET: 'filesystem'
           LHCI_UPLOAD__OUTPUT_DIR: 'tmp/lighthouse'

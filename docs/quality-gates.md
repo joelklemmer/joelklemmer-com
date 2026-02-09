@@ -129,8 +129,9 @@ Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and rel
 
 - **Run:** `nx run web:a11y`
 - **Implementation:** Runs `tools/run-a11y.ts` (tsx). The script **injects safe placeholder env vars only when missing** (`NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_IDENTITY_SAME_AS`, `RELEASE_READY`) so the gate is deterministic without requiring CI or local env. Production identity enforcement in `libs/seo` is unchanged; only the a11y runner supplies these defaults for the spawned build/start process. The script allocates a free port (prefer 4300) via `get-port`, starts the web server on that port, sets `BASE_URL` and `PORT` for Playwright, then runs Playwright a11y (`apps/web-e2e/playwright.a11y.config.ts`). Playwright reads `BASE_URL` and uses `reuseExistingServer: true`, so no port collision with an existing dev server. No manual freeing of port 3000 required.
-- **What it checks:** axe-core accessibility scans across required routes/locales (see `apps/web-e2e/src/a11y/`).
-- **Success:** Exit code 0; no a11y violations reported.
+- **What it checks:** axe-core accessibility scans across required routes/locales (see `apps/web-e2e/src/a11y/`). Also: rate limiter returns 429 with an accessible HTML shell when limit exceeded (when limiter enabled via `RATE_LIMIT_MODE`; CI uses `RATE_LIMIT_MODE=off` for stability; 429 shell test skipped there); locale invariants (html lang, document title, metadata) across locales.
+- **Success:** Exit code 0; no a11y violations reported; limiter and locale-invariant specs pass.
+- **Build/start parity:** The a11y harness runs `nx run web:build` then `nx start web`; a successful ready check and tests prove that the build output path matches what `next start` uses. See [Dev workflow](dev-workflow.md) for distDir notes.
 - **Report path:** The a11y JSON report is written to `tmp/reports/a11y.json` (gitignored). In CI it is uploaded as the `a11y-report` artifact. Verify must not create tracked diffs; this path is outside the repo tree for commit purposes.
 
 ---

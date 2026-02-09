@@ -50,3 +50,5 @@ Thumbs.db
 .next
 out
 apps/web/dev
+# Nx build writes package.json here when outputPath is apps/web
+apps/web/package.json

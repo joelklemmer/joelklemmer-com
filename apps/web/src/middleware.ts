@@ -5,6 +5,37 @@ import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
+/** Derive locale from path first segment for 429 body lang; fallback to default. */
+function localeFromPath(pathname: string): string {
+  const segment = pathname.replace(/^\/+/, '').split('/')[0];
+  if (
+    segment &&
+    routing.locales.includes(segment as (typeof routing.locales)[number])
+  ) {
+    return segment;
+  }
+  return routing.defaultLocale ?? 'en';
+}
+
+/** Accessible 429 body: valid HTML document with lang and title (locale from path or default). */
+function rateLimitResponseBody(pathname: string): string {
+  const lang = localeFromPath(pathname);
+  return `<!DOCTYPE html>
+<html lang="${lang}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Too Many Requests</title>
+</head>
+<body>
+  <main id="rate-limit-message" role="main">
+    <h1>Too Many Requests</h1>
+    <p>You have sent too many requests. Please wait before trying again.</p>
+  </main>
+</body>
+</html>`;
+}
+
 /**
  * Headers set for every forwarded request so root layout can derive locale
  * deterministically. PATHNAME_HEADER is the single source; LOCALE_HEADER is
@@ -16,9 +47,10 @@ export const LOCALE_HEADER = 'x-next-intl-locale';
 export default function middleware(request: import('next/server').NextRequest) {
   const limit = rateLimit(request);
   if (!limit.success) {
-    return new NextResponse('Too Many Requests', {
+    return new NextResponse(rateLimitResponseBody(request.nextUrl.pathname), {
       status: 429,
       headers: {
+        'Content-Type': 'text/html; charset=utf-8',
         'Retry-After': String(limit.retryAfter ?? 60),
       },
     });

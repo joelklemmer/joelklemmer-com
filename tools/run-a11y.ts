@@ -46,6 +46,8 @@ async function waitForServer(
 
 async function main(): Promise<number> {
   applyA11yEnvDefaults();
+  // Enable limiter so rate-limit.spec can assert 429 (uses TEST-NET IP 192.0.2.1 with low threshold).
+  process.env.RATE_LIMIT_MODE ??= 'proxy';
 
   const port = await getPort({ port: 4300 });
   const baseURL = `http://127.0.0.1:${port}`;
