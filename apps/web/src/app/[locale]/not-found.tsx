@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
+// eslint-disable-next-line no-restricted-imports -- segment-level not-found needs i18n for metadata and copy
 import {
   createScopedTranslator,
   loadMessages,

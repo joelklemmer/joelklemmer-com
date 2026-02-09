@@ -5,7 +5,12 @@ import { routing } from './i18n/routing';
 
 const intlMiddleware = createMiddleware(routing);
 
-/** Header forwarded to root layout so html lang/dir and metadata use path-derived locale. */
+/**
+ * Headers set for every forwarded request so root layout can derive locale
+ * deterministically. PATHNAME_HEADER is the single source; LOCALE_HEADER is
+ * the first path segment when it is a valid locale (for root layout fallback).
+ */
+export const PATHNAME_HEADER = 'x-next-pathname';
 export const LOCALE_HEADER = 'x-next-intl-locale';
 
 export default function middleware(request: import('next/server').NextRequest) {
@@ -19,13 +24,17 @@ export default function middleware(request: import('next/server').NextRequest) {
     });
   }
   const response = intlMiddleware(request);
-  const segment = request.nextUrl.pathname.split('/')[1];
-  const hasLocale =
-    segment &&
-    routing.locales.includes(segment as (typeof routing.locales)[number]);
-  if (response && !response.headers.get('location') && hasLocale) {
+  if (response && !response.headers.get('location')) {
     const requestHeaders = new Headers(request.headers);
-    requestHeaders.set(LOCALE_HEADER, segment);
+    const pathname = request.nextUrl.pathname;
+    requestHeaders.set(PATHNAME_HEADER, pathname);
+    const segment = pathname.replace(/^\/+/, '').split('/')[0];
+    if (
+      segment &&
+      routing.locales.includes(segment as (typeof routing.locales)[number])
+    ) {
+      requestHeaders.set(LOCALE_HEADER, segment);
+    }
     const nextRes = NextResponse.next({
       request: { headers: requestHeaders },
     });

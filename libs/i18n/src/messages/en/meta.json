@@ -82,6 +82,7 @@
     "title": "Not found"
   },
   "error": {
-    "title": "Something went wrong"
+    "title": "Something went wrong",
+    "tryAgain": "Try again"
   }
 }

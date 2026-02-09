@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl';
  * Renders inside root layout so html[lang] is already set by root layout.
  */
 export default function LocaleError({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };
@@ -31,7 +30,7 @@ export default function LocaleError({
         onClick={reset}
         className="mt-4 px-4 py-2 rounded-card border border-border bg-surface hover:bg-muted/20 text-text"
       >
-        Try again
+        {t('error.tryAgain')}
       </button>
     </main>
   );

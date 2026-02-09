@@ -1,4 +1,5 @@
 import '../global.css';
+import type { Metadata } from 'next';
 import { Suspense, type ReactNode } from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -11,7 +12,7 @@ import {
 
 /* Locale layout is the single composition point for shell; allowed to import i18n/ui. */
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
-import { defaultLocale } from '@joelklemmer/i18n';
+import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell
 import {
@@ -47,9 +48,32 @@ import {
 } from '../../lib/telemetry';
 import { SyncConsentToTelemetry } from '../../lib/SyncConsentToTelemetry';
 import { routing } from '../../i18n/routing';
+
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+/** Deterministic default title per locale so document-title is never empty. */
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const appLocale: AppLocale = routing.locales.includes(locale as never)
+    ? (locale as AppLocale)
+    : defaultLocale;
+  const messages = await loadMessages(appLocale, ['meta']);
+  const meta = messages.meta as { defaultTitle?: string };
+  const defaultTitle = meta?.defaultTitle ?? 'Joel R. Klemmer';
+  return {
+    title: {
+      default: defaultTitle,
+      template: `%s | ${defaultTitle}`,
+    },
+  };
+}
+
 /* eslint-disable max-lines-per-function,max-lines -- layout composes shell and sections */
 export default async function LocaleLayout({
   children,

@@ -22,10 +22,7 @@ export interface WhatMattersBlockProps {
  * Deterministic "what matters" block: compressed highlights for briefing-at-a-glance.
  * No AI; content is precomputed from claim/proof map.
  */
-export function WhatMattersBlock({
-  items,
-  title,
-}: WhatMattersBlockProps) {
+export function WhatMattersBlock({ items, title }: WhatMattersBlockProps) {
   if (items.length === 0) return null;
 
   return (

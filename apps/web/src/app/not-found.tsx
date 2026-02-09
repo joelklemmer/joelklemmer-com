@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { getLocale } from 'next-intl/server';
+// eslint-disable-next-line no-restricted-imports -- root not-found needs i18n for metadata and copy
 import {
   createScopedTranslator,
   loadMessages,
@@ -29,10 +30,16 @@ export default async function NotFound() {
   const homeHref = `/${locale}`;
 
   return (
-    <main className="min-h-[60vh] flex flex-col items-center justify-center p-6" role="main">
+    <main
+      className="min-h-[60vh] flex flex-col items-center justify-center p-6"
+      role="main"
+    >
       <h1 className="text-xl font-semibold text-text">{t('notFound.title')}</h1>
       <p className="mt-2 text-muted">
-        <a href={homeHref} className="underline underline-offset-4 hover:text-accent">
+        <a
+          href={homeHref}
+          className="underline underline-offset-4 hover:text-accent"
+        >
           {tCommon('wordmark')}
         </a>
       </p>

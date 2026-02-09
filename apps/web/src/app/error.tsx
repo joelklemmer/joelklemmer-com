@@ -8,7 +8,6 @@ import { useTranslations } from 'next-intl';
  * Renders inside root layout so html[lang] is already set.
  */
 export default function Error({
-  error,
   reset,
 }: {
   error: Error & { digest?: string };
@@ -21,14 +20,17 @@ export default function Error({
   }, [t]);
 
   return (
-    <main className="min-h-[60vh] flex flex-col items-center justify-center p-6" role="main">
+    <main
+      className="min-h-[60vh] flex flex-col items-center justify-center p-6"
+      role="main"
+    >
       <h1 className="text-xl font-semibold text-text">{t('error.title')}</h1>
       <button
         type="button"
         onClick={reset}
         className="mt-4 px-4 py-2 rounded-card border border-border bg-surface hover:bg-muted/20 text-text"
       >
-        Try again
+        {t('error.tryAgain')}
       </button>
     </main>
   );

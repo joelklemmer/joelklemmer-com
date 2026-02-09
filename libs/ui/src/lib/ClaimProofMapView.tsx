@@ -46,56 +46,57 @@ export function ClaimProofMapView({
       <div className="mt-3 space-y-3" role="list">
         {entries.map((entry) => {
           const claimHref =
-            entry.claimHref ?? (entry.claimId ? `#claim-${entry.claimId}` : undefined);
+            entry.claimHref ??
+            (entry.claimId ? `#claim-${entry.claimId}` : undefined);
           return (
-          <article
-            key={entry.claimId}
-            role="listitem"
-            className="border border-border rounded-card overflow-hidden bg-surface"
-          >
-            <div className="p-4">
-              <a
-                href={claimHref}
-                className={`font-medium text-text ${claimHref ? focusRingClass : ''} underline-offset-4 hover:text-accent ${claimHref ? 'underline' : ''}`}
-              >
-                {entry.claimLabel}
-              </a>
-              <p className="text-sm text-muted mt-1">{entry.claimSummary}</p>
-              <dl className="mt-2 text-xs text-muted">
-                <div>
-                  <dt className="sr-only">{supportingRecordsLabel}</dt>
-                  <dd>{entry.proofs.length} records</dd>
-                </div>
-                {entry.caseStudyCount > 0 ? (
+            <article
+              key={entry.claimId}
+              role="listitem"
+              className="border border-border rounded-card overflow-hidden bg-surface"
+            >
+              <div className="p-4">
+                <a
+                  href={claimHref}
+                  className={`font-medium text-text ${claimHref ? focusRingClass : ''} underline-offset-4 hover:text-accent ${claimHref ? 'underline' : ''}`}
+                >
+                  {entry.claimLabel}
+                </a>
+                <p className="text-sm text-muted mt-1">{entry.claimSummary}</p>
+                <dl className="mt-2 text-xs text-muted">
                   <div>
-                    <dt className="sr-only">{caseStudiesLabel}</dt>
-                    <dd>{entry.caseStudyCount} case studies</dd>
+                    <dt className="sr-only">{supportingRecordsLabel}</dt>
+                    <dd>{entry.proofs.length} records</dd>
                   </div>
+                  {entry.caseStudyCount > 0 ? (
+                    <div>
+                      <dt className="sr-only">{caseStudiesLabel}</dt>
+                      <dd>{entry.caseStudyCount} case studies</dd>
+                    </div>
+                  ) : null}
+                  {entry.lastVerified ? (
+                    <div>
+                      <dt className="sr-only">{lastVerifiedLabel}</dt>
+                      <dd>{entry.lastVerified}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+                {entry.proofs.length > 0 ? (
+                  <ul className="mt-2 list-none space-y-1">
+                    {entry.proofs.map((proof) => (
+                      <li key={proof.id}>
+                        <Link
+                          href={proof.href}
+                          className={`text-xs ${focusRingClass} underline underline-offset-4 hover:text-accent text-muted`}
+                        >
+                          {proof.label}
+                          {proof.date ? ` (${proof.date})` : ''}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 ) : null}
-                {entry.lastVerified ? (
-                  <div>
-                    <dt className="sr-only">{lastVerifiedLabel}</dt>
-                    <dd>{entry.lastVerified}</dd>
-                  </div>
-                ) : null}
-              </dl>
-              {entry.proofs.length > 0 ? (
-                <ul className="mt-2 list-none space-y-1">
-                  {entry.proofs.map((proof) => (
-                    <li key={proof.id}>
-                      <Link
-                        href={proof.href}
-                        className={`text-xs ${focusRingClass} underline underline-offset-4 hover:text-accent text-muted`}
-                      >
-                        {proof.label}
-                        {proof.date ? ` (${proof.date})` : ''}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          </article>
+              </div>
+            </article>
           );
         })}
       </div>

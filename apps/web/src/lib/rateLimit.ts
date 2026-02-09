@@ -26,7 +26,17 @@ function getClientKey(request: NextRequest): string {
   return 'unknown';
 }
 
+/** Skip rate limiting when not behind a proxy (local, a11y, dev). */
+function isBehindProxy(request: NextRequest): boolean {
+  return (
+    request.headers.has('x-forwarded-for') || request.headers.has('x-real-ip')
+  );
+}
+
 export function rateLimit(request: NextRequest): RateLimitResult {
+  if (!isBehindProxy(request)) {
+    return { success: true, remaining: MAX_REQUESTS_PER_WINDOW };
+  }
   const key = getClientKey(request);
   const now = Date.now();
 
