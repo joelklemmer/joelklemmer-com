@@ -433,8 +433,8 @@ export async function BriefScreen(props?: BriefScreenProps) {
               summary: item.summary,
               refId: item.refId,
               verificationStrength: item.verificationStrength,
+              href: `/${locale}/brief#claim-${item.refId}`,
             }))}
-            getItemHref={(item) => `/${locale}/brief#claim-${item.refId}`}
           />
         </Container>
 
@@ -501,8 +501,8 @@ export async function BriefScreen(props?: BriefScreenProps) {
                 proofs: e.proofs,
                 caseStudyCount: e.caseStudyCount,
                 lastVerified: e.lastVerified,
+                claimHref: `#claim-${e.claimId}`,
               }))}
-              claimAnchorId={(id) => `claim-${id}`}
               supportingRecordsLabel={t('claims.supportingRecords')}
               caseStudiesLabel={t('claims.supportingCaseStudies')}
               lastVerifiedLabel={t('claims.lastVerified')}

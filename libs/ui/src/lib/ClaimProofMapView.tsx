@@ -19,12 +19,13 @@ export interface ClaimProofMapViewEntry {
   proofs: ClaimProofMapViewProof[];
   caseStudyCount: number;
   lastVerified?: string;
+  /** Precomputed hash href for the claim anchor (e.g. #claim-xyz). Server must pass; serializable. */
+  claimHref?: string;
 }
 
 export interface ClaimProofMapViewProps {
   entries: ClaimProofMapViewEntry[];
   title: string;
-  claimAnchorId?: (claimId: string) => string;
   supportingRecordsLabel: string;
   caseStudiesLabel: string;
   lastVerifiedLabel: string;
@@ -33,7 +34,6 @@ export interface ClaimProofMapViewProps {
 export function ClaimProofMapView({
   entries,
   title,
-  claimAnchorId = (id) => `claim-${id}`,
   supportingRecordsLabel,
   caseStudiesLabel,
   lastVerifiedLabel,
@@ -44,7 +44,10 @@ export function ClaimProofMapView({
     <section className="section-shell" aria-label={title}>
       <h2 className="text-section-heading font-semibold">{title}</h2>
       <div className="mt-3 space-y-3" role="list">
-        {entries.map((entry) => (
+        {entries.map((entry) => {
+          const claimHref =
+            entry.claimHref ?? (entry.claimId ? `#claim-${entry.claimId}` : undefined);
+          return (
           <article
             key={entry.claimId}
             role="listitem"
@@ -52,10 +55,8 @@ export function ClaimProofMapView({
           >
             <div className="p-4">
               <a
-                href={
-                  entry.claimId ? `#${claimAnchorId(entry.claimId)}` : undefined
-                }
-                className={`font-medium text-text ${entry.claimId ? focusRingClass : ''} underline-offset-4 hover:text-accent ${entry.claimId ? 'underline' : ''}`}
+                href={claimHref}
+                className={`font-medium text-text ${claimHref ? focusRingClass : ''} underline-offset-4 hover:text-accent ${claimHref ? 'underline' : ''}`}
               >
                 {entry.claimLabel}
               </a>
@@ -95,7 +96,8 @@ export function ClaimProofMapView({
               ) : null}
             </div>
           </article>
-        ))}
+          );
+        })}
       </div>
     </section>
   );

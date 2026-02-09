@@ -65,39 +65,44 @@ async function main(): Promise<number> {
     process.env.SKIP_A11Y_BUILD === '1' ||
     process.env.SKIP_A11Y_BUILD === 'true';
   const env = { ...process.env, PORT: String(port) };
-  let server: ReturnType<typeof spawn>;
-  if (skipBuild) {
-    const nextDir = path.join(webAppDir, '.next');
-    const buildIdPath = findBuildId(nextDir);
-    if (!buildIdPath) {
-      throw new Error(
-        `a11y: BUILD_ID not found under ${nextDir}. Run web:build first or run verify without SKIP_A11Y_BUILD.`,
-      );
+  if (!skipBuild) {
+    // Run build first (cross-platform; avoids single shell && on Windows).
+    const build = spawn('pnpm nx run web:build --skip-nx-cache', [], {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env,
+      shell: true,
+    });
+    const buildExit = await new Promise<number>((resolve) => {
+      build.on('exit', (code, signal) => {
+        resolve(code ?? (signal ? 1 : 0));
+      });
+    });
+    if (buildExit !== 0) {
+      throw new Error(`a11y: web:build exited with ${buildExit}`);
     }
-    const nextBin = require.resolve('next/dist/bin/next');
-    // No directory arg: run from apps/web so Next uses cwd and finds build output (e.g. .next/.next/.next/.next/BUILD_ID)
-    server = spawn(
-      process.execPath,
-      [nextBin, 'start', '--port', String(port)],
-      {
-        cwd: webAppDir,
-        stdio: 'pipe',
-        env,
-        shell: false,
-      },
-    );
-  } else {
-    server = spawn(
-      `pnpm nx run web:build --skip-nx-cache && (cd apps/web && npx next start --port=${port})`,
-      [],
-      {
-        cwd: workspaceRoot,
-        stdio: 'pipe',
-        env,
-        shell: true,
-      },
+    // Brief delay so filesystem sync completes (e.g. on Windows) before next start.
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  const nextDir = path.join(webAppDir, '.next');
+  const buildIdPath = findBuildId(nextDir);
+  if (!buildIdPath) {
+    throw new Error(
+      `a11y: BUILD_ID not found under ${nextDir}. Run web:build first or run verify without SKIP_A11Y_BUILD.`,
     );
   }
+  // Run next start from project root so content/ and other relative paths resolve.
+  const nextBin = require.resolve('next/dist/bin/next');
+  const server = spawn(
+    process.execPath,
+    [nextBin, 'start', '--port', String(port)],
+    {
+      cwd: path.resolve(webAppDir),
+      stdio: 'pipe',
+      env,
+      shell: false,
+    },
+  );
 
   let serverExited = false;
   let serverExitCode: number | null = null;

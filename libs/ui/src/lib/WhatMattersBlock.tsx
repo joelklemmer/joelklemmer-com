@@ -9,13 +9,13 @@ export interface WhatMattersBlockItem {
   summary: string;
   refId: string;
   verificationStrength: number;
+  /** Precomputed href for the item (e.g. /en/brief#claim-xyz). Server must pass; serializable. */
+  href?: string;
 }
 
 export interface WhatMattersBlockProps {
   items: WhatMattersBlockItem[];
   title: string;
-  /** Optional anchor for each item (e.g. #claim-{refId}). */
-  getItemHref?: (item: WhatMattersBlockItem) => string;
 }
 
 /**
@@ -25,7 +25,6 @@ export interface WhatMattersBlockProps {
 export function WhatMattersBlock({
   items,
   title,
-  getItemHref,
 }: WhatMattersBlockProps) {
   if (items.length === 0) return null;
 
@@ -34,7 +33,7 @@ export function WhatMattersBlock({
       <h2 className="text-section-heading font-semibold">{title}</h2>
       <ul className="mt-3 list-none space-y-2" role="list">
         {items.map((item) => {
-          const href = getItemHref?.(item);
+          const href = item.href;
           const baseClass =
             'block p-3 rounded-card border border-border bg-muted/10 transition-colors motion-reduce:transition-none';
           return (

@@ -77,5 +77,11 @@
   "books": {
     "title": "Books",
     "description": "Published volumes with verification-linked references."
+  },
+  "notFound": {
+    "title": "Not found"
+  },
+  "error": {
+    "title": "Something went wrong"
   }
 }

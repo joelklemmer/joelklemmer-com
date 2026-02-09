@@ -77,5 +77,11 @@
   "books": {
     "title": "Libros",
     "description": "Volumenes publicados con referencias de verificacion."
+  },
+  "notFound": {
+    "title": "No encontrado"
+  },
+  "error": {
+    "title": "Algo salió mal"
   }
 }
