@@ -3,18 +3,23 @@ name: CI
 on:
   push:
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  NX_CLOUD: 'false'
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+  NEXT_PUBLIC_SITE_URL: https://example.invalid
+  NEXT_PUBLIC_IDENTITY_SAME_AS: https://example.invalid/ci
+  RELEASE_READY: '0'
+
 jobs:
-  ci:
+  verify-fast:
+    name: verify-fast
     runs-on: ubuntu-latest
-    env:
-      CI: true
-      NX_CLOUD: 'false'
-      PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
-      # Deterministic values for SEO/sitemap/canonical and identity validators
-      NEXT_PUBLIC_SITE_URL: https://example.invalid
-      NEXT_PUBLIC_IDENTITY_SAME_AS: https://example.invalid/ci
-      # Do not enforce required artifacts/checksums in CI unless cutting a release
-      RELEASE_READY: '0'
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -39,6 +44,137 @@ jobs:
           path: ${{ steps.pnpm-store.outputs.path }}
           key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
 
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-nx-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format check
+        run: pnpm nx format:check --all
+
+      - name: Lint
+        run: pnpm nx run web:lint
+
+      - name: Validators (content, governance, i18n, tokens, authority-program, etc.)
+        run: |
+          pnpm nx run web:content-validate
+          pnpm nx run web:governance-validate
+          pnpm nx run web:i18n-validate
+          pnpm nx run web:pgf-validate
+          pnpm nx run web:intelligence-validate
+          pnpm nx run web:authority-signals-validate
+          pnpm nx run web:experience-intelligence-validate
+          pnpm nx run web:frameworks-validate
+          pnpm nx run web:aec-validate
+          pnpm nx run web:orchestration-validate
+          pnpm nx run web:content-os-validate
+          pnpm nx run web:home-validate
+          pnpm nx run web:sitemap-validate
+          pnpm nx run web:image-sitemap-validate
+          pnpm nx run web:media-manifest-validate
+          pnpm nx run web:media-derivatives-validate
+          pnpm nx run web:media-authority-validate
+          pnpm nx run web:visual-contract-validate
+          pnpm nx run web:seo-validate
+          pnpm nx run web:tokens-validate
+          pnpm nx run web:authority-program-validate
+          pnpm nx run web:authority-constitution-validate
+          pnpm nx run web:test
+
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-nx-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm nx run web:build --verbose
+
+      - name: Restore generated typings (hygiene)
+        run: git checkout -- apps/web/next-env.d.ts
+
+      - name: Repo must be clean (no generated diffs)
+        run: |
+          STATUS=$(git status --porcelain)
+          if [ -n "$STATUS" ]; then
+            echo "::error::Build produced uncommitted changes. Repo must remain clean in CI."
+            echo "$STATUS"
+            exit 1
+          fi
+
+  a11y:
+    name: a11y
+    runs-on: ubuntu-latest
+    needs: build
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-nx-
+
       - name: Cache Playwright browsers
         uses: actions/cache@v4
         with:
@@ -46,33 +182,14 @@ jobs:
           key: ${{ runner.os }}-ms-playwright-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-ms-playwright-
 
-      - name: Versions
-        run: |
-          node -v
-          npm -v
-          pnpm -v
-          git --version
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium
 
-      - name: Verify (lint, content, i18n, sitemap, seo, test, build, a11y)
-        run: pnpm nx run web:verify --verbose
-
-      - name: Restore generated typings (hygiene only; does not fix format)
-        run: git checkout -- apps/web/next-env.d.ts
-
-      - name: Repo must be clean (no generated diffs)
-        run: |
-          STATUS=$(git status --porcelain)
-          if [ -n "$STATUS" ]; then
-            echo "::error::Verify produced uncommitted changes. Repo must remain clean in CI."
-            echo "$STATUS"
-            exit 1
-          fi
+      - name: A11y (Playwright + axe)
+        run: pnpm nx run web:a11y --verbose
 
       - name: Upload a11y report
         uses: actions/upload-artifact@v4
