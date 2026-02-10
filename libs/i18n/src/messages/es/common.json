@@ -29,7 +29,8 @@
     "textSizeLabel": "Tamaño del texto",
     "textSizeDefault": "Predeterminado",
     "textSizeLarge": "Grande",
-    "underlineLinksLabel": "Subrayar enlaces"
+    "underlineLinksLabel": "Subrayar enlaces",
+    "evaluatorToggleLabel": "Vista de evaluador"
   },
   "fallbackNotice": {
     "title": "Aviso de traducción",

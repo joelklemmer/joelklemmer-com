@@ -1,6 +1,6 @@
 /**
  * Server-rendered consent banner. Renders immediately when no choice made (no client delay).
- * Buttons are enhanced by ConsentActionsIsland (client) which attaches click handlers.
+ * Buttons are enhanced by /deferred/islands.js which attaches click handlers (data-consent-action).
  */
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
@@ -25,12 +25,14 @@ export async function ConsentBannerSSR({
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1">
-          <h2
+          <div
             id="consent-surface-title"
-            className="text-sm font-semibold text-text"
+            role="heading"
+            aria-level={2}
+            className="text-xs font-semibold text-text"
           >
             {t('title')}
-          </h2>
+          </div>
           <p
             id="consent-surface-desc"
             className="mt-1 max-w-[48ch] text-sm text-muted line-clamp-3 overflow-hidden text-ellipsis sm:line-clamp-2"

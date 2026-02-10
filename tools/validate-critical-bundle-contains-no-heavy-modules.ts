@@ -77,7 +77,7 @@ function main(): number {
 
   if (offending.length > 0) {
     console.error(
-      'validate-critical-bundle-contains-no-heavy-modules: root chunks must not contain heavy lazy-only modules.',
+      'validate-critical-bundle-contains-no-heavy-modules: root chunks must not contain banned heavy modules (theme/contrast/density/evaluator providers, client shell, modals).',
     );
     offending.forEach(({ chunk, signature }) =>
       console.error(`  - ${chunk} contains "${signature}"`),

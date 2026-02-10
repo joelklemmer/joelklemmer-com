@@ -29,7 +29,8 @@
     "textSizeLabel": "Розмір тексту",
     "textSizeDefault": "За замовчуванням",
     "textSizeLarge": "Великий",
-    "underlineLinksLabel": "Підкреслювати посилання"
+    "underlineLinksLabel": "Підкреслювати посилання",
+    "evaluatorToggleLabel": "Режим оцінювача"
   },
   "fallbackNotice": {
     "title": "Попередження про переклад",

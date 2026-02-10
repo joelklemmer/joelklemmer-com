@@ -29,7 +29,8 @@
     "textSizeLabel": "Text size",
     "textSizeDefault": "Default",
     "textSizeLarge": "Large",
-    "underlineLinksLabel": "Underline links"
+    "underlineLinksLabel": "Underline links",
+    "evaluatorToggleLabel": "Evaluator view"
   },
   "fallbackNotice": {
     "title": "Translation fallback",

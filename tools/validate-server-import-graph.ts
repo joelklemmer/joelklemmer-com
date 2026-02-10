@@ -20,15 +20,10 @@ const SERVER_ENTRYPOINTS = [
   'apps/web/src/app/[locale]/layout.tsx',
 ];
 
-/** Entrypoints that must not import any file that contains "use client" (resolved direct imports). */
+/** Entrypoints that must not import any file that contains "use client" (resolved direct imports). Zero allowed list. */
 const NO_CLIENT_IMPORTS_ENTRYPOINTS = new Set([
   'apps/web/src/app/[locale]/layout.tsx',
 ]);
-
-/** Exception: locale layout may import this single client bridge (dynamic loader only). */
-const LOCALE_LAYOUT_ALLOWED_CLIENT_IMPORT = path
-  .join(ROOT, 'apps/web/src/app/[locale]/ClientDeferredBridge.tsx')
-  .replace(/\\/g, '/');
 
 /** Banned identifiers: if a server entrypoint imports any of these names, fail. */
 const BANNED_IMPORT_NAMES = new Set([
@@ -179,18 +174,11 @@ function main(): number {
       if (NO_CLIENT_IMPORTS_ENTRYPOINTS.has(rel)) {
         const resolved = resolveImportPath(fromPath, rel);
         if (resolved && fs.existsSync(resolved)) {
-          const resolvedNormalized = path
-            .resolve(ROOT, resolved)
-            .replace(/\\/g, '/');
-          const isAllowed =
-            resolvedNormalized === LOCALE_LAYOUT_ALLOWED_CLIENT_IMPORT;
-          if (!isAllowed) {
-            const resolvedContent = fs.readFileSync(resolved, 'utf-8');
-            if (hasUseClient(resolvedContent)) {
-              violations.push(
-                `${rel}: must not import "use client" files; "${fromPath}" resolves to ${resolved} which has "use client"`,
-              );
-            }
+          const resolvedContent = fs.readFileSync(resolved, 'utf-8');
+          if (hasUseClient(resolvedContent)) {
+            violations.push(
+              `${rel}: must not import any client module (zero allowed); "${fromPath}" resolves to ${resolved} which has "use client"`,
+            );
           }
         }
       }

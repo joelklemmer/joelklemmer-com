@@ -20,14 +20,11 @@ import {
   ConsentBannerSSR,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
-import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
 
 import { ServerLanguageLinks } from '../../lib/ServerLanguageLinks';
 import { routing } from '../../i18n/routing';
-import {
-  ClientDeferredBridge,
-  ClientDeferredControlsSlot,
-} from './ClientDeferredBridge';
+import { HeaderDeferredSSR } from './_deferred/HeaderDeferredSSR';
+import { DeferredIslandsScript } from './_deferred/DeferredIslands.server';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -79,10 +76,6 @@ export default async function LocaleLayout({
     : defaultLocale;
   setRequestLocale(resolvedLocale);
   const cookieStore = await cookies();
-  const initialEvaluatorMode = resolveEvaluatorMode({
-    cookies: cookieStore.toString(),
-    isDev: process.env.NODE_ENV !== 'production',
-  });
   const common = await getTranslations('common');
   const nav = await getTranslations('nav');
   const footer = await getTranslations('footer');
@@ -147,19 +140,22 @@ export default async function LocaleLayout({
           />
         }
         headerDeferredSlot={
-          <ClientDeferredControlsSlot
-            initialEvaluatorMode={initialEvaluatorMode}
-            locale={resolvedLocale}
-            messages={messages}
+          <HeaderDeferredSSR
+            themeToggleLabel={common('a11y.themeLabel')}
+            contrastToggleLabel={common('a11y.contrastLabel')}
+            densityToggleLabel={common('density.toggleLabel')}
+            evaluatorToggleLabel={common('a11y.evaluatorToggleLabel')}
+            cookiePrefsLabel={common('cookiePreferences.openLabel')}
+            accessibilityLabel={common('a11y.accessibilityPanelLabel')}
+            preferencesHref={`/${resolvedLocale}/preferences`}
+            accessibilityHref={`/${resolvedLocale}/accessibility`}
           />
         }
       >
         {children}
       </ServerShell>
-      <ClientDeferredBridge
+      <DeferredIslandsScript
         initialAnalyticsConsent={initialAnalyticsConsent}
-        initialConsentState={initialConsentState}
-        showConsentBanner={!initialConsentState?.choiceMade}
       />
       {!initialConsentState?.choiceMade && (
         <ConsentBannerSSR preferencesHref={`/${resolvedLocale}/preferences`} />

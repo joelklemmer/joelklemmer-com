@@ -29,7 +29,8 @@
     "textSizeLabel": "גודל טקסט",
     "textSizeDefault": "ברירת מחדל",
     "textSizeLarge": "גדול",
-    "underlineLinksLabel": "הדגשת קישורים"
+    "underlineLinksLabel": "הדגשת קישורים",
+    "evaluatorToggleLabel": "תצוגת מעריך"
   },
   "fallbackNotice": {
     "title": "התראת תרגום",
