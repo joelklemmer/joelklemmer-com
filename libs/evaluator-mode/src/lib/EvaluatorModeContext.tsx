@@ -14,6 +14,21 @@ import {
   DEFAULT_EVALUATOR_MODE,
 } from './evaluatorMode';
 
+const EVALUATOR_COOKIE = 'evaluator_mode';
+const EVALUATOR_COOKIE_MAX_AGE_DAYS = 365;
+
+function setEvaluatorCookie(mode: EvaluatorMode): void {
+  try {
+    if (typeof document === 'undefined') return;
+    document.cookie = `${EVALUATOR_COOKIE}=${mode}; path=/; max-age=${
+      EVALUATOR_COOKIE_MAX_AGE_DAYS * 86400
+    }; SameSite=Lax`;
+    document.documentElement.setAttribute('data-evaluator', mode);
+  } catch {
+    // Ignore
+  }
+}
+
 interface EvaluatorModeContextValue {
   mode: EvaluatorMode;
   setMode: (mode: EvaluatorMode) => void;
@@ -31,7 +46,7 @@ export interface EvaluatorModeProviderProps {
 
 /**
  * Provides evaluator mode to the tree. Use initialMode from server for SSR/CSR alignment.
- * No visible UI in this wave; setMode reserved for future explicit user action.
+ * setMode updates cookie and data-evaluator on document for persistence and SSR on next load.
  */
 export function EvaluatorModeProvider({
   children,
@@ -41,6 +56,7 @@ export function EvaluatorModeProvider({
 
   const setMode = useCallback((next: EvaluatorMode) => {
     setModeState(next);
+    setEvaluatorCookie(next);
   }, []);
 
   const value = useMemo<EvaluatorModeContextValue>(

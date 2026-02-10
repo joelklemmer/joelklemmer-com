@@ -360,8 +360,8 @@ node tools/extract-lhr-evidence.mjs
 
 ### Provider split (before → after)
 
-| Before (locale layout) | After |
-| ---------------------- | ----- |
+| Before (locale layout)                                                                                                                                                                                                                            | After                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | NextIntlClientProvider → PerfMarks → ThemeProvider → ContrastProvider → ACPProvider → EvaluatorModeProvider → DensityViewProvider → ConsentProviderV2 → Shell (full client) → DeferredTelemetry → children; ConsentSurfaceV2 (client, 2.5s delay) | NextIntlClientProvider → PerfMarks → ConsentProviderV2 → ServerShell (server) with headerControlsSlot = ClientShellControls (client island) → DeferredTelemetry → children; when !choiceMade: ConsentBannerSSR (server) + ConsentActionsIsland (client). ThemeProvider, ContrastProvider, ACPProvider, EvaluatorModeProvider, DensityViewProvider only wrap ClientShellControls (header controls), not the full page. |
 
 ### Consent
@@ -381,16 +381,16 @@ LCP gate remains 1800 ms; not yet achieved. Further levers: defer ClientShellCon
 
 ### Files changed (Phase 2–3)
 
-| File | Change |
-| ---- | ------ |
-| `libs/shell/` (new) | ServerShell (server), ClientShellControls (client island with providers + Nav mobile, LanguageSwitcherPopover, ThemeToggle, CookiePreferencesTrigger, AccessibilityPanel), README |
-| `tsconfig.base.json` | Path `@joelklemmer/shell` |
-| `apps/web/src/app/[locale]/layout.tsx` | ServerShell + ClientShellControls; ConsentBannerSSR + ConsentActionsIsland when !choiceMade; removed ThemeProvider/ContrastProvider/ACPProvider/EvaluatorModeProvider/DensityViewProvider/Shell from root |
-| `libs/ui/src/lib/Nav.tsx` | Optional `desktopRendered`: when true, only mobile menu rendered (desktop links from ServerShell) |
-| `libs/compliance/src/lib/ConsentBannerSSR.tsx` (new) | Async server component: banner dialog with translated copy and buttons (data-consent-action) |
-| `libs/compliance/src/lib/ConsentActionsIsland.tsx` (new) | Client: attaches handlers to banner buttons, saveConsentWithReceipt + reload |
-| `libs/compliance/src/index.ts` | Export ConsentBannerSSR, ConsentActionsIsland |
-| `tools/extract-lhr-evidence.mjs` | Phase 1: mainthread top 5, bootup top 5, unused-javascript top 5, LCP summary |
+| File                                                     | Change                                                                                                                                                                                                    |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `libs/shell/` (new)                                      | ServerShell (server), ClientShellControls (client island with providers + Nav mobile, LanguageSwitcherPopover, ThemeToggle, CookiePreferencesTrigger, AccessibilityPanel), README                         |
+| `tsconfig.base.json`                                     | Path `@joelklemmer/shell`                                                                                                                                                                                 |
+| `apps/web/src/app/[locale]/layout.tsx`                   | ServerShell + ClientShellControls; ConsentBannerSSR + ConsentActionsIsland when !choiceMade; removed ThemeProvider/ContrastProvider/ACPProvider/EvaluatorModeProvider/DensityViewProvider/Shell from root |
+| `libs/ui/src/lib/Nav.tsx`                                | Optional `desktopRendered`: when true, only mobile menu rendered (desktop links from ServerShell)                                                                                                         |
+| `libs/compliance/src/lib/ConsentBannerSSR.tsx` (new)     | Async server component: banner dialog with translated copy and buttons (data-consent-action)                                                                                                              |
+| `libs/compliance/src/lib/ConsentActionsIsland.tsx` (new) | Client: attaches handlers to banner buttons, saveConsentWithReceipt + reload                                                                                                                              |
+| `libs/compliance/src/index.ts`                           | Export ConsentBannerSSR, ConsentActionsIsland                                                                                                                                                             |
+| `tools/extract-lhr-evidence.mjs`                         | Phase 1: mainthread top 5, bootup top 5, unused-javascript top 5, LCP summary                                                                                                                             |
 
 ### Commands run
 
@@ -403,3 +403,185 @@ RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbos
 ### No gate changes
 
 - LCP assertion remains `maxNumericValue: 1800`. No budgets or thresholds changed.
+
+---
+
+## 13) Phase 0 — Pre-change evidence (main-thread, bootup-time, unused JS)
+
+**Purpose:** Baseline from fresh build and lighthouse-timespan. Run after production build (skip-nx-cache), then `web:lighthouse-timespan`, then `node tools/extract-lhr-evidence.mjs`. Evidence below from 2026-02-09 run (Critical/Deferred shell + SSR data-* + cookie preferences in place).
+
+### LCP numericValue and renderDelay % per route
+
+| URL       | LCP numericValue (ms) | Render delay (ms) | Render delay % |
+| --------- | --------------------- | ----------------- | -------------- |
+| /en       | 3178                  | 1622              | 51%            |
+| /en/brief | 3165                  | 2710              | 86%            |
+| /en/media | 3249                  | 2791              | 86%            |
+
+**Stop condition:** LCP ≤1800 for all three routes not met; assertion-results show LCP failures for all three.
+
+### Top 10 main-thread contributors (from en.report.json)
+
+| Rank | Category                     | Duration (ms) |
+| ---- | ---------------------------- | ------------- |
+| 1    | Script Evaluation            | 288           |
+| 2    | Style & Layout               | 117           |
+| 3    | Other                        | 98            |
+| 4    | Script Parsing & Compilation | 89            |
+| 5    | Parse HTML & CSS             | 19            |
+| 6    | Rendering                    | 7             |
+
+### Top 10 bootup-time (scripts, total ms)
+
+| Rank | Resource              | Total (ms) |
+| ---- | --------------------- | ---------- |
+| 1    | c4b75ee0e91487b4.js   | 240        |
+| 2    | /en (document)        | 172        |
+| 3    | Unattributable        | 86         |
+
+### Top 10 unused JavaScript (wastedBytes)
+
+| Rank | Chunk                | Wasted (bytes) | %   |
+| ---- | -------------------- | -------------- | --- |
+| 1    | 092c65ca05ada580.js  | 65740          | 100%|
+| 2    | c4b75ee0e91487b4.js  | 25036          | 37% |
+
+### LCP element selector / text snippet and resource URL (from LHR)
+
+| URL       | LCP element (selector)                                                                 | Snippet / text                                                                 | Resource URL (if image/font) |
+| --------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------- |
+| /en       | `div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image` | `<img alt="Professional portrait" … class="portrait-image" …>`                 | `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…` (Next.js image) |
+| /en/brief | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                       | `<p id="consent-surface-desc" class="mt-1 text-sm text-muted">`; nodeLabel: "We use cookies and similar technologies…" | — (text node) |
+| /en/media | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                      | Same as /en/brief                                                              | — (text node) |
+
+### Commands to regenerate
+
+```powershell
+RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
+RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
+```
+
+(Extract script with a single report path outputs main-thread top 10, bootup-time top 10, unused JS top 10, and LCP element + resource for that route. Run once per report to populate per-route evidence below.)
+
+### Per-route evidence (Phase 1A) — main-thread, bootup-time, unused JS, LCP
+
+Evidence from explicit extractor runs per report (required before code changes). Source: same build + lighthouse-timespan as §13 baseline; then `node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/<report>.report.json` for each.
+
+#### /en (en.report.json)
+
+```
+=== /en ===
+
+Top 10 main-thread contributors (ms):
+  1. Script Evaluation: 288
+  2. Style & Layout: 117
+  3. Other: 98
+  4. Script Parsing & Compilation: 89
+  5. Parse HTML & CSS: 19
+  6. Rendering: 7
+
+Top 10 bootup-time by total (ms):
+  1. c4b75ee0e91487b4.js: 240
+  2. http://127.0.0.1:50930/en: 172
+  3. Unattributable: 86
+
+Top 10 unused JavaScript (wastedBytes):
+  1. 092c65ca05ada580.js: 65740 (100%)
+  2. c4b75ee0e91487b4.js: 25036 (37%)
+
+LCP numericValue (ms): 3178
+Render delay (ms): 1622
+LCP element: div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image
+LCP resource URL: http://127.0.0.1:50930/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…
+```
+
+#### /en/brief (en-brief.report.json)
+
+```
+=== /en/brief ===
+
+Top 10 main-thread contributors (ms):
+  1. Script Evaluation: 304
+  2. Style & Layout: 220
+  3. Other: 115
+  4. Script Parsing & Compilation: 72
+  5. Rendering: 34
+  6. Parse HTML & CSS: 22
+
+Top 10 bootup-time by total (ms):
+  1. http://127.0.0.1:50930/en/brief: 332
+  2. c4b75ee0e91487b4.js: 273
+  3. Unattributable: 87
+
+Top 10 unused JavaScript (wastedBytes):
+  1. 092c65ca05ada580.js: 64290 (98%)
+  2. c4b75ee0e91487b4.js: 25737 (38%)
+
+LCP numericValue (ms): 3165
+Render delay (ms): 2710
+LCP element: div#consent-banner > div.mx-auto > div > p#consent-surface-desc
+```
+
+#### /en/media (en-media.report.json)
+
+```
+=== /en/media ===
+
+Top 10 main-thread contributors (ms):
+  1. Script Evaluation: 373
+  2. Style & Layout: 126
+  3. Other: 124
+  4. Script Parsing & Compilation: 80
+  5. Parse HTML & CSS: 30
+  6. Rendering: 26
+
+Top 10 bootup-time by total (ms):
+  1. c4b75ee0e91487b4.js: 335
+  2. http://127.0.0.1:50930/en/media: 234
+  3. Unattributable: 106
+
+Top 10 unused JavaScript (wastedBytes):
+  1. 092c65ca05ada580.js: 64060 (97%)
+  2. c4b75ee0e91487b4.js: 25107 (37%)
+
+LCP numericValue (ms): 3249
+Render delay (ms): 2791
+LCP element: div#consent-banner > div.mx-auto > div > p#consent-surface-desc
+```
+
+**Recorded:**
+
+- **Main-thread breakdown (top 10):** Script Evaluation dominates (288–373 ms); Style & Layout 117–220 ms; Script Parsing & Compilation 72–89 ms.
+- **Bootup-time (top 10):** Largest: `c4b75ee0e91487b4.js` (240–335 ms) and document (172–332 ms); Unattributable 86–106 ms.
+- **Unused JS (top 10):** `092c65ca05ada580.js` ~64–66 KB wasted (97–100%); `c4b75ee0e91487b4.js` ~25 KB (37–38%).
+- **LCP element + resource:** /en: hero `img.portrait-image` (Next image URL). /en/brief and /en/media: consent paragraph `p#consent-surface-desc` (text node, no resource URL).
+
+### Post-change (Phase 1+2: Critical/Deferred split + SSR attributes)
+
+- **Phase 1:** ClientShellCritical (Nav + LanguageSwitcher only) in headerCriticalSlot; ClientShellDeferred (Theme, Contrast, ACP, Cookie, AccessibilityPanel, Evaluator, Density) mounted via DeferMount (requestIdleCallback 500ms) in headerDeferredSlot. ServerShell has two slots; deferred slot has reserved min-width/min-height to avoid CLS.
+- **Phase 2:** Root layout reads cookies (`joelklemmer-theme`, `joelklemmer-contrast`, `joelklemmer-density`, `evaluator_mode`) and sets `data-theme`, `data-contrast`, `data-density`, `data-evaluator` on `<html>`. Theme script only resolves `data-theme="system"` to light/dark. ThemeProvider/ContrastProvider/DensityViewProvider/EvaluatorModeProvider persist via cookies and update DOM in place when deferred controls mount.
+
+**Files changed (Phase 1+2):**
+
+| File                                                     | Change                                                                                        |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `libs/shell/src/lib/ClientShellCritical.tsx`             | New: minimal client island (Nav + LanguageSwitcherPopover only).                              |
+| `libs/shell/src/lib/ClientShellDeferred.tsx`             | New: full controls suite with Theme/Contrast/ACP/Evaluator/Density providers.                 |
+| `libs/shell/src/lib/DeferMount.tsx`                      | New: mounts children after requestIdleCallback (timeout 500ms) or double rAF fallback.        |
+| `libs/shell/src/lib/ShellDeferredControls.tsx`           | New: DeferMount wrapper for ClientShellDeferred.                                              |
+| `libs/shell/src/lib/ServerShell.tsx`                     | headerCriticalSlot + headerDeferredSlot; reserved `.masthead-deferred-slot` container.        |
+| `libs/shell/src/index.ts`                                | Export Critical, Deferred, DeferMount, ShellDeferredControls.                                 |
+| `apps/web/src/app/[locale]/layout.tsx`                   | headerCriticalSlot=ClientShellCritical, headerDeferredSlot=ShellDeferredControls.             |
+| `apps/web/src/app/layout.tsx`                            | Async; read cookies; set data-theme, data-contrast, data-density, data-evaluator on `<html>`. |
+| `apps/web/src/app/theme-script.ts`                       | Only resolve data-theme when "system" or unset; no localStorage.                              |
+| `libs/ui/src/lib/ThemeProvider.tsx`                      | Persist theme via cookie; read from cookie or data-theme on mount.                            |
+| `libs/ui/src/lib/ContrastProvider.tsx`                   | Persist contrast via cookie; read from cookie or data-contrast on mount.                      |
+| `libs/authority-density/src/lib/densityState.ts`         | setDensityCookie, isDensityOnFromSSR; sync with data-density.                                 |
+| `libs/authority-density/src/lib/DensityViewContext.tsx`  | setDensityOn/toggle write cookie + data-density; initial from hash or SSR.                    |
+| `libs/evaluator-mode/src/lib/EvaluatorModeContext.tsx`   | setMode writes evaluator_mode cookie and data-evaluator on document.                          |
+| `tools/extract-lhr-evidence.mjs`                         | Top 10 main-thread, bootup-time, unused-javascript.                                           |
+| `apps/web-e2e/src/shell/shell-deferred-controls.spec.ts` | New: reserved slot present, deferred controls within 2s, no CLS from mount.                   |
+| `apps/web-e2e/project.json`                              | Target e2e-shell for shell-deferred-controls spec.                                            |

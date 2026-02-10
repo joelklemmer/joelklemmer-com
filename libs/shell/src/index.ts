@@ -1,4 +1,10 @@
 export { ServerShell } from './lib/ServerShell';
 export type { ServerShellProps, ServerShellNavItem } from './lib/ServerShell';
-export { ClientShellControls } from './lib/ClientShellControls';
-export type { ClientShellControlsProps } from './lib/ClientShellControls';
+export { ClientShellCritical } from './lib/ClientShellCritical';
+export type { ClientShellCriticalProps } from './lib/ClientShellCritical';
+export { ClientShellDeferred } from './lib/ClientShellDeferred';
+export type { ClientShellDeferredProps } from './lib/ClientShellDeferred';
+export { DeferMount } from './lib/DeferMount';
+export type { DeferMountProps } from './lib/DeferMount';
+export { ShellDeferredControls } from './lib/ShellDeferredControls';
+export type { ShellDeferredControlsProps } from './lib/ShellDeferredControls';

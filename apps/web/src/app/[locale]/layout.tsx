@@ -14,7 +14,11 @@ import {
 // eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
 import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
-import { ServerShell, ClientShellControls } from '@joelklemmer/shell';
+import {
+  ServerShell,
+  ClientShellCritical,
+  ShellDeferredControls,
+} from '@joelklemmer/shell';
 import {
   getConsentFromCookieV2,
   ConsentProviderV2,
@@ -133,9 +137,9 @@ export default async function LocaleLayout({
           footerContent={
             <FooterSection label={footer('label')} links={footerItems} />
           }
-          headerControlsSlot={
-            <ClientShellControls
-              navItems={navItems}
+          headerCriticalSlot={<ClientShellCritical navItems={navItems} />}
+          headerDeferredSlot={
+            <ShellDeferredControls
               initialEvaluatorMode={initialEvaluatorMode}
             />
           }

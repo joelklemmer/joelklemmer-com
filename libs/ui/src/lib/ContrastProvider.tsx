@@ -19,12 +19,34 @@ const ContrastContext = createContext<ContrastContextValue | undefined>(
   undefined,
 );
 
-const CONTRAST_STORAGE_KEY = 'joelklemmer-contrast';
+const CONTRAST_COOKIE = 'joelklemmer-contrast';
+const CONTRAST_COOKIE_MAX_AGE_DAYS = 365;
+
+function getContrastFromCookie(): ContrastMode | null {
+  if (typeof document === 'undefined' || !document.cookie) return null;
+  const m = document.cookie.match(
+    new RegExp(`(?:^|;\\s*)${CONTRAST_COOKIE}=([^;]*)`),
+  );
+  const v = m?.[1]?.trim();
+  return v === 'high' ? 'high' : v === 'default' ? 'default' : null;
+}
+
+function setContrastCookie(contrast: ContrastMode): void {
+  try {
+    document.cookie = `${CONTRAST_COOKIE}=${contrast}; path=/; max-age=${
+      CONTRAST_COOKIE_MAX_AGE_DAYS * 86400
+    }; SameSite=Lax`;
+  } catch {
+    // Ignore
+  }
+}
 
 function getStoredContrast(): ContrastMode {
   if (typeof window === 'undefined') return 'default';
-  const stored = localStorage.getItem(CONTRAST_STORAGE_KEY);
-  return stored === 'high' ? 'high' : 'default';
+  const fromCookie = getContrastFromCookie();
+  if (fromCookie) return fromCookie;
+  const fromRoot = document.documentElement.getAttribute('data-contrast');
+  return fromRoot === 'high' ? 'high' : 'default';
 }
 
 function applyContrast(contrast: ContrastMode) {
@@ -83,9 +105,7 @@ export function ContrastProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     applyContrast(contrast);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(CONTRAST_STORAGE_KEY, contrast);
-    }
+    setContrastCookie(contrast);
   }, [contrast]);
 
   const setContrast = (newContrast: ContrastMode) => {

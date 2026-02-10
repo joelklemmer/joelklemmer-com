@@ -18,7 +18,8 @@ interface ThemeContextValue {
 
 const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 
-const THEME_STORAGE_KEY = 'joelklemmer-theme';
+const THEME_COOKIE = 'joelklemmer-theme';
+const THEME_COOKIE_MAX_AGE_DAYS = 365;
 
 function getSystemTheme(): 'light' | 'dark' {
   if (typeof window === 'undefined') return 'light';
@@ -27,18 +28,32 @@ function getSystemTheme(): 'light' | 'dark' {
     : 'light';
 }
 
+function getThemeFromCookie(): Theme | null {
+  if (typeof document === 'undefined' || !document.cookie) return null;
+  const m = document.cookie.match(
+    new RegExp(`(?:^|;\\s*)${THEME_COOKIE}=([^;]*)`),
+  );
+  const v = m?.[1]?.trim();
+  return v === 'light' || v === 'dark' || v === 'system' ? (v as Theme) : null;
+}
+
+function setThemeCookie(theme: Theme): void {
+  try {
+    document.cookie = `${THEME_COOKIE}=${theme}; path=/; max-age=${
+      THEME_COOKIE_MAX_AGE_DAYS * 86400
+    }; SameSite=Lax`;
+  } catch {
+    // Ignore
+  }
+}
+
 function getStoredTheme(): Theme {
   if (typeof window === 'undefined') return 'system';
-  try {
-    const stored = localStorage.getItem(THEME_STORAGE_KEY);
-    return (
-      stored === 'light' || stored === 'dark' || stored === 'system'
-        ? stored
-        : 'system'
-    ) as Theme;
-  } catch {
-    return 'system';
-  }
+  const fromCookie = getThemeFromCookie();
+  if (fromCookie) return fromCookie;
+  const fromRoot = document.documentElement.getAttribute('data-theme');
+  if (fromRoot === 'light' || fromRoot === 'dark') return fromRoot;
+  return 'system';
 }
 
 /** Always sets data-theme to "light" or "dark". System mode uses resolved OS preference. */
@@ -69,13 +84,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (!mounted) return;
     setResolvedTheme(theme === 'system' ? getSystemTheme() : theme);
     applyTheme(theme);
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(THEME_STORAGE_KEY, theme);
-      }
-    } catch {
-      // Ignore localStorage errors
-    }
+    setThemeCookie(theme);
   }, [theme, mounted]);
 
   // Listen for system theme changes when theme is 'system'

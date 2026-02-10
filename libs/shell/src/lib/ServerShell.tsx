@@ -1,7 +1,7 @@
 /**
  * Server shell: masthead, static nav links, main, footer.
  * No 'use client'. Outputs full HTML so LCP is not blocked by client hydration.
- * Interactive header: mobile nav + utilities in one headerControlsSlot (ClientShellControls).
+ * Interactive header: critical slot (Nav + language) + deferred slot (theme, cookie, a11y) after first paint.
  */
 import type { ReactNode } from 'react';
 import Link from 'next/link';
@@ -27,8 +27,10 @@ export interface ServerShellProps {
   homeHref: string;
   navItems: ServerShellNavItem[];
   footerContent: ReactNode;
-  /** Client island: mobile menu + language, theme, cookie, a11y. Single slot for both. */
-  headerControlsSlot: ReactNode;
+  /** Critical path: mobile nav + language switcher only. Rendered immediately. */
+  headerCriticalSlot: ReactNode;
+  /** Deferred: theme, contrast, cookie, a11y panel, etc. Mounted after first paint; container reserved to avoid CLS. */
+  headerDeferredSlot: ReactNode;
   children: ReactNode;
   mainId?: string;
 }
@@ -42,7 +44,8 @@ export function ServerShell({
   homeHref,
   navItems,
   footerContent,
-  headerControlsSlot,
+  headerCriticalSlot,
+  headerDeferredSlot,
   children,
   mainId = MAIN_CONTENT_ID,
 }: ServerShellProps) {
@@ -89,8 +92,12 @@ export function ServerShell({
                 </ul>
               </nav>
             </div>
-            <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-6">
-              {headerControlsSlot}
+            <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-6 min-h-[var(--masthead-bar-height)]">
+              {headerCriticalSlot}
+              {/* Reserved space for deferred controls; no CLS when they mount */}
+              <div className="masthead-deferred-slot flex items-center gap-6 min-w-[8rem] min-h-[var(--masthead-bar-height)]">
+                {headerDeferredSlot}
+              </div>
             </div>
           </div>
         </Container>

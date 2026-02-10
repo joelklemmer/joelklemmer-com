@@ -9,7 +9,12 @@ import {
   useState,
   type ReactNode,
 } from 'react';
-import { isDensityHashPresent, setDensityHash } from './densityState';
+import {
+  isDensityHashPresent,
+  isDensityOnFromSSR,
+  setDensityHash,
+  setDensityCookie,
+} from './densityState';
 
 interface DensityViewContextValue {
   isDensityOn: boolean;
@@ -38,19 +43,22 @@ export function DensityViewProvider({
   const setDensityOn = useCallback((on: boolean) => {
     setDensityOnState(on);
     setDensityHash(on);
+    setDensityCookie(on);
   }, []);
 
   const toggleDensity = useCallback(() => {
     setDensityOnState((prev) => {
       const next = !prev;
       setDensityHash(next);
+      setDensityCookie(next);
       return next;
     });
   }, []);
 
   useEffect(() => {
     if (!syncWithHash || typeof window === 'undefined') return;
-    const read = () => setDensityOnState(isDensityHashPresent());
+    const read = () =>
+      setDensityOnState(isDensityHashPresent() || isDensityOnFromSSR());
     read();
     window.addEventListener('hashchange', read);
     return () => window.removeEventListener('hashchange', read);
