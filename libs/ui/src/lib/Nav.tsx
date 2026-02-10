@@ -22,9 +22,11 @@ export interface NavItem {
 
 export interface NavProps {
   items: NavItem[];
+  /** When true, desktop list is omitted (server-rendered elsewhere). Only mobile menu is rendered. */
+  desktopRendered?: boolean;
 }
 
-export function Nav({ items }: NavProps) {
+export function Nav({ items, desktopRendered = false }: NavProps) {
   const pathname = usePathname();
   const a11y = useTranslations('common');
   const [isOpen, setIsOpen] = useState(false);
@@ -141,8 +143,8 @@ export function Nav({ items }: NavProps) {
     setIsOpen(false);
   }, [pathname]);
 
-  // Desktop: primary nav — semantic classes + data-nav-rank for cognitive hierarchy (weight/spacing in 30-components). RTL: logical props in CSS.
-  const desktopNav = (
+  // Desktop: primary nav — omit when desktopRendered (server shell renders links).
+  const desktopNav = desktopRendered ? null : (
     <ul
       className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]"
       role="list"

@@ -1,6 +1,6 @@
 import '../global.css';
 import type { Metadata } from 'next';
-import { Suspense, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
@@ -10,37 +10,21 @@ import {
   setRequestLocale,
 } from 'next-intl/server';
 
-/* Locale layout is the single composition point for shell; allowed to import i18n/ui. */
-// eslint-disable-next-line no-restricted-imports -- layout composes shell
+/* Locale layout is the single composition point for shell; allowed to import i18n/shell/sections. */
+// eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
 import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
-// eslint-disable-next-line no-restricted-imports -- layout composes shell
-import {
-  LanguageSwitcherPopover,
-  Shell,
-  ThemeProvider,
-  ThemeToggle,
-  ContrastProvider,
-  AccessibilityPanel,
-  Header,
-  Nav,
-} from '@joelklemmer/ui';
-// eslint-disable-next-line no-restricted-imports -- ACP internals (Agent 2 owns)
-import { ACPProvider } from '@joelklemmer/a11y';
-import {
-  EvaluatorModeProvider,
-  resolveEvaluatorMode,
-} from '@joelklemmer/evaluator-mode';
-import { DensityViewProvider } from '@joelklemmer/authority-density';
+import { ServerShell, ClientShellControls } from '@joelklemmer/shell';
 import {
   getConsentFromCookieV2,
   ConsentProviderV2,
   canLoadAnalyticsV2,
-  CookiePreferencesTrigger,
-  ConsentSurfaceV2,
+  ConsentBannerSSR,
+  ConsentActionsIsland,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
 import { PerfMarks } from '@joelklemmer/perf';
+import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
 
 import { DeferredTelemetry } from '../../lib/DeferredTelemetry';
 import { routing } from '../../i18n/routing';
@@ -137,71 +121,38 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
       <PerfMarks />
-      <ThemeProvider>
-        <ContrastProvider>
-          <ACPProvider>
-            <EvaluatorModeProvider initialMode={initialEvaluatorMode}>
-              <DensityViewProvider syncWithHash>
-                <ConsentProviderV2 initialConsentState={initialConsentState}>
-                  <Shell
-                    headerContent={
-                      <Header
-                        wordmark={common('wordmark')}
-                        homeHref={`/${resolvedLocale}`}
-                        centerContent={
-                          <Suspense
-                            fallback={
-                              <div
-                                className="min-h-[var(--masthead-bar-height)] w-32"
-                                aria-hidden
-                              />
-                            }
-                          >
-                            <Nav items={navItems} />
-                          </Suspense>
-                        }
-                        headerControls={
-                          <>
-                            <Suspense
-                              fallback={
-                                <div
-                                  className="masthead-touch-target w-11 min-h-[var(--masthead-bar-height)]"
-                                  aria-hidden
-                                />
-                              }
-                            >
-                              <LanguageSwitcherPopover />
-                            </Suspense>
-                            <ThemeToggle />
-                            <CookiePreferencesTrigger />
-                            <AccessibilityPanel />
-                          </>
-                        }
-                      />
-                    }
-                    navContent={null}
-                    footerContent={
-                      <FooterSection
-                        label={footer('label')}
-                        links={footerItems}
-                      />
-                    }
-                  >
-                    <DeferredTelemetry
-                      initialAnalyticsConsent={initialAnalyticsConsent}
-                    >
-                      {children}
-                    </DeferredTelemetry>
-                  </Shell>
-                  <ConsentSurfaceV2
-                    preferencesHref={`/${resolvedLocale}/preferences`}
-                  />
-                </ConsentProviderV2>
-              </DensityViewProvider>
-            </EvaluatorModeProvider>
-          </ACPProvider>
-        </ContrastProvider>
-      </ThemeProvider>
+      <ConsentProviderV2 initialConsentState={initialConsentState}>
+        <ServerShell
+          skipLabel={common('a11y.skipToContent')}
+          headerLabel={common('a11y.headerLabel')}
+          navLabel={common('a11y.navLabel')}
+          footerLabel={common('a11y.footerLabel')}
+          wordmark={common('wordmark')}
+          homeHref={`/${resolvedLocale}`}
+          navItems={navItems}
+          footerContent={
+            <FooterSection label={footer('label')} links={footerItems} />
+          }
+          headerControlsSlot={
+            <ClientShellControls
+              navItems={navItems}
+              initialEvaluatorMode={initialEvaluatorMode}
+            />
+          }
+        >
+          <DeferredTelemetry initialAnalyticsConsent={initialAnalyticsConsent}>
+            {children}
+          </DeferredTelemetry>
+        </ServerShell>
+        {!initialConsentState?.choiceMade && (
+          <>
+            <ConsentBannerSSR
+              preferencesHref={`/${resolvedLocale}/preferences`}
+            />
+            <ConsentActionsIsland />
+          </>
+        )}
+      </ConsentProviderV2>
     </NextIntlClientProvider>
   );
 }

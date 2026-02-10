@@ -312,3 +312,94 @@ node tools/extract-lhr-evidence.mjs
 ### No gates weakened
 
 - LCP assertion remains `maxNumericValue: 1800`. No assertion or budget changes.
+
+---
+
+## 11) Phase 1 — Main-thread evidence (evidence-driven)
+
+**Source:** Production build, then `SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan`, then `node tools/extract-lhr-evidence.mjs`. Perf marks: run `NEXT_PUBLIC_PERF_MARKS=1` with app and load /en; read `window.__PERF_MARKS__` (or use `nx run web-e2e:perf-smoke`).
+
+### Top 5 main-thread contributors (from en.report.json)
+
+| Rank | Category                     | Duration (ms) |
+| ---- | ---------------------------- | ------------- |
+| 1    | Script Evaluation            | ~994          |
+| 2    | Parse HTML & CSS             | ~395          |
+| 3    | Other                        | ~124          |
+| 4    | Style & Layout               | ~104          |
+| 5    | Script Parsing & Compilation | ~90           |
+
+### Top 5 bootup-time (largest JS execution)
+
+| Rank | Resource         | Total (ms) |
+| ---- | ---------------- | ---------- |
+| 1    | c4b75ee0…87b4.js | ~1376      |
+| 2    | /en (document)   | ~157       |
+| 3    | Unattributable   | ~102       |
+
+### Largest unused JavaScript (wastedBytes)
+
+| Rank | Chunk            | Wasted (bytes) | %    |
+| ---- | ---------------- | -------------- | ---- |
+| 1    | 3dfe5a50…edbb.js | 66410          | 100% |
+| 2    | c4b75ee0…87b4.js | 22015          | 33%  |
+
+### LCP and render delay (baseline before structural fix)
+
+| URL       | LCP (ms) | LCP element               | Render delay % |
+| --------- | -------- | ------------------------- | -------------- |
+| /en       | ~3322    | img.portrait-image (hero) | 70%            |
+| /en/brief | ~3325    | h1#hero-title             | 86%            |
+| /en/media | ~3403    | h1#hero-title             | 87%            |
+
+---
+
+## 12) Phase 2–3 structural changes (SSR shell + consent, 2026-02-10)
+
+**Goal:** Initial viewport render mostly from server HTML with minimal client hydration; consent visible immediately (SSR), no artificial delay.
+
+### Provider split (before → after)
+
+| Before (locale layout) | After |
+| ---------------------- | ----- |
+| NextIntlClientProvider → PerfMarks → ThemeProvider → ContrastProvider → ACPProvider → EvaluatorModeProvider → DensityViewProvider → ConsentProviderV2 → Shell (full client) → DeferredTelemetry → children; ConsentSurfaceV2 (client, 2.5s delay) | NextIntlClientProvider → PerfMarks → ConsentProviderV2 → ServerShell (server) with headerControlsSlot = ClientShellControls (client island) → DeferredTelemetry → children; when !choiceMade: ConsentBannerSSR (server) + ConsentActionsIsland (client). ThemeProvider, ContrastProvider, ACPProvider, EvaluatorModeProvider, DensityViewProvider only wrap ClientShellControls (header controls), not the full page. |
+
+### Consent
+
+- **Before:** ConsentSurfaceV2 (client) with double rAF + 2.5s delay; banner painted after delay.
+- **After:** ConsentBannerSSR (server) renders banner HTML immediately when !initialConsentState?.choiceMade. ConsentActionsIsland (client) attaches click handlers to buttons; on accept/reject writes cookie and reloads. No delay; consent visible in first paint. E2E consent-governance: banner visible and keyboard reachable (unchanged; satisfied by SSR banner).
+
+### LCP before / after (same run conditions; no assertion change)
+
+| URL       | Before (ms) | After (ms) |
+| --------- | ----------- | ---------- |
+| /en       | ~3322       | ~2883      |
+| /en/brief | ~3325       | ~3166      |
+| /en/media | ~3403       | ~3241      |
+
+LCP gate remains 1800 ms; not yet achieved. Further levers: defer ClientShellControls (e.g. requestIdleCallback), reduce client bundle in the island, or measure on faster CI.
+
+### Files changed (Phase 2–3)
+
+| File | Change |
+| ---- | ------ |
+| `libs/shell/` (new) | ServerShell (server), ClientShellControls (client island with providers + Nav mobile, LanguageSwitcherPopover, ThemeToggle, CookiePreferencesTrigger, AccessibilityPanel), README |
+| `tsconfig.base.json` | Path `@joelklemmer/shell` |
+| `apps/web/src/app/[locale]/layout.tsx` | ServerShell + ClientShellControls; ConsentBannerSSR + ConsentActionsIsland when !choiceMade; removed ThemeProvider/ContrastProvider/ACPProvider/EvaluatorModeProvider/DensityViewProvider/Shell from root |
+| `libs/ui/src/lib/Nav.tsx` | Optional `desktopRendered`: when true, only mobile menu rendered (desktop links from ServerShell) |
+| `libs/compliance/src/lib/ConsentBannerSSR.tsx` (new) | Async server component: banner dialog with translated copy and buttons (data-consent-action) |
+| `libs/compliance/src/lib/ConsentActionsIsland.tsx` (new) | Client: attaches handlers to banner buttons, saveConsentWithReceipt + reload |
+| `libs/compliance/src/index.ts` | Export ConsentBannerSSR, ConsentActionsIsland |
+| `tools/extract-lhr-evidence.mjs` | Phase 1: mainthread top 5, bootup top 5, unused-javascript top 5, LCP summary |
+
+### Commands run
+
+```powershell
+pnpm nx format:write --all
+pnpm nx run web:verify --verbose
+RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
+```
+
+### No gate changes
+
+- LCP assertion remains `maxNumericValue: 1800`. No budgets or thresholds changed.

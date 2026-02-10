@@ -134,4 +134,8 @@ export type {
 export { ConsentSurfaceV2 } from './lib/ConsentSurfaceV2';
 export type { ConsentSurfaceV2Props } from './lib/ConsentSurfaceV2';
 
+export { ConsentBannerSSR } from './lib/ConsentBannerSSR';
+export type { ConsentBannerSSRProps } from './lib/ConsentBannerSSR';
+export { ConsentActionsIsland } from './lib/ConsentActionsIsland';
+
 export { ConsentPreferencesForm } from './lib/ConsentPreferencesForm';
