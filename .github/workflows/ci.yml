@@ -160,6 +160,7 @@ jobs:
         run: pnpm nx run web:head-invariants-validate --verbose
         env:
           RATE_LIMIT_MODE: off
+          STANDALONE: '1'
 
   a11y:
     name: a11y

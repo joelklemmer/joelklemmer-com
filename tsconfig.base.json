@@ -48,7 +48,8 @@
       "@joelklemmer/compliance": ["libs/compliance/src/index.ts"],
       "@joelklemmer/telemetry-governance": [
         "libs/telemetry-governance/src/index.ts"
-      ]
+      ],
+      "@joelklemmer/perf": ["libs/perf/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

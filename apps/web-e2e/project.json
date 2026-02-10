@@ -18,6 +18,10 @@
     "interaction": {
       "executor": "@nx/playwright:playwright",
       "options": { "config": "apps/web-e2e/playwright.interaction.config.ts" }
+    },
+    "perf-smoke": {
+      "executor": "@nx/playwright:playwright",
+      "options": { "config": "apps/web-e2e/playwright.perf.config.ts" }
     }
   }
 }

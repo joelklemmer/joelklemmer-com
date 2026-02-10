@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
 /* Root layout: html lang/dir set by script for cacheability (bf-cache). */
-// eslint-disable-next-line no-restricted-imports -- root layout
 import { themeScript } from './theme-script';
 
 /** Default meta description; segment metadata (pages) set canonical via getMetadataBaseUrl(). */
@@ -35,13 +34,14 @@ const localeDirScript = `
 })();
 `;
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" dir="ltr" className={inter.variable} suppressHydrationWarning>
+    <html
+      lang="en"
+      dir="ltr"
+      className={inter.variable}
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script dangerouslySetInnerHTML={{ __html: localeDirScript }} />

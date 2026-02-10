@@ -45,6 +45,7 @@ const ALLOWED_NON_TOKEN_CSS_VARS = new Set([
   '--nav-primary-padding-inline',
   '--nav-primary-padding-block',
   '--nav-primary-active-border-width',
+  '--tap-target-spacing', // WCAG 2.2 2.5.8: ≥24px between adjacent tap targets (masthead)
 ]);
 
 /** Tailwind palette names that are NOT token-mapped (would be drift). */

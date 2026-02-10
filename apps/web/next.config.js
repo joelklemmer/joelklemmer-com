@@ -18,11 +18,15 @@ const nextConfig = {
   distDir: '.next',
   // Reduce JS on critical routes: tree-shake barrel imports from workspace libs (cognitive load reduction).
   experimental: {
+    // Inline CSS to remove render-blocking link tags; improves FCP/LCP (Lighthouse).
+    inlineCss: true,
     optimizePackageImports: [
       '@joelklemmer/ui',
       '@joelklemmer/sections',
       '@joelklemmer/a11y',
       '@joelklemmer/seo',
+      '@joelklemmer/authority-telemetry',
+      '@joelklemmer/compliance',
     ],
   },
   images: {

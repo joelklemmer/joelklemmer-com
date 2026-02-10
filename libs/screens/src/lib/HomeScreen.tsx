@@ -1,12 +1,11 @@
 import type { ReactNode } from 'react';
-import { Fragment } from 'react';
+import { Fragment, Suspense } from 'react';
 import { getLocale } from 'next-intl/server';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import type { SectionId } from '@joelklemmer/authority-orchestration';
 import {
   createPageMetadata,
   getCriticalPreloadLinks,
@@ -23,6 +22,10 @@ import { getFrameworkList } from '@joelklemmer/content';
 
 const HOME_HERO_IMAGE_PATH =
   '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp';
+
+/** Section order: H1 (hero) first, then H2 sections. Enforced by validate-home. */
+type SectionId = 'hero' | 'routes' | 'claims' | 'doctrine';
+const HOME_IA_ORDER: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
@@ -43,12 +46,8 @@ export async function generateMetadata(options?: { baseUrl?: string }) {
 
 export const homeMetadata = generateMetadata;
 
-const HOME_SECTION_IDS: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
-
-/** Fixed IA order: Hero first, then Executive Brief (dominant) + Verification rails, Claim summary, Frameworks & doctrine. */
-const HOME_IA_ORDER: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
-
-export async function HomeScreen() {
+/** Below-fold content in its own async boundary so server can stream hero first (LCP). */
+async function HomeBelowFold() {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['home', 'frameworks']);
   const t = createScopedTranslator(locale, messages, 'home');
@@ -61,21 +60,6 @@ export async function HomeScreen() {
   }>;
   const frameworks = (await getFrameworkList()).slice(0, 3);
   const briefDoctrineAnchor = `/${locale}/brief#doctrine`;
-
-  const hero = (
-    <HeroSection
-      title={t('hero.title')}
-      lede={t('hero.lede')}
-      actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
-      visual={{
-        src: HOME_HERO_IMAGE_PATH,
-        alt: t('hero.portraitAlt'),
-        width: 1200,
-        height: 1500,
-      }}
-      imagePriority
-    />
-  );
 
   const claims = <ListSection title={t('claims.title')} items={claimItems} />;
   const doctrine =
@@ -106,7 +90,6 @@ export async function HomeScreen() {
       </section>
     ) : null;
 
-  // Routes section: Executive Brief (dominant) + Verification rails (other routes)
   const executiveBriefItem = routeItems.find((item) =>
     item.path.includes('/brief'),
   );
@@ -116,7 +99,6 @@ export async function HomeScreen() {
   const routes = (
     <section id="routes" className="section-shell">
       <Container variant="wide" className="section-shell">
-        {/* Executive Brief - dominant entry point */}
         {executiveBriefItem ? (
           <div className="mb-8">
             <Link
@@ -142,7 +124,6 @@ export async function HomeScreen() {
             </Link>
           </div>
         ) : null}
-        {/* Verification rails - other routes */}
         {otherRoutes.length > 0 ? (
           <div>
             <h2 className="text-section-heading font-semibold mb-4">
@@ -183,12 +164,34 @@ export async function HomeScreen() {
     </section>
   );
 
-  const byId: Partial<Record<SectionId, ReactNode>> = {
-    hero,
-    claims,
-    doctrine,
-    routes,
-  };
+  return (
+    <>
+      <Fragment key="routes">{routes}</Fragment>
+      <Fragment key="claims">{claims}</Fragment>
+      {doctrine != null ? <Fragment key="doctrine">{doctrine}</Fragment> : null}
+    </>
+  );
+}
+
+export async function HomeScreen() {
+  const locale = (await getLocale()) as AppLocale;
+  const messages = await loadMessages(locale, ['home']);
+  const t = createScopedTranslator(locale, messages, 'home');
+
+  const hero = (
+    <HeroSection
+      title={t('hero.title')}
+      lede={t('hero.lede')}
+      actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
+      visual={{
+        src: HOME_HERO_IMAGE_PATH,
+        alt: t('hero.portraitAlt'),
+        width: 1200,
+        height: 1500,
+      }}
+      imagePriority
+    />
+  );
 
   return (
     <>
@@ -197,12 +200,10 @@ export async function HomeScreen() {
       <PersonJsonLd />
       <BreadcrumbJsonLd locale={locale} pathSegments={[]} />
       <div className="content-lane-grid">
-        {HOME_IA_ORDER.filter((id) => HOME_SECTION_IDS.includes(id)).map(
-          (id) => {
-            const node = byId[id];
-            return node != null ? <Fragment key={id}>{node}</Fragment> : null;
-          },
-        )}
+        <Fragment key="hero">{hero}</Fragment>
+        <Suspense fallback={null}>
+          <HomeBelowFold />
+        </Suspense>
       </div>
     </>
   );

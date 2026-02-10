@@ -16,7 +16,7 @@ test.describe('visual regression', () => {
     await page.evaluate(async () => {
       await document.fonts.ready;
       await new Promise<void>((resolve) =>
-        requestAnimationFrame(() => requestAnimationFrame(() => resolve()))
+        requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
       );
     });
   }

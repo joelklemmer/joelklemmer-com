@@ -40,11 +40,16 @@ function checkChrome(): boolean {
   }
 }
 
-function checkReportDir(reportDir: string): { inpRan: number; errors: string[] } {
+function checkReportDir(reportDir: string): {
+  inpRan: number;
+  errors: string[];
+} {
   const errors: string[] = [];
   let inpRan = 0;
   if (!fs.existsSync(reportDir) || !fs.statSync(reportDir).isDirectory()) {
-    errors.push(`Report dir does not exist or is not a directory: ${reportDir}`);
+    errors.push(
+      `Report dir does not exist or is not a directory: ${reportDir}`,
+    );
     return { inpRan: 0, errors };
   }
   const files = fs.readdirSync(reportDir);
@@ -55,7 +60,9 @@ function checkReportDir(reportDir: string): { inpRan: number; errors: string[] }
     const filePath = path.join(reportDir, file);
     try {
       const raw = fs.readFileSync(filePath, 'utf8');
-      const report = JSON.parse(raw) as { audits?: Record<string, { id?: string; numericValue?: number }> };
+      const report = JSON.parse(raw) as {
+        audits?: Record<string, { id?: string; numericValue?: number }>;
+      };
       const audits = report?.audits ?? {};
       const inp = audits[INP_AUDIT_ID];
       if (inp !== undefined && inp !== null) {
@@ -80,7 +87,9 @@ function main(): number {
 
   const lhVersion = getLighthouseVersion();
   if (!lhVersion) {
-    console.error('validate-lighthouse-runtime: could not resolve lighthouse version');
+    console.error(
+      'validate-lighthouse-runtime: could not resolve lighthouse version',
+    );
     process.exit(1);
   }
   const [major] = parseVersion(lhVersion);
@@ -90,11 +99,15 @@ function main(): number {
     );
     process.exit(1);
   }
-  console.log(`Lighthouse version: ${lhVersion} (>= ${MIN_LIGHTHOUSE_MAJOR}.x)`);
+  console.log(
+    `Lighthouse version: ${lhVersion} (>= ${MIN_LIGHTHOUSE_MAJOR}.x)`,
+  );
 
   const hasChrome = checkChrome();
   if (!hasChrome) {
-    console.error('validate-lighthouse-runtime: Chrome not found (lighthouse.getChromePath)');
+    console.error(
+      'validate-lighthouse-runtime: Chrome not found (lighthouse.getChromePath)',
+    );
     process.exit(1);
   }
   console.log('Chrome: present');

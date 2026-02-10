@@ -1,0 +1,87 @@
+# One-time or on-demand: generate Linux visual baselines so CI visual job passes.
+# CI compares against apps/web-e2e/__screenshots__/linux/; this workflow creates/updates those files.
+# Run from Actions tab → "Update Linux visual baselines" → "Run workflow" (branch = your branch).
+# After run: commit the pushed changes (only __screenshots__/linux/*.png and README.md).
+name: Update Linux visual baselines
+
+on:
+  workflow_dispatch: {}
+
+concurrency:
+  group: update-baselines-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: true
+  NX_CLOUD: 'false'
+  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
+  RATE_LIMIT_MODE: off
+  PORT: '3000'
+
+jobs:
+  update-baselines:
+    name: update-linux-baselines
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Get pnpm store path
+        id: pnpm-store
+        run: echo "path=$(pnpm store path)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pnpm-store.outputs.path }}
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Cache Nx
+        uses: actions/cache@v4
+        with:
+          path: .nx/cache
+          key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-nx-
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: /home/runner/.cache/ms-playwright
+          key: ${{ runner.os }}-ms-playwright-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-ms-playwright-
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Generate Linux visual baselines
+        run: pnpm nx run web:visual -- --update-snapshots --verbose
+
+      - name: Commit and push Linux baselines
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add apps/web-e2e/__screenshots__/linux/
+          if ! git diff --cached --quiet; then
+            git status
+            git diff --cached --stat
+            git commit -m "chore(ci): update Linux visual baselines [workflow]"
+            git push origin HEAD:${{ github.ref_name }}
+          else
+            echo "No changes under apps/web-e2e/__screenshots__/linux/ to commit."
+          fi

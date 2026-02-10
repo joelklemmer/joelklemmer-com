@@ -29,19 +29,30 @@ interface LHR {
 
 function loadAssertions(): Record<string, [string, Record<string, number>]> {
   const configPath = path.join(REPO_ROOT, 'lighthouserc.serverless.cjs');
-  const config = require(configPath) as { ci?: { assert?: { assertions?: Record<string, [string, Record<string, number>]> } } };
+  const config = require(configPath) as {
+    ci?: {
+      assert?: {
+        assertions?: Record<string, [string, Record<string, number>]>;
+      };
+    };
+  };
   const assertions = config?.ci?.assert?.assertions;
   if (!assertions || typeof assertions !== 'object') {
-    throw new Error('lhci-assert-from-lhrs: no ci.assert.assertions in lighthouserc.serverless.cjs');
+    throw new Error(
+      'lhci-assert-from-lhrs: no ci.assert.assertions in lighthouserc.serverless.cjs',
+    );
   }
   return assertions;
 }
 
-function parseAssertion(entry: [string, Record<string, number>]): AssertionSpec {
+function parseAssertion(
+  entry: [string, Record<string, number>],
+): AssertionSpec {
   const [level, opts] = entry;
   const spec: AssertionSpec = { level: level === 'warn' ? 'warn' : 'error' };
   if (opts?.minScore !== undefined) spec.minScore = opts.minScore;
-  if (opts?.maxNumericValue !== undefined) spec.maxNumericValue = opts.maxNumericValue;
+  if (opts?.maxNumericValue !== undefined)
+    spec.maxNumericValue = opts.maxNumericValue;
   return spec;
 }
 
@@ -64,30 +75,40 @@ function assertLhr(
         if (score === null || score === undefined) {
           failures.push(`${url} ${key}: category score missing`);
         } else if (score < spec.minScore) {
-          failures.push(`${url} ${key}: score ${score} < minScore ${spec.minScore}`);
+          failures.push(
+            `${url} ${key}: score ${score} < minScore ${spec.minScore}`,
+          );
         }
       }
     } else {
       const audit = audits[key];
       if (spec.maxNumericValue !== undefined) {
         if (audit === undefined || audit === null) {
-          failures.push(`${url} ${key}: audit missing (required for maxNumericValue ${spec.maxNumericValue})`);
+          failures.push(
+            `${url} ${key}: audit missing (required for maxNumericValue ${spec.maxNumericValue})`,
+          );
         } else {
           const val = audit.numericValue;
           if (typeof val !== 'number') {
             failures.push(`${url} ${key}: numericValue missing`);
           } else if (val > spec.maxNumericValue) {
-            failures.push(`${url} ${key}: numericValue ${val} > max ${spec.maxNumericValue}`);
+            failures.push(
+              `${url} ${key}: numericValue ${val} > max ${spec.maxNumericValue}`,
+            );
           }
         }
       }
       if (spec.minScore !== undefined) {
         if (audit === undefined || audit === null) {
-          failures.push(`${url} ${key}: audit missing (required for minScore ${spec.minScore})`);
+          failures.push(
+            `${url} ${key}: audit missing (required for minScore ${spec.minScore})`,
+          );
         } else {
           const s = audit.score;
           if (s === null || s === undefined || s < spec.minScore) {
-            failures.push(`${url} ${key}: score ${s ?? 'missing'} < minScore ${spec.minScore}`);
+            failures.push(
+              `${url} ${key}: score ${s ?? 'missing'} < minScore ${spec.minScore}`,
+            );
           }
         }
       }
@@ -108,12 +129,16 @@ function main(): number {
   }
 
   if (!fs.existsSync(lhrDir) || !fs.statSync(lhrDir).isDirectory()) {
-    console.error(`lhci-assert-from-lhrs: LHR dir not found or not a directory: ${lhrDir}`);
+    console.error(
+      `lhci-assert-from-lhrs: LHR dir not found or not a directory: ${lhrDir}`,
+    );
     return 1;
   }
 
   const assertions = loadAssertions();
-  const files = fs.readdirSync(lhrDir).filter((f) => f.endsWith('.report.json'));
+  const files = fs
+    .readdirSync(lhrDir)
+    .filter((f) => f.endsWith('.report.json'));
   if (files.length === 0) {
     console.error(`lhci-assert-from-lhrs: no *.report.json in ${lhrDir}`);
     return 1;
@@ -129,7 +154,9 @@ function main(): number {
     try {
       lhr = JSON.parse(raw) as LHR;
     } catch (e) {
-      console.error(`lhci-assert-from-lhrs: failed to parse ${file}: ${String(e)}`);
+      console.error(
+        `lhci-assert-from-lhrs: failed to parse ${file}: ${String(e)}`,
+      );
       return 1;
     }
     const { passed, failures } = assertLhr(lhr, assertions);
@@ -144,16 +171,30 @@ function main(): number {
   const assertionResultsPath = path.join(LHCI_DIR, 'assertion-results.json');
   fs.writeFileSync(
     assertionResultsPath,
-    JSON.stringify({ results, summary: { passed: allFailures.length === 0, failureCount: allFailures.length } }, null, 2),
+    JSON.stringify(
+      {
+        results,
+        summary: {
+          passed: allFailures.length === 0,
+          failureCount: allFailures.length,
+        },
+      },
+      null,
+      2,
+    ),
     'utf8',
   );
 
   if (allFailures.length > 0) {
     allFailures.forEach((f) => console.error('lhci-assert-from-lhrs:', f));
-    console.error(`lhci-assert-from-lhrs: ${allFailures.length} assertion(s) failed.`);
+    console.error(
+      `lhci-assert-from-lhrs: ${allFailures.length} assertion(s) failed.`,
+    );
     return 1;
   }
-  console.log(`lhci-assert-from-lhrs: all assertions passed (${files.length} LHRs).`);
+  console.log(
+    `lhci-assert-from-lhrs: all assertions passed (${files.length} LHRs).`,
+  );
   return 0;
 }
 

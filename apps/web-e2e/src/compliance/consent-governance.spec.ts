@@ -23,6 +23,19 @@ test.describe('Consent surface (banner)', () => {
     await expect(page.getByRole('link', { name: /customise/i })).toBeVisible();
   });
 
+  test('consent banner appears within deterministic window (< 3s) and is keyboard reachable', async ({
+    page,
+  }) => {
+    await page.goto(EN_HOME, { waitUntil: 'load', timeout: 45000 });
+    const banner = page.getByRole('dialog', { name: /consent and data use/i });
+    await expect(banner).toBeVisible({ timeout: 3500 });
+    const acceptButton = page
+      .getByRole('button', { name: /accept all/i })
+      .first();
+    await acceptButton.focus();
+    await expect(acceptButton).toBeFocused();
+  });
+
   test('Accept all hides banner and sets consent cookie', async ({ page }) => {
     await page.goto(EN_HOME, { waitUntil: 'load', timeout: 45000 });
     const acceptAll = page.getByRole('button', { name: /accept all/i }).first();

@@ -11,15 +11,19 @@ export interface ConsentSurfaceV2Props {
   preferencesHref: string;
 }
 
+/** Delay after first paint before showing consent so hero/main content can win LCP. 2.5s keeps banner visible within 3s while reducing chance consent is LCP. */
+const CONSENT_DISPLAY_DELAY_MS = 2500;
+
 /**
  * Initial consent decision surface. Shown when user has not made a choice.
- * Deferred until after first paint (requestAnimationFrame) so main content can win LCP on media route.
+ * Deferred until after first paint (double rAF) + short delay so main content can win LCP on media route.
  * Accessible: focus order, keyboard, no auto-dismiss. RTL-safe via next-intl.
  */
 export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
   const t = useTranslations('consent.banner');
   const { choiceMade, acceptAll, rejectNonEssential } = useConsentV2();
   const [afterFirstPaint, setAfterFirstPaint] = useState(false);
+  const [delayElapsed, setDelayElapsed] = useState(false);
 
   useEffect(() => {
     let raf2 = 0;
@@ -32,7 +36,16 @@ export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
     };
   }, []);
 
-  if (choiceMade || !afterFirstPaint) return null;
+  useEffect(() => {
+    if (!afterFirstPaint) return;
+    const timeoutId = window.setTimeout(
+      () => setDelayElapsed(true),
+      CONSENT_DISPLAY_DELAY_MS,
+    );
+    return () => clearTimeout(timeoutId);
+  }, [afterFirstPaint]);
+
+  if (choiceMade || !afterFirstPaint || !delayElapsed) return null;
 
   return (
     <div

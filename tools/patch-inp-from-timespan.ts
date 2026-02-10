@@ -16,14 +16,27 @@ const LHCI_DIR = path.join(REPO_ROOT, '.lighthouseci');
 const INP_AUDIT_ID = 'interaction-to-next-paint';
 const MAX_INP_MS = 200;
 
-function loadSavedLHRs(): Array<{ url: string; filename: string; lhr: Record<string, unknown> }> {
+function loadSavedLHRs(): Array<{
+  url: string;
+  filename: string;
+  lhr: Record<string, unknown>;
+}> {
   if (!fs.existsSync(LHCI_DIR) || !fs.statSync(LHCI_DIR).isDirectory()) {
     return [];
   }
-  const out: Array<{ url: string; filename: string; lhr: Record<string, unknown> }> = [];
+  const out: Array<{
+    url: string;
+    filename: string;
+    lhr: Record<string, unknown>;
+  }> = [];
   const files = fs.readdirSync(LHCI_DIR);
   for (const f of files) {
-    if (!f.endsWith('.json') || f.includes('manifest') || f.includes('assertion')) continue;
+    if (
+      !f.endsWith('.json') ||
+      f.includes('manifest') ||
+      f.includes('assertion')
+    )
+      continue;
     const fp = path.join(LHCI_DIR, f);
     try {
       const raw = fs.readFileSync(fp, 'utf8');
@@ -58,6 +71,19 @@ function makeInpAudit(numericValue: number): Record<string, unknown> {
   };
 }
 
+type FlowResult = {
+  navigate: (u: string) => Promise<unknown>;
+  startTimespan: (opts?: { stepName: string }) => Promise<unknown>;
+  endTimespan: () => Promise<unknown>;
+  getFlowResult: () => Promise<{
+    steps: Array<{ lhr: Record<string, unknown> }>;
+  }>;
+};
+type StartFlowFn = (
+  page: unknown,
+  opts?: { name: string },
+) => Promise<FlowResult>;
+
 async function getInpForUrl(baseUrl: string, url: string): Promise<number> {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
   const puppeteer = require('puppeteer');
@@ -69,11 +95,16 @@ async function getInpForUrl(baseUrl: string, url: string): Promise<number> {
   });
   try {
     const page = await browser.newPage();
-    const flow = await (lighthouse.startFlow as (page: unknown, opts?: { name: string }) => Promise<{ navigate: (u: string) => Promise<unknown>; startTimespan: (opts?: { stepName: string }) => Promise<unknown>; endTimespan: () => Promise<unknown>; getFlowResult: () => Promise<{ steps: Array<{ lhr: Record<string, unknown> }> }> }>(page, { name: 'INP timespan' }));
+    const flow = await (lighthouse.startFlow as StartFlowFn)(page, {
+      name: 'INP timespan',
+    });
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });
     await page.evaluate(() => {
-      const btn = document.querySelector('#primary-nav-trigger') ?? document.querySelector('button') ?? document.body;
+      const btn =
+        document.querySelector('#primary-nav-trigger') ??
+        document.querySelector('button') ??
+        document.body;
       (btn as HTMLElement).click();
     });
     await new Promise((r) => setTimeout(r, 100));
@@ -82,7 +113,10 @@ async function getInpForUrl(baseUrl: string, url: string): Promise<number> {
     const steps = result?.steps ?? [];
     for (const step of steps) {
       const lhr = step.lhr as Record<string, unknown> | undefined;
-      const audits = (lhr?.audits ?? {}) as Record<string, { numericValue?: number }>;
+      const audits = (lhr?.audits ?? {}) as Record<
+        string,
+        { numericValue?: number }
+      >;
       const inp = audits[INP_AUDIT_ID];
       if (inp != null && typeof inp.numericValue === 'number') {
         return inp.numericValue;
@@ -98,17 +132,24 @@ async function getInpForUrl(baseUrl: string, url: string): Promise<number> {
 async function main(): Promise<number> {
   const baseUrl = process.env.BASE_URL ?? process.env.LHCI_BASE_URL;
   if (!baseUrl) {
-    process.stderr.write('patch-inp-from-timespan: set BASE_URL or LHCI_BASE_URL\n');
+    process.stderr.write(
+      'patch-inp-from-timespan: set BASE_URL or LHCI_BASE_URL\n',
+    );
     return 1;
   }
 
   const lhrs = loadSavedLHRs();
   if (lhrs.length === 0) {
-    process.stderr.write('patch-inp-from-timespan: no LHRs found in .lighthouseci\n');
+    process.stderr.write(
+      'patch-inp-from-timespan: no LHRs found in .lighthouseci\n',
+    );
     return 1;
   }
 
-  const byUrl = new Map<string, Array<{ filename: string; lhr: Record<string, unknown> }>>();
+  const byUrl = new Map<
+    string,
+    Array<{ filename: string; lhr: Record<string, unknown> }>
+  >();
   for (const { url, filename, lhr } of lhrs) {
     if (!byUrl.has(url)) byUrl.set(url, []);
     byUrl.get(url)!.push({ filename, lhr });
@@ -121,12 +162,16 @@ async function main(): Promise<number> {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require.resolve('puppeteer');
   } catch {
-    process.stderr.write('patch-inp-from-timespan: puppeteer not installed. Install with: pnpm add -D puppeteer\n');
+    process.stderr.write(
+      'patch-inp-from-timespan: puppeteer not installed. Install with: pnpm add -D puppeteer\n',
+    );
     return 1;
   }
 
   for (const url of uniqueUrls) {
-    process.stdout.write(`patch-inp-from-timespan: measuring INP for ${url}...`);
+    process.stdout.write(
+      `patch-inp-from-timespan: measuring INP for ${url}...`,
+    );
     try {
       const inp = await getInpForUrl(baseUrl, url);
       urlToInp.set(url, inp);
@@ -149,7 +194,9 @@ async function main(): Promise<number> {
     }
   }
 
-  process.stdout.write('patch-inp-from-timespan: INP patched into .lighthouseci LHRs.\n');
+  process.stdout.write(
+    'patch-inp-from-timespan: INP patched into .lighthouseci LHRs.\n',
+  );
   return 0;
 }
 

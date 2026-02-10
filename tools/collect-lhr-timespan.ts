@@ -39,22 +39,18 @@ function runFlowForUrl(
   const outFile = path.join(CUSTOM_DIR, `${slug}.report.json`);
   return new Promise((resolve) => {
     const scriptPath = path.join(REPO_ROOT, 'tools', 'collect-lhr-single.mjs');
-    const child = spawn(
-      process.execPath,
-      [scriptPath],
-      {
-        cwd: REPO_ROOT,
-        stdio: 'inherit',
-        env: {
-          ...process.env,
-          BASE_URL: baseUrl,
-          LHCI_BASE_URL: baseUrl,
-          URL_PATH: pathSegment,
-          SLUG: slug,
-          OUT_FILE: outFile,
-        },
+    const child = spawn(process.execPath, [scriptPath], {
+      cwd: REPO_ROOT,
+      stdio: 'inherit',
+      env: {
+        ...process.env,
+        BASE_URL: baseUrl,
+        LHCI_BASE_URL: baseUrl,
+        URL_PATH: pathSegment,
+        SLUG: slug,
+        OUT_FILE: outFile,
       },
-    );
+    });
     child.on('exit', (code, signal) => {
       resolve(code ?? (signal ? 1 : 0));
     });
@@ -94,7 +90,9 @@ async function main(): Promise<number> {
       let inp: number | undefined;
       if (fs.existsSync(outPath)) {
         const raw = fs.readFileSync(outPath, 'utf8');
-        const lhr = JSON.parse(raw) as { audits?: Record<string, { numericValue?: number }> };
+        const lhr = JSON.parse(raw) as {
+          audits?: Record<string, { numericValue?: number }>;
+        };
         inp = lhr?.audits?.[INP_AUDIT_ID]?.numericValue;
       }
       process.stdout.write(` INP=${inp ?? 'n/a'} ms, wrote ${outPath}\n`);

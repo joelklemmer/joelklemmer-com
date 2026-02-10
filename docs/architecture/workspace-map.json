@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-09T02:07:58.714Z",
+  "generatedAt": "2026-02-10T02:34:05.315Z",
   "projects": [
     {
       "name": "a11y",
@@ -41,6 +41,12 @@
       "name": "authority-telemetry",
       "type": "lib",
       "root": "libs/authority-telemetry",
+      "targetCount": 1
+    },
+    {
+      "name": "compliance",
+      "type": "lib",
+      "root": "libs/compliance",
       "targetCount": 1
     },
     {
@@ -92,6 +98,12 @@
       "targetCount": 1
     },
     {
+      "name": "telemetry-governance",
+      "type": "lib",
+      "root": "libs/telemetry-governance",
+      "targetCount": 1
+    },
+    {
       "name": "tokens",
       "type": "lib",
       "root": "libs/tokens",
@@ -107,13 +119,13 @@
       "name": "web",
       "type": "app",
       "root": "apps/web",
-      "targetCount": 43
+      "targetCount": 54
     },
     {
       "name": "web-e2e",
       "type": "e2e",
       "root": "apps/web-e2e",
-      "targetCount": 19
+      "targetCount": 23
     }
   ],
   "dependencies": [
@@ -150,6 +162,11 @@
     {
       "source": "authority-orchestration",
       "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "compliance",
+      "target": "a11y",
       "type": "static"
     },
     {
@@ -195,6 +212,11 @@
     {
       "source": "screens",
       "target": "authority-signals",
+      "type": "static"
+    },
+    {
+      "source": "screens",
+      "target": "compliance",
       "type": "static"
     },
     {
@@ -299,6 +321,11 @@
     },
     {
       "source": "web",
+      "target": "compliance",
+      "type": "static"
+    },
+    {
+      "source": "web",
       "target": "content",
       "type": "static"
     },
@@ -354,7 +381,7 @@
     }
   ],
   "stats": {
-    "projectCount": 19,
-    "dependencyCount": 47
+    "projectCount": 21,
+    "dependencyCount": 50
   }
 }

@@ -1,11 +1,11 @@
 # Workspace map
 
-Generated at 2026-02-09T02:07:58.714Z.
+Generated at 2026-02-10T02:34:05.315Z.
 
 ## Summary
 
-- **Projects:** 19
-- **Dependencies:** 47
+- **Projects:** 21
+- **Dependencies:** 50
 
 ## Projects
 
@@ -18,6 +18,7 @@ Generated at 2026-02-09T02:07:58.714Z.
 | authority-orchestration | lib | libs/authority-orchestration | 1 |
 | authority-signals | lib | libs/authority-signals | 1 |
 | authority-telemetry | lib | libs/authority-telemetry | 1 |
+| compliance | lib | libs/compliance | 1 |
 | content | lib | libs/content | 1 |
 | docs | lib | docs | 3 |
 | evaluator-mode | lib | libs/evaluator-mode | 1 |
@@ -26,10 +27,11 @@ Generated at 2026-02-09T02:07:58.714Z.
 | screens | lib | libs/screens | 1 |
 | sections | lib | libs/sections | 1 |
 | seo | lib | libs/seo | 1 |
+| telemetry-governance | lib | libs/telemetry-governance | 1 |
 | tokens | lib | libs/tokens | 1 |
 | ui | lib | libs/ui | 1 |
-| web | app | apps/web | 43 |
-| web-e2e | e2e | apps/web-e2e | 19 |
+| web | app | apps/web | 54 |
+| web-e2e | e2e | apps/web-e2e | 23 |
 
 ## Dependencies
 
@@ -42,6 +44,7 @@ Generated at 2026-02-09T02:07:58.714Z.
 | authority-density | a11y | static |
 | authority-mapping | authority-signals | static |
 | authority-orchestration | evaluator-mode | static |
+| compliance | a11y | static |
 | content | i18n | static |
 | intelligence | authority-signals | static |
 | intelligence | content | static |
@@ -51,6 +54,7 @@ Generated at 2026-02-09T02:07:58.714Z.
 | screens | authority-mapping | static |
 | screens | authority-orchestration | static |
 | screens | authority-signals | static |
+| screens | compliance | static |
 | screens | content | static |
 | screens | evaluator-mode | static |
 | screens | i18n | static |
@@ -71,6 +75,7 @@ Generated at 2026-02-09T02:07:58.714Z.
 | web | authority-mapping | static |
 | web | authority-orchestration | static |
 | web | authority-telemetry | static |
+| web | compliance | static |
 | web | content | static |
 | web | evaluator-mode | static |
 | web | i18n | static |

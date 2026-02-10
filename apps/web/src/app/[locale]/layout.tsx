@@ -32,7 +32,6 @@ import {
   resolveEvaluatorMode,
 } from '@joelklemmer/evaluator-mode';
 import { DensityViewProvider } from '@joelklemmer/authority-density';
-import { TelemetryProvider } from '@joelklemmer/authority-telemetry';
 import {
   getConsentFromCookieV2,
   ConsentProviderV2,
@@ -41,12 +40,9 @@ import {
   ConsentSurfaceV2,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
+import { PerfMarks } from '@joelklemmer/perf';
 
-import {
-  RouteViewTracker,
-  AuthorityTelemetryListener,
-} from '../../lib/telemetry';
-import { SyncConsentToTelemetry } from '../../lib/SyncConsentToTelemetry';
+import { DeferredTelemetry } from '../../lib/DeferredTelemetry';
 import { routing } from '../../i18n/routing';
 
 export function generateStaticParams() {
@@ -140,6 +136,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
+      <PerfMarks />
       <ThemeProvider>
         <ContrastProvider>
           <ACPProvider>
@@ -190,16 +187,11 @@ export default async function LocaleLayout({
                       />
                     }
                   >
-                    <TelemetryProvider
-                      initialConsent={initialAnalyticsConsent}
-                      trackInputMode
-                      persistToStorage={false}
+                    <DeferredTelemetry
+                      initialAnalyticsConsent={initialAnalyticsConsent}
                     >
-                      <SyncConsentToTelemetry />
-                      <RouteViewTracker />
-                      <AuthorityTelemetryListener />
                       {children}
-                    </TelemetryProvider>
+                    </DeferredTelemetry>
                   </Shell>
                   <ConsentSurfaceV2
                     preferencesHref={`/${resolvedLocale}/preferences`}

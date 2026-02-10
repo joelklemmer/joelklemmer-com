@@ -66,7 +66,8 @@ const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
   'hot-air-balloon': 'Official portrait',
 };
 
-const ITEMS_PER_PAGE = 20;
+/** Initial DOM size for LCP/dom-size: 12 items; pagination for more. */
+const ITEMS_PER_PAGE = 12;
 
 export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
   const devTimerStart =

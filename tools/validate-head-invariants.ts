@@ -15,12 +15,17 @@ import { startServer } from './lib/startServer';
 
 const ROUTES = ['/en', '/en/brief', '/en/media'] as const;
 
-function parseHtmlHead(html: string): { description: string | null; canonical: string | null } {
+function parseHtmlHead(html: string): {
+  description: string | null;
+  canonical: string | null;
+} {
   let description: string | null = null;
   let canonical: string | null = null;
-  const metaDesc = /<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i.exec(html);
+  const metaDesc =
+    /<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i.exec(html);
   if (metaDesc) description = metaDesc[1].trim() || null;
-  const linkCanonical = /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i.exec(html);
+  const linkCanonical =
+    /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i.exec(html);
   if (linkCanonical) canonical = linkCanonical[1].trim() || null;
   return { description, canonical };
 }
@@ -29,7 +34,9 @@ function isAbsoluteUrl(url: string): boolean {
   return /^https?:\/\//i.test(url);
 }
 
-async function runWithBaseUrl(baseUrl: string): Promise<{ ok: boolean; errors: string[] }> {
+async function runWithBaseUrl(
+  baseUrl: string,
+): Promise<{ ok: boolean; errors: string[] }> {
   const errors: string[] = [];
   const normalizedBase = baseUrl.replace(/\/$/, '');
 
@@ -50,12 +57,16 @@ async function runWithBaseUrl(baseUrl: string): Promise<{ ok: boolean; errors: s
 
     const { description, canonical } = parseHtmlHead(html);
     if (!description || description.length === 0) {
-      errors.push(`${url}: <meta name="description" content="..."> missing or empty`);
+      errors.push(
+        `${url}: <meta name="description" content="..."> missing or empty`,
+      );
     }
     if (!canonical) {
       errors.push(`${url}: <link rel="canonical" href="..."> missing`);
     } else if (!isAbsoluteUrl(canonical)) {
-      errors.push(`${url}: canonical href must be absolute (got: ${canonical})`);
+      errors.push(
+        `${url}: canonical href must be absolute (got: ${canonical})`,
+      );
     }
   }
 
@@ -63,12 +74,15 @@ async function runWithBaseUrl(baseUrl: string): Promise<{ ok: boolean; errors: s
 }
 
 async function main(): Promise<number> {
-  const standalone = process.env.STANDALONE === '1' || process.env.STANDALONE === 'true';
+  const standalone =
+    process.env.STANDALONE === '1' || process.env.STANDALONE === 'true';
   let baseUrl = process.env.BASE_URL;
 
   if (standalone || !baseUrl) {
     if (standalone) {
-      process.stdout.write('validate-head-invariants: starting server for standalone run...\n');
+      process.stdout.write(
+        'validate-head-invariants: starting server for standalone run...\n',
+      );
       const buildDir = path.join(process.cwd(), 'apps', 'web', '.next');
       if (!fs.existsSync(buildDir)) {
         process.stderr.write(
@@ -83,10 +97,14 @@ async function main(): Promise<number> {
           const result = await runWithBaseUrl(baseUrl);
           await stop();
           if (!result.ok) {
-            result.errors.forEach((e) => process.stderr.write(`validate-head-invariants: ${e}\n`));
+            result.errors.forEach((e) =>
+              process.stderr.write(`validate-head-invariants: ${e}\n`),
+            );
             return 1;
           }
-          process.stdout.write('validate-head-invariants: meta description and canonical OK.\n');
+          process.stdout.write(
+            'validate-head-invariants: meta description and canonical OK.\n',
+          );
           return 0;
         } catch (e) {
           await stop();
@@ -107,10 +125,14 @@ async function main(): Promise<number> {
 
   const result = await runWithBaseUrl(baseUrl);
   if (!result.ok) {
-    result.errors.forEach((e) => process.stderr.write(`validate-head-invariants: ${e}\n`));
+    result.errors.forEach((e) =>
+      process.stderr.write(`validate-head-invariants: ${e}\n`),
+    );
     return 1;
   }
-  process.stdout.write('validate-head-invariants: meta description and canonical OK.\n');
+  process.stdout.write(
+    'validate-head-invariants: meta description and canonical OK.\n',
+  );
   return 0;
 }
 

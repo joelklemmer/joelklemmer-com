@@ -59,16 +59,18 @@ async function main(): Promise<number> {
     void stop();
   });
 
-  const playwright = spawn(
-    'npx',
-    ['playwright', 'test', '--config=apps/web-e2e/playwright.visual.config.ts'],
-    {
-      cwd: workspaceRoot,
-      stdio: 'inherit',
-      env: { ...process.env, BASE_URL: baseUrl, PORT: String(port) },
-      shell: true,
-    },
-  );
+  const playwrightArgs = [
+    'playwright',
+    'test',
+    '--config=apps/web-e2e/playwright.visual.config.ts',
+    ...process.argv.slice(2),
+  ];
+  const playwright = spawn('npx', playwrightArgs, {
+    cwd: workspaceRoot,
+    stdio: 'inherit',
+    env: { ...process.env, BASE_URL: baseUrl, PORT: String(port) },
+    shell: true,
+  });
 
   const playExit = await new Promise<number>((resolve) => {
     playwright.on('exit', (code, signal) => {

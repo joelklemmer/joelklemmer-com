@@ -44,7 +44,9 @@ async function main(): Promise<number> {
       });
     });
     if (buildExit !== 0) {
-      throw new Error(`lighthouse-timespan: web:build exited with ${buildExit}`);
+      throw new Error(
+        `lighthouse-timespan: web:build exited with ${buildExit}`,
+      );
     }
     await new Promise((r) => setTimeout(r, 1500));
   }
@@ -58,7 +60,12 @@ async function main(): Promise<number> {
 
   const collect = spawn(
     'npx',
-    ['tsx', '--tsconfig', 'tsconfig.base.json', 'tools/collect-lhr-timespan.ts'],
+    [
+      'tsx',
+      '--tsconfig',
+      'tsconfig.base.json',
+      'tools/collect-lhr-timespan.ts',
+    ],
     {
       cwd: workspaceRoot,
       stdio: 'inherit',

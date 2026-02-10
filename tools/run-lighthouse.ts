@@ -61,7 +61,12 @@ async function main(): Promise<number> {
   // Head invariants: meta description and canonical on /en, /en/brief, /en/media
   const headInvariants = spawn(
     'npx',
-    ['tsx', '--tsconfig', 'tsconfig.base.json', 'tools/validate-head-invariants.ts'],
+    [
+      'tsx',
+      '--tsconfig',
+      'tsconfig.base.json',
+      'tools/validate-head-invariants.ts',
+    ],
     {
       cwd: workspaceRoot,
       stdio: 'inherit',
@@ -79,7 +84,11 @@ async function main(): Promise<number> {
     throw new Error('validate-head-invariants failed');
   }
 
-  const envWithBase = { ...process.env, LHCI_BASE_URL: baseUrl, BASE_URL: baseUrl };
+  const envWithBase = {
+    ...process.env,
+    LHCI_BASE_URL: baseUrl,
+    BASE_URL: baseUrl,
+  };
 
   const collect = spawn(
     'pnpm',
@@ -96,7 +105,12 @@ async function main(): Promise<number> {
 
   const patch = spawn(
     'npx',
-    ['tsx', '--tsconfig', 'tsconfig.base.json', 'tools/patch-inp-from-timespan.ts'],
+    [
+      'tsx',
+      '--tsconfig',
+      'tsconfig.base.json',
+      'tools/patch-inp-from-timespan.ts',
+    ],
     { cwd: workspaceRoot, stdio: 'inherit', env: envWithBase, shell: true },
   );
   const patchExit = await new Promise<number>((resolve) => {

@@ -21,11 +21,11 @@
 
 ### 2.1 URLs tested
 
-| URL (normalized) | Base URL in run | Runs |
-|------------------|-----------------|------|
-| `/en` | `http://127.0.0.1:61672` | 3 |
-| `/en/brief` | `http://127.0.0.1:61672` | 3 |
-| `/en/media` | `http://127.0.0.1:61672` and `http://127.0.0.1:62094` | 3 |
+| URL (normalized) | Base URL in run                                       | Runs |
+| ---------------- | ----------------------------------------------------- | ---- |
+| `/en`            | `http://127.0.0.1:61672`                              | 3    |
+| `/en/brief`      | `http://127.0.0.1:61672`                              | 3    |
+| `/en/media`      | `http://127.0.0.1:61672` and `http://127.0.0.1:62094` | 3    |
 
 Config: `lighthouserc.serverless.cjs` — `numberOfRuns: 3`, URLs from `LHCI_BASE_URL` + `/en`, `/en/brief`, `/en/media`. Artifacts: `tmp/lighthouse/*.report.json`, `tmp/lighthouse/*.report.html`, `.lighthouseci/assertion-results.json`.
 
@@ -33,63 +33,63 @@ Config: `lighthouserc.serverless.cjs` — `numberOfRuns: 3`, URLs from `LHCI_BAS
 
 From `.lighthouseci/assertion-results.json`. Each row is one failing assertion (one URL × one audit).
 
-| URL | Audit ID | Assertion name | Expected | Actual | Severity |
-|-----|----------|----------------|----------|--------|----------|
-| /en | interaction-to-next-paint | auditRan | ≥1 | 0 | error |
-| /en | aria-allowed-role | minScore | ≥0.9 | 0 | error |
-| /en | bf-cache | minScore | ≥0.9 | 0 | error |
-| /en | image-delivery-insight | minScore | ≥0.9 | 0.5 | error |
-| /en | label-content-name-mismatch | minScore | ≥0.9 | 0 | error |
-| /en | largest-contentful-paint | maxNumericValue | ≤1800 | 3165.192 (values: 3404.5, 3165.2, 3242.8) | error |
-| /en | lcp-discovery-insight | minScore | ≥0.9 | 0 | error |
-| /en | legacy-javascript-insight | minScore | ≥0.9 | 0.5 (values: 0, 0.5, 0) | error |
-| /en | meta-description | minScore | ≥0.9 | 0 | error |
-| /en | network-dependency-tree-insight | minScore | ≥0.9 | 0 | error |
-| /en | target-size | minScore | ≥0.9 | 0 | error |
-| /en | unused-javascript | maxLength | ≤0 | 2 | error |
-| /en | legacy-javascript | maxLength | ≤0 | 1 | warn |
-| /en | render-blocking-insight | maxLength | ≤0 | 2 | warn |
-| /en | render-blocking-resources | maxLength | ≤0 | 2 | warn |
-| /en/brief | interaction-to-next-paint | auditRan | ≥1 | 0 | error |
-| /en/brief | aria-allowed-role | minScore | ≥0.9 | 0 | error |
-| /en/brief | bf-cache | minScore | ≥0.9 | 0 | error |
-| /en/brief | canonical | minScore | ≥0.9 | 0 | error |
-| /en/brief | forced-reflow-insight | minScore | ≥0.9 | 0 | error |
-| /en/brief | largest-contentful-paint | maxNumericValue | ≤1800 | 3019.02 (values: 3171.6, 3019.0, 3163.9) | error |
-| /en/brief | legacy-javascript-insight | minScore | ≥0.9 | 0.5 | error |
-| /en/brief | target-size | minScore | ≥0.9 | 0 | error |
-| /en/brief | unused-javascript | maxLength | ≤0 | 2 | error |
-| /en/brief | legacy-javascript | maxLength | ≤0 | 1 | warn |
-| /en/media | interaction-to-next-paint | auditRan | ≥1 | 0 | error |
-| /en/media | aria-allowed-role | minScore | ≥0.9 | 0 | error |
-| /en/media | bf-cache | minScore | ≥0.9 | 0 | error |
-| /en/media | dom-size | minScore | ≥0.9 | 0.5 | warn |
-| /en/media | largest-contentful-paint | maxNumericValue | ≤1800 | 3163.62–3164.67 | error |
-| /en/media | legacy-javascript-insight | minScore | ≥0.9 | 0 | error |
-| /en/media | meta-description | minScore | ≥0.9 | 0 | error |
-| /en/media | network-dependency-tree-insight | minScore | ≥0.9 | 0 | error |
-| /en/media | target-size | minScore | ≥0.9 | 0 | error |
-| /en/media | unused-javascript | maxLength | ≤0 | 2 | error |
-| /en/media | legacy-javascript | maxLength | ≤0 | 1 | warn |
-| /en/media | render-blocking-insight | maxLength | ≤0 | 2 | warn |
-| /en/media | render-blocking-resources | maxLength | ≤0 | 2 | warn |
+| URL       | Audit ID                        | Assertion name  | Expected | Actual                                    | Severity |
+| --------- | ------------------------------- | --------------- | -------- | ----------------------------------------- | -------- |
+| /en       | interaction-to-next-paint       | auditRan        | ≥1       | 0                                         | error    |
+| /en       | aria-allowed-role               | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | bf-cache                        | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | image-delivery-insight          | minScore        | ≥0.9     | 0.5                                       | error    |
+| /en       | label-content-name-mismatch     | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | largest-contentful-paint        | maxNumericValue | ≤1800    | 3165.192 (values: 3404.5, 3165.2, 3242.8) | error    |
+| /en       | lcp-discovery-insight           | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | legacy-javascript-insight       | minScore        | ≥0.9     | 0.5 (values: 0, 0.5, 0)                   | error    |
+| /en       | meta-description                | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | network-dependency-tree-insight | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | target-size                     | minScore        | ≥0.9     | 0                                         | error    |
+| /en       | unused-javascript               | maxLength       | ≤0       | 2                                         | error    |
+| /en       | legacy-javascript               | maxLength       | ≤0       | 1                                         | warn     |
+| /en       | render-blocking-insight         | maxLength       | ≤0       | 2                                         | warn     |
+| /en       | render-blocking-resources       | maxLength       | ≤0       | 2                                         | warn     |
+| /en/brief | interaction-to-next-paint       | auditRan        | ≥1       | 0                                         | error    |
+| /en/brief | aria-allowed-role               | minScore        | ≥0.9     | 0                                         | error    |
+| /en/brief | bf-cache                        | minScore        | ≥0.9     | 0                                         | error    |
+| /en/brief | canonical                       | minScore        | ≥0.9     | 0                                         | error    |
+| /en/brief | forced-reflow-insight           | minScore        | ≥0.9     | 0                                         | error    |
+| /en/brief | largest-contentful-paint        | maxNumericValue | ≤1800    | 3019.02 (values: 3171.6, 3019.0, 3163.9)  | error    |
+| /en/brief | legacy-javascript-insight       | minScore        | ≥0.9     | 0.5                                       | error    |
+| /en/brief | target-size                     | minScore        | ≥0.9     | 0                                         | error    |
+| /en/brief | unused-javascript               | maxLength       | ≤0       | 2                                         | error    |
+| /en/brief | legacy-javascript               | maxLength       | ≤0       | 1                                         | warn     |
+| /en/media | interaction-to-next-paint       | auditRan        | ≥1       | 0                                         | error    |
+| /en/media | aria-allowed-role               | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | bf-cache                        | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | dom-size                        | minScore        | ≥0.9     | 0.5                                       | warn     |
+| /en/media | largest-contentful-paint        | maxNumericValue | ≤1800    | 3163.62–3164.67                           | error    |
+| /en/media | legacy-javascript-insight       | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | meta-description                | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | network-dependency-tree-insight | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | target-size                     | minScore        | ≥0.9     | 0                                         | error    |
+| /en/media | unused-javascript               | maxLength       | ≤0       | 2                                         | error    |
+| /en/media | legacy-javascript               | maxLength       | ≤0       | 1                                         | warn     |
+| /en/media | render-blocking-insight         | maxLength       | ≤0       | 2                                         | warn     |
+| /en/media | render-blocking-resources       | maxLength       | ≤0       | 2                                         | warn     |
 
 ### 2.3 Key audits driving failures (Top 10)
 
 These are the audits that cause assertion failures across the most URLs or are explicit in `lighthouserc.serverless.cjs`:
 
-| Rank | Audit ID | Category | How it fails | URLs affected |
-|------|----------|----------|--------------|---------------|
-| 1 | largest-contentful-paint | performance | maxNumericValue: expected ≤1800 ms, actual ~3019–3165 ms | /en, /en/brief, /en/media |
-| 2 | interaction-to-next-paint | performance | auditRan: 0 (audit did not run) | /en, /en/brief, /en/media |
-| 3 | aria-allowed-role | accessibility | minScore: 0 (ARIA roles on incompatible elements) | /en, /en/brief, /en/media |
-| 4 | bf-cache | performance | minScore: 0 (back/forward cache prevented) | /en, /en/brief, /en/media |
-| 5 | target-size | accessibility | minScore: 0 (touch targets size/spacing) | /en, /en/brief, /en/media |
-| 6 | unused-javascript | performance | maxLength: 2 (reduce unused JS) | /en, /en/brief, /en/media |
-| 7 | legacy-javascript-insight | performance | minScore 0 or 0.5 | /en, /en/brief, /en/media |
-| 8 | network-dependency-tree-insight | performance | minScore: 0 | /en, /en/brief, /en/media |
-| 9 | meta-description | SEO | minScore: 0 (document meta description) | /en, /en/media (brief has canonical fail) |
-| 10 | canonical | SEO | minScore: 0 (valid rel=canonical) | /en/brief only |
+| Rank | Audit ID                        | Category      | How it fails                                             | URLs affected                             |
+| ---- | ------------------------------- | ------------- | -------------------------------------------------------- | ----------------------------------------- |
+| 1    | largest-contentful-paint        | performance   | maxNumericValue: expected ≤1800 ms, actual ~3019–3165 ms | /en, /en/brief, /en/media                 |
+| 2    | interaction-to-next-paint       | performance   | auditRan: 0 (audit did not run)                          | /en, /en/brief, /en/media                 |
+| 3    | aria-allowed-role               | accessibility | minScore: 0 (ARIA roles on incompatible elements)        | /en, /en/brief, /en/media                 |
+| 4    | bf-cache                        | performance   | minScore: 0 (back/forward cache prevented)               | /en, /en/brief, /en/media                 |
+| 5    | target-size                     | accessibility | minScore: 0 (touch targets size/spacing)                 | /en, /en/brief, /en/media                 |
+| 6    | unused-javascript               | performance   | maxLength: 2 (reduce unused JS)                          | /en, /en/brief, /en/media                 |
+| 7    | legacy-javascript-insight       | performance   | minScore 0 or 0.5                                        | /en, /en/brief, /en/media                 |
+| 8    | network-dependency-tree-insight | performance   | minScore: 0                                              | /en, /en/brief, /en/media                 |
+| 9    | meta-description                | SEO           | minScore: 0 (document meta description)                  | /en, /en/media (brief has canonical fail) |
+| 10   | canonical                       | SEO           | minScore: 0 (valid rel=canonical)                        | /en/brief only                            |
 
 Additional URL-specific: **label-content-name-mismatch** (/en), **image-delivery-insight** (/en), **lcp-discovery-insight** (/en), **forced-reflow-insight** (/en/brief), **dom-size** (/en/media).
 
@@ -109,16 +109,16 @@ Additional URL-specific: **label-content-name-mismatch** (/en), **image-delivery
 
 ### 3.1 Specs failing (table)
 
-| Spec | Test (describe/it) | Route(s) | Failure type | Artifact paths |
-|------|-------------------|----------|--------------|----------------|
-| i18n-rtl-stress.spec.ts | i18n + RTL layout stress › hero does not overflow viewport across locales and viewports | /en (en @ mobile) | Layout / viewport | Error: "en @ mobile: hero section must be within viewport"; context: `dist/.playwright/apps/web-e2e/test-output/i18n-rtl-stress-.../error-context.md` |
-| proof-density.spec.ts | Proof density layering and doctrine › entry with attachments has attachment row and copy-hash button | /en/publicrecord/[slug] | Assertion (expect Promise vs string) | `expect(row.getAttribute('data-attachment-sha')).toBe(firstAtt.sha256)` — received Promise {}; context: `dist/.playwright/.../proof-density-.../error-context.md` |
-| responsive-layout.spec.ts | responsive layout stability › masthead remains single-row and within bounds | — | Assertion (height) | Expected masthead height ≤200, received 395.34 |
-| visual-regression.spec.ts | visual regression › home top viewport | /en | Snapshot diff | Expected: `apps/web-e2e/src/presentation-integrity/visual-regression.spec.ts-snapshots/home-viewport-chromium-win32.png`; Received: `.../test-output/.../home-viewport-actual.png`; Diff: `.../home-viewport-diff.png` |
-| visual-regression.spec.ts | visual regression › masthead region | /en | Snapshot diff | Expected: `.../masthead-chromium-win32.png`; Received/Diff in same test-output folder |
-| visual-regression.spec.ts | visual regression › brief top viewport | /en/brief | Snapshot diff | Expected: `.../brief-viewport-chromium-win32.png`; 24090 pixels different (ratio 0.03); Diff: `.../brief-viewport-diff.png` |
-| visual-regression.spec.ts | visual regression › RTL home top viewport | /he | Snapshot diff | Expected: `.../rtl-home-viewport-chromium-win32.png`; 102557 pixels different (ratio 0.11); Diff: `.../rtl-home-viewport-diff.png` |
-| visual-regression.spec.ts | visual regression › media library filter row | /en/media | Snapshot diff | Expected: `.../media-filter-row-chromium-win32.png`; size mismatch (e.g. 1280×5403 vs 1280×5404) and pixel diff; Diff: `.../media-filter-row-diff.png` |
+| Spec                      | Test (describe/it)                                                                                   | Route(s)                | Failure type                         | Artifact paths                                                                                                                                                                                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- | ------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| i18n-rtl-stress.spec.ts   | i18n + RTL layout stress › hero does not overflow viewport across locales and viewports              | /en (en @ mobile)       | Layout / viewport                    | Error: "en @ mobile: hero section must be within viewport"; context: `dist/.playwright/apps/web-e2e/test-output/i18n-rtl-stress-.../error-context.md`                                                                  |
+| proof-density.spec.ts     | Proof density layering and doctrine › entry with attachments has attachment row and copy-hash button | /en/publicrecord/[slug] | Assertion (expect Promise vs string) | `expect(row.getAttribute('data-attachment-sha')).toBe(firstAtt.sha256)` — received Promise {}; context: `dist/.playwright/.../proof-density-.../error-context.md`                                                      |
+| responsive-layout.spec.ts | responsive layout stability › masthead remains single-row and within bounds                          | —                       | Assertion (height)                   | Expected masthead height ≤200, received 395.34                                                                                                                                                                         |
+| visual-regression.spec.ts | visual regression › home top viewport                                                                | /en                     | Snapshot diff                        | Expected: `apps/web-e2e/src/presentation-integrity/visual-regression.spec.ts-snapshots/home-viewport-chromium-win32.png`; Received: `.../test-output/.../home-viewport-actual.png`; Diff: `.../home-viewport-diff.png` |
+| visual-regression.spec.ts | visual regression › masthead region                                                                  | /en                     | Snapshot diff                        | Expected: `.../masthead-chromium-win32.png`; Received/Diff in same test-output folder                                                                                                                                  |
+| visual-regression.spec.ts | visual regression › brief top viewport                                                               | /en/brief               | Snapshot diff                        | Expected: `.../brief-viewport-chromium-win32.png`; 24090 pixels different (ratio 0.03); Diff: `.../brief-viewport-diff.png`                                                                                            |
+| visual-regression.spec.ts | visual regression › RTL home top viewport                                                            | /he                     | Snapshot diff                        | Expected: `.../rtl-home-viewport-chromium-win32.png`; 102557 pixels different (ratio 0.11); Diff: `.../rtl-home-viewport-diff.png`                                                                                     |
+| visual-regression.spec.ts | visual regression › media library filter row                                                         | /en/media               | Snapshot diff                        | Expected: `.../media-filter-row-chromium-win32.png`; size mismatch (e.g. 1280×5403 vs 1280×5404) and pixel diff; Diff: `.../media-filter-row-diff.png`                                                                 |
 
 ### 3.2 Diff artifact references
 
@@ -138,11 +138,11 @@ Additional URL-specific: **label-content-name-mismatch** (/en), **image-delivery
 
 For each Lighthouse/Visual failing URL:
 
-| URL | Route composer (page) | Screen / section | Metadata keys (source) | Suspected weight / notes (evidence) |
-|-----|------------------------|------------------|-------------------------|-------------------------------------|
-| /en | `apps/web/src/app/[locale]/page.tsx` | `HomeScreen` (`@joelklemmer/screens`), sections: `HeroSection`, `ListSection`, `FrameworkCard` | `homeMetadata()` → `createPageMetadata({ title: meta.home.title, description: meta.home.description, pathname: '/', ogImageSlug: 'home', criticalPreloadLinks: heroImageHref })` | Hero image: `HOME_HERO_IMAGE_PATH` = `/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp`; LCP ~3242 ms; meta-description/canonical from `libs/seo` `createPageMetadata` |
-| /en/brief | `apps/web/src/app/[locale]/brief/page.tsx` | `BriefScreen`, `HeroSection` | `briefMetadata` → `createPageMetadata` (title/description/pathname for brief) | LCP ~3019–3164 ms; canonical fails (brief); forced-reflow-insight |
-| /en/media | `apps/web/src/app/[locale]/media/page.tsx` | `MediaLibraryScreen`, `HeroSection`, media grid | `mediaLibraryMetadata` → `createPageMetadata({ pathname: '/media', ogImageSlug: 'media' })` | LCP ~3164 ms; meta-description fails; dom-size warn; many media items (DOM weight) |
+| URL       | Route composer (page)                      | Screen / section                                                                               | Metadata keys (source)                                                                                                                                                           | Suspected weight / notes (evidence)                                                                                                                                                                    |
+| --------- | ------------------------------------------ | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| /en       | `apps/web/src/app/[locale]/page.tsx`       | `HomeScreen` (`@joelklemmer/screens`), sections: `HeroSection`, `ListSection`, `FrameworkCard` | `homeMetadata()` → `createPageMetadata({ title: meta.home.title, description: meta.home.description, pathname: '/', ogImageSlug: 'home', criticalPreloadLinks: heroImageHref })` | Hero image: `HOME_HERO_IMAGE_PATH` = `/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp`; LCP ~3242 ms; meta-description/canonical from `libs/seo` `createPageMetadata` |
+| /en/brief | `apps/web/src/app/[locale]/brief/page.tsx` | `BriefScreen`, `HeroSection`                                                                   | `briefMetadata` → `createPageMetadata` (title/description/pathname for brief)                                                                                                    | LCP ~3019–3164 ms; canonical fails (brief); forced-reflow-insight                                                                                                                                      |
+| /en/media | `apps/web/src/app/[locale]/media/page.tsx` | `MediaLibraryScreen`, `HeroSection`, media grid                                                | `mediaLibraryMetadata` → `createPageMetadata({ pathname: '/media', ogImageSlug: 'media' })`                                                                                      | LCP ~3164 ms; meta-description fails; dom-size warn; many media items (DOM weight)                                                                                                                     |
 
 **Metadata:** All use `libs/seo` `createPageMetadata()`; description and `alternates.canonical` are set in code. Lighthouse still reports meta-description and canonical failures — verify Next.js output (e.g. `<meta name="description">` and `<link rel="canonical">`) in built HTML.
 

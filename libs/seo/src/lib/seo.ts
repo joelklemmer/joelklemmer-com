@@ -170,9 +170,7 @@ export function createPageMetadata({
   );
   // When baseUrl is set, emit canonical + languages. When undefined, omit alternates
   // so root layout's generateMetadata (request-based canonical) is not overwritten and LHCI passes.
-  const alternates = baseUrl
-    ? { canonical, languages }
-    : undefined;
+  const alternates = baseUrl ? { canonical, languages } : undefined;
   const openGraph: {
     title: string;
     description: string;

@@ -47,13 +47,21 @@ async function main() {
   let browser;
   try {
     chrome = await chromeLauncher.launch({
-      chromeFlags: ['--headless=new', '--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage'],
+      chromeFlags: [
+        '--headless=new',
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+      ],
     });
     browser = await puppeteer.connect({
       browserURL: `http://127.0.0.1:${chrome.port}`,
     });
   } catch (err) {
-    console.error('collect-lhr-single.mjs: failed to launch Chrome:', err.message);
+    console.error(
+      'collect-lhr-single.mjs: failed to launch Chrome:',
+      err.message,
+    );
     process.exit(1);
   }
 
@@ -76,7 +84,9 @@ async function main() {
       await new Promise((r) => setTimeout(r, 80));
     }
 
-    const cta = await page.$('a[href="/en/brief"], a[href*="/brief"], .masthead-nav-primary a');
+    const cta = await page.$(
+      'a[href="/en/brief"], a[href*="/brief"], .masthead-nav-primary a',
+    );
     if (cta) {
       await cta.click();
       await new Promise((r) => setTimeout(r, 100));
@@ -85,7 +95,9 @@ async function main() {
     }
 
     if (urlPath === '/en/media') {
-      const filterBtn = await page.$('section[aria-labelledby="media-filter-heading"] button');
+      const filterBtn = await page.$(
+        'section[aria-labelledby="media-filter-heading"] button',
+      );
       if (filterBtn) {
         await filterBtn.click();
         await new Promise((r) => setTimeout(r, 80));
