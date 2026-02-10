@@ -24,6 +24,7 @@ export function CookiePreferencesModal({
   onClose,
 }: CookiePreferencesModalProps) {
   const t = useTranslations('common');
+  const tConsent = useTranslations('consent.banner');
   const {
     consentState,
     updateConsent,
@@ -121,6 +122,9 @@ export function CookiePreferencesModal({
           {t('cookiePreferences.modalTitle')}
         </h2>
         <p id="cookie-preferences-desc" className="mt-2 text-sm text-muted">
+          {tConsent('description')}
+        </p>
+        <p className="mt-1 text-sm text-muted">
           {t('cookiePreferences.essentialNote')}
         </p>
 

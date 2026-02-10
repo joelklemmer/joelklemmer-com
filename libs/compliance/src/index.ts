@@ -35,6 +35,11 @@ export type { ScriptLoaderProps, ScriptCategory } from './lib/ScriptLoader';
 
 export { CookiePreferencesModal } from './lib/CookiePreferencesModal';
 export { CookiePreferencesTrigger } from './lib/CookiePreferencesTrigger';
+export {
+  CookiePreferencesOpenProvider,
+  useCookiePreferencesOpen,
+} from './lib/CookiePreferencesOpenContext';
+export type { CookiePreferencesOpenContextValue } from './lib/CookiePreferencesOpenContext';
 
 export type {
   ConsentCategory as ConsentCategoryV2,

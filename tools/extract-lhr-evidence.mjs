@@ -83,8 +83,14 @@ function emitPhase1ForLhr(lhr, label) {
   const lcpElAudit = a['largest-contentful-paint-element']?.details;
   // Lighthouse 12: details can be list of tables; first table has node, second has phases
   const listItems = lcpElAudit?.items;
-  const firstTable = Array.isArray(listItems) && listItems[0]?.type === 'table' ? listItems[0] : null;
-  const phaseTable = Array.isArray(listItems) && listItems[1]?.type === 'table' ? listItems[1] : null;
+  const firstTable =
+    Array.isArray(listItems) && listItems[0]?.type === 'table'
+      ? listItems[0]
+      : null;
+  const phaseTable =
+    Array.isArray(listItems) && listItems[1]?.type === 'table'
+      ? listItems[1]
+      : null;
   const node = firstTable?.items?.[0]?.node ?? lcpElAudit?.items?.[0]?.node;
   const phases = phaseTable?.items ?? [];
   const renderDelayItem = phases.find((p) => p.phase === 'Render Delay');
@@ -94,7 +100,10 @@ function emitPhase1ForLhr(lhr, label) {
       console.log('Render delay (ms):', Math.round(renderDelayItem.timing));
     }
     if (node) {
-      console.log('LCP element:', node.selector || node.snippet?.slice(0, 120) || node.nodeLabel || '');
+      console.log(
+        'LCP element:',
+        node.selector || node.snippet?.slice(0, 120) || node.nodeLabel || '',
+      );
       if (node.snippet && /src(set)?=/.test(node.snippet)) {
         const srcMatch = node.snippet.match(/src="([^"]+)"/);
         if (srcMatch) console.log('LCP resource URL:', srcMatch[1]);
@@ -106,13 +115,17 @@ function emitPhase1ForLhr(lhr, label) {
 
 const singlePath = process.argv[2];
 if (singlePath) {
-  const fp = path.isAbsolute(singlePath) ? singlePath : path.join(process.cwd(), singlePath);
+  const fp = path.isAbsolute(singlePath)
+    ? singlePath
+    : path.join(process.cwd(), singlePath);
   if (!fs.existsSync(fp)) {
     console.error('File not found:', fp);
     process.exit(1);
   }
   const lhr = JSON.parse(fs.readFileSync(fp, 'utf8'));
-  const label = shortUrl(lhr.finalUrl || lhr.requestedUrl) || path.basename(fp, '.report.json');
+  const label =
+    shortUrl(lhr.finalUrl || lhr.requestedUrl) ||
+    path.basename(fp, '.report.json');
   emitPhase1ForLhr(lhr, label);
   process.exit(0);
 }

@@ -4,7 +4,9 @@
     "description": "Utilizamos cookies y tecnologías similares para el funcionamiento esencial, análisis y funciones opcionales. Elija cómo podemos procesar sus datos.",
     "acceptAll": "Aceptar todo",
     "rejectNonEssential": "Rechazar no esenciales",
-    "customise": "Personalizar"
+    "customise": "Personalizar",
+    "bannerShort": "Usamos cookies para funcionamiento esencial, análisis y funciones opcionales. Elija cómo procesamos sus datos.",
+    "details": "Detalles"
   },
   "preferences": {
     "title": "Preferencias de consentimiento",

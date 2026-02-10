@@ -408,7 +408,7 @@ RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbos
 
 ## 13) Phase 0 — Pre-change evidence (main-thread, bootup-time, unused JS)
 
-**Purpose:** Baseline from fresh build and lighthouse-timespan. Run after production build (skip-nx-cache), then `web:lighthouse-timespan`, then `node tools/extract-lhr-evidence.mjs`. Evidence below from 2026-02-09 run (Critical/Deferred shell + SSR data-* + cookie preferences in place).
+**Purpose:** Baseline from fresh build and lighthouse-timespan. Run after production build (skip-nx-cache), then `web:lighthouse-timespan`, then `node tools/extract-lhr-evidence.mjs`. Evidence below from 2026-02-09 run (Critical/Deferred shell + SSR data-\* + cookie preferences in place).
 
 ### LCP numericValue and renderDelay % per route
 
@@ -433,26 +433,26 @@ RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbos
 
 ### Top 10 bootup-time (scripts, total ms)
 
-| Rank | Resource              | Total (ms) |
-| ---- | --------------------- | ---------- |
-| 1    | c4b75ee0e91487b4.js   | 240        |
-| 2    | /en (document)        | 172        |
-| 3    | Unattributable        | 86         |
+| Rank | Resource            | Total (ms) |
+| ---- | ------------------- | ---------- |
+| 1    | c4b75ee0e91487b4.js | 240        |
+| 2    | /en (document)      | 172        |
+| 3    | Unattributable      | 86         |
 
 ### Top 10 unused JavaScript (wastedBytes)
 
-| Rank | Chunk                | Wasted (bytes) | %   |
-| ---- | -------------------- | -------------- | --- |
-| 1    | 092c65ca05ada580.js  | 65740          | 100%|
-| 2    | c4b75ee0e91487b4.js  | 25036          | 37% |
+| Rank | Chunk               | Wasted (bytes) | %    |
+| ---- | ------------------- | -------------- | ---- |
+| 1    | 092c65ca05ada580.js | 65740          | 100% |
+| 2    | c4b75ee0e91487b4.js | 25036          | 37%  |
 
 ### LCP element selector / text snippet and resource URL (from LHR)
 
-| URL       | LCP element (selector)                                                                 | Snippet / text                                                                 | Resource URL (if image/font) |
-| --------- | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ---------------------------- |
-| /en       | `div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image` | `<img alt="Professional portrait" … class="portrait-image" …>`                 | `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…` (Next.js image) |
-| /en/brief | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                       | `<p id="consent-surface-desc" class="mt-1 text-sm text-muted">`; nodeLabel: "We use cookies and similar technologies…" | — (text node) |
-| /en/media | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                      | Same as /en/brief                                                              | — (text node) |
+| URL       | LCP element (selector)                                                                                          | Snippet / text                                                                                                         | Resource URL (if image/font)                                            |
+| --------- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| /en       | `div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image` | `<img alt="Professional portrait" … class="portrait-image" …>`                                                         | `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…` (Next.js image) |
+| /en/brief | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                                               | `<p id="consent-surface-desc" class="mt-1 text-sm text-muted">`; nodeLabel: "We use cookies and similar technologies…" | — (text node)                                                           |
+| /en/media | `div#consent-banner > div.mx-auto > div > p#consent-surface-desc`                                               | Same as /en/brief                                                                                                      | — (text node)                                                           |
 
 ### Commands to regenerate
 
@@ -558,6 +558,118 @@ LCP element: div#consent-banner > div.mx-auto > div > p#consent-surface-desc
 - **Bootup-time (top 10 resources):** Largest: `c4b75ee0e91487b4.js` (240–335 ms) and document (172–332 ms); Unattributable 86–106 ms.
 - **Unused JS (top 10):** `092c65ca05ada580.js` ~64–66 KB wasted (97–100%); `c4b75ee0e91487b4.js` ~25 KB (37–38%).
 - **LCP element + resource:** /en: hero `img.portrait-image`, resource `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…`. /en/brief and /en/media: consent paragraph `p#consent-surface-desc` (text node; no resource URL).
+
+### Phase 1B — Consent banner not LCP (change set B1–B3)
+
+**Goal:** Make consent paragraph not the LCP winner on /brief and /media; keep banner SSR and visible with no delay tricks.
+
+**B1) Short banner copy + Details trigger**
+
+- New i18n key `consent.banner.bannerShort` (en/uk/es/he) ≤ ~140 chars; full disclosure remains in preferences modal and cookies page.
+- Banner visible paragraph uses `bannerShort`; `aria-describedby` still points to `consent-surface-desc` (short text).
+- New "Details" button (`data-consent-action="details"`) opens cookie preferences modal immediately (client island) via `CookiePreferencesOpenContext`; no reload.
+
+**B2) Clamp banner description**
+
+- On `p#consent-surface-desc`: `max-width: 48ch`, `line-clamp` 3 lines mobile / 2 lines desktop, `overflow-hidden` + `text-ellipsis`.
+- Full disclosure available in Details/Preferences surface (modal shows `consent.banner.description`).
+
+**B3) Reduce banner paint area**
+
+- Banner container: `p-3` (was p-4), `bg-bg/98`, lighter shadow `shadow-[0_-2px_8px_rgba(0,0,0,0.06)]` to reduce painted block dominance.
+- Tighter gap and `min-w-0 flex-1` on text block so layout stays compact.
+
+**Files changed (Phase 1B):**
+
+| File                                                       | Change                                                                                                        |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `libs/i18n/src/messages/{en,uk,es,he}/consent.json`        | Added `banner.bannerShort`, `banner.details`.                                                                 |
+| `libs/compliance/src/lib/ConsentBannerSSR.tsx`             | Use `bannerShort` for paragraph; Details button; 48ch + line-clamp + ellipsis; p-3, bg-bg/98, reduced shadow. |
+| `libs/compliance/src/lib/CookiePreferencesOpenContext.tsx` | New: context + provider; provider renders `CookiePreferencesModal`; `useCookiePreferencesOpen()`.             |
+| `libs/compliance/src/lib/CookiePreferencesTrigger.tsx`     | Use `useCookiePreferencesOpen()`; no local modal.                                                             |
+| `libs/compliance/src/lib/ConsentActionsIsland.tsx`         | Listen for `data-consent-action="details"`; call `openPreferences()`.                                         |
+| `libs/compliance/src/lib/CookiePreferencesModal.tsx`       | Show full disclosure: `consent.banner.description` in modal body; keep essentialNote.                         |
+| `libs/compliance/src/index.ts`                             | Export `CookiePreferencesOpenProvider`, `useCookiePreferencesOpen`.                                           |
+| `apps/web/src/app/[locale]/layout.tsx`                     | Wrap with `CookiePreferencesOpenProvider` inside `ConsentProviderV2`.                                         |
+
+**After Phase 1B — LCP / unused JS / bootup (fill after running Phase Loop):**
+
+Run:
+
+```powershell
+RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
+RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
+```
+
+Then update the table below with numericValue, render delay %, LCP element, top unused JS chunk, and bootup top entry. Delta: before (Phase 1A) vs after (Phase 1B).
+
+| URL       | LCP numericValue (ms) | Render delay % | LCP element                                | Top unused JS                    | Top bootup                 |
+| --------- | --------------------- | -------------- | ------------------------------------------ | -------------------------------- | -------------------------- |
+| /en       | 2876                  | 77%            | img.portrait-image (hero)                  | 092c65ca05ada580.js 65740 (100%) | c4b75ee0e91487b4.js 233 ms |
+| /en/brief | 3166                  | 86%            | h1#hero-title                              | 092c65ca05ada580.js 64290 (98%)  | document 313 ms            |
+| /en/media | 3248                  | —              | (unavailable this run; trace engine error) | 092c65ca05ada580.js 64060 (97%)  | c4b75ee0e91487b4.js 278 ms |
+
+**Delta summary (before vs after):** /en/brief LCP element is no longer `p#consent-surface-desc` — it is now `h1#hero-title` (Executive brief). /en LCP improved from 3178 ms to 2876 ms (hero remains LCP). /en/media LCP element could not be read from this run (trace engine TypeError); numericValue 3248 ms. Unused JS unchanged: 092c65ca*.js still top offender (~64–66 KB, 97–100%) until Phase 1C. Bootup: c4b75ee0*.js and document remain top. **Phase 1B success on /en/brief:** consent paragraph no longer LCP; proceed to Phase 1C for 092c65ca removal.
+
+**Success criteria Phase 1B:** LCP element on /en/brief and /en/media is no longer `p#consent-surface-desc`; LCP decreases or LCP element becomes a more optimizable node (hero, main heading).
+
+### Phase 1B results (2026-02-10)
+
+Measured after production build (skip-nx-cache) and `web:lighthouse-timespan`. Evidence extracted via `node tools/extract-lhr-evidence.mjs` for en, en-brief, en-media.
+
+- **/en:** LCP 2876 ms (down from Phase 0 3178 ms), 77% render delay; LCP element hero `img.portrait-image`. Top unused JS: 092c65ca05ada580.js 65740 bytes (100%). Top bootup: c4b75ee0e91487b4.js 233 ms.
+- **/en/brief:** LCP 3166 ms; LCP element **h1#hero-title** (no longer consent). Render delay 86%. Top unused JS: 092c65ca05ada580.js 64290 (98%). Top bootup: document 313 ms.
+- **/en/media:** LCP 3248 ms; LCP element unavailable this run (trace engine TypeError). Top unused JS: 092c65ca05ada580.js 64060 (97%). Top bootup: c4b75ee0e91487b4.js 278 ms.
+
+**Delta vs Phase 0:** /en/brief LCP moved off consent paragraph to hero title. /en LCP improved ~302 ms. Unused JS list unchanged; 092c65ca\*.js remains the top wasted chunk until Phase 1C.
+
+---
+
+## 14) Phase 1C — Remove 092c65ca\*.js from initial route path (2026-02-10)
+
+**Goal:** The wasted chunk 092c65ca\*.js should not be loaded pre-LCP on /en, /en/brief, /en/media.
+
+### C1) Chunk identification
+
+- Chunk file: `apps/web/.next/static/chunks/092c65ca05ada580.js`.
+- **Content (from chunk header):** BriefNavigator (claim cards, category/strength filters, grid/graph view), plus Zod (validation library). The chunk is **not** CookiePreferencesModal; it is the Brief page client content (BriefNavigator + Zod).
+- It is loaded on all three routes because it lives in a shared client bundle (layout or shared route dependency tree). Lighthouse reports it as ~64–66 KB wasted (97–100%) on /en, /en/brief, /en/media.
+
+### C2) Fix applied (real gating)
+
+- **CookiePreferencesModal** was statically imported and always rendered (hidden when closed) in `CookiePreferencesOpenProvider`, so its code was in the initial layout chunk.
+- **Change:** Modal is now loaded on demand. In `libs/compliance/src/lib/CookiePreferencesOpenContext.tsx`:
+  - Removed static `import { CookiePreferencesModal } from './CookiePreferencesModal'`.
+  - Added `React.lazy(() => import('./CookiePreferencesModal').then(m => ({ default: m.CookiePreferencesModal })))`.
+  - Provider renders the lazy modal only when `isOpen` is true, wrapped in `<Suspense fallback={null}>`. First click on "Details" or cookie preferences triggers the dynamic import, then the modal opens; no placeholder on the page.
+- **SSR:** Unchanged; consent banner remains SSR, trigger and context remain available. Only the heavy modal implementation loads when the user opens preferences.
+
+### C3) Post-change evidence
+
+- **Rebuild and lighthouse timespan** (Phase Loop steps 3–5) were run after the change.
+- **Unused JS:** 092c65ca05ada580.js **still** appears as the top unused chunk (~64–66 KB, 97–100%) on all three URLs. Chunk content is BriefNavigator + Zod, so the modal lazy-load did not remove this chunk; it moved the modal into a separate lazy chunk (e.g. 7684e4b9545cca40.js or eac9880512ced4b9.js).
+- **Conclusion:** 092c65ca\*.js is produced by the **Brief page / shared route client code** (BriefNavigator + Zod), not by the cookie modal. Removing it from the initial load on /en and /en/media would require route-level code splitting so that Brief-only components are not in the layout bundle (follow-up). Phase 1C successfully deferred the modal; the remaining unused chunk is a different offender.
+
+### Phase 1C results summary
+
+| Item            | Result                                                                                                                               |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| **Chunk**       | 092c65ca05ada580.js (~65 KB, 97–100% wasted)                                                                                         |
+| **Cause**       | BriefNavigator + Zod (Brief page client code) in shared bundle; CookiePreferencesModal was also in layout bundle before fix.         |
+| **Change**      | CookiePreferencesModal is now lazy-loaded when user opens preferences; modal chunk no longer in initial load.                        |
+| **Post-change** | 092c65ca still top unused (different cause — Brief content). Modal code moved to separate lazy chunk; first open loads it on demand. |
+
+### Files changed (Phase 1B + Phase 1C, this session)
+
+| File | Change |
+|------|--------|
+| `docs/audit/lighthouse-visual-fix-report.md` | §13 After Phase 1B table filled with measured LCP, render delay %, LCP element, unused JS, bootup; Phase 1B results subsection; §14 Phase 1C results (chunk id, cause, fix, evidence); this files-changed list. |
+| `libs/compliance/src/lib/CookiePreferencesOpenContext.tsx` | Phase 1C: Replaced static import of `CookiePreferencesModal` with `React.lazy(() => import('./CookiePreferencesModal').then(m => ({ default: m.CookiePreferencesModal })))`; render modal only when `isOpen` inside `<Suspense fallback={null}>`. |
+
+(Phase 1B files — banner short copy, clamp, Details → modal, context — were already in place per §13; no code changes this session for 1B.)
 
 ### Post-change (Phase 1+2: Critical/Deferred split + SSR attributes)
 

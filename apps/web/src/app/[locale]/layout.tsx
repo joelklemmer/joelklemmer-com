@@ -25,6 +25,7 @@ import {
   canLoadAnalyticsV2,
   ConsentBannerSSR,
   ConsentActionsIsland,
+  CookiePreferencesOpenProvider,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
 import { PerfMarks } from '@joelklemmer/perf';
@@ -126,36 +127,40 @@ export default async function LocaleLayout({
     <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
       <PerfMarks />
       <ConsentProviderV2 initialConsentState={initialConsentState}>
-        <ServerShell
-          skipLabel={common('a11y.skipToContent')}
-          headerLabel={common('a11y.headerLabel')}
-          navLabel={common('a11y.navLabel')}
-          footerLabel={common('a11y.footerLabel')}
-          wordmark={common('wordmark')}
-          homeHref={`/${resolvedLocale}`}
-          navItems={navItems}
-          footerContent={
-            <FooterSection label={footer('label')} links={footerItems} />
-          }
-          headerCriticalSlot={<ClientShellCritical navItems={navItems} />}
-          headerDeferredSlot={
-            <ShellDeferredControls
-              initialEvaluatorMode={initialEvaluatorMode}
-            />
-          }
-        >
-          <DeferredTelemetry initialAnalyticsConsent={initialAnalyticsConsent}>
-            {children}
-          </DeferredTelemetry>
-        </ServerShell>
-        {!initialConsentState?.choiceMade && (
-          <>
-            <ConsentBannerSSR
-              preferencesHref={`/${resolvedLocale}/preferences`}
-            />
-            <ConsentActionsIsland />
-          </>
-        )}
+        <CookiePreferencesOpenProvider>
+          <ServerShell
+            skipLabel={common('a11y.skipToContent')}
+            headerLabel={common('a11y.headerLabel')}
+            navLabel={common('a11y.navLabel')}
+            footerLabel={common('a11y.footerLabel')}
+            wordmark={common('wordmark')}
+            homeHref={`/${resolvedLocale}`}
+            navItems={navItems}
+            footerContent={
+              <FooterSection label={footer('label')} links={footerItems} />
+            }
+            headerCriticalSlot={<ClientShellCritical navItems={navItems} />}
+            headerDeferredSlot={
+              <ShellDeferredControls
+                initialEvaluatorMode={initialEvaluatorMode}
+              />
+            }
+          >
+            <DeferredTelemetry
+              initialAnalyticsConsent={initialAnalyticsConsent}
+            >
+              {children}
+            </DeferredTelemetry>
+          </ServerShell>
+          {!initialConsentState?.choiceMade && (
+            <>
+              <ConsentBannerSSR
+                preferencesHref={`/${resolvedLocale}/preferences`}
+              />
+              <ConsentActionsIsland />
+            </>
+          )}
+        </CookiePreferencesOpenProvider>
       </ConsentProviderV2>
     </NextIntlClientProvider>
   );
