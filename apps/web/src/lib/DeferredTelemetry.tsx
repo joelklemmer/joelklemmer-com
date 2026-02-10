@@ -1,19 +1,26 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import { TelemetryProvider } from '@joelklemmer/authority-telemetry';
+import { ConsentProviderV2 } from '@joelklemmer/compliance';
+import type { ConsentStateV2 } from '@joelklemmer/compliance';
 import { RouteViewTracker, AuthorityTelemetryListener } from './telemetry';
 import { SyncConsentToTelemetry } from './SyncConsentToTelemetry';
 
 /** Schedules telemetry after first paint so LCP is not blocked by provider + listeners. */
 const DEFER_TIMEOUT_MS = 500;
 
-export function DeferredTelemetry({
-  children,
+/**
+ * Telemetry as a sibling listener layer: mounts after idle without wrapping page children.
+ * Renders ConsentProviderV2 (only here, not in first paint) + TelemetryProvider + SyncConsentToTelemetry, etc.
+ * ConsentProviderV2 is in this deferred tree so it does not block LCP.
+ */
+export function TelemetryLayer({
   initialAnalyticsConsent,
+  initialConsentState,
 }: {
-  children: ReactNode;
   initialAnalyticsConsent: boolean;
+  initialConsentState: ConsentStateV2 | null;
 }) {
   const [afterPaint, setAfterPaint] = useState(false);
 
@@ -33,19 +40,20 @@ export function DeferredTelemetry({
   }, []);
 
   if (!afterPaint) {
-    return <>{children}</>;
+    return null;
   }
 
   return (
-    <TelemetryProvider
-      initialConsent={initialAnalyticsConsent}
-      trackInputMode
-      persistToStorage={false}
-    >
-      <SyncConsentToTelemetry />
-      <RouteViewTracker />
-      <AuthorityTelemetryListener />
-      {children}
-    </TelemetryProvider>
+    <ConsentProviderV2 initialConsentState={initialConsentState}>
+      <TelemetryProvider
+        initialConsent={initialAnalyticsConsent}
+        trackInputMode
+        persistToStorage={false}
+      >
+        <SyncConsentToTelemetry />
+        <RouteViewTracker />
+        <AuthorityTelemetryListener />
+      </TelemetryProvider>
+    </ConsentProviderV2>
   );
 }

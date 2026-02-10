@@ -19,6 +19,18 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-route-chunks.ts"
       }
     },
+    "server-import-graph-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-server-import-graph.ts"
+      }
+    },
+    "critical-bundle-validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-critical-bundle-contains-no-heavy-modules.ts"
+      }
+    },
     "start": {
       "executor": "nx:run-commands",
       "options": {
@@ -306,6 +318,8 @@
           "nx run web:test",
           "nx run web:build",
           "nx run web:bundle-guard",
+          "nx run web:server-import-graph-validate",
+          "nx run web:critical-bundle-validate",
           "nx run web:restore-generated-typings",
           "nx run web:head-invariants-validate",
           "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y",

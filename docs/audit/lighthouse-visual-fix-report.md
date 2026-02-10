@@ -43,6 +43,70 @@ Extracted via `tools/extract-lhr-evidence.mjs` from fresh timespan LHRs.
 
 ---
 
+## LCP Root Cause (Phase 1 — fresh reports 2026-02-10)
+
+**Source:** Production build (skip-nx-cache) then `RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose`. Extraction from `tmp/lighthouse/custom/en.report.json`, `en-brief.report.json`, `en-media.report.json` via `tools/extract-lhr-evidence.mjs` and direct audit read. Trace engine logged `TypeError` during run; LHRs were written and LCP numericValue is present; `largest-contentful-paint-element` details are present for /en only (en-brief, en-media lack node table in this run).
+
+### Per-route: largest-contentful-paint
+
+| URL       | numericValue (ms) | score |
+| --------- | ----------------- | ----- |
+| /en       | 3179.64           | 0.73  |
+| /en/brief | 3169.04           | 0.73  |
+| /en/media | 3247.47           | 0.71  |
+
+**Gate:** LCP ≤1800 ms not met on any route.
+
+### Per-route: largest-contentful-paint-element
+
+| URL       | LCP element (selector / node)                                                                                                                                                                                             | Resource URL (if image)                                 |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| /en       | `div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image` (nodeLabel: "Professional portrait"; snippet: `<img alt="Professional portrait" fetchpriority="high" …>`) | `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…` |
+| /en/brief | (details missing this run — trace engine error)                                                                                                                                                                           | —                                                       |
+| /en/media | (details missing this run — trace engine error)                                                                                                                                                                           | —                                                       |
+
+Prior evidence (§13, §16): /en/brief LCP element often `h1#hero-title` or consent; /en/media consent or hero. Render delay dominates (e.g. /en 1562 ms this run).
+
+### Per-route: render-blocking-resources
+
+| URL       | Count | Notes    |
+| --------- | ----- | -------- |
+| /en       | 0     | No items |
+| /en/brief | 0     | No items |
+| /en/media | 0     | No items |
+
+No render-blocking resources reported (e.g. inlineCss / critical CSS in use).
+
+### Per-route: mainthread-work-breakdown (top contributors, ms)
+
+| URL       | 1. Script Evaluation | 2. Style & Layout | 3. Other | 4. Script Parsing & Compilation | 5. Parse HTML & CSS | 6. Rendering |
+| --------- | -------------------- | ----------------- | -------- | ------------------------------- | ------------------- | ------------ |
+| /en       | 286                  | 110               | 99       | 77                              | 19                  | 8            |
+| /en/brief | 323                  | 229               | 108      | 69                              | 19                  | 39           |
+| /en/media | 331                  | 121               | 114      | 72                              | 27                  | 27           |
+
+Script Evaluation is the largest category (286–331 ms); Style & Layout 110–229 ms. Main-thread blocking is the LCP bottleneck.
+
+### Per-route: bootup-time (top resources by total ms)
+
+| URL       | 1st                     | 2nd (document)          | 3rd               |
+| --------- | ----------------------- | ----------------------- | ----------------- |
+| /en       | c4b75ee0e91487b4.js 261 | /en 171                 | Unattributable 84 |
+| /en/brief | /en/brief 331           | c4b75ee0e91487b4.js 295 | Unattributable 83 |
+| /en/media | c4b75ee0e91487b4.js 298 | /en/media 225           | Unattributable 95 |
+
+Single main JS chunk `c4b75ee0e91487b4.js` dominates bootup (261–298 ms) across routes; document execution 171–331 ms.
+
+### Summary for Phase 2+
+
+- **Exact LCP element:** /en = hero `img.portrait-image` (priority/sizes already set); /en/brief and /en/media = LCP element audit details unavailable this run; prior runs show hero title or consent.
+- **Render blockers:** None; no change required.
+- **Main-thread:** Script Evaluation + Style & Layout dominate; reduce above-the-fold client JS and hydration cost.
+- **Bootup:** One large chunk (c4b75ee0…) in critical path; defer or split to improve LCP.
+- **Next:** Phase 2 (server/client boundaries, zero large client components above fold), Phase 3 (telemetry idle/dynamic load), Phase 4 (media DOM reduction), Phase 5 (image correctness if LCP is image).
+
+---
+
 ## 1) Failing audit/test: before → fix → after
 
 ### 1.1 Canonical (score 0 on /en/brief)
@@ -766,3 +830,118 @@ Measured after production build (skip-nx-cache) and `web:lighthouse-timespan`. E
 ### LCP ≤1800 ms statement (Phase 2A)
 
 **LCP ≤1800 is not yet met.** After Phase 2A, LCP numericValue remains 3169–3258 ms on /en, /en/brief, /en/media. Assertions unchanged; no thresholds lowered. Further reduction would require splitting or deferring c4b75ee0e91487b4.js and/or additional first-paint deferrals.
+
+---
+
+## Phase 2B — Critical chunk ownership (2026-02-10)
+
+**Goal:** Identify what is inside chunk c4b75ee0… and why it loads on /en, /en/brief, /en/media.
+
+**Tool:** `tools/explain-critical-chunks.mjs` — run after production build. It parses `apps/web/.next/build-manifest.json`, reads `apps/web/.next/static/chunks/*` for sizes, and inspects the critical chunk content for ownership signatures (no source maps emitted for this client chunk in current build).
+
+### rootMainFiles (shared by all locale pages)
+
+From `build-manifest.json`:
+
+- `static/chunks/7c3ee4e94300745f.js`
+- `static/chunks/24094a8bfa435889.js`
+- `static/chunks/8ccd132d479a8a91.js`
+- `static/chunks/c4b75ee0e91487b4.js`
+- `static/chunks/turbopack-3405043b4e52e001.js`
+
+### Top 10 chunks by size (bytes)
+
+| Rank | Chunk                   | Size (bytes) |
+| ---- | ----------------------- | ------------ |
+| 1    | f0d879fbd534e378.js     | 285,772      |
+| 2    | **c4b75ee0e91487b4.js** | **214,812**  |
+| 3    | a6dad97d9634a72d.js     | 112,594      |
+| 4    | 24094a8bfa435889.js     | 91,111       |
+| 5    | 8ccd132d479a8a91.js     | 85,398       |
+| 6    | 6955f1a7a3b41820.js     | 60,804       |
+| 7    | b130248d3c190ad0.js     | 41,453       |
+| 8    | 00ca2230dace962f.js     | 38,994       |
+| 9    | f0e215b60b947c69.js     | 27,852       |
+| 10   | 7c3ee4e94300745f.js     | 13,600       |
+
+### Critical chunk c4b75ee0e91487b4.js — ownership
+
+- **Size:** 214,812 bytes (~210 KB). Second-largest chunk; in rootMainFiles.
+- **sourceMappingURL:** None (client chunk has no source map in current build).
+- **Ownership signatures found in chunk content (grep):**  
+  `getAssetPrefix`, `__NEXT_ERROR_CODE`, `E783`, `E784`, `InvariantError`, `/_next/`, `react-dom`, `createRoot`, `hydrateRoot`, `useSyncExternalStore`, `Nav`, `TURBOPACK`, `document.currentScript`.
+
+**Interpretation:** The chunk is a Turbopack client bundle containing (1) Next.js client runtime (getAssetPrefix, error codes), (2) React DOM hydration (createRoot, hydrateRoot, useSyncExternalStore), and (3) layout client tree including at least the Nav component. The locale layout (`apps/web/src/app/[locale]/layout.tsx`) imports client components from `@joelklemmer/shell` (ClientShellCritical, ShellDeferredControls), `@joelklemmer/compliance` (ConsentProviderV2, ConsentBannerSlot, ConsentActionsIsland, CookiePreferencesOpenProvider), `next-intl` (NextIntlClientProvider), `@joelklemmer/perf` (PerfMarks), and local `DeferredTelemetry`. All of these that run on initial client load are bundled into this shared root chunk. Barrel exports and shared client dependencies pull this single large chunk onto every route.
+
+### Why this chunk loads on all three routes
+
+- In Next.js App Router, the **root** `build-manifest.json` `rootMainFiles` are the shared client bundle required by the root layout. Every page under `[locale]` (e.g. /en, /en/brief, /en/media) loads these root chunks.
+- Per-route build manifests (`server/app/[locale]/page/build-manifest.json`, `server/app/[locale]/brief/page/build-manifest.json`, `server/app/[locale]/media/page/build-manifest.json`) all list the same `rootMainFiles`, including `c4b75ee0e91487b4.js`.
+- **Conclusion:** c4b75ee0… is the **shared client runtime + layout client tree** (Next runtime, React hydration, shell/compliance/i18n client components). We can explain why it is on all three routes: it is the single root client entry for the locale layout, not route-specific.
+
+**Commands to regenerate:**
+
+```powershell
+RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
+node tools/explain-critical-chunks.mjs
+```
+
+**Stop condition:** We can explain why this chunk is on all three routes. Proceed to Phase 2C (defer non-critical client logic behind DeferMount) and 2D (split root client runtime / server–client import boundaries).
+
+---
+
+## Phase 2C + 2D — Telemetry sibling, guards, evidence (2026-02-10)
+
+**Goal:** Shrink first-paint hydration work; ensure server paths never import client-heavy code; make non-critical client logic mount after first paint without re-wrapping page children.
+
+### A) Code changes
+
+**2C3 Telemetry as sibling (no tree-shape change):**
+
+- `DeferredTelemetry` was a wrapper: after requestIdleCallback it wrapped children in `TelemetryProvider` + listeners, causing reconciliation when the tree shape changed.
+- Replaced with **TelemetryLayer**: a component that mounts after requestIdleCallback and renders only `<TelemetryProvider><SyncConsentToTelemetry /><RouteViewTracker /><AuthorityTelemetryListener /></TelemetryProvider>` with **no children**. It is rendered as a **sibling** to `ServerShell` (and page content), not wrapping it.
+- Layout: `ServerShell` now wraps only `{children}`; `<TelemetryLayer initialAnalyticsConsent={…} />` is a sibling inside `ConsentProviderV2`, so `SyncConsentToTelemetry` still has access to consent context.
+- File: `apps/web/src/lib/DeferredTelemetry.tsx` — export `TelemetryLayer` instead of wrapper `DeferredTelemetry`; layout imports `TelemetryLayer` and renders it as sibling.
+
+**2D Server/client import boundaries (enforcement):**
+
+- No barrel split (libs/compliance/server vs client) in this change set; enforcement is via validators below.
+
+### B) New guards
+
+| Guard                            | Tool                                                          | Purpose                                                                                                                                                                                                                                |
+| -------------------------------- | ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **server-import-graph-validate** | `tools/validate-server-import-graph.ts`                       | Fails if server entrypoints (ServerShell, root layout) import banned client-only modules: CookiePreferencesModal, AccessibilityPanel, ConsentPreferencesForm, ThemeProvider, ContrastProvider. Scans import names and path substrings. |
+| **critical-bundle-validate**     | `tools/validate-critical-bundle-contains-no-heavy-modules.ts` | After build, scans rootMainFiles chunks for banned signatures (e.g. ConsentPreferencesForm). Fails if any root chunk contains them (heavy form must be in lazy modal chunk only).                                                      |
+
+Both run in verify after `bundle-guard` (see VERIFY.md steps 40–41).
+
+### C) Evidence — LCP after Phase 2C+2D
+
+Production build (skip-nx-cache), then `SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan`, then `node tools/extract-lhr-evidence.mjs` for each report.
+
+**LCP numericValue per route:**
+
+| URL       | LCP numericValue (ms) | Render delay (ms) | LCP element               |
+| --------- | --------------------- | ----------------- | ------------------------- |
+| /en       | 3332                  | 2544              | img.portrait-image (hero) |
+| /en/brief | 3172                  | 2716              | h1#hero-title             |
+| /en/media | 3242                  | 2787              | h1#hero-title             |
+
+**Bootup-time (top):** c4b75ee0e91487b4.js 209–266 ms; document 182–297 ms.
+
+**Main-thread (top):** Script Evaluation 239–295 ms; Style & Layout 117–208 ms.
+
+**LCP ≤1800:** Not yet met (3172–3332 ms). Assertions unchanged. Telemetry no longer wraps children; guards enforce server import graph and critical-bundle contents. Further reduction requires splitting or deferring more of c4b75ee0… (e.g. ClientShellCritical/Nav or consent providers) or measuring on faster CI.
+
+**Commands run:**
+
+```powershell
+RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
+nx run web:server-import-graph-validate
+nx run web:critical-bundle-validate
+RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
+```

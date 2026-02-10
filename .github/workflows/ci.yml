@@ -144,6 +144,12 @@ jobs:
         env:
           BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA: '1'
 
+      - name: Bundle guards (zod, server-import-graph, critical-bundle)
+        run: |
+          pnpm nx run web:bundle-guard
+          pnpm nx run web:server-import-graph-validate
+          pnpm nx run web:critical-bundle-validate
+
       - name: Restore generated typings (hygiene)
         run: git checkout -- apps/web/next-env.d.ts
 

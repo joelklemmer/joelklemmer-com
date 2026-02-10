@@ -1,3 +1,4 @@
+import { getLocale } from 'next-intl/server';
 import { BriefScreen, briefMetadata } from '@joelklemmer/screens';
 import { BriefOpenTracker } from '../../../lib/telemetry';
 import { getMetadataBaseUrl } from '../../../lib/requestBaseUrl';
@@ -7,10 +8,11 @@ export async function generateMetadata() {
   return briefMetadata({ baseUrl: getMetadataBaseUrl() });
 }
 
-export default function BriefPage() {
+export default async function BriefPage() {
+  const locale = await getLocale();
   return (
     <>
-      <BriefOpenTracker />
+      <BriefOpenTracker locale={locale} />
       <BriefScreen queryBriefingAction={queryBriefingAction} />
     </>
   );

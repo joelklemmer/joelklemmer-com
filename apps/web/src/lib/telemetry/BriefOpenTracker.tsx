@@ -6,14 +6,13 @@ import {
   TELEMETRY_EVENTS,
   type BriefOpenPayload,
 } from '@joelklemmer/authority-telemetry';
-import { useLocale } from 'next-intl';
 
 /**
  * Fires brief_open once when the brief page is opened. Renders nothing.
  * Place on the brief page (inside TelemetryProvider).
+ * Locale is passed from server so no NextIntlClientProvider is required.
  */
-export function BriefOpenTracker() {
-  const locale = useLocale();
+export function BriefOpenTracker({ locale }: { locale: string }) {
   const { track } = useTelemetry();
   const fired = useRef(false);
 

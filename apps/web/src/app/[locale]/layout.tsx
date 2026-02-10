@@ -3,7 +3,6 @@ import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { NextIntlClientProvider } from 'next-intl';
 import {
   getMessages,
   getTranslations,
@@ -14,27 +13,21 @@ import {
 // eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
 import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
-import {
-  ServerShell,
-  ClientShellCritical,
-  ShellDeferredControls,
-} from '@joelklemmer/shell';
+import { ServerShell } from '@joelklemmer/shell';
 import {
   getConsentFromCookieV2,
-  ConsentProviderV2,
   canLoadAnalyticsV2,
   ConsentBannerSSR,
-  ConsentBannerSlot,
-  ConsentActionsIsland,
-  CookiePreferencesOpenProvider,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
-import { PerfMarks } from '@joelklemmer/perf';
 import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
 
-import { DeferredTelemetry } from '../../lib/DeferredTelemetry';
 import { ServerLanguageLinks } from '../../lib/ServerLanguageLinks';
 import { routing } from '../../i18n/routing';
+import {
+  ClientDeferredBridge,
+  ClientDeferredControlsSlot,
+} from './ClientDeferredBridge';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -134,51 +127,43 @@ export default async function LocaleLayout({
   }));
 
   return (
-    <NextIntlClientProvider locale={resolvedLocale} messages={messages}>
-      <PerfMarks />
-      <ConsentProviderV2 initialConsentState={initialConsentState}>
-        <CookiePreferencesOpenProvider>
-          <ServerShell
-            skipLabel={common('a11y.skipToContent')}
-            headerLabel={common('a11y.headerLabel')}
-            navLabel={common('a11y.navLabel')}
-            footerLabel={common('a11y.footerLabel')}
-            wordmark={common('wordmark')}
-            homeHref={`/${resolvedLocale}`}
-            navItems={navItems}
-            footerContent={
-              <FooterSection label={footer('label')} links={footerItems} />
-            }
-            headerCriticalSlot={<ClientShellCritical navItems={navItems} />}
-            languageLinksSlot={
-              <ServerLanguageLinks
-                currentLocale={resolvedLocale}
-                labels={languageLabels}
-                separator={languageSeparator}
-              />
-            }
-            headerDeferredSlot={
-              <ShellDeferredControls
-                initialEvaluatorMode={initialEvaluatorMode}
-              />
-            }
-          >
-            <DeferredTelemetry
-              initialAnalyticsConsent={initialAnalyticsConsent}
-            >
-              {children}
-            </DeferredTelemetry>
-          </ServerShell>
-          {!initialConsentState?.choiceMade && (
-            <ConsentBannerSlot>
-              <ConsentBannerSSR
-                preferencesHref={`/${resolvedLocale}/preferences`}
-              />
-              <ConsentActionsIsland />
-            </ConsentBannerSlot>
-          )}
-        </CookiePreferencesOpenProvider>
-      </ConsentProviderV2>
-    </NextIntlClientProvider>
+    <>
+      <ServerShell
+        skipLabel={common('a11y.skipToContent')}
+        headerLabel={common('a11y.headerLabel')}
+        navLabel={common('a11y.navLabel')}
+        footerLabel={common('a11y.footerLabel')}
+        wordmark={common('wordmark')}
+        homeHref={`/${resolvedLocale}`}
+        navItems={navItems}
+        footerContent={
+          <FooterSection label={footer('label')} links={footerItems} />
+        }
+        languageLinksSlot={
+          <ServerLanguageLinks
+            currentLocale={resolvedLocale}
+            labels={languageLabels}
+            separator={languageSeparator}
+          />
+        }
+        headerDeferredSlot={
+          <ClientDeferredControlsSlot
+            initialEvaluatorMode={initialEvaluatorMode}
+            locale={resolvedLocale}
+            messages={messages}
+          />
+        }
+      >
+        {children}
+      </ServerShell>
+      <ClientDeferredBridge
+        initialAnalyticsConsent={initialAnalyticsConsent}
+        initialConsentState={initialConsentState}
+        showConsentBanner={!initialConsentState?.choiceMade}
+      />
+      {!initialConsentState?.choiceMade && (
+        <ConsentBannerSSR preferencesHref={`/${resolvedLocale}/preferences`} />
+      )}
+    </>
   );
 }
