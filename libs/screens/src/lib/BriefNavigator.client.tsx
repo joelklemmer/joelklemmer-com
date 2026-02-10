@@ -3,50 +3,17 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
+import type {
+  BriefNavigatorClaimCard,
+  BriefNavigatorLabels,
+  BriefNavigatorProps,
+} from './briefNavigatorTypes';
 
-export interface BriefNavigatorClaimCard {
-  id: string;
-  label: string;
-  summary: string;
-  category?: string;
-  categoryId?: string;
-  verificationStrength: number;
-  lastVerified?: string;
-  supportingLinks: Array<{ label: string; href: string }>;
-  caseStudies: Array<{ slug: string; title: string }>;
-  casestudiesBasePath: string;
-  supportingRecordsLabel: string;
-  supportingCaseStudiesLabel: string;
-  verificationConnectionsLabel: string;
-  lastVerifiedLabel: string;
-  /** Dominant authority signal for structural clustering (UASIL). Not displayed. */
-  dominantSignalId?: string;
-}
-
-export interface BriefNavigatorLabels {
-  viewGrid: string;
-  viewGraph: string;
-  viewModeLabel: string;
-  filterCategoryLegend: string;
-  filterStrengthLegend: string;
-  categoryAll: string;
-  strengthAll: string;
-  /** Precomputed "N+ records" for N from 1 to max strength */
-  strengthMinByCount: Record<number, string>;
-  closePanel: string;
-  viewInBrief: string;
-  /** Precomputed record count strings for 0..maxCount */
-  recordCountByCount: Record<number, string>;
-  /** Precomputed case study count strings for 0..maxCount */
-  caseStudyCountByCount: Record<number, string>;
-}
-
-export interface BriefNavigatorProps {
-  claimCards: BriefNavigatorClaimCard[];
-  briefAnchorBase: string;
-  categoryOptions: Array<{ id: string; label: string }>;
-  labels: BriefNavigatorLabels;
-}
+export type {
+  BriefNavigatorClaimCard,
+  BriefNavigatorLabels,
+  BriefNavigatorProps,
+};
 
 type ViewMode = 'grid' | 'graph';
 
@@ -363,13 +330,12 @@ export function BriefNavigator({
       {viewMode === 'graph' && (
         <div
           className="space-y-0 authority-panel overflow-hidden"
-          role="list"
+          role="group"
           aria-label="Verification graph"
         >
           {filteredClaims.map((claim) => (
             <div
               key={claim.id}
-              role="listitem"
               className="border-b border-border last:border-b-0"
               {...(claim.dominantSignalId
                 ? { 'data-dominant-signal': claim.dominantSignalId }

@@ -13,6 +13,12 @@
         "outputPath": "apps/web"
       }
     },
+    "bundle-guard": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-route-chunks.ts"
+      }
+    },
     "start": {
       "executor": "nx:run-commands",
       "options": {
@@ -292,6 +298,7 @@
           "nx run docs:arch:check",
           "nx run web:test",
           "nx run web:build",
+          "nx run web:bundle-guard",
           "nx run web:restore-generated-typings",
           "nx run web:head-invariants-validate",
           "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y",

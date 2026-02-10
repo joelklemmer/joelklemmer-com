@@ -28,13 +28,13 @@ export function WhatMattersBlock({ items, title }: WhatMattersBlockProps) {
   return (
     <section className="section-shell" aria-label={title}>
       <h2 className="text-section-heading font-semibold">{title}</h2>
-      <ul className="mt-3 list-none space-y-2" role="list">
+      <ul className="mt-3 list-none space-y-2 p-0 m-0">
         {items.map((item) => {
           const href = item.href;
           const baseClass =
             'block p-3 rounded-card border border-border bg-muted/10 transition-colors motion-reduce:transition-none';
           return (
-            <li key={item.id} role="listitem">
+            <li key={item.id}>
               {href ? (
                 <a
                   href={href}

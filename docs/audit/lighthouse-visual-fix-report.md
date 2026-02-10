@@ -662,11 +662,51 @@ Measured after production build (skip-nx-cache) and `web:lighthouse-timespan`. E
 | **Change**      | CookiePreferencesModal is now lazy-loaded when user opens preferences; modal chunk no longer in initial load.                        |
 | **Post-change** | 092c65ca still top unused (different cause — Brief content). Modal code moved to separate lazy chunk; first open loads it on demand. |
 
+---
+
+## 15) Phase 1D — Remove Zod from client & defer BriefNavigator (2026-02-10)
+
+**Goal:** Keep zod out of client critical path; defer BriefNavigator hydration so above-the-fold is not blocked by its bundle.
+
+### D1–D3) Changes applied
+
+- **D1/D2:** Client receives only serializable DTOs. Types moved to `libs/screens/src/lib/briefNavigatorTypes.ts` (no zod). BriefNavigator.client imports types from there; BriefScreen (server) builds claimCards/labels and passes to navigator. Validation remains server-side in content layer.
+- **D3:** BriefNavigator hydration deferred. `DeferredBriefNavigator` (client) renders `BriefNavStatic` (static list of claim links) immediately for SSR and first paint; after `requestIdleCallback` (500 ms) dynamically imports `BriefNavigator` and replaces with full interactive nav. `BriefNavStatic` is server-safe (no client-only code, no zod). `@joelklemmer/screens` added to `optimizePackageImports` in next.config.js.
+- **Bundle guard:** `tools/validate-route-chunks.ts` scans `build-manifest.json` rootMainFiles for `node_modules/zod`; exits 1 if found. Target `web:bundle-guard` runs after build in verify chain; documented in VERIFY.md.
+
+### Phase 1D before/after (same run conditions)
+
+| URL                      | LCP numericValue (ms)                    | Render delay % | LCP element                                                              | Top unused JS                           | Top bootup                     |
+| ------------------------ | ---------------------------------------- | -------------- | ------------------------------------------------------------------------ | --------------------------------------- | ------------------------------ |
+| **Before (Phase 1B/1C)** | /en 2876, /en/brief 3166, /en/media 3248 | 77–86%         | /en hero img; /en/brief h1#hero-title                                    | 092c65ca05ada580.js ~64–66 KB           | c4b75ee0… / document           |
+| **After (Phase 1D)**     | /en 3177, /en/brief 3173, /en/media 3275 | ~48% (/en)     | /en hero img.portrait-image; /en/brief (trace engine TypeError this run) | 9fc8fe71528245f4.js ~62–64 KB (97–100%) | c4b75ee0e91487b4.js 272–335 ms |
+
+**Delta:** Top unused chunk hash changed from 092c65ca to 9fc8fe71 (BriefNavigator moved to lazy chunk; new hash is the deferred navigator chunk, unused during initial trace). Root main chunks (bundle-guard) do not contain zod; guard passes.
+
+### LCP ≤1800 ms statement
+
+**LCP ≤1800 is still not met.** After Phase 1D, LCP numericValue remains ~3173–3275 ms on /en, /en/brief, /en/media. Main-thread (script evaluation, style & layout) remains the bottleneck; deferring BriefNavigator moved its chunk off the initial load but did not reduce LCP below the assertion. No assertions or budgets were lowered.
+
+### Files changed (Phase 1D)
+
+| File                                                     | Change                                                                                                          |
+| -------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| `libs/screens/src/lib/briefNavigatorTypes.ts`            | New: DTO types only (BriefNavigatorClaimCard, BriefNavigatorLabels, BriefNavigatorProps); no zod.               |
+| `libs/screens/src/lib/BriefNavigator.client.tsx`         | Import types from briefNavigatorTypes; re-export types.                                                         |
+| `libs/screens/src/lib/BriefNavStatic.tsx`                | New: server-safe static claim list (plain links); used for SSR and first paint.                                 |
+| `libs/screens/src/lib/DeferredBriefNavigator.client.tsx` | New: renders BriefNavStatic then after requestIdleCallback lazy-loads BriefNavigator.                           |
+| `libs/screens/src/lib/BriefScreen.tsx`                   | Use DeferredBriefNavigator instead of BriefNavigator.                                                           |
+| `apps/web/next.config.js`                                | optimizePackageImports + `@joelklemmer/screens`.                                                                |
+| `tools/validate-route-chunks.ts`                         | New: bundle guard — rootMainFiles must not contain `node_modules/zod`.                                          |
+| `apps/web/project.json`                                  | Target bundle-guard; verify commands: bundle-guard after build.                                                 |
+| `VERIFY.md`                                              | Step 39 bundle-guard; renumber restore, head-invariants, a11y, rate-limit.                                      |
+| `apps/web-e2e/src/compliance/consent-footprint.spec.ts`  | New: consent footprint guard (banner visible, #consent-surface-desc height, Details → modal disclosure, close). |
+
 ### Files changed (Phase 1B + Phase 1C, this session)
 
-| File | Change |
-|------|--------|
-| `docs/audit/lighthouse-visual-fix-report.md` | §13 After Phase 1B table filled with measured LCP, render delay %, LCP element, unused JS, bootup; Phase 1B results subsection; §14 Phase 1C results (chunk id, cause, fix, evidence); this files-changed list. |
+| File                                                       | Change                                                                                                                                                                                                                                            |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/audit/lighthouse-visual-fix-report.md`               | §13 After Phase 1B table filled with measured LCP, render delay %, LCP element, unused JS, bootup; Phase 1B results subsection; §14 Phase 1C results (chunk id, cause, fix, evidence); this files-changed list.                                   |
 | `libs/compliance/src/lib/CookiePreferencesOpenContext.tsx` | Phase 1C: Replaced static import of `CookiePreferencesModal` with `React.lazy(() => import('./CookiePreferencesModal').then(m => ({ default: m.CookiePreferencesModal })))`; render modal only when `isOpen` inside `<Suspense fallback={null}>`. |
 
 (Phase 1B files — banner short copy, clamp, Details → modal, context — were already in place per §13; no code changes this session for 1B.)

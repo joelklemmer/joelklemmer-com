@@ -67,7 +67,7 @@ import {
   ClaimProofMapView,
 } from '@joelklemmer/ui';
 import { DensityAwarePage } from '@joelklemmer/authority-density';
-import { BriefNavigator } from './BriefNavigator.client';
+import { DeferredBriefNavigator } from './DeferredBriefNavigator.client';
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
@@ -482,7 +482,7 @@ export async function BriefScreen(props?: BriefScreenProps) {
                 {t('claims.lede')}
               </p>
             </div>
-            <BriefNavigator
+            <DeferredBriefNavigator
               claimCards={claimCards}
               briefAnchorBase={`/${locale}/brief`}
               categoryOptions={categoryOptions}

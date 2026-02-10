@@ -73,10 +73,7 @@ export function ServerShell({
                 aria-label={navLabel}
                 className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
               >
-                <ul
-                  className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]"
-                  role="list"
-                >
+                <ul className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]">
                   {navItems.map((item) => (
                     <li key={item.href} className="flex items-center h-full">
                       <Link

@@ -27,6 +27,7 @@ const nextConfig = {
       '@joelklemmer/seo',
       '@joelklemmer/authority-telemetry',
       '@joelklemmer/compliance',
+      '@joelklemmer/screens',
     ],
   },
   images: {

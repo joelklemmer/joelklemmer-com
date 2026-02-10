@@ -145,10 +145,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
 
   // Desktop: primary nav — omit when desktopRendered (server shell renders links).
   const desktopNav = desktopRendered ? null : (
-    <ul
-      className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]"
-      role="list"
-    >
+    <ul className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]">
       {items.map((item) => {
         const isActive = pathname === item.href;
         return (

@@ -43,15 +43,14 @@ export function ClaimProofMapView({
   return (
     <section className="section-shell" aria-label={title}>
       <h2 className="text-section-heading font-semibold">{title}</h2>
-      <div className="mt-3 space-y-3" role="list">
+      <ul className="mt-3 space-y-3 list-none p-0 m-0">
         {entries.map((entry) => {
           const claimHref =
             entry.claimHref ??
             (entry.claimId ? `#claim-${entry.claimId}` : undefined);
           return (
-            <div
+            <li
               key={entry.claimId}
-              role="listitem"
               className="border border-border rounded-card overflow-hidden bg-surface"
             >
               <div className="p-4">
@@ -96,10 +95,10 @@ export function ClaimProofMapView({
                   </ul>
                 ) : null}
               </div>
-            </div>
+            </li>
           );
         })}
-      </div>
+      </ul>
     </section>
   );
 }
