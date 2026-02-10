@@ -6,6 +6,21 @@
 
 ---
 
+## 0) Phase 0 — Evidence from LHR (tmp/lighthouse/custom/*.report.json)
+
+Extracted via `tools/extract-lhr-evidence.mjs` from fresh timespan LHRs.
+
+| Audit / URL | Result |
+|-------------|--------|
+| **aria-allowed-role** | Score 1 on /en, /en/brief, /en/media; `details.items` empty (no failing nodes in these runs). |
+| **target-size** | Score 0 on all three. Failing nodes: `#primary-nav-trigger`, `#language-menu-trigger`. Selectors: `div.masthead-nav > nav.nav-primary > div.relative > button`, `div.masthead-bar > div.masthead-utilities > div.relative > button`. Reason: "smallest space is 13.5px by 44px" (need ≥24px); "Safe clickable space has a diameter of 13.6px instead of at least 24px." Buttons are 44×44; spacing between them is the issue. |
+| **bf-cache** | Score 1 in extracted reports. |
+| **LCP /en** | numericValue ~3174 ms. LCP element: hero portrait `img.portrait-image` (`div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.portrait-image-wrapper > img.portrait-image`). Phases: TTFB ~14%, Load Delay ~5%, Load Time ~7%, **Render Delay ~74%**. |
+| **LCP /en/brief** | numericValue ~3172 ms. LCP element: `h1#hero-title` "Executive brief". **Render Delay ~86%**. |
+| **LCP /en/media** | numericValue ~3166 ms. LCP element: `p#consent-surface-desc`. **Render Delay ~86%**. |
+
+---
+
 ## 1) Failing audit/test: before → fix → after
 
 ### 1.1 Canonical (score 0 on /en/brief)
@@ -53,15 +68,15 @@
 | Stage   | Evidence |
 |--------|----------|
 | **Before** | Lighthouse: primary-nav-trigger and language-menu-trigger had "smallest space 13.5px by 44px" (need ≥24px). |
-| **Fix** | `libs/ui/src/lib/Header.tsx`: increased `masthead-bar` gap from `gap-6` (24px) to `gap-8` (32px) so space between nav and utilities meets 24px. |
-| **After** | Touch targets remain 44×44; spacing between them meets 24px. |
+| **Fix** | `apps/web/src/styles/20-layout.css`: `--tap-target-spacing: 12px`; `.masthead-nav { margin-inline-end: var(--tap-target-spacing) }`; `.masthead-utilities { margin-inline-start: var(--tap-target-spacing) }`. With masthead-bar gap, total spacing between controls ≥24px. |
+| **After** | Touch targets remain 44×44; spacing between them meets 24px. Re-run lighthouse-timespan to confirm target-size ≥0.9. |
 
-### 1.7 LCP (largest-contentful-paint), bf-cache, aria-allowed-role, target-size, insights
+### 1.7 LCP, bf-cache, aria-allowed-role, target-size (Phases 3–5)
 
-- **LCP:** Hero image already uses `next/image` with `priority`, `sizes` tuned; added `fetchPriority="high"` when `priority` is true (`libs/ui/src/lib/PortraitImage.tsx`). Current timespan-run LCP ~3.1–3.2 s; further work: preload hero image, reduce render-blocking, next/font for critical fonts, DOM/JS reduction (Phase 5).
-- **bf-cache:** Requires removing or narrowing `force-dynamic` and avoiding Cache-Control: no-store where not needed; request-derived canonical via metadataBase or middleware without forcing dynamic (Phase 4).
-- **aria-allowed-role / target-size:** Fix from report `details.items`; replace invalid roles with semantic elements; ensure tap targets ≥44px and spacing (Phase 3).
-- **Insights:** Address without lowering assertions.
+- **LCP:** Hero uses `next/image` with `priority` and `fetchPriority="high"` when priority (`PortraitImage.tsx`). Current LCP ~3.1–3.2 s; Phase 5: preload hero, reduce render-blocking, next/font, DOM/JS reduction to reach ≤1800 ms.
+- **bf-cache (Phase 4):** Root layout: removed `force-dynamic` and `headers()`; segment pages use `getMetadataBaseUrl()` (NEXT_PUBLIC_SITE_URL / VERCEL_URL) for canonical so pages can be cacheable. Head-invariants: canonical still set per segment via metadata.
+- **aria-allowed-role:** No failing items in extracted LHRs; monitor if full preset asserts it.
+- **target-size:** Fixed via tap-target spacing in 20-layout.css (see 1.6).
 
 ---
 
@@ -69,20 +84,22 @@
 
 | File | Change |
 |------|--------|
-| `apps/web/src/app/layout.tsx` | Root `generateMetadata()` for description + request-based canonical; no raw meta/link in head. |
-| `apps/web/src/app/[locale]/page.tsx` | `export const dynamic = 'force-dynamic'`; `getRequestBaseUrl()` for metadata. |
+| `apps/web/src/app/layout.tsx` | Static layout: removed `force-dynamic` and `headers()`; `generateMetadata()` returns only `description`; inline `localeDirScript` sets `lang`/`dir` from pathname so segment metadata owns canonical. |
+| `apps/web/src/app/[locale]/page.tsx` | No `force-dynamic`; `getMetadataBaseUrl()` for canonical (cacheable). |
 | `apps/web/src/app/[locale]/brief/page.tsx` | Same. |
 | `apps/web/src/app/[locale]/media/page.tsx` | Same. |
-| `apps/web/src/styles/20-layout.css` | `.hero-authority`: no overflow-y; mobile hero min-height/padding so viewport fit. |
-| `libs/ui/src/lib/Header.tsx` | `masthead-bar` gap-8 (32px) for target-size (24px min spacing). |
-| `libs/ui/src/lib/PortraitImage.tsx` | `fetchPriority="high"` when `priority` is true for LCP. |
-| `tools/validate-head-invariants.ts` | Fetches /en, /en/brief; asserts meta description and canonical. |
+| `apps/web/src/lib/requestBaseUrl.ts` | `getMetadataBaseUrl()` for cacheable metadata (env); `getRequestBaseUrl()` for dynamic only. |
+| `apps/web/src/styles/20-layout.css` | Hero viewport fit; `--tap-target-spacing`, `.masthead-nav` / `.masthead-utilities` margins for target-size. |
+| `libs/ui/src/lib/PortraitImage.tsx` | `fetchPriority="high"` when `priority` for LCP. |
+| `tools/validate-head-invariants.ts` | Fetches /en, /en/brief, /en/media; asserts meta description and absolute canonical. |
 | `tools/collect-lhr-timespan.ts` | Spawns `collect-lhr-single.mjs` per URL; writes LHRs to `tmp/lighthouse/custom/`. |
 | `tools/collect-lhr-single.mjs` | ESM worker: chrome-launcher + Puppeteer, Lighthouse flow, merge INP, write LHR. |
 | `tools/lhci-assert-from-lhrs.ts` | Asserts lighthouserc.serverless.cjs against custom LHRs. |
 | `tools/run-lighthouse-timespan.ts` | Build (optional), start server, collect, assert. |
+| `apps/web-e2e/playwright.visual.config.ts` | Platform-aware `snapshotPathTemplate`: `__screenshots__/${snapshotPlatform}/{arg}{ext}` (CI→linux, local→process.platform). |
+| `apps/web-e2e/src/presentation-integrity/visual-regression.spec.ts` | `waitForStableViewport`: `document.fonts.ready` + double `requestAnimationFrame` for determinism. |
 | `apps/web/project.json` | Targets `head-invariants-validate`, `lighthouse-timespan`. |
-| `.github/workflows/ci.yml` | Lighthouse job runs `web:lighthouse-timespan`. |
+| `.github/workflows/ci.yml` | Lighthouse job runs `web:lighthouse-timespan`; head-invariants in build. |
 | `package.json` | devDependencies: `puppeteer`, `lighthouse`, `chrome-launcher`. |
 
 ---
@@ -118,10 +135,11 @@ CI: Head invariants run in the **build** job. The **lighthouse** job runs `web:l
 
 ---
 
-## 5) Snapshot strategy for CI (Linux)
+## 5) Snapshot strategy for CI (Linux) — implemented
 
-- **Current:** Baselines are `*-chromium-win32.png`; CI runs on ubuntu-latest (Linux). Cross-platform snapshot diffs are expected (fonts, antialiasing, subpixel layout).
-- **Strategy:** (1) **Determinism first:** `waitForStableViewport(page)` (e.g. `document.fonts.ready`) and `reducedMotion: 'reduce'` are in place; disable animations in test mode if needed; avoid time-dependent UI in snapshotted regions. (2) **Platform-aware baselines:** Either generate and commit Linux baselines (run visual with updateSnapshots on a Linux runner, then commit the new snapshots) so CI compares like-to-like, or use a snapshot config that names/store baselines by platform (e.g. `*-chromium-linux.png` on CI). (3) **No blind accept:** Update snapshots only after determinism is ensured and the change is intentional; document the reason in the report or commit message.
+- **Platform-aware paths:** `playwright.visual.config.ts` uses `snapshotPathTemplate: __screenshots__/${snapshotPlatform}/{arg}{ext}` with `snapshotPlatform = CI ? 'linux' : process.platform`. CI (ubuntu-latest) compares against `__screenshots__/linux/`; local uses `__screenshots__/win32/` (or darwin). Like-to-like comparison avoids font/antialiasing drift.
+- **Determinism:** `waitForStableViewport(page)` now waits for `document.fonts.ready` and a double `requestAnimationFrame`; tests use `reducedMotion: 'reduce'`. No time-dependent UI in snapshotted regions.
+- **Linux baselines:** To make `web:visual` pass in CI, generate and commit Linux baselines once: on a Linux environment run `RATE_LIMIT_MODE=off pnpm nx run web-e2e:visual -- --update-snapshots` (or equivalent), then commit the new files under `apps/web-e2e/__screenshots__/linux/`. Do not commit test-output diffs.
 
 ---
 

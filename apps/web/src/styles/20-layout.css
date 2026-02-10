@@ -576,6 +576,7 @@ section.section-shell:last-child {
 :root {
   --masthead-bar-height: 3rem;
   --masthead-touch-min: 44px;
+  --tap-target-spacing: 12px; /* half of 24px min; masthead-bar gap-8 + margins = ≥24px between controls */
 }
 
 .masthead-bar {
@@ -591,6 +592,14 @@ section.section-shell:last-child {
 .masthead-utilities button[type='button'] {
   min-width: var(--masthead-touch-min);
   min-height: var(--masthead-touch-min);
+}
+
+/* Tap target spacing: ≥24px between adjacent controls (WCAG 2.2 2.5.8) */
+.masthead-nav {
+  margin-inline-end: var(--tap-target-spacing, 12px);
+}
+.masthead-utilities {
+  margin-inline-start: var(--tap-target-spacing, 12px);
 }
 
 /* Masthead icons: same size, stroke, and baseline alignment (no float) */

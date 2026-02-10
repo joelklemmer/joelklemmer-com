@@ -2,18 +2,15 @@
  * Canonical Home route for /[locale]/ (e.g. /en, /he).
  * See: docs/authority/home-implementation-map.md
  * Performance: LCP hero preload via homeMetadata (criticalPreloadLinks in screens).
+ * Metadata uses getMetadataBaseUrl() so page can be cacheable (bf-cache); CI sets NEXT_PUBLIC_SITE_URL.
  */
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import { HomeScreen, homeMetadata } from '@joelklemmer/screens';
-import { getRequestBaseUrl } from '../../lib/requestBaseUrl';
-
-/** Force dynamic so generateMetadata runs with request headers and canonical matches served URL (LHCI/SEO). */
-export const dynamic = 'force-dynamic';
+import { getMetadataBaseUrl } from '../../lib/requestBaseUrl';
 
 export async function generateMetadata(): Promise<Metadata> {
-  const baseUrl = await getRequestBaseUrl();
-  return homeMetadata({ baseUrl });
+  return homeMetadata({ baseUrl: getMetadataBaseUrl() });
 }
 
 export default function LocaleIndex() {

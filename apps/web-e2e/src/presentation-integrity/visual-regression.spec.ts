@@ -9,9 +9,11 @@ test.describe('visual regression', () => {
     reducedMotion: 'reduce',
   });
 
+  /** Determinism: fonts loaded, layout settled (double rAF), reduced motion via test.use. */
   async function waitForStableViewport(page: { evaluate: (fn: () => Promise<void>) => Promise<void> }) {
     await page.evaluate(async () => {
       await document.fonts.ready;
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
     });
   }
 
