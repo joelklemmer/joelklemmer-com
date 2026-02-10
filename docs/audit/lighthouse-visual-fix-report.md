@@ -460,15 +460,15 @@ RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbos
 RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
 RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
 node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
-node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
-node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en_brief.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en_media.report.json
 ```
 
-(Extract script with a single report path outputs main-thread top 10, bootup-time top 10, unused JS top 10, and LCP element + resource for that route. Run once per report to populate per-route evidence below.)
+(Report files on disk: `en.report.json`, `en-brief.report.json`, `en-media.report.json`. Use those paths if `en_brief`/`en_media` are not present. Extract script with a single report path outputs main-thread top 10, bootup-time top 10, unused JS top 10, and LCP element + resource for that route. Run once per report to populate per-route evidence below.)
 
 ### Per-route evidence (Phase 1A) — main-thread, bootup-time, unused JS, LCP
 
-Evidence from explicit extractor runs per report (required before code changes). Source: same build + lighthouse-timespan as §13 baseline; then `node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/<report>.report.json` for each.
+Evidence from **explicit extractor runs per report** (required before code changes). Source: same build + lighthouse-timespan as §13 baseline; then `node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/<report>.report.json` for each of en, en-brief, en-media.
 
 #### /en (en.report.json)
 
@@ -498,7 +498,7 @@ LCP element: div.hero-authority-visual-frame > div.hero-portrait-wrapper > div.p
 LCP resource URL: http://127.0.0.1:50930/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…
 ```
 
-#### /en/brief (en-brief.report.json)
+#### /en/brief (en_brief.report.json → en-brief.report.json)
 
 ```
 === /en/brief ===
@@ -525,7 +525,7 @@ Render delay (ms): 2710
 LCP element: div#consent-banner > div.mx-auto > div > p#consent-surface-desc
 ```
 
-#### /en/media (en-media.report.json)
+#### /en/media (en_media.report.json → en-media.report.json)
 
 ```
 === /en/media ===
@@ -552,12 +552,12 @@ Render delay (ms): 2791
 LCP element: div#consent-banner > div.mx-auto > div > p#consent-surface-desc
 ```
 
-**Recorded:**
+**Recorded (Phase 1A):**
 
-- **Main-thread breakdown (top 10):** Script Evaluation dominates (288–373 ms); Style & Layout 117–220 ms; Script Parsing & Compilation 72–89 ms.
-- **Bootup-time (top 10):** Largest: `c4b75ee0e91487b4.js` (240–335 ms) and document (172–332 ms); Unattributable 86–106 ms.
+- **Main-thread breakdown (top 10):** Script Evaluation dominates (288–373 ms); Style & Layout 117–220 ms; Script Parsing & Compilation 72–89 ms; Parse HTML & CSS 19–30 ms; Rendering 7–34 ms; Other 98–124 ms.
+- **Bootup-time (top 10 resources):** Largest: `c4b75ee0e91487b4.js` (240–335 ms) and document (172–332 ms); Unattributable 86–106 ms.
 - **Unused JS (top 10):** `092c65ca05ada580.js` ~64–66 KB wasted (97–100%); `c4b75ee0e91487b4.js` ~25 KB (37–38%).
-- **LCP element + resource:** /en: hero `img.portrait-image` (Next image URL). /en/brief and /en/media: consent paragraph `p#consent-surface-desc` (text node, no resource URL).
+- **LCP element + resource:** /en: hero `img.portrait-image`, resource `/_next/image?url=%2Fmedia%2Fportraits%2Fjoel-klemmer…`. /en/brief and /en/media: consent paragraph `p#consent-surface-desc` (text node; no resource URL).
 
 ### Post-change (Phase 1+2: Critical/Deferred split + SSR attributes)
 
