@@ -24,6 +24,7 @@ import {
   ConsentProviderV2,
   canLoadAnalyticsV2,
   ConsentBannerSSR,
+  ConsentBannerSlot,
   ConsentActionsIsland,
   CookiePreferencesOpenProvider,
 } from '@joelklemmer/compliance';
@@ -32,6 +33,7 @@ import { PerfMarks } from '@joelklemmer/perf';
 import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
 
 import { DeferredTelemetry } from '../../lib/DeferredTelemetry';
+import { ServerLanguageLinks } from '../../lib/ServerLanguageLinks';
 import { routing } from '../../i18n/routing';
 
 export function generateStaticParams() {
@@ -92,6 +94,14 @@ export default async function LocaleLayout({
   const nav = await getTranslations('nav');
   const footer = await getTranslations('footer');
   const messages = await getMessages();
+  const commonMsg = messages as {
+    common?: {
+      languages?: Record<string, string>;
+      languageSeparator?: string;
+    };
+  };
+  const languageLabels = commonMsg.common?.languages ?? {};
+  const languageSeparator = commonMsg.common?.languageSeparator ?? '|';
 
   const navItems = PRIMARY_NAV_ENTRIES.map((entry) => ({
     href: entry.path
@@ -140,6 +150,13 @@ export default async function LocaleLayout({
               <FooterSection label={footer('label')} links={footerItems} />
             }
             headerCriticalSlot={<ClientShellCritical navItems={navItems} />}
+            languageLinksSlot={
+              <ServerLanguageLinks
+                currentLocale={resolvedLocale}
+                labels={languageLabels}
+                separator={languageSeparator}
+              />
+            }
             headerDeferredSlot={
               <ShellDeferredControls
                 initialEvaluatorMode={initialEvaluatorMode}
@@ -153,12 +170,12 @@ export default async function LocaleLayout({
             </DeferredTelemetry>
           </ServerShell>
           {!initialConsentState?.choiceMade && (
-            <>
+            <ConsentBannerSlot>
               <ConsentBannerSSR
                 preferencesHref={`/${resolvedLocale}/preferences`}
               />
               <ConsentActionsIsland />
-            </>
+            </ConsentBannerSlot>
           )}
         </CookiePreferencesOpenProvider>
       </ConsentProviderV2>

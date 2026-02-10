@@ -18,16 +18,20 @@ export function ListSection({
       <Container variant={containerVariant} className="section-shell">
         <div className="authority-card authority-card-inner">
           <h2 className="text-section-heading font-semibold">{title}</h2>
-          <ul className="authority-list text-base">
-            {items.map((item) => (
-              <li key={item}>
-                <span aria-hidden="true" className="authority-list-bullet">
-                  •
-                </span>
-                <span className="authority-list-item-text flex-1">{item}</span>
-              </li>
-            ))}
-          </ul>
+          {items.length > 0 ? (
+            <ul className="authority-list text-base">
+              {items.map((item) => (
+                <li key={item}>
+                  <span aria-hidden="true" className="authority-list-bullet">
+                    •
+                  </span>
+                  <span className="authority-list-item-text flex-1">
+                    {item}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </div>
       </Container>
     </section>

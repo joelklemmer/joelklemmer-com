@@ -1,6 +1,7 @@
 {
   "wordmark": "Joel R. Klemmer",
   "tagline": "סמכות שקטה ותדריך מבוסס הוכחות",
+  "languageSeparator": "|",
   "languages": {
     "en": "English",
     "uk": "Ukrainian",

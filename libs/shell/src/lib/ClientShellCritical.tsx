@@ -1,11 +1,11 @@
 'use client';
 
 /**
- * Minimal client island for above-the-fold header only: mobile nav trigger + language switcher.
- * No ThemeProvider, ContrastProvider, ACPProvider, EvaluatorModeProvider, DensityViewProvider.
- * Keeps critical JS small so LCP is not blocked by provider hydration.
+ * Minimal client island for above-the-fold header only: mobile nav trigger.
+ * Language switcher is deferred (SSR links for first paint; popover in headerDeferredSlot).
+ * No ThemeProvider, ContrastProvider, etc.; keeps critical JS small for LCP.
  */
-import { Nav, LanguageSwitcherPopover } from '@joelklemmer/ui';
+import { Nav } from '@joelklemmer/ui';
 
 export interface ClientShellCriticalProps {
   navItems: {
@@ -16,10 +16,5 @@ export interface ClientShellCriticalProps {
 }
 
 export function ClientShellCritical({ navItems }: ClientShellCriticalProps) {
-  return (
-    <>
-      <Nav items={navItems} desktopRendered />
-      <LanguageSwitcherPopover />
-    </>
-  );
+  return <Nav items={navItems} desktopRendered />;
 }

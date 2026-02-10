@@ -1,6 +1,7 @@
 {
   "wordmark": "Joel R. Klemmer",
   "tagline": "Quiet authority and proof forward briefing",
+  "languageSeparator": "|",
   "languages": {
     "en": "English",
     "uk": "Ukrainian",

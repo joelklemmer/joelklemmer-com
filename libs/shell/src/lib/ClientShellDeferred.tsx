@@ -1,16 +1,18 @@
 'use client';
 
 /**
- * Full header controls suite: theme, contrast, ACP, cookie prefs, a11y panel, evaluator/density.
+ * Full header controls suite: theme, contrast, ACP, cookie prefs, a11y panel, language popover, evaluator/density.
  * Mounted after first paint (DeferMount) so it does not block LCP.
- * Theme/contrast/density/evaluator are applied via SSR attributes; providers here sync and offer toggles.
+ * On mount, hides SSR language links so the popover takes over.
  */
 import type { ReactNode } from 'react';
+import { useEffect } from 'react';
 import {
   ThemeProvider,
   ContrastProvider,
   ThemeToggle,
   AccessibilityPanel,
+  LanguageSwitcherPopover,
 } from '@joelklemmer/ui';
 import { ACPProvider } from '@joelklemmer/a11y';
 import { CookiePreferencesTrigger } from '@joelklemmer/compliance';
@@ -26,6 +28,13 @@ export function ClientShellDeferred({
   initialEvaluatorMode = 'default',
   children,
 }: ClientShellDeferredProps) {
+  useEffect(() => {
+    document.querySelectorAll('[data-language-links-ssr]').forEach((el) => {
+      el.setAttribute('aria-hidden', 'true');
+      (el as HTMLElement).classList.add('hidden');
+    });
+  }, []);
+
   return (
     <ThemeProvider>
       <ContrastProvider>
@@ -43,6 +52,7 @@ export function ClientShellDeferred({
           >
             <DensityViewProvider syncWithHash>
               <ThemeToggle />
+              <LanguageSwitcherPopover />
               <CookiePreferencesTrigger />
               <AccessibilityPanel />
               {children}

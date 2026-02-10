@@ -35,6 +35,13 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/run-a11y.ts"
       }
     },
+    "a11y-brief-repro": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/run-a11y-brief-only.ts"
+      },
+      "description": "Diagnostics: 10 iterations per locale on /brief to reproduce intermittent a11y failures; not in verify"
+    },
     "visual": {
       "executor": "nx:run-commands",
       "options": {

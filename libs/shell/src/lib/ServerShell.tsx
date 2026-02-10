@@ -27,9 +27,11 @@ export interface ServerShellProps {
   homeHref: string;
   navItems: ServerShellNavItem[];
   footerContent: ReactNode;
-  /** Critical path: mobile nav + language switcher only. Rendered immediately. */
+  /** Critical path: mobile nav only. Rendered immediately. */
   headerCriticalSlot: ReactNode;
-  /** Deferred: theme, contrast, cookie, a11y panel, etc. Mounted after first paint; container reserved to avoid CLS. */
+  /** Optional SSR language links for first paint; hidden when deferred popover mounts. */
+  languageLinksSlot?: ReactNode;
+  /** Deferred: theme, contrast, cookie, a11y panel, language popover, etc. Mounted after first paint; container reserved to avoid CLS. */
   headerDeferredSlot: ReactNode;
   children: ReactNode;
   mainId?: string;
@@ -45,6 +47,7 @@ export function ServerShell({
   navItems,
   footerContent,
   headerCriticalSlot,
+  languageLinksSlot,
   headerDeferredSlot,
   children,
   mainId = MAIN_CONTENT_ID,
@@ -91,6 +94,9 @@ export function ServerShell({
             </div>
             <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex items-center gap-6 min-h-[var(--masthead-bar-height)]">
               {headerCriticalSlot}
+              {languageLinksSlot != null ? (
+                <span data-language-links-ssr>{languageLinksSlot}</span>
+              ) : null}
               {/* Reserved space for deferred controls; no CLS when they mount */}
               <div className="masthead-deferred-slot flex items-center gap-6 min-w-[8rem] min-h-[var(--masthead-bar-height)]">
                 {headerDeferredSlot}

@@ -1,6 +1,7 @@
 {
   "wordmark": "Joel R. Klemmer",
   "tagline": "Autoridad discreta y briefing con pruebas",
+  "languageSeparator": "|",
   "languages": {
     "en": "English",
     "uk": "Ukrainian",

@@ -737,3 +737,32 @@ Measured after production build (skip-nx-cache) and `web:lighthouse-timespan`. E
 | `tools/extract-lhr-evidence.mjs`                         | Top 10 main-thread, bootup-time, unused-javascript.                                           |
 | `apps/web-e2e/src/shell/shell-deferred-controls.spec.ts` | New: reserved slot present, deferred controls within 2s, no CLS from mount.                   |
 | `apps/web-e2e/project.json`                              | Target e2e-shell for shell-deferred-controls spec.                                            |
+
+---
+
+## 16) Phase 2A — LCP reduction (hydration / first paint) (2026-02-10)
+
+**Goal:** Reduce hydration and main-thread work on first paint so LCP can meet ≤1800 ms without lowering assertions.
+
+### Changes applied (Phase 2A)
+
+- **2A1 ClientShellCritical:** LanguageSwitcherPopover removed from critical path. SSR-only language links (ServerLanguageLinks) render for first paint; deferred slot mounts LanguageSwitcherPopover via DeferMount; on mount SSR links hidden (aria-hidden + hidden). Critical slot now Nav only.
+- **2A2 ConsentActionsIsland:** No full reload after accept/reject. Consent state updated via context (acceptAll/rejectNonEssential); ConsentBannerSlot (client) unmounts banner when choiceMade; focus moved to main-content. Cookie and receipt still persisted; gated scripts see state on next navigation.
+- **2A3 Hero/PortraitImage:** Priority and sizes already set for /en hero; no change this cycle.
+- **2A4 Bootup:** Top script remains c4b75ee0e91487b4.js (234–290 ms across URLs); not split this cycle.
+
+### Phase 2A before/after (single run: RATE_LIMIT_MODE=off, SKIP_LH_BUILD=1, lighthouse-timespan)
+
+| URL           | LCP numericValue (ms) | Render delay (ms) | LCP element               | Main-thread top 5 (ms)                                                  | Bootup-time top 5                              | Unused JS top 5                  |
+| ------------- | --------------------- | ----------------- | ------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------- | -------------------------------- |
+| **/en**       | 3203                  | 100               | img.portrait-image (hero) | Script Eval 263, Style & Layout 110, Other 100, Parse 75, Parse HTML 17 | c4b75ee0… 234, document 170, Unattributable 90 | f0d879fb… 64341, c4b75ee0… 25132 |
+| **/en/brief** | 3169                  | —                 | (from LHR)                | Script Eval 300, Style & Layout 234, Other 107, Parse 65, Rendering 37  | document 341, c4b75ee0… 274, Unattributable 80 | f0d879fb… 63847, c4b75ee0… 23697 |
+| **/en/media** | 3258                  | —                 | (from LHR)                | Script Eval 321, Style & Layout 120, Other 108, Parse 64, Parse HTML 29 | c4b75ee0… 290, document 223, Unattributable 88 | f0d879fb… 62658, c4b75ee0… 25107 |
+
+**Before (Phase 1D):** LCP ~3173–3275 ms; same three routes; consent banner LCP on /en/brief and /en/media when visible.
+
+**After (Phase 2A):** LCP 3169–3258 ms. Consent no longer triggers full reload; banner hides via React state. Language popover deferred; SSR links shown until deferred mount. Main-thread and bootup still dominated by c4b75ee0e91487b4.js and document.
+
+### LCP ≤1800 ms statement (Phase 2A)
+
+**LCP ≤1800 is not yet met.** After Phase 2A, LCP numericValue remains 3169–3258 ms on /en, /en/brief, /en/media. Assertions unchanged; no thresholds lowered. Further reduction would require splitting or deferring c4b75ee0e91487b4.js and/or additional first-paint deferrals.

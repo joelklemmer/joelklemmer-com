@@ -2,26 +2,30 @@
 
 /**
  * Small client island: attaches click handlers to consent banner buttons (rendered by ConsentBannerSSR).
- * On accept/reject: persists consent via cookie and reloads so gated scripts and next paint see the new state.
- * On details: opens cookie preferences modal without reload (via CookiePreferencesOpenContext).
+ * On accept/reject: persists consent via context + cookie, hides banner without reload, moves focus to main.
+ * On details: opens cookie preferences modal (CookiePreferencesOpenContext).
  */
 import { useEffect } from 'react';
-import {
-  createAcceptedAllConsentState,
-  createRejectNonEssentialConsentState,
-} from './consent-state-v2';
-import { saveConsentWithReceipt } from './consent-store-v2';
-import { appendConsentHistory } from './consent-history';
-import { captureGpcDntAudit } from './gpc-dnt';
-import { createConsentReceiptSync } from './receipt';
+import { useConsentV2 } from './ConsentContextV2';
 import { useCookiePreferencesOpen } from './CookiePreferencesOpenContext';
+import { MAIN_CONTENT_ID } from '@joelklemmer/a11y';
 
 const BANNER_ID = 'consent-banner';
 const ACCEPT_SELECTOR = '[data-consent-action="accept"]';
 const REJECT_SELECTOR = '[data-consent-action="reject"]';
 const DETAILS_SELECTOR = '[data-consent-action="details"]';
 
+function moveFocusToMain(): void {
+  requestAnimationFrame(() => {
+    const main = document.getElementById(MAIN_CONTENT_ID);
+    if (main && typeof main.focus === 'function') {
+      main.focus();
+    }
+  });
+}
+
 export function ConsentActionsIsland() {
+  const { acceptAll, rejectNonEssential } = useConsentV2();
   const { open: openPreferences } = useCookiePreferencesOpen();
 
   useEffect(() => {
@@ -35,28 +39,14 @@ export function ConsentActionsIsland() {
 
     const handleAccept = (e: Event) => {
       e.preventDefault();
-      const state = createAcceptedAllConsentState();
-      saveConsentWithReceipt(state);
-      appendConsentHistory({
-        ...captureGpcDntAudit(),
-        timestamp: Date.now(),
-        type: 'accept_all',
-        receiptHash: createConsentReceiptSync(state).hash,
-      });
-      window.location.reload();
+      acceptAll();
+      moveFocusToMain();
     };
 
     const handleReject = (e: Event) => {
       e.preventDefault();
-      const state = createRejectNonEssentialConsentState();
-      saveConsentWithReceipt(state);
-      appendConsentHistory({
-        ...captureGpcDntAudit(),
-        timestamp: Date.now(),
-        type: 'reject_non_essential',
-        receiptHash: createConsentReceiptSync(state).hash,
-      });
-      window.location.reload();
+      rejectNonEssential();
+      moveFocusToMain();
     };
 
     const handleDetails = (e: Event) => {
@@ -72,7 +62,7 @@ export function ConsentActionsIsland() {
       if (rejectBtn) rejectBtn.removeEventListener('click', handleReject);
       if (detailsBtn) detailsBtn.removeEventListener('click', handleDetails);
     };
-  }, [openPreferences]);
+  }, [acceptAll, rejectNonEssential, openPreferences]);
 
   return null;
 }
