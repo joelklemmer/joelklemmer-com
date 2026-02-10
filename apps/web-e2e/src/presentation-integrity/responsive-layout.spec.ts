@@ -50,18 +50,22 @@ test.describe('responsive layout stability', () => {
     await expect(header).toBeVisible();
     // Ensure mobile nav menu is closed so we measure single-row height only
     const menuTrigger = page.locator('#primary-nav-trigger');
-    if (await menuTrigger.getAttribute('aria-expanded') === 'true') {
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(100);
+    if ((await menuTrigger.getAttribute('aria-expanded')) === 'true') {
+      await menuTrigger.click();
+      await page.waitForTimeout(150);
     }
-    const box = await header.boundingBox();
+    // Measure the bar only (single row); header can include nav dropdown when open
+    const bar = page.locator('.masthead-bar').first();
+    await expect(bar).toBeVisible();
+    const box = await bar.boundingBox();
     expect(box).toBeTruthy();
-    expect(box!.height).toBeLessThanOrEqual(200);
+    expect(box!.height).toBeLessThanOrEqual(80);
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/en', { waitUntil: 'networkidle' });
-    const boxWide = await header.boundingBox();
+    const barWide = page.locator('.masthead-bar').first();
+    const boxWide = await barWide.boundingBox();
     expect(boxWide).toBeTruthy();
-    expect(boxWide!.height).toBeLessThanOrEqual(120);
+    expect(boxWide!.height).toBeLessThanOrEqual(80);
   });
 
   test('hero heading and CTA visible at mobile and desktop', async ({

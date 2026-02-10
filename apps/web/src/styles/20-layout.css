@@ -576,7 +576,7 @@ section.section-shell:last-child {
 :root {
   --masthead-bar-height: 3rem;
   --masthead-touch-min: 44px;
-  --tap-target-spacing: 12px; /* half of 24px min; masthead-bar gap-8 + margins = ≥24px between controls */
+  --tap-target-spacing: 24px; /* WCAG 2.2 2.5.8: ≥24px between adjacent tap targets; masthead-bar gap-8 + margins */
 }
 
 .masthead-bar {

@@ -20,6 +20,9 @@ module.exports = {
       assertions: {
         'categories:performance': ['error', { minScore: 0.7 }],
         'categories:accessibility': ['error', { minScore: 0.9 }],
+        'aria-allowed-role': ['error', { minScore: 0.9 }],
+        'target-size': ['error', { minScore: 0.9 }],
+        'bf-cache': ['error', { minScore: 0.9 }],
         'largest-contentful-paint': ['error', { maxNumericValue: 1800 }],
         'cumulative-layout-shift': ['error', { maxNumericValue: 0.05 }],
         'interaction-to-next-paint': ['error', { maxNumericValue: 200 }],

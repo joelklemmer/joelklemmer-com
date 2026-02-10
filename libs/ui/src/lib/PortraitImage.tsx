@@ -76,12 +76,10 @@ export function PortraitImage({
   // Standard institutional portrait: 1200x1500 = 0.8 (4:5)
   const aspectRatio = width / height;
 
-  // Optimize sizes for LCP and 2x displays: ensure hero portrait loads appropriate size
-  // For 2x displays, double the pixel dimensions:
-  // Mobile: up to 640px (320px * 2), Tablet: up to 840px (420px * 2), Desktop: up to 900px (450px * 2)
-  // Next.js Image automatically handles 2x selection based on device pixel ratio
+  // LCP: request smaller initial width for faster decode; 2x still covered by deviceSizes
+  // Mobile: ~400px, tablet ~560px, desktop ~600px to reduce decode time and help Render Delay
   const sizes =
-    '(max-width: 767px) min(640px, 100vw), (max-width: 1023px) min(840px, 80vw), min(900px, 70vw)';
+    '(max-width: 767px) min(400px, 100vw), (max-width: 1023px) min(560px, 80vw), min(600px, 70vw)';
 
   const imageStyle: CSSProperties = {
     objectPosition,

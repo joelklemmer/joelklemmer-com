@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { focusRingClass } from '@joelklemmer/a11y';
@@ -12,13 +13,26 @@ export interface ConsentSurfaceV2Props {
 
 /**
  * Initial consent decision surface. Shown when user has not made a choice.
+ * Deferred until after first paint (requestAnimationFrame) so main content can win LCP on media route.
  * Accessible: focus order, keyboard, no auto-dismiss. RTL-safe via next-intl.
  */
 export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
   const t = useTranslations('consent.banner');
   const { choiceMade, acceptAll, rejectNonEssential } = useConsentV2();
+  const [afterFirstPaint, setAfterFirstPaint] = useState(false);
 
-  if (choiceMade) return null;
+  useEffect(() => {
+    let raf2 = 0;
+    const raf1 = requestAnimationFrame(() => {
+      raf2 = requestAnimationFrame(() => setAfterFirstPaint(true));
+    });
+    return () => {
+      cancelAnimationFrame(raf1);
+      if (raf2) cancelAnimationFrame(raf2);
+    };
+  }, []);
+
+  if (choiceMade || !afterFirstPaint) return null;
 
   return (
     <div

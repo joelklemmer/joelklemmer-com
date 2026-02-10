@@ -81,10 +81,14 @@ function assertLhr(
           }
         }
       }
-      if (spec.minScore !== undefined && audit != null) {
-        const s = audit.score;
-        if (s !== null && s !== undefined && s < spec.minScore) {
-          failures.push(`${url} ${key}: score ${s} < minScore ${spec.minScore}`);
+      if (spec.minScore !== undefined) {
+        if (audit === undefined || audit === null) {
+          failures.push(`${url} ${key}: audit missing (required for minScore ${spec.minScore})`);
+        } else {
+          const s = audit.score;
+          if (s === null || s === undefined || s < spec.minScore) {
+            failures.push(`${url} ${key}: score ${s ?? 'missing'} < minScore ${spec.minScore}`);
+          }
         }
       }
     }
