@@ -1,8 +1,10 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { Inter } from 'next/font/google';
 
+import { PATHNAME_HEADER } from '../middleware';
+import { getMetadataBaseUrl } from '../lib/requestBaseUrl';
 /* Root layout: html lang/dir set by script for cacheability (bf-cache). */
 import { themeScript } from './theme-script';
 
@@ -16,9 +18,13 @@ const COOKIE_EVALUATOR = 'evaluator_mode';
 const DEFAULT_META_DESCRIPTION =
   'Authority verification ecosystem for executive evaluation and institutional review.';
 
-/** Root metadata: description only. Canonical comes from each segment so pages can be cacheable. */
+/** Root metadata: metadataBase + description so LHCI meta-description and canonical audits pass. */
 export function generateMetadata(): Promise<Metadata> {
-  return Promise.resolve({ description: DEFAULT_META_DESCRIPTION });
+  const baseUrl = getMetadataBaseUrl();
+  return Promise.resolve({
+    metadataBase: new URL(baseUrl),
+    description: DEFAULT_META_DESCRIPTION,
+  });
 }
 
 /** Authority Design Constitution: Primary stack — Inter Variable. Subset + swap to minimize FOIT/FOUT. */
@@ -46,7 +52,11 @@ export default async function RootLayout({
 }: {
   children: ReactNode;
 }) {
-  const cookieStore = await cookies();
+  const [cookieStore, headersList] = await Promise.all([cookies(), headers()]);
+  const rawPath = headersList.get(PATHNAME_HEADER) || '/en';
+  const pathname = rawPath.startsWith('/') ? rawPath : `/${rawPath}`;
+  const baseUrl = getMetadataBaseUrl();
+  const canonicalHref = `${baseUrl.replace(/\/$/, '')}${pathname}`;
   const theme = cookieStore.get(COOKIE_THEME)?.value ?? 'system';
   const contrast =
     cookieStore.get(COOKIE_CONTRAST)?.value === 'high' ? 'high' : 'default';
@@ -77,6 +87,8 @@ export default async function RootLayout({
       data-evaluator={evaluator}
     >
       <head>
+        <meta name="description" content={DEFAULT_META_DESCRIPTION} />
+        <link rel="canonical" href={canonicalHref} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script dangerouslySetInnerHTML={{ __html: localeDirScript }} />
       </head>

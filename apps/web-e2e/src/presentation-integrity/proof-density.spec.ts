@@ -66,7 +66,9 @@ test.describe('Proof density layering and doctrine', () => {
       row.getAttribute('data-attachment-sha'),
     ).then((v) => (typeof v === 'string' ? v : null));
     const expectedSha =
-      typeof firstAtt.sha256 === 'string' ? firstAtt.sha256 : String(firstAtt?.sha256 ?? '');
+      typeof firstAtt.sha256 === 'string'
+        ? firstAtt.sha256
+        : String(firstAtt?.sha256 ?? '');
     expect(sha).toBe(expectedSha);
     const copyButton = row.getByRole('button', {
       name: /copy|hash|full hash/i,
