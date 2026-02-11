@@ -58,6 +58,51 @@ async function main(): Promise<number> {
   process.on('SIGINT', () => void stop());
   process.on('SIGTERM', () => void stop());
 
+  // Dump instrument config so guard can validate before collect
+  const dump = spawn(
+    process.execPath,
+    ['tools/dump-lighthouse-instrument.mjs'],
+    {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: process.env,
+    },
+  );
+  const dumpExit = await new Promise<number>((resolve) => {
+    dump.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+  });
+  if (dumpExit !== 0) {
+    await stop();
+    return dumpExit;
+  }
+
+  // Instrument guard: fail if apparatus (Chrome major, formFactor, throttlingMethod, cpuSlowdownMultiplier) differs from expected
+  const validateInstrument = spawn(
+    'npx',
+    [
+      'tsx',
+      '--tsconfig',
+      'tsconfig.base.json',
+      'tools/validate-lighthouse-instrument.ts',
+      '--instrument-path=tmp/lighthouse/instrument.json',
+    ],
+    {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: process.env,
+      shell: true,
+    },
+  );
+  const validateInstrumentExit = await new Promise<number>((resolve) => {
+    validateInstrument.on('exit', (code, signal) =>
+      resolve(code ?? (signal ? 1 : 0)),
+    );
+  });
+  if (validateInstrumentExit !== 0) {
+    await stop();
+    return validateInstrumentExit;
+  }
+
   const collect = spawn(
     'npx',
     [

@@ -321,6 +321,7 @@
           "nx run web:server-import-graph-validate",
           "nx run web:critical-bundle-validate",
           "nx run web:restore-generated-typings",
+          "nx run web:lighthouse-harness-validate",
           "nx run web:head-invariants-validate",
           "npx cross-env SKIP_A11Y_BUILD=1 nx run web:a11y",
           "npx cross-env SKIP_RATE_LIMIT_BUILD=1 nx run web:rate-limit-verify"
@@ -370,10 +371,10 @@
         "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-lighthouse-runtime.ts"
       }
     },
-    "head-invariants-validate": {
+    "lighthouse-harness-validate": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-head-invariants.ts"
+        "command": "npx tsx --tsconfig tsconfig.base.json tools/validate-lighthouse-harness.ts"
       }
     },
     "head-invariants-validate": {

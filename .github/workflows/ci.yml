@@ -337,16 +337,37 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Install Chrome (pinned for deterministic Lighthouse)
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: 136
+          install-dependencies: true
+
+      - name: Print Chrome and Lighthouse versions
+        run: |
+          "${{ steps.setup-chrome.outputs.chrome-path }}" --version
+          node -e "const p=require('lighthouse/package.json');console.log('Lighthouse version:',p.version)"
+
       - name: Build (for Lighthouse)
         run: pnpm nx run web:build --verbose
         env:
           BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA: '1'
+
+      - name: Lighthouse harness validate (pinned versions + desktop/provided profile)
+        run: pnpm nx run web:lighthouse-harness-validate --verbose
+        env:
+          LH_FORM_FACTOR: desktop
+          LH_THROTTLING_METHOD: provided
 
       - name: 'Run Lighthouse timespan (INP + assertions: LCP &lt; 1.8s, CLS ≤ 0.05, performance ≥ 0.7)'
         run: pnpm nx run web:lighthouse-timespan --verbose
         env:
           RATE_LIMIT_MODE: off
           SKIP_LH_BUILD: '1'
+          LH_CHROME_MAJOR: '136'
+          LH_FORM_FACTOR: desktop
+          LH_THROTTLING_METHOD: provided
 
       - name: Upload Lighthouse reports
         uses: actions/upload-artifact@v4

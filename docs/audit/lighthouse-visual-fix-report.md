@@ -216,6 +216,23 @@ CI: Head invariants run in the **build** job. The **lighthouse** job runs `web:l
 
 ---
 
+## 4.1) Lighthouse lab instrument and guard
+
+The LCP ≤1800 ms gate is measured under a **pinned, deterministic** collection profile so failures are attributable to the app, not environment drift.
+
+- **Instrument:** `tools/lighthouse-instrument-config.mjs` defines the single profile: `formFactor`, `throttlingMethod`, `throttling` (including `cpuSlowdownMultiplier`), `screenEmulation`, `locale`, `disableStorageReset`. The collector (`tools/collect-lhr-single.mjs`) passes this config to Lighthouse `startFlow(page, { config })` and dumps the effective config to `tmp/lighthouse/instrument.json`.
+- **Guard:** `tools/validate-lighthouse-instrument.ts` runs **before** collection. It reads the Lighthouse version from `package.json`, the Chrome version from `chrome --version`, and `tmp/lighthouse/instrument.json`. It fails if `LH_CHROME_MAJOR` is set and the runtime Chrome major differs, or if `LH_FORM_FACTOR`, `LH_THROTTLING_METHOD`, or `LH_CPU_SLOWDOWN_MULTIPLIER` differ from the instrument file. CI sets these env vars and pins Chrome (e.g. browser-actions/setup-chrome with `chrome-version: 136`). Chrome version, Lighthouse version, and effective instrument settings are printed in logs.
+
+### Harness determinism
+
+To lock the measurement profile without changing thresholds, the following are pinned and validated:
+
+- **Toolchain (exact versions in package.json, no caret):** `lighthouse` 12.6.1, `chrome-launcher` 1.2.1, `puppeteer` 24.37.2. `tools/validate-lighthouse-harness.ts` asserts these exact versions and that Chrome is available and Lighthouse version matches.
+- **Lighthouse flags (desktop / provided):** `formFactor: "desktop"`, `throttlingMethod: "provided"` (no CPU/network simulation), `disableStorageReset: false`, `onlyCategories: ["performance", "accessibility", "seo", "best-practices"]`, `screenEmulation`: Lighthouse desktop metrics (1350×940). The collector sets a fixed Puppeteer viewport of 1365×768 for deterministic desktop measurement.
+- **Guard:** `web:lighthouse-harness-validate` runs in the verify chain (after build, before head-invariants) and in the CI lighthouse job before `web:lighthouse-timespan`. It runs `dump-lighthouse-instrument.mjs` and asserts the written instrument matches the required profile; fails with actionable errors if versions or flags drift.
+
+---
+
 ## 5) Snapshot strategy for CI (Linux) — implemented
 
 - **Platform-aware paths:** `playwright.visual.config.ts` uses `snapshotPathTemplate: __screenshots__/${snapshotPlatform}/{arg}{ext}` with `snapshotPlatform = CI ? 'linux' : process.platform`. CI (ubuntu-latest) compares against `__screenshots__/linux/`; local uses `__screenshots__/win32/` (or darwin). Like-to-like comparison avoids font/antialiasing drift.
@@ -983,10 +1000,10 @@ LCP ≤1800 not yet met; no thresholds lowered. Changes this session: (1) Portra
 ### Before (numericValues from prior report and runs)
 
 | URL       | LCP numericValue (ms) | LCP element               | Render delay % |
-| --------- | --------------------- | -------------------------- | -------------- |
-| /en       | 3174–3322             | img.portrait-image (hero)  | 70–79          |
-| /en/brief | 3162–3325             | h1#hero-title              | 86             |
-| /en/media | 3240–3403             | h1#hero-title / consent    | 87             |
+| --------- | --------------------- | ------------------------- | -------------- |
+| /en       | 3174–3322             | img.portrait-image (hero) | 70–79          |
+| /en/brief | 3162–3325             | h1#hero-title             | 86             |
+| /en/media | 3240–3403             | h1#hero-title / consent   | 87             |
 
 ### Changes applied
 
@@ -997,7 +1014,7 @@ LCP ≤1800 not yet met; no thresholds lowered. Changes this session: (1) Portra
 
 ### After (same measure loop: RATE_LIMIT_MODE=off build, SKIP_LH_BUILD=1 lighthouse-timespan, extract-lhr-evidence)
 
-| URL       | LCP numericValue (ms) | LCP element              | Render delay (ms) |
+| URL       | LCP numericValue (ms) | LCP element               | Render delay (ms) |
 | --------- | --------------------- | ------------------------- | ----------------- |
 | /en       | 3198–3217             | img.portrait-image (hero) | 2572              |
 | /en/brief | 3046–3048             | h1#hero-title             | —                 |

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-10T02:34:05.315Z",
+  "generatedAt": "2026-02-11T01:13:24.015Z",
   "projects": [
     {
       "name": "a11y",
@@ -80,6 +80,12 @@
       "targetCount": 1
     },
     {
+      "name": "perf",
+      "type": "lib",
+      "root": "libs/perf",
+      "targetCount": 1
+    },
+    {
       "name": "screens",
       "type": "lib",
       "root": "libs/screens",
@@ -95,6 +101,12 @@
       "name": "seo",
       "type": "lib",
       "root": "libs/seo",
+      "targetCount": 1
+    },
+    {
+      "name": "shell",
+      "type": "lib",
+      "root": "libs/shell",
       "targetCount": 1
     },
     {
@@ -119,13 +131,13 @@
       "name": "web",
       "type": "app",
       "root": "apps/web",
-      "targetCount": 54
+      "targetCount": 59
     },
     {
       "name": "web-e2e",
       "type": "e2e",
       "root": "apps/web-e2e",
-      "targetCount": 23
+      "targetCount": 30
     }
   ],
   "dependencies": [
@@ -280,6 +292,31 @@
       "type": "static"
     },
     {
+      "source": "shell",
+      "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "shell",
+      "target": "authority-density",
+      "type": "static"
+    },
+    {
+      "source": "shell",
+      "target": "compliance",
+      "type": "static"
+    },
+    {
+      "source": "shell",
+      "target": "evaluator-mode",
+      "type": "static"
+    },
+    {
+      "source": "shell",
+      "target": "ui",
+      "type": "static"
+    },
+    {
       "source": "ui",
       "target": "a11y",
       "type": "static"
@@ -297,11 +334,6 @@
     {
       "source": "web",
       "target": "aec",
-      "type": "static"
-    },
-    {
-      "source": "web",
-      "target": "authority-density",
       "type": "static"
     },
     {
@@ -361,7 +393,7 @@
     },
     {
       "source": "web",
-      "target": "ui",
+      "target": "shell",
       "type": "static"
     },
     {
@@ -381,7 +413,7 @@
     }
   ],
   "stats": {
-    "projectCount": 21,
-    "dependencyCount": 50
+    "projectCount": 23,
+    "dependencyCount": 54
   }
 }

@@ -70,7 +70,7 @@ jobs:
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Generate Linux visual baselines
-        run: pnpm nx run web:visual -- --update-snapshots --verbose
+        run: RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose
 
       - name: Commit and push Linux baselines
         run: |

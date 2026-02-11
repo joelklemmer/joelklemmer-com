@@ -45,6 +45,20 @@ function loadAssertions(): Record<string, [string, Record<string, number>]> {
   return assertions;
 }
 
+/** Returns an error message if LHR is missing or malformed; null if shape is valid. */
+function checkLhrShape(lhr: LHR, file: string): string | null {
+  if (lhr == null || typeof lhr !== 'object') {
+    return `LHR in ${file}: root is not an object. Re-run Lighthouse collection.`;
+  }
+  if (lhr.categories == null || typeof lhr.categories !== 'object') {
+    return `LHR in ${file}: missing or invalid key "categories". Re-run Lighthouse collection.`;
+  }
+  if (lhr.audits == null || typeof lhr.audits !== 'object') {
+    return `LHR in ${file}: missing or invalid key "audits". Re-run Lighthouse collection.`;
+  }
+  return null;
+}
+
 function parseAssertion(
   entry: [string, Record<string, number>],
 ): AssertionSpec {
@@ -149,14 +163,27 @@ function main(): number {
 
   for (const file of files) {
     const filePath = path.join(lhrDir, file);
-    const raw = fs.readFileSync(filePath, 'utf8');
+    let raw: string;
+    try {
+      raw = fs.readFileSync(filePath, 'utf8');
+    } catch (e) {
+      console.error(
+        `lhci-assert-from-lhrs: could not read file ${file}: ${e instanceof Error ? e.message : String(e)}`,
+      );
+      return 1;
+    }
     let lhr: LHR;
     try {
       lhr = JSON.parse(raw) as LHR;
     } catch (e) {
       console.error(
-        `lhci-assert-from-lhrs: failed to parse ${file}: ${String(e)}`,
+        `lhci-assert-from-lhrs: invalid JSON in ${file}: ${e instanceof Error ? e.message : String(e)}. Fix or re-run Lighthouse collection.`,
       );
+      return 1;
+    }
+    const missingKey = checkLhrShape(lhr, file);
+    if (missingKey) {
+      console.error(`lhci-assert-from-lhrs: ${missingKey}`);
       return 1;
     }
     const { passed, failures } = assertLhr(lhr, assertions);

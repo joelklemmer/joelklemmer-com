@@ -1,11 +1,11 @@
 # Workspace map
 
-Generated at 2026-02-10T02:34:05.315Z.
+Generated at 2026-02-11T01:13:24.015Z.
 
 ## Summary
 
-- **Projects:** 21
-- **Dependencies:** 50
+- **Projects:** 23
+- **Dependencies:** 54
 
 ## Projects
 
@@ -24,14 +24,16 @@ Generated at 2026-02-10T02:34:05.315Z.
 | evaluator-mode | lib | libs/evaluator-mode | 1 |
 | i18n | lib | libs/i18n | 1 |
 | intelligence | lib | libs/intelligence | 1 |
+| perf | lib | libs/perf | 1 |
 | screens | lib | libs/screens | 1 |
 | sections | lib | libs/sections | 1 |
 | seo | lib | libs/seo | 1 |
+| shell | lib | libs/shell | 1 |
 | telemetry-governance | lib | libs/telemetry-governance | 1 |
 | tokens | lib | libs/tokens | 1 |
 | ui | lib | libs/ui | 1 |
-| web | app | apps/web | 54 |
-| web-e2e | e2e | apps/web-e2e | 23 |
+| web | app | apps/web | 59 |
+| web-e2e | e2e | apps/web-e2e | 30 |
 
 ## Dependencies
 
@@ -67,11 +69,15 @@ Generated at 2026-02-10T02:34:05.315Z.
 | sections | authority-density | static |
 | sections | ui | static |
 | seo | i18n | static |
+| shell | a11y | static |
+| shell | authority-density | static |
+| shell | compliance | static |
+| shell | evaluator-mode | static |
+| shell | ui | static |
 | ui | a11y | static |
 | ui | i18n | static |
 | web | a11y | static |
 | web | aec | static |
-| web | authority-density | static |
 | web | authority-mapping | static |
 | web | authority-orchestration | static |
 | web | authority-telemetry | static |
@@ -83,7 +89,7 @@ Generated at 2026-02-10T02:34:05.315Z.
 | web | screens | static |
 | web | sections | static |
 | web | seo | static |
-| web | ui | static |
+| web | shell | static |
 | web-e2e | content | static |
 | web-e2e | i18n | static |
 | web-e2e | web | implicit |

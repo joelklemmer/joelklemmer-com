@@ -1,13 +1,28 @@
 /**
  * Single-URL Lighthouse timespan flow. Run with Node (ESM) so Lighthouse loads correctly.
+ * Uses pinned instrument config (formFactor, throttling, screenEmulation) for deterministic LCP.
  * Env: BASE_URL, URL_PATH (e.g. /en), SLUG (e.g. en), OUT_FILE (path to write .report.json).
  */
 import fs from 'node:fs';
 import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import * as chromeLauncher from 'chrome-launcher';
 import puppeteer from 'puppeteer';
 import { startFlow } from 'lighthouse/core/index.js';
+import {
+  flowConfig,
+  getInstrumentSummary,
+} from './lighthouse-instrument-config.mjs';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const REPO_ROOT = path.resolve(__dirname, '..');
+const INSTRUMENT_OUT = path.join(
+  REPO_ROOT,
+  'tmp',
+  'lighthouse',
+  'instrument.json',
+);
 const INP_AUDIT_ID = 'interaction-to-next-paint';
 
 function mergeInpIntoNav(navLhr, timespanLhr) {
@@ -30,6 +45,47 @@ function mergeInpIntoNav(navLhr, timespanLhr) {
   return navLhr;
 }
 
+function getChromeVersion() {
+  try {
+    const chromePath = chromeLauncher.getChromePath?.();
+    if (!chromePath) return null;
+    const out = spawnSync(chromePath, ['--version'], {
+      encoding: 'utf8',
+      timeout: 5000,
+    });
+    return (out.stdout || out.stderr || '').trim() || null;
+  } catch {
+    return null;
+  }
+}
+
+function getLighthouseVersion() {
+  try {
+    const pkgPath = path.join(
+      REPO_ROOT,
+      'node_modules',
+      'lighthouse',
+      'package.json',
+    );
+    const raw = fs.readFileSync(pkgPath, 'utf8');
+    const pkg = JSON.parse(raw);
+    return pkg?.version ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function writeInstrumentJson() {
+  const summary = getInstrumentSummary();
+  const payload = {
+    settings: flowConfig.settings,
+    summary,
+    dumpedAt: new Date().toISOString(),
+  };
+  fs.mkdirSync(path.dirname(INSTRUMENT_OUT), { recursive: true });
+  fs.writeFileSync(INSTRUMENT_OUT, JSON.stringify(payload, null, 2), 'utf8');
+}
+
 async function main() {
   const baseUrl = process.env.BASE_URL || process.env.LHCI_BASE_URL;
   const urlPath = process.env.URL_PATH || '/en';
@@ -42,6 +98,20 @@ async function main() {
   }
 
   const url = baseUrl.replace(/\/?$/, '') + urlPath;
+  const isFirstUrl = slug === 'en';
+
+  if (isFirstUrl) {
+    const chromeVer = getChromeVersion();
+    const lhVer = getLighthouseVersion();
+    writeInstrumentJson();
+    console.error('Lighthouse instrument: Chrome:', chromeVer ?? 'unknown');
+    console.error('Lighthouse instrument: Lighthouse:', lhVer ?? 'unknown');
+    console.error(
+      'Lighthouse instrument: effective settings',
+      JSON.stringify(getInstrumentSummary(), null, 2),
+    );
+  }
+
   // Use chrome-launcher (same as LHCI) so Chrome is found in CI; then connect Puppeteer
   let chrome;
   let browser;
@@ -67,7 +137,18 @@ async function main() {
 
   try {
     const page = await browser.newPage();
-    const flow = await startFlow(page, { name: `timespan-${slug}` });
+    // Fixed viewport for deterministic desktop measurement (matches harness: desktop, no device emulation)
+    const VIEWPORT_WIDTH = 1365;
+    const VIEWPORT_HEIGHT = 768;
+    await page.setViewport({
+      width: VIEWPORT_WIDTH,
+      height: VIEWPORT_HEIGHT,
+      deviceScaleFactor: 1,
+    });
+    const flow = await startFlow(page, {
+      name: `timespan-${slug}`,
+      config: flowConfig,
+    });
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });
 

@@ -1,6 +1,6 @@
 # Linux visual baselines
 
-CI runs on ubuntu-latest and uses this directory for screenshot comparison. The Playwright visual config uses `snapshotPathTemplate: __screenshots__/linux/{arg}{ext}` when `CI=true`.
+CI runs on ubuntu-latest and **compares only against this directory** (linux baselines). Local runs may use `win32` or `darwin` snapshot dirs; only this directory is committed and used in CI. The Playwright visual config uses `snapshotPathTemplate: __screenshots__/linux/{arg}{ext}` when `CI=true`.
 
 To generate or update baselines:
 
