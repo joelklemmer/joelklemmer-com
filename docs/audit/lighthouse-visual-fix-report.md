@@ -945,3 +945,31 @@ node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
 node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
 node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
 ```
+
+---
+
+## 17) LCP budget guard and Linux visual baselines (2026-02-10)
+
+### LCP budget validator (Phase 2F)
+
+- **Tool:** `tools/validate-lcp-budget.ts` — run after lighthouse-timespan has produced LHRs in `tmp/lighthouse/custom/`.
+- **Asserts:** LCP numericValue ≤ 1800 ms for en, en-brief, en-media; LCP element matches expected (home: hero image; brief/media: hero h1).
+- **Wiring:** `tools/run-lighthouse-timespan.ts` runs it after `lhci-assert-from-lhrs`; lighthouse CI job runs lighthouse-timespan, so this guard runs in CI. Not in verify chain.
+- **VERIFY.md:** CI jobs table updated: lighthouse job runs `web:lighthouse-timespan` (collect, assert, validate-lcp-budget).
+
+### Before/after LCP (current state)
+
+| URL       | LCP numericValue (ms) | LCP element        | Gate  |
+| --------- | --------------------- | ------------------ | ----- |
+| /en       | ~3183–3255            | img.portrait-image | ≤1800 |
+| /en/brief | ~3166–3173            | h1#hero-title      | ≤1800 |
+| /en/media | ~3242–3258            | h1#hero-title      | ≤1800 |
+
+LCP ≤1800 not yet met; no thresholds lowered. Changes this session: (1) PortraitImage with `priority` uses `unoptimized` so preload URL matches request and Next image optimizer is skipped for LCP hero. (2) createPageMetadata title/description fallbacks so document-title never empty. (3) Case study metadata fallback title. (4) validate-lcp-budget guard added.
+
+### How to regenerate Linux visual baselines
+
+- **CI visual job** compares against `apps/web-e2e/__screenshots__/linux/`. Local may use win32/darwin; only Linux baselines are committed for CI.
+- **Workflow:** Actions → "Update Linux visual baselines" → Run workflow (choose branch). The workflow: installs deps, runs `pnpm nx run web:visual -- --update-snapshots --verbose`, then commits and pushes only `apps/web-e2e/__screenshots__/linux/`.
+- **Manual (Linux env):** `RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose`, then commit only `apps/web-e2e/__screenshots__/linux/*.png` (and README.md if updated).
+- Do not commit test-output diff images; do not change the visual job to ignore diffs.

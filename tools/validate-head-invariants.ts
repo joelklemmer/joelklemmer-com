@@ -18,16 +18,24 @@ const ROUTES = ['/en', '/en/brief', '/en/media'] as const;
 function parseHtmlHead(html: string): {
   description: string | null;
   canonical: string | null;
+  title: string | null;
+  htmlLang: string | null;
 } {
   let description: string | null = null;
   let canonical: string | null = null;
+  let title: string | null = null;
+  let htmlLang: string | null = null;
   const metaDesc =
     /<meta\s+name=["']description["']\s+content=["']([^"']*)["']/i.exec(html);
   if (metaDesc) description = metaDesc[1].trim() || null;
   const linkCanonical =
     /<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i.exec(html);
   if (linkCanonical) canonical = linkCanonical[1].trim() || null;
-  return { description, canonical };
+  const titleMatch = /<title[^>]*>([\s\S]*?)<\/title>/i.exec(html);
+  if (titleMatch) title = titleMatch[1].trim() || null;
+  const htmlOpen = /<html[^>]*\slang=["']([^"']+)["']/i.exec(html);
+  if (htmlOpen) htmlLang = htmlOpen[1].trim() || null;
+  return { description, canonical, title, htmlLang };
 }
 
 function isAbsoluteUrl(url: string): boolean {
@@ -55,7 +63,7 @@ async function runWithBaseUrl(
       continue;
     }
 
-    const { description, canonical } = parseHtmlHead(html);
+    const { description, canonical, title, htmlLang } = parseHtmlHead(html);
     if (!description || description.length === 0) {
       errors.push(
         `${url}: <meta name="description" content="..."> missing or empty`,
@@ -67,6 +75,12 @@ async function runWithBaseUrl(
       errors.push(
         `${url}: canonical href must be absolute (got: ${canonical})`,
       );
+    }
+    if (!title || title.length <= 3) {
+      errors.push(`${url}: <title> missing or too short (length > 3 required)`);
+    }
+    if (!htmlLang || htmlLang.length < 2) {
+      errors.push(`${url}: <html lang="..."> missing or invalid`);
     }
   }
 
@@ -103,7 +117,7 @@ async function main(): Promise<number> {
             return 1;
           }
           process.stdout.write(
-            'validate-head-invariants: meta description and canonical OK.\n',
+            'validate-head-invariants: meta description, canonical, title, and html lang OK.\n',
           );
           return 0;
         } catch (e) {
@@ -131,7 +145,7 @@ async function main(): Promise<number> {
     return 1;
   }
   process.stdout.write(
-    'validate-head-invariants: meta description and canonical OK.\n',
+    'validate-head-invariants: meta description, canonical, title, and html lang OK.\n',
   );
   return 0;
 }

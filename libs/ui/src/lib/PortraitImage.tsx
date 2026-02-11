@@ -109,6 +109,7 @@ export function PortraitImage({
         sizes={sizes}
         style={imageStyle}
         className="portrait-image"
+        unoptimized={priority}
       />
     </div>
   );

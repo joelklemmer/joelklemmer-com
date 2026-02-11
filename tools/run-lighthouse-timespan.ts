@@ -100,9 +100,33 @@ async function main(): Promise<number> {
   const assertExit = await new Promise<number>((resolve) => {
     assert.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
   });
+  if (assertExit !== 0) {
+    await stop();
+    return assertExit;
+  }
+
+  const lcpBudget = spawn(
+    'npx',
+    [
+      'tsx',
+      '--tsconfig',
+      'tsconfig.base.json',
+      'tools/validate-lcp-budget.ts',
+      '--lhr-dir=tmp/lighthouse/custom',
+    ],
+    {
+      cwd: workspaceRoot,
+      stdio: 'inherit',
+      env: process.env,
+      shell: true,
+    },
+  );
+  const lcpBudgetExit = await new Promise<number>((resolve) => {
+    lcpBudget.on('exit', (code, signal) => resolve(code ?? (signal ? 1 : 0)));
+  });
 
   await stop();
-  return assertExit;
+  return lcpBudgetExit;
 }
 
 main()

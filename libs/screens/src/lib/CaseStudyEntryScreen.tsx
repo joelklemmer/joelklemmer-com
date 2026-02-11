@@ -43,7 +43,7 @@ export async function generateMetadata({
   }
 
   return createPageMetadata({
-    title: entry.frontmatter.title,
+    title: entry.frontmatter.title?.trim() || 'Case Study',
     description: entry.frontmatter.summary ?? entry.frontmatter.title,
     locale,
     pathname: `/casestudies/${entry.frontmatter.slug}`,

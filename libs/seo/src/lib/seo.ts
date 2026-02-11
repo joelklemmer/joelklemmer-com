@@ -140,6 +140,8 @@ export function getCriticalPreloadLinks(options: {
   return links;
 }
 
+const DEFAULT_PAGE_TITLE = 'Joel R. Klemmer';
+
 export function createPageMetadata({
   title,
   description,
@@ -151,6 +153,7 @@ export function createPageMetadata({
   ogImageSlug,
   criticalPreloadLinks,
 }: PageMetadataInput): Metadata {
+  const titleValue = title?.trim() || DEFAULT_PAGE_TITLE;
   const descriptionValue =
     description?.trim() ||
     'Authority verification ecosystem for executive evaluation and institutional review.';
@@ -185,10 +188,10 @@ export function createPageMetadata({
       alt?: string;
     }>;
   } = {
-    title,
+    title: titleValue,
     description: descriptionValue,
     url: canonical,
-    siteName: title,
+    siteName: titleValue,
     locale,
     type: 'website',
   };
@@ -198,14 +201,14 @@ export function createPageMetadata({
         url: `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`,
         width: 1200,
         height: 630,
-        alt: title,
+        alt: titleValue,
       },
     ];
   }
 
   const twitter = {
     card: 'summary_large_image' as const,
-    title,
+    title: titleValue,
     description: descriptionValue,
     ...(ogImageSlug && {
       images: [
@@ -215,7 +218,7 @@ export function createPageMetadata({
   };
 
   const metadata: Metadata = {
-    title,
+    title: titleValue,
     description: descriptionValue,
     ...(alternates && { alternates }),
     openGraph,
