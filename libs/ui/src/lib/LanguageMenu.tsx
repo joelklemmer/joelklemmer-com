@@ -29,7 +29,7 @@ export function LanguageMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLUListElement | null>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const menuId = 'language-menu';
@@ -123,33 +123,30 @@ export function LanguageMenu() {
       </button>
 
       {isOpen && (
-        <div
+        <ul
           ref={menuRef}
           id={menuId}
-          role="menu"
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="absolute end-0 top-full mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg z-50"
+          className="absolute end-0 top-full mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
         >
-          <div className="py-1" role="none">
-            {locales.map((targetLocale, index) => {
-              const restPath = restSegments.length
-                ? `/${restSegments.join('/')}`
-                : '';
-              const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
-              const isCurrent = targetLocale === locale;
-              const languageLabel = common(`languages.${targetLocale}`);
+          {locales.map((targetLocale, index) => {
+            const restPath = restSegments.length
+              ? `/${restSegments.join('/')}`
+              : '';
+            const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
+            const isCurrent = targetLocale === locale;
+            const languageLabel = common(`languages.${targetLocale}`);
 
-              return (
+            return (
+              <li key={targetLocale}>
                 <Link
-                  key={targetLocale}
                   ref={(el) => {
                     itemRefs.current[index] = el;
                   }}
                   href={href}
                   prefetch={false}
                   lang={targetLocale}
-                  role="menuitem"
                   aria-current={isCurrent ? 'page' : undefined}
                   aria-label={common('a11y.languageSwitcherAction', {
                     language: languageLabel,
@@ -163,10 +160,10 @@ export function LanguageMenu() {
                 >
                   {languageLabel}
                 </Link>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

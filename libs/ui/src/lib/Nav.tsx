@@ -32,7 +32,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLUListElement | null>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const menuId = 'primary-nav-menu';
@@ -176,7 +176,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
         type="button"
         aria-expanded={isOpen}
         aria-controls={menuId}
-        aria-haspopup="menu"
+        aria-haspopup="listbox"
         aria-label={a11y('a11y.navLabel')}
         onClick={handleToggle}
         onKeyDown={(e) => {
@@ -204,40 +204,37 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
       </button>
 
       {isOpen && (
-        <div
+        <ul
           ref={menuRef}
           id={menuId}
-          role="menu"
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start"
+          className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start list-none py-1 m-0 p-0"
         >
-          <div className="py-1" role="none">
-            {items.map((item, index) => {
-              const isActive = pathname === item.href;
-              return (
+          {items.map((item, index) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.href}>
                 <Link
-                  key={item.href}
                   ref={(el) => {
                     itemRefs.current[index] = el;
                   }}
                   href={item.href}
                   prefetch={false}
                   lang={undefined}
-                  role="menuitem"
                   {...(item.rank && { 'data-nav-rank': item.rank })}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start ${interactionTransitionClass} relative ${
+                  className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start py-2 px-3 ${interactionTransitionClass} relative ${
                     isActive ? 'nav-primary-menu-item--active' : ''
                   }`}
                   onClick={handleClose}
                 >
                   {item.label}
                 </Link>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

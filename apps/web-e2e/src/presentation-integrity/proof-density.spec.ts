@@ -62,8 +62,12 @@ test.describe('Proof density layering and doctrine', () => {
     });
     const row = page.locator(`[data-attachment-id="${firstAtt.id}"]`);
     await expect(row).toBeVisible();
-    const sha = await row.getAttribute('data-attachment-sha');
-    expect(sha).toBe(firstAtt.sha256);
+    const sha = await Promise.resolve(
+      row.getAttribute('data-attachment-sha'),
+    ).then((v) => (typeof v === 'string' ? v : null));
+    const expectedSha =
+      typeof firstAtt.sha256 === 'string' ? firstAtt.sha256 : String(firstAtt?.sha256 ?? '');
+    expect(sha).toBe(expectedSha);
     const copyButton = row.getByRole('button', {
       name: /copy|hash|full hash/i,
     });

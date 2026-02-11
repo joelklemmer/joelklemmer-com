@@ -21,7 +21,7 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [focusedIndex, setFocusedIndex] = useState<number | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLUListElement | null>(null);
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
   const menuId = 'primary-nav-menu';
@@ -140,26 +140,23 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
       </button>
 
       {isOpen && (
-        <div
+        <ul
           ref={menuRef}
           id={menuId}
-          role="menu"
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50"
+          className="absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
         >
-          <div className="py-1" role="none">
-            {items.map((item, index) => {
-              const isActive = pathname === item.href;
-              return (
+          {items.map((item, index) => {
+            const isActive = pathname === item.href;
+            return (
+              <li key={item.href}>
                 <Link
-                  key={item.href}
                   ref={(el) => {
                     itemRefs.current[index] = el;
                   }}
                   href={item.href}
                   lang={undefined}
-                  role="menuitem"
                   aria-current={isActive ? 'page' : undefined}
                   className={`${focusRingClass} block w-full px-4 py-2 text-sm text-left transition-colors motion-reduce:transition-none ${
                     isActive
@@ -170,10 +167,10 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
                 >
                   {item.label}
                 </Link>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

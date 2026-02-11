@@ -33,7 +33,7 @@ export function LanguageSwitcherPopover() {
   const searchParams = useSearchParams();
   const [isOpen, setIsOpen] = useState(false);
   const buttonRef = useRef<HTMLButtonElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLUListElement | null>(null);
   const itemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   const { restSegments } = resolvePathname(pathname, locale);
@@ -191,26 +191,24 @@ export function LanguageSwitcherPopover() {
       </button>
 
       {isOpen && (
-        <div
+        <ul
           ref={menuRef}
           id={menuId}
-          role="menu"
           aria-labelledby={triggerId}
-          className="absolute end-0 top-full z-50 mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg"
+          className="absolute end-0 top-full z-50 mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg list-none py-1 m-0 px-0"
           onKeyDown={handleKeyDown}
         >
-          <div className="py-1" role="none">
-            {locales.map((targetLocale) => {
-              const restPath = restSegments.length
-                ? `/${restSegments.join('/')}`
-                : '';
-              const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
-              const isCurrent = targetLocale === locale;
-              const languageLabel = nativeLanguageNames[targetLocale];
+          {locales.map((targetLocale) => {
+            const restPath = restSegments.length
+              ? `/${restSegments.join('/')}`
+              : '';
+            const href = `/${targetLocale}${restPath}${queryString ? `?${queryString}` : ''}`;
+            const isCurrent = targetLocale === locale;
+            const languageLabel = nativeLanguageNames[targetLocale];
 
-              return (
+            return (
+              <li key={targetLocale}>
                 <Link
-                  key={targetLocale}
                   ref={(el) => {
                     if (el) {
                       itemRefs.current.set(targetLocale, el);
@@ -221,7 +219,6 @@ export function LanguageSwitcherPopover() {
                   href={href}
                   prefetch={false}
                   lang={targetLocale}
-                  role="menuitem"
                   aria-current={isCurrent ? 'page' : undefined}
                   aria-label={common('a11y.languageSwitcherAction', {
                     language: languageLabel,
@@ -235,10 +232,10 @@ export function LanguageSwitcherPopover() {
                 >
                   {languageLabel}
                 </Link>
-              );
-            })}
-          </div>
-        </div>
+              </li>
+            );
+          })}
+        </ul>
       )}
     </div>
   );

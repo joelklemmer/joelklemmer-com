@@ -152,6 +152,14 @@ async function main() {
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });
 
+    // Deterministic interaction so INP audit runs (auditRan >= 1): focus + activate a control
+    const skipLink = await page.$('[data-skip-link], a[href="#main-content"]');
+    if (skipLink) {
+      await skipLink.focus();
+      await new Promise((r) => setTimeout(r, 50));
+      await page.keyboard.press('Enter');
+      await new Promise((r) => setTimeout(r, 80));
+    }
     await page.keyboard.down('Tab');
     await new Promise((r) => setTimeout(r, 80));
     await page.keyboard.up('Tab');

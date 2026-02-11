@@ -42,12 +42,12 @@ test.describe('Keyboard navigation', () => {
   }) => {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/en', { waitUntil: 'domcontentloaded' });
-    const trigger = page.locator('button[aria-haspopup="menu"]');
+    const trigger = page.locator('#primary-nav-trigger');
     await trigger.focus();
     await page.keyboard.press('Enter');
-    await expect(page.locator('[role="menu"]')).toBeVisible();
+    await expect(page.locator('#primary-nav-menu')).toBeVisible();
     await page.keyboard.press('Escape');
-    await expect(page.locator('[role="menu"]')).not.toBeVisible();
+    await expect(page.locator('#primary-nav-menu')).not.toBeVisible();
     await expect(trigger).toBeFocused();
   });
 });
