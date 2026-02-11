@@ -88,12 +88,37 @@ export function PortraitImage({
     height: '100%',
   };
 
+  // LCP: when priority, use native img with decoding=async to avoid Next/Image runtime and reduce main-thread before paint
+  if (priority) {
+    return (
+      <div
+        className={`portrait-image-wrapper ${className}`}
+        style={{
+          aspectRatio,
+          minHeight: 0,
+          width: '100%',
+        }}
+      >
+        <img
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          decoding="async"
+          fetchPriority="high"
+          sizes={sizes}
+          style={imageStyle}
+          className="portrait-image"
+        />
+      </div>
+    );
+  }
+
   return (
     <div
       className={`portrait-image-wrapper ${className}`}
       style={{
         aspectRatio,
-        // Reserve space to prevent CLS - ensure wrapper maintains aspect ratio
         minHeight: 0,
         width: '100%',
       }}
@@ -103,13 +128,10 @@ export function PortraitImage({
         alt={alt}
         width={width}
         height={height}
-        priority={priority}
-        fetchPriority={priority ? 'high' : undefined}
         quality={quality}
         sizes={sizes}
         style={imageStyle}
         className="portrait-image"
-        unoptimized={priority}
       />
     </div>
   );

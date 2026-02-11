@@ -973,3 +973,48 @@ LCP ≤1800 not yet met; no thresholds lowered. Changes this session: (1) Portra
 - **Workflow:** Actions → "Update Linux visual baselines" → Run workflow (choose branch). The workflow: installs deps, runs `pnpm nx run web:visual -- --update-snapshots --verbose`, then commits and pushes only `apps/web-e2e/__screenshots__/linux/`.
 - **Manual (Linux env):** `RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose`, then commit only `apps/web-e2e/__screenshots__/linux/*.png` (and README.md if updated).
 - Do not commit test-output diff images; do not change the visual job to ignore diffs.
+
+---
+
+## 18) Phase 2 LCP reduction (2026-02-10) — changes applied, result
+
+**Goal:** LCP ≤1800 ms on /en, /en/brief, /en/media without lowering the gate. Render delay was dominant (74–87%); levers targeted font load, hero CSS cost, streaming, and LCP image path.
+
+### Before (numericValues from prior report and runs)
+
+| URL       | LCP numericValue (ms) | LCP element               | Render delay % |
+| --------- | --------------------- | -------------------------- | -------------- |
+| /en       | 3174–3322             | img.portrait-image (hero)  | 70–79          |
+| /en/brief | 3162–3325             | h1#hero-title              | 86             |
+| /en/media | 3240–3403             | h1#hero-title / consent    | 87             |
+
+### Changes applied
+
+1. **Hero font (2A)** — `libs/tokens/src/lib/tokens.css`: added `--hero-display-font` and `--hero-lede-font` (system stack: `ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif`). `apps/web/src/styles/20-layout.css`: `.hero-display` uses `var(--hero-display-font)`, `.hero-lede` uses `var(--hero-lede-font)`. Hero title and lede paint with system font on first paint; no wait for Inter.
+2. **Hero CSS (2B)** — `libs/tokens`: `--hero-atmosphere-primary/secondary/tertiary` set to `transparent`; `--hero-depth-shadow` to single light shadow; `--hero-inner-surface` opaque, `--hero-inner-blur: 0`, `--authority-ambient-soft: transparent`. `apps/web/src/styles/20-layout.css`: removed `backdrop-filter` and `authority-soft-light` from `.hero-authority-inner`. Fewer gradients, no blur, minimal shadow.
+3. **Streaming (2D)** — `libs/screens/src/lib/BriefScreen.tsx`: `BriefScreen` loads only locale + `brief` messages and renders `HeroSection` plus `Suspense` with `BriefBelowFold` (all data and sections). `libs/screens/src/lib/MediaLibraryScreen.tsx`: `MediaLibraryScreen` loads only locale + `quiet` messages and renders `HeroSection` plus `Suspense` with `MediaBelowFold` (manifest, list, press section). Initial HTML flushes hero first.
+4. **Home LCP image (2C)** — `libs/ui/src/lib/PortraitImage.tsx`: when `priority` is true, render native `<img>` with `decoding="async"`, `fetchPriority="high"`, `width`, `height`, `sizes` instead of Next `Image` to avoid Next/Image runtime on the LCP path.
+
+### After (same measure loop: RATE_LIMIT_MODE=off build, SKIP_LH_BUILD=1 lighthouse-timespan, extract-lhr-evidence)
+
+| URL       | LCP numericValue (ms) | LCP element              | Render delay (ms) |
+| --------- | --------------------- | ------------------------- | ----------------- |
+| /en       | 3198–3217             | img.portrait-image (hero) | 2572              |
+| /en/brief | 3046–3048             | h1#hero-title             | —                 |
+| /en/media | 3255–3272             | h1#hero-title             | —                 |
+
+LCP gate remains 1800 ms. Assertion not changed. `web:lighthouse-timespan` still exits non-zero on local Windows; main-thread (Script Evaluation, Style & Layout) and render delay remain the bottleneck. Trace engine logs `TypeError: Cannot read properties of undefined (reading 'url')` during run; LHRs are written and LCP numericValue is present.
+
+### Commands run
+
+```powershell
+RATE_LIMIT_MODE=off pnpm nx run web:build --configuration=production --skip-nx-cache
+RATE_LIMIT_MODE=off SKIP_LH_BUILD=1 pnpm nx run web:lighthouse-timespan --verbose
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-brief.report.json
+node tools/extract-lhr-evidence.mjs tmp/lighthouse/custom/en-media.report.json
+```
+
+### Phase 1 (Linux visual) — completed
+
+- Workflow `.github/workflows/update-linux-visual-baselines.yml` verified; `snapshotPathTemplate` uses `__screenshots__/linux` in CI. README at `apps/web-e2e/__screenshots__/linux/README.md` updated to describe workflow_dispatch and commit scope. To make the visual job green: run "Update Linux visual baselines" from the Actions tab, then the branch will contain the committed Linux baselines.

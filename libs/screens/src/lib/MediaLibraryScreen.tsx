@@ -69,7 +69,8 @@ const DESCRIPTOR_DISPLAY_LABELS: Record<string, string> = {
 /** Initial DOM size for LCP/dom-size: 12 items; pagination for more. */
 const ITEMS_PER_PAGE = 12;
 
-export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
+/** Below-fold: manifest, filter, list, press section. Streamed after hero for LCP. */
+async function MediaBelowFold(_props: MediaLibraryScreenProps) {
   const devTimerStart =
     typeof process !== 'undefined' && process.env.NODE_ENV === 'development'
       ? Date.now()
@@ -98,7 +99,6 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
     defaultBaseUrl;
   const siteBase = baseUrl.replace(/\/+$/, '');
   const tierAForStructuredData = getMediaManifestTierAOnly(manifest);
-  // Limit JSON-LD to prevent bloat: max 50 ImageObjects per page
   const MAX_JSON_LD_IMAGES = 50;
   const tierAForStructuredDataLimited = tierAForStructuredData.slice(
     0,
@@ -151,30 +151,17 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
           seoKeywords: a.seoKeywords,
         }))}
       />
-      <HeroSection title={tQuiet('media.title')} lede={tQuiet('media.lede')} />
-      <Suspense
-        fallback={
-          <section className="section-shell">
-            <div className="animate-pulse flex flex-col gap-4 max-w-2xl mx-auto px-4">
-              <div className="h-10 bg-muted/50 rounded w-48" />
-              <div className="h-24 bg-muted/50 rounded" />
-              <div className="h-24 bg-muted/50 rounded" />
-            </div>
-          </section>
-        }
-      >
-        <MediaLibraryClient
-          assets={paginatedAssets}
-          initialKind={kind}
-          manifestSize={manifest.assets.length}
-          basePath={basePath}
-          siteBase={siteBase}
-          labels={labels}
-          currentPage={currentPage}
-          totalPages={totalPages}
-          totalItems={filtered.length}
-        />
-      </Suspense>
+      <MediaLibraryClient
+        assets={paginatedAssets}
+        initialKind={kind}
+        manifestSize={manifest.assets.length}
+        basePath={basePath}
+        siteBase={siteBase}
+        labels={labels}
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalItems={filtered.length}
+      />
       <section
         className="section-shell"
         aria-labelledby="media-press-usage-heading"
@@ -197,6 +184,29 @@ export async function MediaLibraryScreen(_props: MediaLibraryScreenProps) {
           </Link>
         </Container>
       </section>
+    </>
+  );
+}
+
+export async function MediaLibraryScreen(props: MediaLibraryScreenProps) {
+  const locale = (await getLocale()) as AppLocale;
+  const messages = await loadMessages(locale, ['quiet']);
+  const tQuiet = createScopedTranslator(locale, messages, 'quiet');
+  return (
+    <>
+      <HeroSection title={tQuiet('media.title')} lede={tQuiet('media.lede')} />
+      <Suspense
+        fallback={
+          <section className="section-shell" aria-hidden>
+            <div className="animate-pulse flex flex-col gap-4 max-w-2xl mx-auto px-4">
+              <div className="h-10 bg-muted/50 rounded w-48" />
+              <div className="h-24 bg-muted/50 rounded" />
+            </div>
+          </section>
+        }
+      >
+        <MediaBelowFold kind={props.kind} page={props.page} />
+      </Suspense>
     </>
   );
 }

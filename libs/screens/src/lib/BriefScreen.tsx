@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { getLocale } from 'next-intl/server';
 import { cookies } from 'next/headers';
 import {
@@ -94,7 +95,8 @@ const CLAIMS_DEFAULT_COUNT = 9;
 const CASE_STUDIES_MAX = 3;
 const PUBLIC_RECORD_HIGHLIGHTS_MAX = 10;
 
-export async function BriefScreen(props?: BriefScreenProps) {
+/** Below-fold content: all data loading and sections. Streamed after hero so LCP can paint early. */
+async function BriefBelowFold(props: BriefScreenProps) {
   const { queryBriefingAction } = props ?? {};
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, [
@@ -411,8 +413,6 @@ export async function BriefScreen(props?: BriefScreenProps) {
         caseStudySlugs={caseStudies.map((s) => s.frontmatter.slug)}
         publicRecordSlugs={recordHighlights.map((r) => r.frontmatter.slug)}
       />
-      <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
-
       <DensityAwarePage
         toggleLabel={tCommon('density.toggleLabel')}
         densityDefault={orchestrationHints.densityDefaultSuggestion}
@@ -581,6 +581,29 @@ export async function BriefScreen(props?: BriefScreenProps) {
           href={`/${locale}/contact`}
         />
       </DensityAwarePage>
+    </>
+  );
+}
+
+export async function BriefScreen(props?: BriefScreenProps) {
+  const locale = (await getLocale()) as AppLocale;
+  const messages = await loadMessages(locale, ['brief']);
+  const t = createScopedTranslator(locale, messages, 'brief');
+  return (
+    <>
+      <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
+      <Suspense
+        fallback={
+          <section className="section-shell" aria-hidden>
+            <div className="animate-pulse flex flex-col gap-4 max-w-2xl mx-auto px-4">
+              <div className="h-10 bg-muted/50 rounded w-48" />
+              <div className="h-24 bg-muted/50 rounded" />
+            </div>
+          </section>
+        }
+      >
+        <BriefBelowFold queryBriefingAction={props?.queryBriefingAction} />
+      </Suspense>
     </>
   );
 }

@@ -301,11 +301,9 @@ section.section-shell:last-child {
   display: grid;
   gap: var(--hero-block-gap);
   background: var(--hero-inner-surface);
-  backdrop-filter: blur(var(--hero-inner-blur));
-  -webkit-backdrop-filter: blur(var(--hero-inner-blur));
   border: 1px solid var(--hero-inner-border);
   border-radius: 0.5rem;
-  box-shadow: var(--hero-depth-shadow), var(--authority-soft-light);
+  box-shadow: var(--hero-depth-shadow);
   overflow: hidden;
   width: 100%;
 }
@@ -475,7 +473,7 @@ section.section-shell:last-child {
 }
 
 .hero-display {
-  font-family: var(--display-heading-font);
+  font-family: var(--hero-display-font);
   font-size: var(--hero-display-size);
   line-height: var(--hero-display-line);
   letter-spacing: var(--hero-display-spacing);
@@ -485,7 +483,7 @@ section.section-shell:last-child {
 }
 
 .hero-lede {
-  font-family: var(--body-analytical-font);
+  font-family: var(--hero-lede-font);
   font-size: var(--hero-lede-size);
   line-height: var(--hero-lede-line);
   margin: 0;
