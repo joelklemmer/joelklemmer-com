@@ -2,8 +2,10 @@
  * Single-URL Lighthouse timespan flow. Run with Node (ESM) so Lighthouse loads correctly.
  * Uses pinned instrument config (formFactor, throttling, screenEmulation) for deterministic LCP.
  * Env: BASE_URL, URL_PATH (e.g. /en), SLUG (e.g. en), OUT_FILE (path to write .report.json).
+ * Chrome: ephemeral user-data-dir and no-first-run flags to avoid profile picker in all paths.
  */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -112,16 +114,25 @@ async function main() {
     );
   }
 
-  // Use chrome-launcher (same as LHCI) so Chrome is found in CI; then connect Puppeteer
+  // Use chrome-launcher (same as LHCI) so Chrome is found in CI; ephemeral profile to avoid picker
+  const userDataDir = path.join(os.tmpdir(), `lhci-profile-${process.pid}`);
   let chrome;
   let browser;
   try {
     chrome = await chromeLauncher.launch({
       chromeFlags: [
         '--headless=new',
+        '--no-first-run',
+        '--no-default-browser-check',
+        '--disable-extensions',
+        '--disable-component-update',
+        '--disable-background-networking',
+        '--disable-sync',
+        '--metrics-recording-only',
+        '--disable-features=ChromeWhatsNewUI,PrivacySandboxSettings4',
         '--no-sandbox',
-        '--disable-setuid-sandbox',
         '--disable-dev-shm-usage',
+        `--user-data-dir=${userDataDir}`,
       ],
     });
     browser = await puppeteer.connect({

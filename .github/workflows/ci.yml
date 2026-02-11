@@ -368,6 +368,7 @@ jobs:
           LH_CHROME_MAJOR: '136'
           LH_FORM_FACTOR: desktop
           LH_THROTTLING_METHOD: provided
+          LH_RUNS: '1'
 
       - name: Upload Lighthouse reports
         uses: actions/upload-artifact@v4

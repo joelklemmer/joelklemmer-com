@@ -16,10 +16,13 @@ const REPO_ROOT = process.cwd();
 const CUSTOM_DIR = path.join(REPO_ROOT, 'tmp', 'lighthouse', 'custom');
 const INP_AUDIT_ID = 'interaction-to-next-paint';
 
+const includeMedia = process.env.LH_INCLUDE_MEDIA === '1';
+const runs = Math.max(1, Number(process.env.LH_RUNS || 1) || 1);
+
 const URL_SLUGS: { path: string; slug: string }[] = [
   { path: '/en', slug: 'en' },
   { path: '/en/brief', slug: 'en-brief' },
-  { path: '/en/media', slug: 'en-media' },
+  ...(includeMedia ? [{ path: '/en/media', slug: 'en-media' }] : []),
 ];
 
 function ensureCustomDir(): void {
@@ -79,28 +82,33 @@ async function main(): Promise<number> {
   ensureCustomDir();
 
   for (const { path: pathSegment, slug } of URL_SLUGS) {
-    process.stdout.write(`collect-lhr-timespan: ${pathSegment}...`);
-    try {
-      const code = await runFlowForUrl(baseUrl, pathSegment, slug);
-      if (code !== 0) {
-        process.stderr.write(` exit ${code}\n`);
+    for (let run = 1; run <= runs; run++) {
+      const runLabel = runs > 1 ? ` (run ${run}/${runs})` : '';
+      process.stdout.write(
+        `collect-lhr-timespan: ${pathSegment}${runLabel}...`,
+      );
+      try {
+        const code = await runFlowForUrl(baseUrl, pathSegment, slug);
+        if (code !== 0) {
+          process.stderr.write(` exit ${code}\n`);
+          return 1;
+        }
+        const outPath = path.join(CUSTOM_DIR, `${slug}.report.json`);
+        let inp: number | undefined;
+        if (fs.existsSync(outPath)) {
+          const raw = fs.readFileSync(outPath, 'utf8');
+          const lhr = JSON.parse(raw) as {
+            audits?: Record<string, { numericValue?: number }>;
+          };
+          inp = lhr?.audits?.[INP_AUDIT_ID]?.numericValue;
+        }
+        process.stdout.write(` INP=${inp ?? 'n/a'} ms, wrote ${outPath}\n`);
+      } catch (e) {
+        const err = e as Error;
+        process.stderr.write(` error: ${err?.message ?? String(e)}\n`);
+        if (err?.stack) process.stderr.write(err.stack + '\n');
         return 1;
       }
-      const outPath = path.join(CUSTOM_DIR, `${slug}.report.json`);
-      let inp: number | undefined;
-      if (fs.existsSync(outPath)) {
-        const raw = fs.readFileSync(outPath, 'utf8');
-        const lhr = JSON.parse(raw) as {
-          audits?: Record<string, { numericValue?: number }>;
-        };
-        inp = lhr?.audits?.[INP_AUDIT_ID]?.numericValue;
-      }
-      process.stdout.write(` INP=${inp ?? 'n/a'} ms, wrote ${outPath}\n`);
-    } catch (e) {
-      const err = e as Error;
-      process.stderr.write(` error: ${err?.message ?? String(e)}\n`);
-      if (err?.stack) process.stderr.write(err.stack + '\n');
-      return 1;
     }
   }
 
