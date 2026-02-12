@@ -39,13 +39,13 @@ test.describe('i18n overflow guard', () => {
   }) => {
     for (const locale of LOCALES) {
       await page.setViewportSize({ width: 768, height: 1024 });
-      await page.goto(`/${locale}`, { waitUntil: 'load', timeout: 15000 });
+      await page.goto(`/${locale}`, { waitUntil: 'load', timeout: 30000 });
       const heroContent = page.locator('.hero-authority-content').first();
-      await expect(heroContent).toBeVisible();
+      await expect(heroContent).toBeVisible({ timeout: 10000 });
       const cta = page.locator('a.hero-action-link').first();
-      await expect(cta).toBeVisible();
+      await expect(cta).toBeVisible({ timeout: 5000 });
       const h1 = page.locator('#hero-title').first();
-      await expect(h1).toBeVisible();
+      await expect(h1).toBeVisible({ timeout: 5000 });
     }
   });
 

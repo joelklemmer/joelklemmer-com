@@ -37,7 +37,7 @@ export default defineConfig({
         cwd: workspaceRoot,
       },
   retries: isCi ? 2 : 0,
-  workers: isCi ? 1 : undefined,
+  workers: isCi ? 1 : 4,
   projects: [
     {
       name: 'chromium',

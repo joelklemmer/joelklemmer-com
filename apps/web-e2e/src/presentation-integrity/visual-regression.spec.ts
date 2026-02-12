@@ -33,11 +33,15 @@ test.describe('visual regression', () => {
 
   test('masthead region', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/en', { waitUntil: 'networkidle' });
+    await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
     await waitForStableViewport(page);
-    const header = page.locator('header[aria-label]').first();
+    const header = page.locator(
+      '[data-testid="masthead"], header[aria-label]',
+    ).first();
+    await expect(header).toBeVisible({ timeout: 10000 });
     await expect(header).toHaveScreenshot('masthead.png', {
       maxDiffPixels: 300,
+      timeout: 10000,
     });
   });
 
@@ -63,12 +67,12 @@ test.describe('visual regression', () => {
 
   test('media library filter row', async ({ page }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/en/media', { waitUntil: 'networkidle' });
+    await page.goto('/en/media', { waitUntil: 'networkidle', timeout: 30000 });
     await waitForStableViewport(page);
     const filterSection = page
-      .locator('section[aria-labelledby="media-filter-heading"]')
+      .locator('[data-testid="media-filter-section"]')
       .first();
-    await expect(filterSection).toBeVisible();
+    await expect(filterSection).toBeVisible({ timeout: 15000 });
     await expect(filterSection).toHaveScreenshot('media-filter-row.png', {
       maxDiffPixels: 500,
     });

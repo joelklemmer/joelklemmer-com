@@ -23,7 +23,8 @@
   --lane-readable: var(--readable-max-width);
 }
 
-/* Layout root: full bleed, spans viewport; no fixed max-width wrapper. Prevents horizontal scroll. */
+/* Layout root: full bleed, spans viewport; no fixed max-width wrapper.
+   overflow-x: clip prevents horizontal scroll. */
 .layout-root {
   width: 100%;
   min-width: 0;
@@ -255,7 +256,8 @@ section.section-shell:last-child {
 }
 
 /* Full-width hero: section spans viewport; inner lane from Container variant=full.
-   Mobile: reduced padding and min-height so hero fits viewport without internal scroll. */
+   Mobile: reduced padding and min-height so hero fits viewport without internal scroll.
+   overflow-x: clip prevents hero from extending viewport (RTL-safe). */
 .hero-authority {
   position: relative;
   margin-block-end: var(--section-block-margin);
@@ -263,6 +265,8 @@ section.section-shell:last-child {
   isolation: isolate;
   width: 100%;
   min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 @media (min-width: 768px) {
@@ -616,8 +620,10 @@ section.section-shell:last-child {
   stroke-width: var(--masthead-icon-stroke);
 }
 
-/* Header: Fortune 10 / statesman briefing interface */
+/* Header: Fortune 10 / statesman briefing interface.
+   overflow: visible so focus rings on masthead controls are not clipped. */
 header[aria-label] {
   background: hsl(var(--color-surface));
   border-bottom-color: hsl(var(--color-border-subtle));
+  overflow: visible;
 }

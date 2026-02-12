@@ -58,10 +58,15 @@ export function ServerShell({
       <a href={`#${mainId}`} className={skipLinkClass} data-skip-link>
         {skipLabel}
       </a>
-      <header aria-label={headerLabel} className="border-b border-border">
+      <header
+        aria-label={headerLabel}
+        data-testid="masthead"
+        className="border-b border-border"
+      >
         <Container className="py-2 md:py-3">
           <div
             data-system="masthead-bar"
+            data-testid="masthead-bar"
             className="masthead-bar flex flex-nowrap items-center w-full gap-8"
           >
             <div className="masthead-identity flex-shrink-0">
@@ -95,8 +100,10 @@ export function ServerShell({
                 <details
                   className="nav-primary-mobile md:hidden relative flex items-center"
                   aria-label={navLabel}
+                  data-testid="masthead-mobile-nav"
                 >
                   <summary
+                    id="primary-nav-trigger"
                     className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px] min-w-[44px]`}
                   >
                     <span className={visuallyHiddenClass}>{navLabel}</span>
@@ -143,7 +150,12 @@ export function ServerShell({
           </div>
         </Container>
       </header>
-      <main id={mainId} className="vacel-main py-8" tabIndex={-1}>
+      <main
+        id={mainId}
+        data-testid="main-content"
+        className="vacel-main py-8"
+        tabIndex={-1}
+      >
         <PageFrame contentStage>{children}</PageFrame>
       </main>
       <footer aria-label={footerLabel} className="border-t border-border">

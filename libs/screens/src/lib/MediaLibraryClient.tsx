@@ -135,7 +135,11 @@ export function MediaLibraryClient({
   }, []);
 
   return (
-    <section className="section-shell" aria-labelledby="media-filter-heading">
+    <section
+      className="section-shell"
+      aria-labelledby="media-filter-heading"
+      data-testid="media-filter-section"
+    >
       <Container className="section-shell">
         <h2 id="media-filter-heading" className="sr-only">
           {labels.filterByKind}

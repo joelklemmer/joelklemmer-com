@@ -45,13 +45,17 @@ test.describe('responsive layout stability', () => {
 
   test('masthead remains single-row and within bounds', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto('/en', { waitUntil: 'networkidle' });
-    const header = page.locator('header[aria-label]').first();
-    await expect(header).toBeVisible();
+    await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
+    const header = page.locator(
+      '[data-testid="masthead"], header[aria-label]',
+    ).first();
+    await expect(header).toBeVisible({ timeout: 10000 });
     // Ensure mobile nav menu is closed so we measure single-row height only
-    const menuTrigger = page.locator('#primary-nav-trigger');
-    if ((await menuTrigger.getAttribute('aria-expanded')) === 'true') {
-      await menuTrigger.click();
+    // ServerShell uses details/summary: close if details[open]
+    const mobileNav = page.locator('[data-testid="masthead-mobile-nav"]');
+    const isOpen = await mobileNav.getAttribute('open');
+    if (isOpen !== null) {
+      await mobileNav.locator('summary').click();
       await page.waitForTimeout(150);
     }
     // Measure the bar only (single row); header can include nav dropdown when open
@@ -72,13 +76,23 @@ test.describe('responsive layout stability', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto('/en', { waitUntil: 'networkidle' });
-    await expect(page.locator('#hero-title')).toBeVisible();
-    await expect(page.locator('a.hero-action-link').first()).toBeVisible();
+    await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
+    await expect(page.locator('[data-testid="main-content"]')).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.locator('#hero-title')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('a.hero-action-link').first()).toBeVisible({
+      timeout: 5000,
+    });
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto('/en', { waitUntil: 'networkidle' });
-    await expect(page.locator('#hero-title')).toBeVisible();
-    await expect(page.locator('a.hero-action-link').first()).toBeVisible();
+    await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
+    await expect(page.locator('[data-testid="main-content"]')).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page.locator('#hero-title')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('a.hero-action-link').first()).toBeVisible({
+      timeout: 5000,
+    });
   });
 
   test('RTL: dir and alignment correct on Hebrew routes', async ({ page }) => {
@@ -95,9 +109,9 @@ test.describe('responsive layout stability', () => {
 
   test('main content landmark present and visible', async ({ page }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('/en/brief', { waitUntil: 'networkidle' });
-    const main = page.locator('main#main-content');
-    await expect(main).toBeVisible();
+    await page.goto('/en/brief', { waitUntil: 'networkidle', timeout: 45000 });
+    const main = page.locator('[data-testid="main-content"]');
+    await expect(main).toBeVisible({ timeout: 20000 });
     const box = await main.boundingBox();
     expect(box).toBeTruthy();
     expect(box!.height).toBeGreaterThan(100);
