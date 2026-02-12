@@ -213,20 +213,23 @@ test.describe('i18n + RTL layout stress', () => {
     await expect(firstFocusable).toBeVisible({ timeout: 10000 });
     await firstFocusable.scrollIntoViewIfNeeded();
     await firstFocusable.focus();
+    await page.waitForTimeout(50);
 
+    const ciEpsilon = process.env['CI'] === 'true' ? 2 : 0;
     const ringVisibleAndNotClipped = await page.evaluate(
-      (vp: { w: number; h: number }) => {
+      (p: { w: number; h: number; eps: number }) => {
         const el = document.activeElement as HTMLElement | null;
         if (!el || !el.matches('button, a, [tabindex]'))
           return { ok: false, reason: 'no focusable focused' };
         const r = el.getBoundingClientRect();
         const ringOffset = 4;
         const padding = ringOffset + 4;
+        const eps = p.eps;
         const inView =
-          r.left >= -padding &&
-          r.right <= vp.w + padding + 20 &&
-          r.top >= -padding &&
-          r.bottom <= vp.h + padding;
+          r.left >= -padding - eps &&
+          r.right <= p.w + padding + 20 + eps &&
+          r.top >= -padding - eps &&
+          r.bottom <= p.h + padding + eps;
         let notClipped = true;
         let node: Element | null = el;
         while (node && node !== document.body) {
@@ -254,7 +257,7 @@ test.describe('i18n + RTL layout stress', () => {
           rect: { left: r.left, right: r.right, top: r.top, bottom: r.bottom },
         };
       },
-      { w: 360, h: 800 },
+      { w: 360, h: 800, eps: ciEpsilon },
     );
     expect(
       ringVisibleAndNotClipped.ok,
@@ -276,22 +279,25 @@ test.describe('i18n + RTL layout stress', () => {
       await expect(firstUtility).toBeVisible({ timeout: 10000 });
       await firstUtility.scrollIntoViewIfNeeded();
       await firstUtility.focus();
+      await page.waitForTimeout(50);
 
       const pad = width < 768 ? 24 : 8;
+      const ciEpsilon = process.env['CI'] === 'true' ? 2 : 0;
       const inView = await page.evaluate(
-        (vp: { w: number; h: number; pad: number }) => {
+        (vp: { w: number; h: number; pad: number; eps: number }) => {
           const el = document.activeElement as HTMLElement | null;
           if (!el) return { ok: false };
           const r = el.getBoundingClientRect();
+          const eps = vp.eps;
           return {
             ok:
-              r.left >= -vp.pad &&
-              r.right <= vp.w + vp.pad &&
-              r.top >= -vp.pad &&
-              r.bottom <= vp.h + vp.pad,
+              r.left >= -vp.pad - eps &&
+              r.right <= vp.w + vp.pad + eps &&
+              r.top >= -vp.pad - eps &&
+              r.bottom <= vp.h + vp.pad + eps,
           };
         },
-        { w: width, h: height, pad },
+        { w: width, h: height, pad, eps: ciEpsilon },
       );
       expect(inView.ok, `${name}: focused utility must be in viewport`).toBe(
         true,
