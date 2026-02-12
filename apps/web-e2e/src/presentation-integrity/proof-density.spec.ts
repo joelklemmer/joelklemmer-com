@@ -2,6 +2,17 @@ import './visual-fixtures';
 import { test, expect } from '@playwright/test';
 import { getPublicRecordEntries } from '@joelklemmer/content';
 import { defaultLocale } from '@joelklemmer/i18n';
+import {
+  gotoAndEnsureReady,
+  closeAnyOverlays,
+  assertNoBlockingOverlays,
+} from '../support/test-preflight';
+
+const rawBase = (process.env['BASE_URL'] ?? 'http://127.0.0.1:3000').replace(
+  /\/+$/,
+  '',
+);
+const BASE = rawBase.startsWith('http') ? rawBase : `http://${rawBase}`;
 
 /**
  * Proof density amplification: layering (scan → substantiation → artifact) and
@@ -10,9 +21,11 @@ import { defaultLocale } from '@joelklemmer/i18n';
  */
 test.describe('Proof density layering and doctrine', () => {
   test('public record list shows scan layer and doctrine', async ({ page }) => {
-    await page.goto(`/${defaultLocale}/publicrecord`, {
-      waitUntil: 'domcontentloaded',
+    await gotoAndEnsureReady(page, `/${defaultLocale}/publicrecord`, {
+      baseOrigin: BASE,
     });
+    await closeAnyOverlays(page);
+    await assertNoBlockingOverlays(page);
     await expect(page.locator('[data-layer="scan"]')).toBeVisible();
     await expect(
       page.locator('[data-doctrine="how-to-read-list"]'),
@@ -28,9 +41,11 @@ test.describe('Proof density layering and doctrine', () => {
       test.skip();
       return;
     }
-    await page.goto(`/${defaultLocale}/publicrecord/${slug}`, {
-      waitUntil: 'domcontentloaded',
+    await gotoAndEnsureReady(page, `/${defaultLocale}/publicrecord/${slug}`, {
+      baseOrigin: BASE,
     });
+    await closeAnyOverlays(page);
+    await assertNoBlockingOverlays(page);
     const scan = page.locator('[data-layer="scan"]');
     const substantiation = page.locator('[data-layer="substantiation"]');
     const artifact = page.locator('[data-layer="artifact"]');
@@ -58,9 +73,11 @@ test.describe('Proof density layering and doctrine', () => {
       test.skip();
       return;
     }
-    await page.goto(`/${defaultLocale}/publicrecord/${slug}`, {
-      waitUntil: 'domcontentloaded',
+    await gotoAndEnsureReady(page, `/${defaultLocale}/publicrecord/${slug}`, {
+      baseOrigin: BASE,
     });
+    await closeAnyOverlays(page);
+    await assertNoBlockingOverlays(page);
     const row = page.locator(`[data-attachment-id="${firstAtt.id}"]`);
     await expect(row).toBeVisible();
     const sha = await Promise.resolve(

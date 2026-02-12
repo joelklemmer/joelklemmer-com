@@ -5,8 +5,14 @@
  */
 import './visual-fixtures';
 import { test, expect } from '@playwright/test';
+import { gotoAndEnsureReady } from '../support/test-preflight';
 
 const ROUTE = '/en';
+const rawBase = (process.env['BASE_URL'] ?? 'http://127.0.0.1:3000').replace(
+  /\/+$/,
+  '',
+);
+const BASE = rawBase.startsWith('http') ? rawBase : `http://${rawBase}`;
 const STABILITY_WINDOW_MS = 800;
 
 test.describe('theme pre-paint', () => {
@@ -55,7 +61,7 @@ test.describe('theme pre-paint', () => {
   }) => {
     const context = await browser.newContext({ colorScheme: 'light' });
     const page = await context.newPage();
-    await page.goto(ROUTE, { waitUntil: 'networkidle' });
+    await gotoAndEnsureReady(page, ROUTE, { baseOrigin: BASE });
     const theme = await page.getAttribute('html', 'data-theme');
     const bg = await page.evaluate(
       () => getComputedStyle(document.body).backgroundColor,

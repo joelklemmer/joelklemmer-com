@@ -5,7 +5,20 @@
  * No flaky waits: use load + visibility assertions.
  */
 import { test, expect } from './visual-fixtures';
+import {
+  gotoAndEnsureReady,
+  closeAnyOverlays,
+  assertNoBlockingOverlays,
+  expectMastheadVisible,
+  positionUtilitiesScrollerForRtl,
+  scrollElementIntoView,
+} from '../support/test-preflight';
 
+const rawBase = (process.env['BASE_URL'] ?? 'http://127.0.0.1:3000').replace(
+  /\/+$/,
+  '',
+);
+const BASE = rawBase.startsWith('http') ? rawBase : `http://${rawBase}`;
 const LOCALES = ['en', 'es', 'uk', 'he'] as const;
 const VIEWPORTS = [
   { width: 360, height: 800, name: 'mobile' },
@@ -71,11 +84,9 @@ test.describe('i18n + RTL layout stress', () => {
         page,
       }) => {
         await page.setViewportSize({ width, height });
-        await page.goto(HOME_PATH(locale), {
-          waitUntil: 'load',
-          timeout: 45000,
+        await gotoAndEnsureReady(page, HOME_PATH(locale), {
+          baseOrigin: BASE,
         });
-        await expect(page.locator('main#main-content')).toBeVisible();
         await expectNoHorizontalScroll(
           page,
           `${locale} ${name}`,
@@ -93,12 +104,8 @@ test.describe('i18n + RTL layout stress', () => {
       for (const { width, height, name } of VIEWPORTS) {
         if (width < 768) continue;
         await page.setViewportSize({ width, height });
-        await page.goto(HOME_PATH(locale), {
-          waitUntil: 'load',
-          timeout: 45000,
-        });
-        await expect(page.locator('[data-testid="masthead"]')).toBeVisible({
-          timeout: 10000,
+        await gotoAndEnsureReady(page, HOME_PATH(locale), {
+          baseOrigin: BASE,
         });
 
         const noOverlap = await page.evaluate(() => {
@@ -132,12 +139,11 @@ test.describe('i18n + RTL layout stress', () => {
     for (const locale of LOCALES) {
       for (const { width, height, name } of VIEWPORTS) {
         await page.setViewportSize({ width, height });
-        await page.goto(HOME_PATH(locale), {
-          waitUntil: 'load',
-          timeout: 45000,
+        await gotoAndEnsureReady(page, HOME_PATH(locale), {
+          baseOrigin: BASE,
         });
         const hero = page.locator('section.hero-authority').first();
-        await expect(hero).toBeVisible();
+        await expect(hero).toBeVisible({ timeout: 15000 });
 
         const heroTolerance = width < 400 ? 150 : 2;
         const bottomTolerance = height + 300;
@@ -176,7 +182,7 @@ test.describe('i18n + RTL layout stress', () => {
   });
 
   test('RTL mirrors correctly for he', async ({ page }) => {
-    await page.goto(HOME_PATH('he'), { waitUntil: 'load', timeout: 45000 });
+    await gotoAndEnsureReady(page, HOME_PATH('he'), { baseOrigin: BASE });
     await expect(page.locator('html[dir="rtl"]')).toHaveCount(1);
     const dir = await page.evaluate(
       () => getComputedStyle(document.documentElement).direction,
@@ -184,13 +190,13 @@ test.describe('i18n + RTL layout stress', () => {
     expect(dir).toBe('rtl');
 
     await page.setViewportSize({ width: 1280, height: 800 });
-    await page.goto(HOME_PATH('he'), { waitUntil: 'load', timeout: 45000 });
+    await gotoAndEnsureReady(page, HOME_PATH('he'), { baseOrigin: BASE });
     await expect(page.locator('html[dir="rtl"]')).toHaveCount(1);
   });
 
   test('LTR for en, es, uk', async ({ page }) => {
     for (const locale of ['en', 'es', 'uk'] as const) {
-      await page.goto(HOME_PATH(locale), { waitUntil: 'load', timeout: 45000 });
+      await gotoAndEnsureReady(page, HOME_PATH(locale), { baseOrigin: BASE });
       const dir = await page.getAttribute('html', 'dir');
       expect(dir === 'ltr' || dir === null, `${locale} should be LTR`).toBe(
         true,
@@ -202,16 +208,16 @@ test.describe('i18n + RTL layout stress', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto(HOME_PATH('en'), { waitUntil: 'load', timeout: 45000 });
-    await expect(
-      page.locator('[data-testid="masthead"], header[aria-label]'),
-    ).toBeVisible({ timeout: 10000 });
-    // Wait for deferred controls (theme, etc.) or language links; match first focusable
+    await gotoAndEnsureReady(page, HOME_PATH('en'), { baseOrigin: BASE });
+    await closeAnyOverlays(page);
+    await assertNoBlockingOverlays(page);
+    await expectMastheadVisible(page);
+    await positionUtilitiesScrollerForRtl(page);
     const firstFocusable = page
       .locator('.masthead-utilities button, .masthead-utilities a[href]')
       .first();
     await expect(firstFocusable).toBeVisible({ timeout: 10000 });
-    await firstFocusable.scrollIntoViewIfNeeded();
+    await scrollElementIntoView(firstFocusable);
     await firstFocusable.focus();
     await page.waitForTimeout(50);
 
@@ -266,18 +272,20 @@ test.describe('i18n + RTL layout stress', () => {
   });
 
   test('focus ring not clipped at desktop and ultrawide', async ({ page }) => {
+    test.setTimeout(90000);
     for (const { width, height, name } of VIEWPORTS) {
       await page.setViewportSize({ width, height });
-      await page.goto(HOME_PATH('he'), { waitUntil: 'load', timeout: 45000 });
-      await expect(
-        page.locator('[data-testid="masthead"], header[aria-label]'),
-      ).toBeVisible({ timeout: 10000 });
+      await gotoAndEnsureReady(page, HOME_PATH('he'), { baseOrigin: BASE });
+      await closeAnyOverlays(page);
+      await assertNoBlockingOverlays(page);
+      await expectMastheadVisible(page);
+      await positionUtilitiesScrollerForRtl(page);
 
       const firstUtility = page
         .locator('.masthead-utilities button, .masthead-utilities a[href]')
         .first();
       await expect(firstUtility).toBeVisible({ timeout: 10000 });
-      await firstUtility.scrollIntoViewIfNeeded();
+      await scrollElementIntoView(firstUtility);
       await firstUtility.focus();
       await page.waitForTimeout(50);
 

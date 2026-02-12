@@ -26,9 +26,11 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
-    /** Stable viewport and color scheme for deterministic screenshots. */
+    /** Single deterministic runtime contract for visual suite. */
     viewport: { width: 1280, height: 800 },
+    deviceScaleFactor: 1,
     colorScheme: 'light',
+    reducedMotion: 'reduce',
   },
   webServer: process.env['BASE_URL']
     ? { url: baseURL, reuseExistingServer: true, timeout: 120000 }
@@ -40,11 +42,18 @@ export default defineConfig({
         cwd: workspaceRoot,
       },
   retries: isCi ? 2 : 0,
-  workers: isCi ? 1 : 4,
+  /** workers: 1 for visual to avoid cross-test nondeterminism. */
+  workers: 1,
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1280, height: 800 },
+        deviceScaleFactor: 1,
+        colorScheme: 'light',
+        reducedMotion: 'reduce',
+      },
     },
   ],
 });

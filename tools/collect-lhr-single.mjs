@@ -5,7 +5,6 @@
  * Chrome: ephemeral user-data-dir and no-first-run flags to avoid profile picker in all paths.
  */
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -19,6 +18,7 @@ import {
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(__dirname, '..');
+const SCREENSHOT_DIR = path.join(REPO_ROOT, 'tmp', 'lighthouse');
 const INSTRUMENT_OUT = path.join(
   REPO_ROOT,
   'tmp',
@@ -26,6 +26,9 @@ const INSTRUMENT_OUT = path.join(
   'instrument.json',
 );
 const INP_AUDIT_ID = 'interaction-to-next-paint';
+
+const VIEWPORT_WIDTH = 1280;
+const VIEWPORT_HEIGHT = 800;
 
 function mergeInpIntoNav(navLhr, timespanLhr) {
   const audits = { ...(navLhr.audits || {}) };
@@ -89,6 +92,241 @@ function writeInstrumentJson() {
   fs.writeFileSync(INSTRUMENT_OUT, JSON.stringify(payload, null, 2), 'utf8');
 }
 
+/**
+ * Shared preflight: wait for main or masthead visible, dismiss consent,
+ * close dialogs/details, assert viewport center not blocked.
+ */
+async function runPreflight(page) {
+  await page.waitForSelector(
+    'main#main-content, [data-testid="main-content"], [data-testid="masthead"], header[aria-label]',
+    {
+      state: 'visible',
+      timeout: 20000,
+    },
+  );
+  await assertNoBlockingOverlays(page);
+}
+
+/**
+ * Dismiss consent banner (role or data-consent-action), close dialogs,
+ * close mobile nav. Assert viewport center is not covered by overlay.
+ */
+async function assertNoBlockingOverlays(page) {
+  const acceptRegex = /accept|agree|allow|save/i;
+
+  // Consent banner: role-based first, then data-consent-action
+  const banner = await page.$('#consent-banner');
+  if (banner) {
+    const visible = await banner
+      .evaluate((el) => {
+        const s = getComputedStyle(el);
+        return s.display !== 'none' && s.visibility !== 'hidden';
+      })
+      .catch(() => false);
+    if (visible) {
+      const roleBtn = await page
+        .evaluateHandle((re) => {
+          const btns = document.querySelectorAll('#consent-banner button');
+          for (const b of btns) {
+            if (re.test(b.textContent || '')) return b;
+          }
+          return null;
+        }, acceptRegex)
+        .catch(() => null);
+      if (roleBtn) {
+        const h = await roleBtn.asElement();
+        if (h) {
+          await h.click().catch(() => {});
+          await page
+            .waitForSelector('#consent-banner', {
+              state: 'hidden',
+              timeout: 2000,
+            })
+            .catch(() => {});
+        }
+        await roleBtn.dispose();
+      } else {
+        const dataAccept = await page.$('[data-consent-action="accept"]');
+        if (dataAccept) {
+          await dataAccept.click().catch(() => {});
+          await page
+            .waitForSelector('#consent-banner', {
+              state: 'hidden',
+              timeout: 2000,
+            })
+            .catch(() => {});
+        }
+      }
+    }
+  }
+
+  // Dialogs: close via Escape or role-based close
+  let dialogCount = 1;
+  for (let i = 0; i < 5 && dialogCount > 0; i++) {
+    const dialogs = await page.$$('[role="dialog"]');
+    dialogCount = 0;
+    for (const d of dialogs) {
+      const isVisible = await d
+        .evaluate((el) => {
+          const s = getComputedStyle(el);
+          return s.display !== 'none' && s.visibility !== 'hidden';
+        })
+        .catch(() => false);
+      if (isVisible) {
+        dialogCount++;
+        const closeBtn = await d.$(
+          '[data-testid="dialog-close"], button[aria-label*="lose"], button[aria-label*="ismiss"]',
+        );
+        if (closeBtn) await closeBtn.click().catch(() => {});
+        else await page.keyboard.press('Escape');
+      }
+    }
+    if (dialogCount > 0) await new Promise((r) => setTimeout(r, 80));
+  }
+
+  // Mobile nav: close details[open]
+  const mobileNav = await page.$(
+    '[data-testid="masthead-mobile-nav"][open], details[open]',
+  );
+  if (mobileNav) {
+    await page.evaluate(() => {
+      const el =
+        document.querySelector('[data-testid="masthead-mobile-nav"]') ||
+        document.querySelector('details.nav-primary-mobile[open]');
+      if (el) el.removeAttribute('open');
+    });
+  }
+
+  // Assert viewport center is not banner/dialog and no blocking overlay
+  const ok = await page.evaluate(
+    ({ w, h }) => {
+      const cx = w / 2;
+      const cy = h / 2;
+      const el = document.elementFromPoint(cx, cy);
+      if (!el) return false;
+      const inBanner = el.closest('#consent-banner');
+      const inDialog = el.closest('[role="dialog"]');
+      if (inBanner || inDialog) return false;
+      let n = el;
+      while (n && n !== document.body) {
+        const s = getComputedStyle(n);
+        if (
+          s.pointerEvents === 'none' &&
+          (s.position === 'fixed' || s.position === 'absolute')
+        ) {
+          const r = n.getBoundingClientRect();
+          if (r.left <= cx && cx <= r.right && r.top <= cy && cy <= r.bottom)
+            return false;
+        }
+        n = n.parentElement;
+      }
+      return true;
+    },
+    { w: VIEWPORT_WIDTH, h: VIEWPORT_HEIGHT },
+  );
+  if (!ok) {
+    throw new Error(
+      'assertNoBlockingOverlays: viewport center still blocked by overlay',
+    );
+  }
+}
+
+/**
+ * Wait visible, scroll into view, assertNoBlockingOverlays, click. Retry once after clearing overlays.
+ */
+async function safeClick(page, selector) {
+  const el = await page.waitForSelector(selector, {
+    state: 'visible',
+    timeout: 5000,
+  });
+  if (!el) {
+    const screenshotPath = path.join(
+      SCREENSHOT_DIR,
+      `safeClick-fail-${Date.now()}.png`,
+    );
+    fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
+    await page.screenshot({ path: screenshotPath }).catch(() => {});
+    throw new Error(
+      `safeClick: selector "${selector}" not found or not visible. Screenshot: ${screenshotPath}`,
+    );
+  }
+  await el.evaluate((e) =>
+    e.scrollIntoView({
+      block: 'nearest',
+      inline: 'nearest',
+      behavior: 'instant',
+    }),
+  );
+  await assertNoBlockingOverlays(page);
+
+  try {
+    await el.click();
+    return true;
+  } catch (err) {
+    await assertNoBlockingOverlays(page);
+    try {
+      await el.click();
+      return true;
+    } catch (err2) {
+      const screenshotPath = path.join(
+        SCREENSHOT_DIR,
+        `safeClick-click-fail-${Date.now()}.png`,
+      );
+      fs.mkdirSync(SCREENSHOT_DIR, { recursive: true });
+      await page.screenshot({ path: screenshotPath }).catch(() => {});
+
+      const diagnostic = await page
+        .evaluate((sel) => {
+          const target = document.querySelector(sel);
+          if (!target) return { clickTarget: null, elementAtPoint: null };
+          const r = target.getBoundingClientRect();
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          const atPoint = document.elementFromPoint(cx, cy);
+          const selectorPath = (e) => {
+            if (!e) return null;
+            const parts = [];
+            let n = e;
+            while (n && n !== document.body) {
+              let sel = n.tagName.toLowerCase();
+              if (n.id) sel += `#${n.id}`;
+              else if (n.className && typeof n.className === 'string')
+                sel += '.' + n.className.trim().split(/\s+/).join('.');
+              parts.unshift(sel);
+              n = n.parentElement;
+            }
+            return parts.join(' > ');
+          };
+          const dump = (e) => {
+            if (!e) return null;
+            const s = getComputedStyle(e);
+            return {
+              tagName: e.tagName,
+              id: e.id || null,
+              className: e.className || null,
+              pointerEvents: s.pointerEvents,
+              zIndex: s.zIndex,
+              selectorPath: selectorPath(e),
+            };
+          };
+          return {
+            clickTarget: dump(target),
+            elementAtPoint: dump(atPoint),
+            clickCenter: { x: cx, y: cy },
+          };
+        }, selector)
+        .catch(() => ({}));
+
+      const diagStr = JSON.stringify(diagnostic, null, 2);
+      console.error('safeClick diagnostics:', diagStr);
+      throw new Error(
+        `safeClick: click failed for "${selector}" - ${err2?.message || err2}. ` +
+          `Screenshot: ${screenshotPath}. elementAtPoint: ${diagStr}`,
+      );
+    }
+  }
+}
+
 async function main() {
   const baseUrl = process.env.BASE_URL || process.env.LHCI_BASE_URL;
   const urlPath = process.env.URL_PATH || '/en';
@@ -119,29 +357,42 @@ async function main() {
     );
   }
 
-  // Use chrome-launcher (same as LHCI) so Chrome is found in CI; ephemeral profile to avoid picker.
-  // When LH_CHROME_PATH is set (e.g. CI), use that binary explicitly for deterministic runs.
-  const userDataDir = path.join(os.tmpdir(), `lhci-profile-${process.pid}`);
-  const chromePath = process.env.LH_CHROME_PATH?.trim() || undefined;
+  const userDataDir = path.join(
+    process.cwd(),
+    'tmp',
+    'chrome-profile',
+    String(Date.now()),
+  );
+  fs.mkdirSync(path.dirname(userDataDir), { recursive: true });
+  const chromePath =
+    (process.env.LH_CHROME_PATH || process.env.CHROME_PATH || '').trim() ||
+    undefined;
   let chrome;
   let browser;
   try {
+    const chromeFlags = [
+      '--headless=new',
+      '--no-first-run',
+      '--no-default-browser-check',
+      '--disable-sync',
+      '--disable-extensions',
+      '--disable-features=Translate,OptimizationHints,MediaRouter',
+      '--disable-gpu',
+      '--password-store=basic',
+      '--use-mock-keychain',
+      '--disable-background-networking',
+      '--disable-background-timer-throttling',
+      '--disable-renderer-backgrounding',
+      '--disable-dev-shm-usage',
+      '--window-size=1280,800',
+      `--user-data-dir=${userDataDir}`,
+    ];
+    if (process.env.CI === 'true' || process.env.CI === '1') {
+      chromeFlags.push('--no-sandbox');
+    }
     const launchOpts = {
       ...(chromePath && { chromePath }),
-      chromeFlags: [
-        '--headless=new',
-        '--no-first-run',
-        '--no-default-browser-check',
-        '--disable-extensions',
-        '--disable-component-update',
-        '--disable-background-networking',
-        '--disable-sync',
-        '--metrics-recording-only',
-        '--disable-features=ChromeWhatsNewUI,PrivacySandboxSettings4',
-        '--no-sandbox',
-        '--disable-dev-shm-usage',
-        `--user-data-dir=${userDataDir}`,
-      ],
+      chromeFlags,
     };
     chrome = await chromeLauncher.launch(launchOpts);
     browser = await puppeteer.connect({
@@ -157,99 +408,131 @@ async function main() {
 
   try {
     const page = await browser.newPage();
-    // Fixed viewport and color scheme for deterministic measurement
-    const VIEWPORT_WIDTH = 1365;
-    const VIEWPORT_HEIGHT = 768;
+
     await page.setViewport({
       width: VIEWPORT_WIDTH,
       height: VIEWPORT_HEIGHT,
       deviceScaleFactor: 1,
     });
+    if (typeof page.emulateMedia === 'function') {
+      await page.emulateMedia({
+        colorScheme: 'light',
+        reducedMotion: 'reduce',
+      });
+    } else if (typeof page.evaluateOnNewDocument === 'function') {
+      await page.evaluateOnNewDocument(() => {
+        document.documentElement.setAttribute('data-theme', 'light');
+        document.documentElement.style.colorScheme = 'light';
+      });
+    }
+
     const flow = await startFlow(page, {
       name: `timespan-${slug}`,
       config: flowConfig,
     });
+
+    const consentPayload = {
+      v: 2,
+      t: Date.now(),
+      c: true,
+      cat: {
+        essential: true,
+        functional: true,
+        analytics: true,
+        experience: true,
+        marketing: true,
+      },
+      pur: {
+        measurement: true,
+        experimentation: true,
+        personalization: true,
+        security: true,
+        fraud: true,
+        recommendation: true,
+        profiling: true,
+      },
+      model: false,
+    };
+    const consentValue = Buffer.from(
+      JSON.stringify(consentPayload),
+      'utf8',
+    ).toString('base64');
+    await page.setCookie({ name: 'consent', value: consentValue, url });
+
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });
 
-    // Dismiss consent banner if present so overlays do not intercept clicks
-    const acceptBtn = await page
-      .waitForSelector('[data-consent-action="accept"]', {
-        state: 'visible',
-        timeout: 4000,
-      })
-      .catch(() => null);
-    if (acceptBtn) {
-      await acceptBtn.click().catch(() => {});
-      await page
-        .waitForSelector('#consent-banner', { state: 'hidden', timeout: 3000 })
-        .catch(() => {});
-      await new Promise((r) => setTimeout(r, 100));
-    }
+    await runPreflight(page);
 
-    /** Safe click: wait visible, then click; retry once if node detaches. */
-    async function safeClick(selector) {
-      try {
-        const el = await page.waitForSelector(selector, {
-          state: 'visible',
-          timeout: 5000,
-        });
-        if (!el) return false;
-        await el.click();
-        return true;
-      } catch {
-        const el = await page.$(selector);
-        if (el) {
-          try {
-            await el.click();
-            return true;
-          } catch {
-            return false;
-          }
-        }
-        return false;
-      }
-    }
+    // Stabilize: fonts + 2 rAF
+    await page.waitForFunction(() => document.readyState === 'complete', {
+      timeout: 5000,
+    });
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((r) =>
+        requestAnimationFrame(() => requestAnimationFrame(() => r())),
+      );
+    });
 
-    // Deterministic interaction so INP audit runs (auditRan >= 1): focus + activate a control
+    await assertNoBlockingOverlays(page);
+
+    // Deterministic interactions for INP audit
     const skipLink = await page.$('[data-skip-link], a[href="#main-content"]');
     if (skipLink) {
-      await skipLink.focus();
-      await new Promise((r) => setTimeout(r, 50));
-      await page.keyboard.press('Enter');
-      await new Promise((r) => setTimeout(r, 80));
+      const vis = await skipLink
+        .evaluate((e) => {
+          const r = e.getBoundingClientRect();
+          return r.width > 0 && r.height > 0;
+        })
+        .catch(() => false);
+      if (vis) {
+        await skipLink.evaluate((e) =>
+          e.scrollIntoView({ block: 'nearest', inline: 'nearest' }),
+        );
+        await assertNoBlockingOverlays(page);
+        await skipLink.focus().catch(() => {});
+        await page.keyboard.press('Enter').catch(() => {});
+      }
     }
-    await page.keyboard.down('Tab');
-    await new Promise((r) => setTimeout(r, 80));
-    await page.keyboard.up('Tab');
-    await new Promise((r) => setTimeout(r, 80));
+    await page.keyboard.down('Tab').catch(() => {});
+    await page.keyboard.up('Tab').catch(() => {});
 
+    // Mobile nav trigger only visible at <768px; at 1280x800 it is hidden (md:hidden)
     const trigger = await page.$('#primary-nav-trigger');
     if (trigger) {
-      try {
-        await page.waitForSelector('#primary-nav-trigger', {
-          state: 'visible',
-          timeout: 2000,
-        });
-        await trigger.click();
-      } catch {
-        await safeClick('#primary-nav-trigger');
+      const vis = await trigger
+        .evaluate((e) => {
+          const s = getComputedStyle(e);
+          if (s.display === 'none' || s.visibility === 'hidden') return false;
+          const r = e.getBoundingClientRect();
+          return r.width > 0 && r.height > 0 && r.top >= 0 && r.left >= 0;
+        })
+        .catch(() => false);
+      if (vis) {
+        await safeClick(page, '#primary-nav-trigger');
+        await page.keyboard.press('Escape').catch(() => {});
       }
-      await new Promise((r) => setTimeout(r, 120));
-      await page.keyboard.press('Escape');
-      await new Promise((r) => setTimeout(r, 80));
     }
 
-    await safeClick(
-      'a[href="/en/brief"], a[href*="/brief"], .masthead-nav-primary a',
-    );
-    await new Promise((r) => setTimeout(r, 100));
-    await page.goBack().catch(() => {});
-    await new Promise((r) => setTimeout(r, 100));
+    const briefSelector =
+      'a[href="/en/brief"], a[href*="/brief"], .nav-primary-link[href*="brief"]';
+    const briefLink = await page.$(briefSelector);
+    if (briefLink) {
+      await safeClick(page, briefSelector);
+      await page.goBack().catch(() => {});
+    }
 
     if (urlPath === '/en/media') {
-      await safeClick('section[aria-labelledby="media-filter-heading"] button');
-      await new Promise((r) => setTimeout(r, 80));
+      const mediaBtn = await page.$(
+        'section[aria-labelledby="media-filter-heading"] button',
+      );
+      if (mediaBtn) {
+        await safeClick(
+          page,
+          'section[aria-labelledby="media-filter-heading"] button',
+        );
+      }
     }
 
     await flow.endTimespan();
