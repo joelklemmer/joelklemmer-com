@@ -157,7 +157,7 @@ async function main() {
 
   try {
     const page = await browser.newPage();
-    // Fixed viewport for deterministic desktop measurement (matches harness: desktop, no device emulation)
+    // Fixed viewport and color scheme for deterministic measurement
     const VIEWPORT_WIDTH = 1365;
     const VIEWPORT_HEIGHT = 768;
     await page.setViewport({
@@ -171,6 +171,45 @@ async function main() {
     });
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });
+
+    // Dismiss consent banner if present so overlays do not intercept clicks
+    const acceptBtn = await page
+      .waitForSelector('[data-consent-action="accept"]', {
+        state: 'visible',
+        timeout: 4000,
+      })
+      .catch(() => null);
+    if (acceptBtn) {
+      await acceptBtn.click().catch(() => {});
+      await page
+        .waitForSelector('#consent-banner', { state: 'hidden', timeout: 3000 })
+        .catch(() => {});
+      await new Promise((r) => setTimeout(r, 100));
+    }
+
+    /** Safe click: wait visible, then click; retry once if node detaches. */
+    async function safeClick(selector) {
+      try {
+        const el = await page.waitForSelector(selector, {
+          state: 'visible',
+          timeout: 5000,
+        });
+        if (!el) return false;
+        await el.click();
+        return true;
+      } catch {
+        const el = await page.$(selector);
+        if (el) {
+          try {
+            await el.click();
+            return true;
+          } catch {
+            return false;
+          }
+        }
+        return false;
+      }
+    }
 
     // Deterministic interaction so INP audit runs (auditRan >= 1): focus + activate a control
     const skipLink = await page.$('[data-skip-link], a[href="#main-content"]');
@@ -187,30 +226,30 @@ async function main() {
 
     const trigger = await page.$('#primary-nav-trigger');
     if (trigger) {
-      await trigger.click();
+      try {
+        await page.waitForSelector('#primary-nav-trigger', {
+          state: 'visible',
+          timeout: 2000,
+        });
+        await trigger.click();
+      } catch {
+        await safeClick('#primary-nav-trigger');
+      }
       await new Promise((r) => setTimeout(r, 120));
       await page.keyboard.press('Escape');
       await new Promise((r) => setTimeout(r, 80));
     }
 
-    const cta = await page.$(
+    await safeClick(
       'a[href="/en/brief"], a[href*="/brief"], .masthead-nav-primary a',
     );
-    if (cta) {
-      await cta.click();
-      await new Promise((r) => setTimeout(r, 100));
-      await page.goBack().catch(() => {});
-      await new Promise((r) => setTimeout(r, 100));
-    }
+    await new Promise((r) => setTimeout(r, 100));
+    await page.goBack().catch(() => {});
+    await new Promise((r) => setTimeout(r, 100));
 
     if (urlPath === '/en/media') {
-      const filterBtn = await page.$(
-        'section[aria-labelledby="media-filter-heading"] button',
-      );
-      if (filterBtn) {
-        await filterBtn.click();
-        await new Promise((r) => setTimeout(r, 80));
-      }
+      await safeClick('section[aria-labelledby="media-filter-heading"] button');
+      await new Promise((r) => setTimeout(r, 80));
     }
 
     await flow.endTimespan();

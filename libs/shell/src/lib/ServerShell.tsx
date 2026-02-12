@@ -137,14 +137,19 @@ export function ServerShell({
                 </details>
               </nav>
             </div>
-            <div className="masthead-utilities masthead-nav-secondary flex-shrink-0 flex flex-nowrap items-center gap-6 min-h-[var(--masthead-bar-height)]">
-              {headerCriticalSlot != null ? headerCriticalSlot : null}
-              {languageLinksSlot != null ? (
-                <span data-language-links-ssr>{languageLinksSlot}</span>
-              ) : null}
-              {/* Reserved space for deferred controls; no CLS when they mount */}
-              <div className="masthead-deferred-slot flex flex-nowrap items-center gap-6 min-w-[8rem] min-h-[var(--masthead-bar-height)] shrink-0">
-                {headerDeferredSlot}
+            <div
+              className="masthead-utilities-wrap flex-shrink min-w-0 overflow-x-auto overflow-y-hidden scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              data-masthead-utilities
+            >
+              <div className="masthead-utilities masthead-nav-secondary flex flex-nowrap items-center gap-6 min-h-[var(--masthead-bar-height)] shrink-0">
+                {headerCriticalSlot != null ? headerCriticalSlot : null}
+                {languageLinksSlot != null ? (
+                  <span data-language-links-ssr>{languageLinksSlot}</span>
+                ) : null}
+                {/* Reserved space for deferred controls; no CLS when they mount */}
+                <div className="masthead-deferred-slot flex flex-nowrap items-center gap-6 min-w-[8rem] min-h-[var(--masthead-bar-height)] shrink-0">
+                  {headerDeferredSlot}
+                </div>
               </div>
             </div>
           </div>

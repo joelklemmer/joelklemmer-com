@@ -26,7 +26,8 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
-    /** Stable color scheme for deterministic screenshots. */
+    /** Stable viewport and color scheme for deterministic screenshots. */
+    viewport: { width: 1280, height: 800 },
     colorScheme: 'light',
   },
   webServer: process.env['BASE_URL']

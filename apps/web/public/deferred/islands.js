@@ -201,6 +201,23 @@
     setCookie(EVALUATOR_COOKIE, next, EVALUATOR_MAX_AGE);
   }
 
+  // --- Masthead: scroll focused utility into view (overflow-x-auto row) ---
+  function onMastheadFocusIn(ev) {
+    const el =
+      ev.target &&
+      ev.target.closest &&
+      ev.target.closest(
+        '.masthead-utilities button, .masthead-utilities a[href]',
+      );
+    if (el && typeof el.scrollIntoView === 'function') {
+      el.scrollIntoView({
+        block: 'nearest',
+        inline: 'nearest',
+        behavior: 'instant',
+      });
+    }
+  }
+
   // --- Bind delegates ---
   function delegate(selector, event, handler) {
     document.body.addEventListener(event, function (ev) {
@@ -217,6 +234,9 @@
     delegate('[data-contrast-toggle]', 'click', onContrastToggle);
     delegate('[data-density-toggle]', 'click', onDensityToggle);
     delegate('[data-evaluator-toggle]', 'click', onEvaluatorToggle);
+
+    const masthead = document.querySelector('[data-testid="masthead"]');
+    if (masthead) masthead.addEventListener('focusin', onMastheadFocusIn);
 
     // Optional: load telemetry when consent allows (after idle)
     if (
