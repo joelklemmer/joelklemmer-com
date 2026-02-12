@@ -3,6 +3,7 @@
  * Background must not transition light→dark or dark→light after first paint.
  * Respects prefers-color-scheme for system default.
  */
+import './visual-fixtures';
 import { test, expect } from '@playwright/test';
 
 const ROUTE = '/en';

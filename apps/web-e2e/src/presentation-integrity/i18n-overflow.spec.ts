@@ -2,7 +2,7 @@
  * i18n overflow guard: nav labels and CTA do not overflow or cause layout break
  * across locales (en, uk, es, he).
  */
-import { test, expect } from '@playwright/test';
+import { test, expect } from './visual-fixtures';
 
 const LOCALES = ['en', 'uk', 'es', 'he'] as const;
 const VIEWPORTS = [

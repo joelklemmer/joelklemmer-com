@@ -2,7 +2,7 @@
  * Minimal high-signal visual regression: home viewport, masthead, brief viewport,
  * RTL home. Deterministic fonts (Inter Variable), reduced motion. Snapshots in __screenshots__.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect } from './visual-fixtures';
 
 test.describe('visual regression', () => {
   test.use({
@@ -35,9 +35,9 @@ test.describe('visual regression', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
     await waitForStableViewport(page);
-    const header = page.locator(
-      '[data-testid="masthead"], header[aria-label]',
-    ).first();
+    const header = page
+      .locator('[data-testid="masthead"], header[aria-label]')
+      .first();
     await expect(header).toBeVisible({ timeout: 10000 });
     await expect(header).toHaveScreenshot('masthead.png', {
       maxDiffPixels: 300,

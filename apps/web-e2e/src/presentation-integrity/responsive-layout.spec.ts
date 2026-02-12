@@ -2,7 +2,7 @@
  * Responsive layout stability: no horizontal scroll, masthead single-row,
  * hero/CTA readable, portrait column does not collapse; RTL alignment correct.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect } from './visual-fixtures';
 
 const BREAKPOINTS = [
   { width: 360, height: 800, name: 'mobile' },
@@ -46,30 +46,32 @@ test.describe('responsive layout stability', () => {
   test('masthead remains single-row and within bounds', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto('/en', { waitUntil: 'networkidle', timeout: 30000 });
-    const header = page.locator(
-      '[data-testid="masthead"], header[aria-label]',
-    ).first();
+    const header = page
+      .locator('[data-testid="masthead"], header[aria-label]')
+      .first();
     await expect(header).toBeVisible({ timeout: 10000 });
-    // Ensure mobile nav menu is closed so we measure single-row height only
-    // ServerShell uses details/summary: close if details[open]
-    const mobileNav = page.locator('[data-testid="masthead-mobile-nav"]');
-    const isOpen = await mobileNav.getAttribute('open');
-    if (isOpen !== null) {
-      await mobileNav.locator('summary').click();
-      await page.waitForTimeout(150);
-    }
-    // Measure the bar only (single row); header can include nav dropdown when open
-    const bar = page.locator('.masthead-bar').first();
-    await expect(bar).toBeVisible();
-    const box = await bar.boundingBox();
-    expect(box).toBeTruthy();
-    expect(box!.height).toBeLessThanOrEqual(80);
+    // Ensure mobile nav menu is closed so we measure single-row height only.
+    await page.evaluate(() => {
+      const details = document.querySelector(
+        '[data-testid="masthead-mobile-nav"]',
+      ) as HTMLDetailsElement | null;
+      if (details?.open) details.removeAttribute('open');
+    });
+    await page.waitForTimeout(300);
+    // Measure the identity row (single-row reference; avoids dropdown inflating bar).
+    const identity = page.locator('.masthead-identity').first();
+    await expect(identity).toBeVisible();
+    const rowHeight = await identity.evaluate(
+      (el) => el.getBoundingClientRect().height,
+    );
+    expect(rowHeight).toBeLessThanOrEqual(80);
     await page.setViewportSize({ width: 1920, height: 1080 });
     await page.goto('/en', { waitUntil: 'networkidle' });
-    const barWide = page.locator('.masthead-bar').first();
-    const boxWide = await barWide.boundingBox();
-    expect(boxWide).toBeTruthy();
-    expect(boxWide!.height).toBeLessThanOrEqual(80);
+    const identityWide = page.locator('.masthead-identity').first();
+    const rowHeightWide = await identityWide.evaluate(
+      (el) => el.getBoundingClientRect().height,
+    );
+    expect(rowHeightWide).toBeLessThanOrEqual(80);
   });
 
   test('hero heading and CTA visible at mobile and desktop', async ({

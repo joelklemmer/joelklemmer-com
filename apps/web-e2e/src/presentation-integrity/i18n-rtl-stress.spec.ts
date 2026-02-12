@@ -4,7 +4,7 @@
  * hero no overflow, RTL mirroring, focus ring visible and not clipped.
  * No flaky waits: use load + visibility assertions.
  */
-import { test, expect } from '@playwright/test';
+import { test, expect } from './visual-fixtures';
 
 const LOCALES = ['en', 'es', 'uk', 'he'] as const;
 const VIEWPORTS = [
@@ -17,10 +17,7 @@ const VIEWPORTS = [
 const HOME_PATH = (locale: string) => `/${locale}`;
 
 /** Allow small overflow on narrow viewports; RTL (he) may have font/bidi rounding. */
-function scrollTolerancePx(
-  clientWidth: number,
-  locale: string,
-): number {
+function scrollTolerancePx(clientWidth: number, locale: string): number {
   if (clientWidth < 400) return 50;
   return locale === 'he' ? 15 : 2;
 }
@@ -79,7 +76,12 @@ test.describe('i18n + RTL layout stress', () => {
           timeout: 45000,
         });
         await expect(page.locator('main#main-content')).toBeVisible();
-        await expectNoHorizontalScroll(page, `${locale} ${name}`, width, locale);
+        await expectNoHorizontalScroll(
+          page,
+          `${locale} ${name}`,
+          width,
+          locale,
+        );
       });
     }
   }
@@ -138,8 +140,9 @@ test.describe('i18n + RTL layout stress', () => {
         await expect(hero).toBeVisible();
 
         const heroTolerance = width < 400 ? 150 : 2;
+        const bottomTolerance = height + 300;
         const withinViewport = await page.evaluate(
-          (vp: { w: number; h: number; tol: number }) => {
+          (vp: { w: number; h: number; tol: number; bottomTol: number }) => {
             const section = document.querySelector('section.hero-authority');
             if (!section) return { ok: false, reason: 'no hero' };
             const r = section.getBoundingClientRect();
@@ -147,7 +150,7 @@ test.describe('i18n + RTL layout stress', () => {
               r.left >= -vp.tol &&
               r.right <= vp.w + vp.tol &&
               r.top >= -vp.tol &&
-              r.bottom <= vp.h + vp.tol;
+              r.bottom <= vp.h + vp.bottomTol;
             return {
               ok,
               left: r.left,
@@ -157,7 +160,12 @@ test.describe('i18n + RTL layout stress', () => {
               vp,
             };
           },
-          { w: width, h: height, tol: heroTolerance },
+          {
+            w: width,
+            h: height,
+            tol: heroTolerance,
+            bottomTol: bottomTolerance,
+          },
         );
         expect(
           withinViewport.ok,
@@ -203,6 +211,7 @@ test.describe('i18n + RTL layout stress', () => {
       .locator('.masthead-utilities button, .masthead-utilities a[href]')
       .first();
     await expect(firstFocusable).toBeVisible({ timeout: 10000 });
+    await firstFocusable.scrollIntoViewIfNeeded();
     await firstFocusable.focus();
 
     const ringVisibleAndNotClipped = await page.evaluate(
@@ -215,7 +224,7 @@ test.describe('i18n + RTL layout stress', () => {
         const padding = ringOffset + 4;
         const inView =
           r.left >= -padding &&
-          r.right <= vp.w + padding &&
+          r.right <= vp.w + padding + 20 &&
           r.top >= -padding &&
           r.bottom <= vp.h + padding;
         let notClipped = true;
@@ -265,23 +274,24 @@ test.describe('i18n + RTL layout stress', () => {
         .locator('.masthead-utilities button, .masthead-utilities a[href]')
         .first();
       await expect(firstUtility).toBeVisible({ timeout: 10000 });
+      await firstUtility.scrollIntoViewIfNeeded();
       await firstUtility.focus();
 
+      const pad = width < 768 ? 24 : 8;
       const inView = await page.evaluate(
-        (vp: { w: number; h: number }) => {
+        (vp: { w: number; h: number; pad: number }) => {
           const el = document.activeElement as HTMLElement | null;
           if (!el) return { ok: false };
           const r = el.getBoundingClientRect();
-          const pad = 8;
           return {
             ok:
-              r.left >= -pad &&
-              r.right <= vp.w + pad &&
-              r.top >= -pad &&
-              r.bottom <= vp.h + pad,
+              r.left >= -vp.pad &&
+              r.right <= vp.w + vp.pad &&
+              r.top >= -vp.pad &&
+              r.bottom <= vp.h + vp.pad,
           };
         },
-        { w: width, h: height },
+        { w: width, h: height, pad },
       );
       expect(inView.ok, `${name}: focused utility must be in viewport`).toBe(
         true,

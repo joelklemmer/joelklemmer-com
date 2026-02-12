@@ -1,3 +1,4 @@
+import './visual-fixtures';
 import { test, expect } from '@playwright/test';
 import { getPublicRecordEntries } from '@joelklemmer/content';
 import { defaultLocale } from '@joelklemmer/i18n';
