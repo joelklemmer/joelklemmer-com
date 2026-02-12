@@ -145,9 +145,10 @@ export function MediaLibraryClient({
           {labels.filterByKind}
         </h2>
         <nav
-          className="flex flex-wrap gap-2 mb-6"
+          className="flex flex-nowrap gap-2 mb-6"
           aria-label={labels.filterByKind}
           role="navigation"
+          data-testid="media-filter-row"
         >
           <button
             type="button"

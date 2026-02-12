@@ -357,6 +357,7 @@ jobs:
       - name: Lighthouse harness validate (pinned versions + desktop/provided profile)
         run: pnpm nx run web:lighthouse-harness-validate --verbose
         env:
+          LH_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           LH_FORM_FACTOR: desktop
           LH_THROTTLING_METHOD: provided
 
@@ -365,6 +366,7 @@ jobs:
         env:
           RATE_LIMIT_MODE: off
           SKIP_LH_BUILD: '1'
+          LH_CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
           LH_CHROME_MAJOR: '136'
           LH_FORM_FACTOR: desktop
           LH_THROTTLING_METHOD: provided

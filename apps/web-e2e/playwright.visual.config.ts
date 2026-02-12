@@ -26,6 +26,8 @@ export default defineConfig({
   use: {
     baseURL,
     trace: 'on-first-retry',
+    /** Stable color scheme for deterministic screenshots. */
+    colorScheme: 'light',
   },
   webServer: process.env['BASE_URL']
     ? { url: baseURL, reuseExistingServer: true, timeout: 120000 }

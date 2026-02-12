@@ -32,7 +32,7 @@ export function HeaderDeferredSSR({
         type="button"
         data-theme-toggle
         aria-label={themeToggleLabel}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none min-h-[44px] min-w-[44px]`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none min-h-[44px] min-w-[44px] p-1`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -53,7 +53,7 @@ export function HeaderDeferredSSR({
         type="button"
         data-contrast-toggle
         aria-label={contrastToggleLabel}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px]`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px] p-1`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -74,7 +74,7 @@ export function HeaderDeferredSSR({
         type="button"
         data-density-toggle
         aria-label={densityToggleLabel}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px]`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px] p-1`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -97,7 +97,7 @@ export function HeaderDeferredSSR({
         type="button"
         data-evaluator-toggle
         aria-label={evaluatorToggleLabel}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px]`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px] p-1`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -115,14 +115,14 @@ export function HeaderDeferredSSR({
       </button>
       <Link
         href={preferencesHref}
-        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text text-sm min-h-[44px] px-2`}
+        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text text-sm min-h-[44px] px-2 py-1 truncate max-w-[8rem]`}
         aria-label={cookiePrefsLabel}
       >
         {cookiePrefsLabel}
       </Link>
       <Link
         href={accessibilityHref}
-        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text text-sm min-h-[44px] px-2`}
+        className={`${focusRingClass} masthead-touch-target flex items-center justify-center rounded-sm text-muted hover:text-text text-sm min-h-[44px] px-2 py-1 truncate max-w-[8rem]`}
         aria-label={accessibilityLabel}
       >
         {accessibilityLabel}

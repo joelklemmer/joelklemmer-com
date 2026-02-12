@@ -36,7 +36,8 @@ function getLighthouseVersion(): string | null {
 function getChromeVersion(): string | null {
   try {
     const chromeLauncher = require('chrome-launcher');
-    const chromePath = chromeLauncher.getChromePath?.();
+    const chromePath =
+      process.env.LH_CHROME_PATH?.trim() || chromeLauncher.getChromePath?.();
     if (!chromePath) return null;
     const out = spawnSync(chromePath, ['--version'], {
       encoding: 'utf8',
@@ -94,6 +95,11 @@ function main(): number {
     errors.push('Could not resolve Lighthouse version (package.json)');
   } else {
     console.log(`Lighthouse version: ${lhVersion}`);
+  }
+
+  const explicitChromePath = process.env.LH_CHROME_PATH?.trim();
+  if (explicitChromePath) {
+    console.log(`Chrome path (LH_CHROME_PATH): ${explicitChromePath}`);
   }
 
   const chromeVersion = getChromeVersion();

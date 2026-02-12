@@ -69,11 +69,11 @@ test.describe('visual regression', () => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto('/en/media', { waitUntil: 'networkidle', timeout: 30000 });
     await waitForStableViewport(page);
-    const filterSection = page
-      .locator('[data-testid="media-filter-section"]')
+    const filterRow = page
+      .locator('[data-testid="media-filter-row"]')
       .first();
-    await expect(filterSection).toBeVisible({ timeout: 15000 });
-    await expect(filterSection).toHaveScreenshot('media-filter-row.png', {
+    await expect(filterRow).toBeVisible({ timeout: 15000 });
+    await expect(filterRow).toHaveScreenshot('media-filter-row.png', {
       maxDiffPixels: 500,
     });
   });

@@ -49,7 +49,8 @@ function mergeInpIntoNav(navLhr, timespanLhr) {
 
 function getChromeVersion() {
   try {
-    const chromePath = chromeLauncher.getChromePath?.();
+    const chromePath =
+      process.env.LH_CHROME_PATH?.trim() || chromeLauncher.getChromePath?.();
     if (!chromePath) return null;
     const out = spawnSync(chromePath, ['--version'], {
       encoding: 'utf8',
@@ -103,9 +104,13 @@ async function main() {
   const isFirstUrl = slug === 'en';
 
   if (isFirstUrl) {
+    const explicitPath = process.env.LH_CHROME_PATH?.trim();
     const chromeVer = getChromeVersion();
     const lhVer = getLighthouseVersion();
     writeInstrumentJson();
+    if (explicitPath) {
+      console.error('Lighthouse instrument: chromePath:', explicitPath);
+    }
     console.error('Lighthouse instrument: Chrome:', chromeVer ?? 'unknown');
     console.error('Lighthouse instrument: Lighthouse:', lhVer ?? 'unknown');
     console.error(
@@ -114,12 +119,15 @@ async function main() {
     );
   }
 
-  // Use chrome-launcher (same as LHCI) so Chrome is found in CI; ephemeral profile to avoid picker
+  // Use chrome-launcher (same as LHCI) so Chrome is found in CI; ephemeral profile to avoid picker.
+  // When LH_CHROME_PATH is set (e.g. CI), use that binary explicitly for deterministic runs.
   const userDataDir = path.join(os.tmpdir(), `lhci-profile-${process.pid}`);
+  const chromePath = process.env.LH_CHROME_PATH?.trim() || undefined;
   let chrome;
   let browser;
   try {
-    chrome = await chromeLauncher.launch({
+    const launchOpts = {
+      ...(chromePath && { chromePath }),
       chromeFlags: [
         '--headless=new',
         '--no-first-run',
@@ -134,7 +142,8 @@ async function main() {
         '--disable-dev-shm-usage',
         `--user-data-dir=${userDataDir}`,
       ],
-    });
+    };
+    chrome = await chromeLauncher.launch(launchOpts);
     browser = await puppeteer.connect({
       browserURL: `http://127.0.0.1:${chrome.port}`,
     });

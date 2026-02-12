@@ -20,7 +20,7 @@ export function ServerLanguageLinks({
   separator,
 }: ServerLanguageLinksProps) {
   return (
-    <span className="flex items-center gap-1">
+    <span className="flex flex-nowrap items-center gap-1 shrink-0">
       {locales.map((locale, index) => {
         const href = `/${locale}`;
         const label = labels[locale] ?? (locale as string);

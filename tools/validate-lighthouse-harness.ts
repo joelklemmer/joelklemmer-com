@@ -66,7 +66,8 @@ function assertExactVersions(pkg: Record<string, unknown>): string[] {
 function getChromeVersion(): string | null {
   try {
     const chromeLauncher = require('chrome-launcher');
-    const chromePath = chromeLauncher.getChromePath?.();
+    const chromePath =
+      process.env.LH_CHROME_PATH?.trim() || chromeLauncher.getChromePath?.();
     if (!chromePath) return null;
     const out = spawnSync(chromePath, ['--version'], {
       encoding: 'utf8',

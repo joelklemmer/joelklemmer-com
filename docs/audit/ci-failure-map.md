@@ -28,7 +28,7 @@
 
 ### lighthouse
 
-- **CI step:** Build → `lighthouse-harness-validate` → `lighthouse-timespan` (env: `RATE_LIMIT_MODE=off`, `SKIP_LH_BUILD=1`, `LH_CHROME_MAJOR=136`, `LH_FORM_FACTOR=desktop`, `LH_THROTTLING_METHOD=provided`).
+- **CI step:** Build → `lighthouse-harness-validate` → `lighthouse-timespan` (env: `RATE_LIMIT_MODE=off`, `SKIP_LH_BUILD=1`, `LH_CHROME_PATH` from setup-chrome, `LH_CHROME_MAJOR=136`, `LH_FORM_FACTOR=desktop`, `LH_THROTTLING_METHOD=provided`).
 - **First failing assertions (from `docs/audit/ci-failures-report.md` and `.lighthouseci/assertion-results.json`):**
   1. **largest-contentful-paint** — `maxNumericValue` ≤ 1800 ms, actual ~3019–3165 ms on `/en`, `/en/brief`, `/en/media`. **Route:** all three. **Why:** LCP element (hero image) loads in ~3s; threshold 1.8s.
   2. **interaction-to-next-paint** — `auditRan` ≥ 1, actual 0. **Why:** INP audit did not run (timespan run may not populate INP).
@@ -55,4 +55,4 @@
 
 - **verify-fast:** `pnpm install --frozen-lockfile` → `pnpm audit --audit-level=critical` → `pnpm nx format:check --all` → `pnpm nx run web:lint` → validators block (security through `web:test` including `docs:arch:check`).
 - **build:** `pnpm install --frozen-lockfile` → `pnpm nx run web:build --verbose` (env: `BASELINE_BROWSER_MAPPING_IGNORE_OLD_DATA=1`) → bundle-guard, server-import-graph, critical-bundle → `git checkout -- apps/web/next-env.d.ts` → repo clean check → `pnpm nx run web:head-invariants-validate --verbose` (env: `RATE_LIMIT_MODE=off`, `STANDALONE=1`).
-- **lighthouse:** Install → Chrome 136 → Build → `pnpm nx run web:lighthouse-harness-validate --verbose` → `pnpm nx run web:lighthouse-timespan --verbose` (env: `SKIP_LH_BUILD=1`, etc.).
+- **lighthouse:** Install → Chrome 136 (browser-actions/setup-chrome) → Build → `pnpm nx run web:lighthouse-harness-validate --verbose` → `pnpm nx run web:lighthouse-timespan --verbose` (env: `LH_CHROME_PATH` from setup-chrome output, `SKIP_LH_BUILD=1`, etc.).

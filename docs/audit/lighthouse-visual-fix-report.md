@@ -221,7 +221,7 @@ CI: Head invariants run in the **build** job. The **lighthouse** job runs `web:l
 The LCP ≤1800 ms gate is measured under a **pinned, deterministic** collection profile so failures are attributable to the app, not environment drift.
 
 - **Instrument:** `tools/lighthouse-instrument-config.mjs` defines the single profile: `formFactor`, `throttlingMethod`, `throttling` (including `cpuSlowdownMultiplier`), `screenEmulation`, `locale`, `disableStorageReset`. The collector (`tools/collect-lhr-single.mjs`) passes this config to Lighthouse `startFlow(page, { config })` and dumps the effective config to `tmp/lighthouse/instrument.json`.
-- **Guard:** `tools/validate-lighthouse-instrument.ts` runs **before** collection. It reads the Lighthouse version from `package.json`, the Chrome version from `chrome --version`, and `tmp/lighthouse/instrument.json`. It fails if `LH_CHROME_MAJOR` is set and the runtime Chrome major differs, or if `LH_FORM_FACTOR`, `LH_THROTTLING_METHOD`, or `LH_CPU_SLOWDOWN_MULTIPLIER` differ from the instrument file. CI sets these env vars and pins Chrome (e.g. browser-actions/setup-chrome with `chrome-version: 136`). Chrome version, Lighthouse version, and effective instrument settings are printed in logs.
+- **Guard:** `tools/validate-lighthouse-instrument.ts` runs **before** collection. It reads the Lighthouse version from `package.json`, the Chrome version from the binary at `LH_CHROME_PATH` (or auto-discovered), and `tmp/lighthouse/instrument.json`. It fails if `LH_CHROME_MAJOR` is set and the runtime Chrome major differs, or if `LH_FORM_FACTOR`, `LH_THROTTLING_METHOD`, or `LH_CPU_SLOWDOWN_MULTIPLIER` differ from the instrument file. CI sets `LH_CHROME_PATH` from `browser-actions/setup-chrome` output and pins Chrome 136; the collector uses that path explicitly for deterministic runs. Chrome path (when set), Chrome version, and effective instrument settings are printed in logs.
 
 ### Harness determinism
 
@@ -230,6 +230,12 @@ To lock the measurement profile without changing thresholds, the following are p
 - **Toolchain (exact versions in package.json, no caret):** `lighthouse` 12.6.1, `chrome-launcher` 1.2.1, `puppeteer` 24.37.2. `tools/validate-lighthouse-harness.ts` asserts these exact versions and that Chrome is available and Lighthouse version matches.
 - **Lighthouse flags (desktop / provided):** `formFactor: "desktop"`, `throttlingMethod: "provided"` (no CPU/network simulation), `disableStorageReset: false`, `onlyCategories: ["performance", "accessibility", "seo", "best-practices"]`, `screenEmulation`: Lighthouse desktop metrics (1350×940). The collector sets a fixed Puppeteer viewport of 1365×768 for deterministic desktop measurement.
 - **Guard:** `web:lighthouse-harness-validate` runs in the verify chain (after build, before head-invariants) and in the CI lighthouse job before `web:lighthouse-timespan`. It runs `dump-lighthouse-instrument.mjs` and asserts the written instrument matches the required profile; fails with actionable errors if versions or flags drift.
+
+### Local execution
+
+- **Default:** If `LH_CHROME_PATH` is not set, the harness auto-discovers system Chrome. This may mismatch `LH_CHROME_MAJOR` (e.g. local Chrome 144 vs CI Chrome 136) and fail `validate-lighthouse-instrument` with "Chrome major mismatch."
+- **Recommended:** Set `LH_CHROME_PATH` to a Chrome 136 binary (or the version matching `LH_CHROME_MAJOR`) for deterministic local runs, or rely on CI where `browser-actions/setup-chrome` provides the pinned path via `chrome-path` output.
+- **Example (PowerShell):** `$env:LH_CHROME_PATH = 'C:\Program Files\Google\Chrome\Application\chrome.exe'` (use the path to your Chrome 136 install if available).
 
 ---
 

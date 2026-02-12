@@ -4,11 +4,11 @@ export const visuallyHiddenClass = 'sr-only';
 export const MAIN_CONTENT_ID = 'main-content';
 
 /**
- * Focus ring: visible only for keyboard (focus-visible), token-driven ring/offset.
- * Transition uses motion-duration-feedback for decisive response; disabled when reduced motion.
+ * Focus ring: outline-based (WCAG 2.2 AA+). Outlines are not clipped by overflow,
+ * unlike box-shadow/ring. Token-driven color/offset. Transition uses motion-duration-feedback.
  */
 export const focusRingClass =
-  'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus focus-visible:ring-offset-2 focus-visible:ring-offset-bg transition-[box-shadow] duration-feedback ease-out motion-reduce:transition-none data-[contrast=high]:focus-visible:ring-4 data-[contrast=high]:focus-visible:ring-offset-3';
+  'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus transition-[outline-color,outline-width,outline-offset] duration-feedback ease-out motion-reduce:transition-none data-[contrast=high]:focus-visible:outline-4 data-[contrast=high]:focus-visible:outline-offset-3';
 
 /**
  * Skip link: sr-only until focused; then visible, fixed, high z-index. No focus trap.
