@@ -140,12 +140,13 @@ export function MediaLibraryClient({
       aria-labelledby="media-filter-heading"
       data-testid="media-filter-section"
     >
-      <Container className="section-shell">
+      {/* Filter row: full available width on desktop (1280 viewport) for deterministic visual regression. */}
+      <div className="w-full min-w-0 ps-container-x-start pe-container-x sm:ps-container-x-wide sm:pe-container-x-wide mb-6">
         <h2 id="media-filter-heading" className="sr-only">
           {labels.filterByKind}
         </h2>
         <nav
-          className="flex flex-nowrap gap-2 mb-6"
+          className="flex flex-nowrap gap-2 w-full min-w-0 overflow-x-auto"
           aria-label={labels.filterByKind}
           role="navigation"
           data-testid="media-filter-row"
@@ -194,6 +195,8 @@ export function MediaLibraryClient({
             </button>
           ))}
         </nav>
+      </div>
+      <Container className="section-shell">
         <ul className="space-y-8 list-none p-0 m-0" role="list">
           {assets.map((asset, index) => {
             const thumbPath = getMediaThumbPath(asset);

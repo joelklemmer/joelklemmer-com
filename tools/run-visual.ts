@@ -70,7 +70,12 @@ async function main(): Promise<number> {
   const playwright = spawn('npx', playwrightArgs, {
     cwd: workspaceRoot,
     stdio: 'inherit',
-    env: { ...process.env, BASE_URL: baseUrl, PORT: String(port) },
+    env: {
+      ...process.env,
+      BASE_URL: baseUrl,
+      PORT: String(port),
+      __E2E__: 'true',
+    },
     shell: true,
   });
 

@@ -2,6 +2,8 @@
  * Minimal high-signal visual regression: home viewport, masthead, brief viewport,
  * RTL home. Deterministic fonts (Inter Variable), reduced motion. Snapshots in __screenshots__.
  */
+import path from 'node:path';
+import fs from 'node:fs';
 import { test, expect } from './visual-fixtures';
 import {
   setDeterministicClientState,
@@ -96,19 +98,23 @@ test.describe('visual regression', () => {
     const filterRow = page.locator('[data-testid="media-filter-row"]').first();
     await expect(filterRow).toBeVisible({ timeout: 15000 });
     const box = await filterRow.boundingBox();
-    if (box && Math.abs(box.width - 1280) > 100) {
-      await page.setViewportSize({ width: 1280, height: 800 });
-      await page.evaluate(
-        () =>
-          new Promise<void>((r) =>
-            requestAnimationFrame(() => requestAnimationFrame(() => r())),
-          ),
+    if (box && box.width < 1000) {
+      const pathname = await page.evaluate(() => window.location.pathname);
+      const wrapperClasses = await page
+        .locator('[data-testid="media-filter-row"]')
+        .first()
+        .evaluate((el) => (el.parentElement as Element)?.getAttribute?.('class') ?? '');
+      const diagnosticsDir = path.join(process.cwd(), 'dist', '.playwright', 'diagnostics');
+      await fs.promises.mkdir(diagnosticsDir, { recursive: true });
+      const screenshotPath = path.join(
+        diagnosticsDir,
+        `media-filter-row-width-${Date.now()}.png`,
       );
-    }
-    const boxAfter = await filterRow.boundingBox();
-    if (boxAfter && boxAfter.width < 600) {
+      await page.screenshot({ path: screenshotPath }).catch(() => {});
       throw new Error(
-        `media filter row: width ${boxAfter.width}px expected ~1280. Layout context may be wrong.`,
+        `media filter row: width ${box.width}px at 1280 viewport expected >=1000. ` +
+          `pathname=${pathname} wrapperClasses=${wrapperClasses}. ` +
+          `Screenshot: ${screenshotPath}. Check layout: filter row must use full-bleed wrapper (no max-w-*).`,
       );
     }
     await expect(filterRow).toHaveScreenshot('media-filter-row.png', {
