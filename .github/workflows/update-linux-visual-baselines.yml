@@ -66,8 +66,9 @@ jobs:
 
       - name: Generate Linux visual baselines
         env:
-          __E2E__: 'true'
           PLAYWRIGHT_BROWSERS_PATH: '0'
+          __E2E__: 'true'
+          RATE_LIMIT_MODE: off
         run: pnpm nx run web:visual -- --update-snapshots --verbose
 
       - name: Commit and push Linux baselines

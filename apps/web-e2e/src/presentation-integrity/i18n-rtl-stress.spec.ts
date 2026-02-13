@@ -218,7 +218,8 @@ test.describe('i18n + RTL layout stress', () => {
       .locator('.masthead-utilities button, .masthead-utilities a[href]')
       .first();
     await expect(firstFocusable).toBeVisible({ timeout: 10000 });
-    await scrollElementIntoView(firstFocusable);
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await firstFocusable.scrollIntoViewIfNeeded();
     await firstFocusable.focus();
     await page.waitForTimeout(50);
 
