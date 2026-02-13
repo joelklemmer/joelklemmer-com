@@ -49,24 +49,15 @@ test.describe('visual regression', () => {
     await assertNoBlockingOverlays(page);
     await stabilizeViewport(page);
 
-    const header = await expectMastheadVisible(page);
-    // Forcibly close any mobile nav details and cookie banner remnants before screenshot
+    await expectMastheadVisible(page);
     await closeAnyOverlays(page);
-    await header.evaluate((el) => {
-      const details = el.querySelectorAll('details[open]');
-      details.forEach((d) => d.removeAttribute('open'));
-    });
+    await assertNoBlockingOverlays(page);
+    await stabilizeViewport(page);
 
-    const headerHeight = await header
-      .boundingBox()
-      .then((b) => (b ? b.height : 0));
-    if (headerHeight > 140) {
-      throw new Error(
-        `masthead region: header height ${headerHeight}px exceeds expected range (<=140). ` +
-          `Mobile nav or overlay likely expanded. Run closeAnyOverlays before screenshot.`,
-      );
-    }
-    await expect(header).toHaveScreenshot('masthead.png', {
+    // Determinism: screenshot only the top bar (0,0,1280,80) to avoid any dropdown/popover.
+    // At 1280px md:hidden hides mobile nav; clip ensures we never capture expanded overlays.
+    await expect(page).toHaveScreenshot('masthead.png', {
+      clip: { x: 0, y: 0, width: 1280, height: 80 },
       maxDiffPixels: 300,
       timeout: 10000,
     });

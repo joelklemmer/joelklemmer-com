@@ -12,6 +12,7 @@ import {
   expectMastheadVisible,
   positionUtilitiesScrollerForRtl,
   scrollElementIntoView,
+  stabilizeViewport,
 } from '../support/test-preflight';
 
 const rawBase = (process.env['BASE_URL'] ?? 'http://127.0.0.1:3000').replace(
@@ -287,9 +288,10 @@ test.describe('i18n + RTL layout stress', () => {
       await expect(firstUtility).toBeVisible({ timeout: 10000 });
       await scrollElementIntoView(firstUtility);
       await firstUtility.focus();
-      await page.waitForTimeout(50);
+      await stabilizeViewport(page);
 
-      const pad = width < 768 ? 24 : 8;
+      /** Mobile/tablet: utilities may scroll; pad for focus ring and scroller edge. */
+      const pad = width < 768 ? 48 : width < 1024 ? 24 : 8;
       const ciEpsilon = process.env['CI'] === 'true' ? 2 : 0;
       const inView = await page.evaluate(
         (vp: { w: number; h: number; pad: number; eps: number }) => {

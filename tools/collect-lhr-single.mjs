@@ -3,6 +3,14 @@
  * Uses pinned instrument config (formFactor, throttling, screenEmulation) for deterministic LCP.
  * Env: BASE_URL, URL_PATH (e.g. /en), SLUG (e.g. en), OUT_FILE (path to write .report.json).
  * Chrome: ephemeral user-data-dir and no-first-run flags to avoid profile picker in all paths.
+ *
+ * WHY THIS IS NOW DETERMINISTIC (enforced invariants):
+ * - viewport: 1280x800, deviceScaleFactor 1
+ * - colorScheme: light; reducedMotion: reduce
+ * - consent: cookie set BEFORE navigation (v2 format) so banner never shows
+ * - Chrome: isolated userDataDir under tmp/chrome-profile/<timestamp>; --headless=new; no profile
+ * - preflight: wait main/masthead visible, close consent/dialogs/details[open], assert center not blocked
+ * - safeClick: waits visible, scrolls into view, verifies elementFromPoint, retries once if blocked
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -93,16 +101,13 @@ function writeInstrumentJson() {
 }
 
 /**
- * Shared preflight: wait for main or masthead visible, dismiss consent,
- * close dialogs/details, assert viewport center not blocked.
+ * Shared preflight: wait for main or masthead visible, close overlays,
+ * assert viewport center not blocked. Cookies set before navigate in main().
  */
 async function runPreflight(page) {
   await page.waitForSelector(
-    'main#main-content, [data-testid="main-content"], [data-testid="masthead"], header[aria-label]',
-    {
-      state: 'visible',
-      timeout: 20000,
-    },
+    'main#main-content, [data-testid="main-content"], [data-testid="masthead"], header[aria-label="Site header"]',
+    { state: 'visible', timeout: 20000 },
   );
   await assertNoBlockingOverlays(page);
 }
@@ -185,17 +190,23 @@ async function assertNoBlockingOverlays(page) {
   }
 
   // Mobile nav: close details[open]
-  const mobileNav = await page.$(
-    '[data-testid="masthead-mobile-nav"][open], details[open]',
-  );
-  if (mobileNav) {
-    await page.evaluate(() => {
-      const el =
-        document.querySelector('[data-testid="masthead-mobile-nav"]') ||
-        document.querySelector('details.nav-primary-mobile[open]');
-      if (el) el.removeAttribute('open');
-    });
-  }
+  await page.evaluate(() => {
+    document
+      .querySelectorAll(
+        '[data-testid="masthead"] details[open], header details[open]',
+      )
+      .forEach((el) => el.removeAttribute('open'));
+  });
+
+  // Radix-style popovers
+  await page.keyboard.press('Escape').catch(() => {});
+  await page
+    .evaluate(() => {
+      document
+        .querySelectorAll('[data-state="open"]')
+        .forEach((el) => el.removeAttribute('data-state'));
+    })
+    .catch(() => {});
 
   // Assert viewport center is not banner/dialog and no blocking overlay
   const ok = await page.evaluate(
@@ -258,6 +269,39 @@ async function safeClick(page, selector) {
     }),
   );
   await assertNoBlockingOverlays(page);
+
+  /** Verify click target is not obscured: elementAtPoint at center should be target or descendant. */
+  const blocked = await page
+    .evaluate((sel) => {
+      const target = document.querySelector(sel);
+      if (!target) return { blocked: true, reason: 'target-not-found' };
+      const r = target.getBoundingClientRect();
+      const cx = r.left + r.width / 2;
+      const cy = r.top + r.height / 2;
+      const atPoint = document.elementFromPoint(cx, cy);
+      if (!atPoint) return { blocked: true, reason: 'no-element-at-point' };
+      const isTargetOrChild =
+        target.contains(atPoint) || atPoint.contains(target);
+      if (!isTargetOrChild) {
+        const s = getComputedStyle(atPoint);
+        const sel = atPoint.id
+          ? `#${atPoint.id}`
+          : `${atPoint.tagName}${atPoint.className && typeof atPoint.className === 'string' ? '.' + atPoint.className.trim().split(/\s+/).join('.') : ''}`;
+        return {
+          blocked: true,
+          blockingSelector: sel,
+          pointerEvents: s.pointerEvents,
+          zIndex: s.zIndex,
+        };
+      }
+      return { blocked: false };
+    }, selector)
+    .catch(() => ({ blocked: true, reason: 'eval-error' }));
+
+  if (blocked.blocked) {
+    console.error('safeClick: target blocked', JSON.stringify(blocked));
+    await assertNoBlockingOverlays(page);
+  }
 
   try {
     await el.click();
@@ -357,11 +401,12 @@ async function main() {
     );
   }
 
+  /** Isolated profile; never use user's real Chrome profile. */
   const userDataDir = path.join(
-    process.cwd(),
+    REPO_ROOT,
     'tmp',
     'chrome-profile',
-    String(Date.now()),
+    `lh-${Date.now()}`,
   );
   fs.mkdirSync(path.dirname(userDataDir), { recursive: true });
   const chromePath =

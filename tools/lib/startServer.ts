@@ -92,7 +92,12 @@ async function resolvePort(requested?: number): Promise<number> {
 export async function startServer(port?: number): Promise<StartServerResult> {
   const resolvedPort = await resolvePort(port);
   const baseUrl = `http://127.0.0.1:${resolvedPort}`;
-  const env = { ...process.env, PORT: String(resolvedPort) };
+  /** Determinism: server must not rate-limit e2e requests (visual, a11y, lighthouse). */
+  const env = {
+    ...process.env,
+    PORT: String(resolvedPort),
+    RATE_LIMIT_MODE: process.env.RATE_LIMIT_MODE ?? 'off',
+  };
 
   const server: ChildProcess = spawn(
     'pnpm',

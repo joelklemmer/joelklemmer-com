@@ -18,6 +18,7 @@ const serverReadyURL = `${baseURL.replace(/\/?$/, '')}/en/`;
 
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src/presentation-integrity' }),
+  snapshotPathTemplate: `__screenshots__/${snapshotPlatform}/{arg}{ext}`,
   expect: {
     toHaveScreenshot: {
       snapshotPathTemplate: `__screenshots__/${snapshotPlatform}/{arg}{ext}`,

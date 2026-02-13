@@ -1,6 +1,15 @@
 /**
  * Deterministic test preflight contract shared by Playwright and Lighthouse.
  * Ensures server readiness, stable client state, closed overlays, and stable viewport.
+ *
+ * WHY THIS IS NOW DETERMINISTIC (enforced invariants):
+ * - viewport: 1280×800, deviceScaleFactor 1 (set by playwright config)
+ * - colorScheme: light; reducedMotion: reduce
+ * - consent: accepted via cookie (consent-store-v2 format) so banner never shows
+ * - theme: data-theme=light, style.colorScheme=light
+ * - overlays: consent banner, dialogs, details[open] in masthead/header closed before screenshot
+ * - readiness: main#main-content OR [data-testid="main-content"] OR masthead/header visible before proceed
+ * - fonts: document.fonts.ready + 2 RAF ticks; e2e font override (system-ui) when PLAYWRIGHT_TEST
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -187,6 +196,7 @@ export async function setDeterministicClientState(
   const context = page.context();
   await context.clearCookies();
 
+  /** Determinism: fixed viewport; deviceScaleFactor set by playwright.visual.config */
   await page.setViewportSize(CONTRACT_VIEWPORT);
   await page.emulateMedia({
     colorScheme: 'light',
@@ -222,11 +232,12 @@ export async function setDeterministicClientState(
     }
   }, isE2E);
 
+  /** Determinism: consent cookie (v2 format) so app never shows banner; theme cookie for light mode. */
   const consentValue = encodeConsentAccepted();
   try {
     await context.addCookies([
-      { name: 'consent', value: consentValue, url },
-      { name: 'joelklemmer-theme', value: 'light', url },
+      { name: 'consent', value: consentValue, url, path: '/' },
+      { name: 'joelklemmer-theme', value: 'light', url, path: '/' },
     ]);
   } catch {
     /* optional */
@@ -289,6 +300,16 @@ export async function closeAnyOverlays(page: Page): Promise<void> {
       .evaluate((el) => el.removeAttribute('open'))
       .catch(() => {});
   }
+
+  /** Close any Radix-style popovers or open menus (language, theme, etc). */
+  await page.keyboard.press('Escape').catch(() => {});
+  await page
+    .evaluate(() => {
+      document
+        .querySelectorAll('[data-state="open"]')
+        .forEach((el) => el.removeAttribute('data-state'));
+    })
+    .catch(() => {});
 
   await ensureConsentDismissed(page);
 }

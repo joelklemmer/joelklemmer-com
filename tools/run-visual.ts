@@ -16,6 +16,8 @@ function ensureCiLikeEnv(): void {
 
 async function main(): Promise<number> {
   ensureCiLikeEnv();
+  /** Determinism: disable rate limiting so Playwright requests never get 429. */
+  process.env.RATE_LIMIT_MODE ??= 'off';
   const envPort = process.env.PORT;
   const requestedPort =
     envPort !== undefined && envPort !== '' ? parseInt(envPort, 10) : undefined;

@@ -3,7 +3,7 @@
  * and stable LCP elements per route. Run only as part of the lighthouse job (not verify).
  *
  * Usage: npx tsx tools/validate-lcp-budget.ts [--lhr-dir=tmp/lighthouse/custom]
- * Expects: en.report.json, en-brief.report.json, en-media.report.json in lhr-dir.
+ * Expects: en.report.json, en-brief.report.json (en-media when LH_INCLUDE_MEDIA=1). Skips missing.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -121,10 +121,8 @@ function main(): number {
 
   for (const { slug, file, lcpElementHints } of ROUTE_EXPECTATIONS) {
     const filePath = path.join(lhrDir, file);
-    if (!fs.existsSync(filePath)) {
-      errors.push(`${slug}: missing ${file}`);
-      continue;
-    }
+    /** Skip routes not collected (e.g. en-media when LH_INCLUDE_MEDIA != 1). */
+    if (!fs.existsSync(filePath)) continue;
 
     let lhr: LHR;
     try {

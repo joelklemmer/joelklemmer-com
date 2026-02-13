@@ -17,6 +17,8 @@ function ensureCiLikeEnv(): void {
 
 async function main(): Promise<number> {
   ensureCiLikeEnv();
+  /** Determinism: disable rate limiting so Lighthouse and collect-lhr never get 429. */
+  process.env.RATE_LIMIT_MODE ??= 'off';
   const skipBuild =
     process.env.SKIP_LH_BUILD === '1' || process.env.SKIP_LH_BUILD === 'true';
   const envPort = process.env.PORT;
