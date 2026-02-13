@@ -103,8 +103,15 @@ test.describe('visual regression', () => {
       const wrapperClasses = await page
         .locator('[data-testid="media-filter-row"]')
         .first()
-        .evaluate((el) => (el.parentElement as Element)?.getAttribute?.('class') ?? '');
-      const diagnosticsDir = path.join(process.cwd(), 'dist', '.playwright', 'diagnostics');
+        .evaluate(
+          (el) => (el.parentElement as Element)?.getAttribute?.('class') ?? '',
+        );
+      const diagnosticsDir = path.join(
+        process.cwd(),
+        'dist',
+        '.playwright',
+        'diagnostics',
+      );
       await fs.promises.mkdir(diagnosticsDir, { recursive: true });
       const screenshotPath = path.join(
         diagnosticsDir,

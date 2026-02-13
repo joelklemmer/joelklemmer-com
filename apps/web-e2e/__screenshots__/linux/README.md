@@ -1,10 +1,16 @@
 # Linux visual baselines
 
-CI runs on ubuntu-latest and **compares only against this directory** (linux baselines). Local runs may use `win32` or `darwin` snapshot dirs; only this directory is committed and used in CI. The Playwright visual config uses `snapshotPathTemplate: __screenshots__/linux/{arg}{ext}` when `CI=true`.
+CI (visual job) runs on **ubuntu-22.04** and compares only against this directory. Local runs may use `win32` or `darwin` snapshot dirs; only this directory is committed and used in CI. The Playwright visual config uses `snapshotPathTemplate: __screenshots__/linux/{arg}{ext}` when `CI=true`.
 
-To generate or update baselines:
+## Guardrails
 
-1. **Recommended:** Run the workflow from the Actions tab: "Update Linux visual baselines" → "Run workflow" (choose your branch). The workflow builds the app, runs the visual suite with `--update-snapshots`, then commits only changes under `apps/web-e2e/__screenshots__/linux/` (`.png` files and this README). Do not commit other snapshot dirs or test-output diffs.
-2. **Alternative:** Run the visual suite on a Linux environment (WSL2 or Linux VM) with `CI=true`: `RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose`, then commit the new or changed files under `__screenshots__/linux/`.
+- **Baselines must be generated on ubuntu-22.04** with `PLAYWRIGHT_BROWSERS_PATH=0`. Font rasterization and layout differ by OS; ubuntu-latest can change over time; pinning ensures reproducibility.
+- **Local Windows (or macOS) snapshots are not acceptable** for CI baselines. They will cause drift and fail the visual job.
+- **Single canonical method:** The workflow "Update Linux visual baselines" (Actions → Run workflow on your branch).
+
+## How to update baselines
+
+1. **Recommended:** Actions tab → "Update Linux visual baselines" → Run workflow (select your branch). The workflow uses `ubuntu-22.04`, `PLAYWRIGHT_BROWSERS_PATH=0`, and `__E2E__=true`; builds the app; runs the visual suite with `--update-snapshots`; commits only `apps/web-e2e/__screenshots__/linux/*.png` and this README.
+2. **Alternative (Linux only):** On ubuntu-22.04 with `PLAYWRIGHT_BROWSERS_PATH=0`: `CI=true RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose`, then commit the changed files under `__screenshots__/linux/`. Do not use Windows or macOS for baseline generation.
 
 See `docs/audit/lighthouse-visual-fix-report.md` §5 for the full snapshot strategy.

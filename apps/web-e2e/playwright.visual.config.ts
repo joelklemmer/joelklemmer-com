@@ -8,7 +8,7 @@ import { workspaceRoot } from '@nx/devkit';
 
 const baseURL = process.env['BASE_URL'] ?? 'http://127.0.0.1:3000';
 const isCi = !!process.env['CI'];
-/** CI runs on ubuntu-latest; local may be win32/darwin. Compare like-to-like to avoid font/layout drift. */
+/** CI runs on ubuntu-22.04; local may be win32/darwin. Compare like-to-like to avoid font/layout drift. */
 const snapshotPlatform = isCi ? 'linux' : process.platform;
 const webServerCommand = isCi
   ? 'pnpm nx build web && pnpm nx start web --port=3000'

@@ -2,6 +2,7 @@
 # CI compares against apps/web-e2e/__screenshots__/linux/; this workflow creates/updates those files.
 # Run from Actions tab → "Update Linux visual baselines" → "Run workflow" (branch = your branch).
 # After run: commit the pushed changes (only __screenshots__/linux/*.png and README.md).
+# Determinism: ubuntu-22.04 pinned (not ubuntu-latest); PLAYWRIGHT_BROWSERS_PATH=0 for hermetic install.
 name: Update Linux visual baselines
 
 on:
@@ -14,14 +15,13 @@ concurrency:
 env:
   CI: true
   NX_CLOUD: 'false'
-  PLAYWRIGHT_BROWSERS_PATH: /home/runner/.cache/ms-playwright
   RATE_LIMIT_MODE: off
   PORT: '3000'
 
 jobs:
   update-baselines:
     name: update-linux-baselines
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     timeout-minutes: 30
     steps:
       - name: Checkout
@@ -56,21 +56,19 @@ jobs:
           key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml') }}
           restore-keys: ${{ runner.os }}-nx-
 
-      - name: Cache Playwright browsers
-        uses: actions/cache@v4
-        with:
-          path: /home/runner/.cache/ms-playwright
-          key: ${{ runner.os }}-ms-playwright-${{ hashFiles('pnpm-lock.yaml') }}
-          restore-keys: ${{ runner.os }}-ms-playwright-
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Install Playwright browsers
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: '0'
         run: pnpm exec playwright install --with-deps chromium
 
       - name: Generate Linux visual baselines
-        run: RATE_LIMIT_MODE=off pnpm nx run web:visual -- --update-snapshots --verbose
+        env:
+          __E2E__: 'true'
+          PLAYWRIGHT_BROWSERS_PATH: '0'
+        run: pnpm nx run web:visual -- --update-snapshots --verbose
 
       - name: Commit and push Linux baselines
         run: |
