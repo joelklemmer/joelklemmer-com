@@ -81,7 +81,7 @@ jobs:
         with:
           branch: ci/update-linux-visual-baselines
           add-paths: apps/web-e2e/__screenshots__/linux/
-          commit-message: "chore(ci): update Linux visual baselines"
-          title: "chore(ci): update Linux visual baselines"
-          body: "Automated baseline refresh from ubuntu-22.04 CI."
+          commit-message: 'chore(ci): update Linux visual baselines'
+          title: 'chore(ci): update Linux visual baselines'
+          body: 'Automated baseline refresh from ubuntu-22.04 CI.'
           delete-branch: true
