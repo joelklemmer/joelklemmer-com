@@ -1,12 +1,16 @@
 # One-time or on-demand: generate Linux visual baselines so CI visual job passes.
 # CI compares against apps/web-e2e/__screenshots__/linux/; this workflow creates/updates those files.
 # Run from Actions tab → "Update Linux visual baselines" → "Run workflow" (branch = your branch).
-# After run: commit the pushed changes (only __screenshots__/linux/*.png and README.md).
+# Creates a PR with baseline changes; no direct push to main (works with protected branches).
 # Determinism: ubuntu-22.04 pinned (not ubuntu-latest); PLAYWRIGHT_BROWSERS_PATH=0 for hermetic install.
 name: Update Linux visual baselines
 
 on:
   workflow_dispatch: {}
+
+permissions:
+  contents: write
+  pull-requests: write
 
 concurrency:
   group: update-baselines-${{ github.ref }}
@@ -27,7 +31,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -71,16 +76,12 @@ jobs:
           RATE_LIMIT_MODE: off
         run: pnpm nx run web:visual -- --update-snapshots --verbose
 
-      - name: Commit and push Linux baselines
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add apps/web-e2e/__screenshots__/linux/
-          if ! git diff --cached --quiet; then
-            git status
-            git diff --cached --stat
-            git commit -m "chore(ci): update Linux visual baselines [workflow]"
-            git push origin HEAD:${{ github.ref_name }}
-          else
-            echo "No changes under apps/web-e2e/__screenshots__/linux/ to commit."
-          fi
+      - name: Create PR with Linux baselines
+        uses: peter-evans/create-pull-request@v6
+        with:
+          branch: ci/update-linux-visual-baselines
+          add-paths: apps/web-e2e/__screenshots__/linux/
+          commit-message: "chore(ci): update Linux visual baselines"
+          title: "chore(ci): update Linux visual baselines"
+          body: "Automated baseline refresh from ubuntu-22.04 CI."
+          delete-branch: true
