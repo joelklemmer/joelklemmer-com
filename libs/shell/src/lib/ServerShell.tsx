@@ -67,9 +67,9 @@ export function ServerShell({
           <div
             data-system="masthead-bar"
             data-testid="masthead-bar"
-            className="masthead-bar flex flex-nowrap items-center justify-between w-full gap-6 md:gap-8"
+            className="masthead-bar grid grid-cols-[auto,1fr,auto] items-center w-full min-w-0 gap-6 md:gap-8"
           >
-            <div className="masthead-identity flex-shrink-0">
+            <div className="masthead-identity flex-shrink-0 min-w-0">
               <Link
                 href={homeHref}
                 className={`masthead-identity-link ${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center min-h-[var(--masthead-bar-height)]`}

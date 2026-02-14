@@ -1,13 +1,9 @@
 import '../global.css';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { cookies, headers } from 'next/headers';
+import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
-import {
-  getMessages,
-  getTranslations,
-  setRequestLocale,
-} from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 /* Locale layout is the single composition point for shell; allowed to import i18n/shell/sections. */
 // eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
@@ -23,8 +19,7 @@ import { FooterSection } from '@joelklemmer/sections';
 
 import { routing } from '../../i18n/routing';
 import { DeferredIslandsScript } from './_deferred/DeferredIslands.server';
-import { HeaderDeferredSSR } from './_deferred/HeaderDeferredSSR';
-import { PATHNAME_HEADER } from '../../middleware';
+import { HeaderDeferredSlot } from './_deferred/HeaderDeferredSlot';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -75,24 +70,10 @@ export default async function LocaleLayout({
     ? (locale as typeof defaultLocale)
     : defaultLocale;
   setRequestLocale(resolvedLocale);
-  const [cookieStore, headersList] = await Promise.all([cookies(), headers()]);
-  const rawPath = headersList.get(PATHNAME_HEADER) || `/${resolvedLocale}`;
-  const pathSegments = rawPath.replace(/^\/+/, '').split('/').filter(Boolean);
-  const pathWithoutLocale =
-    pathSegments.length > 0 &&
-    routing.locales.includes(pathSegments[0] as never)
-      ? '/' + pathSegments.slice(1).join('/')
-      : rawPath.startsWith('/')
-        ? rawPath
-        : `/${rawPath}`;
+  const cookieStore = await cookies();
   const common = await getTranslations('common');
   const nav = await getTranslations('nav');
   const footer = await getTranslations('footer');
-  const messages = await getMessages();
-  const commonMsg = messages as {
-    common?: { languages?: Record<string, string> };
-  };
-  const languageLabels = commonMsg.common?.languages ?? {};
 
   const navItems = PRIMARY_NAV_ENTRIES.map((entry) => ({
     href: entry.path
@@ -138,24 +119,7 @@ export default async function LocaleLayout({
           <FooterSection label={footer('label')} links={footerItems} />
         }
         languageLinksSlot={null}
-        headerDeferredSlot={
-          <HeaderDeferredSSR
-            themeToggleLabel={common('a11y.themeLabel')}
-            languageSwitcherLabel={common('a11y.languageSwitcherLabel')}
-            accessibilityLabel={common('a11y.accessibilityPanelLabel')}
-            labels={languageLabels}
-            locales={routing.locales}
-            currentLocale={resolvedLocale}
-            pathWithoutLocale={pathWithoutLocale}
-            contrastLabel={common('a11y.contrastLabel')}
-            contrastDefaultLabel={common('a11y.contrastDefault')}
-            contrastHighLabel={common('a11y.contrastHigh')}
-            motionLabel={common('a11y.motionLabel')}
-            textSizeLabel={common('a11y.textSizeLabel')}
-            textSizeDefaultLabel={common('a11y.textSizeDefault')}
-            textSizeLargeLabel={common('a11y.textSizeLarge')}
-          />
-        }
+        headerDeferredSlot={<HeaderDeferredSlot locale={resolvedLocale} />}
       >
         {children}
       </ServerShell>

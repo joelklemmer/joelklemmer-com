@@ -1,5 +1,7 @@
 export { ServerShell } from './lib/ServerShell';
 export type { ServerShellProps, ServerShellNavItem } from './lib/ServerShell';
+export { HeaderControlsClient } from './lib/HeaderControlsClient';
+export type { HeaderControlsClientProps } from './lib/HeaderControlsClient';
 export { ClientShellCritical } from './lib/ClientShellCritical';
 export type { ClientShellCriticalProps } from './lib/ClientShellCritical';
 export { ClientShellDeferred } from './lib/ClientShellDeferred';
