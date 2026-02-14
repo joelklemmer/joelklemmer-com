@@ -146,7 +146,7 @@ export function MediaLibraryClient({
           {labels.filterByKind}
         </h2>
         <nav
-          className="flex flex-nowrap gap-2 w-full min-w-0 overflow-x-auto"
+          className="flex flex-nowrap gap-2 w-full min-w-0 overflow-x-auto min-h-[35px] items-center"
           aria-label={labels.filterByKind}
           role="navigation"
           data-testid="media-filter-row"
