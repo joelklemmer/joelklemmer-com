@@ -17,6 +17,7 @@
  * - Persistence across reloads
  */
 
+import { createPortal } from 'react-dom';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useContrast } from './ContrastProvider';
@@ -33,6 +34,10 @@ export function AccessibilityPanel() {
   const { preferences, setMotion, setTextSize, setUnderlineLinks } = useACP();
 
   const [isOpen, setIsOpen] = useState(false);
+  const [panelPos, setPanelPos] = useState<{
+    top: number;
+    insetInlineEnd: number;
+  } | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const previouslyFocusedElementRef = useRef<HTMLElement | null>(null);
@@ -41,9 +46,18 @@ export function AccessibilityPanel() {
     setIsOpen((prev) => {
       const newIsOpen = !prev;
       if (newIsOpen) {
-        // Store the currently focused element before opening
         previouslyFocusedElementRef.current =
           document.activeElement as HTMLElement;
+        if (triggerRef.current) {
+          const rect = triggerRef.current.getBoundingClientRect();
+          const isRtl = document.documentElement.dir === 'rtl';
+          setPanelPos({
+            top: rect.bottom + 4,
+            insetInlineEnd: isRtl ? rect.left : window.innerWidth - rect.right,
+          });
+        }
+      } else {
+        setPanelPos(null);
       }
       return newIsOpen;
     });
@@ -51,7 +65,7 @@ export function AccessibilityPanel() {
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
-    // Return focus to trigger or previously focused element
+    setPanelPos(null);
     requestAnimationFrame(() => {
       const elementToFocus =
         triggerRef.current || previouslyFocusedElementRef.current;
@@ -202,102 +216,111 @@ export function AccessibilityPanel() {
         </span>
       </button>
 
-      {isOpen && (
-        <div
-          ref={panelRef}
-          id={PANEL_ID}
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby={TITLE_ID}
-          className="absolute end-0 top-full mt-1 z-50 w-64 rounded-md border border-border bg-surface shadow-lg p-4 focus:outline-none"
-        >
-          <h2 id={TITLE_ID} className={visuallyHiddenClass}>
-            {common('a11y.accessibilityPanelLabel')}
-          </h2>
+      {isOpen &&
+        panelPos &&
+        typeof document !== 'undefined' &&
+        createPortal(
+          <div
+            ref={panelRef}
+            id={PANEL_ID}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby={TITLE_ID}
+            className="fixed z-[9999] w-64 rounded-md border border-border bg-surface shadow-lg p-4 focus:outline-none"
+            style={{
+              top: panelPos.top,
+              insetInlineEnd: panelPos.insetInlineEnd,
+              insetInlineStart: 'auto',
+            }}
+          >
+            <h2 id={TITLE_ID} className={visuallyHiddenClass}>
+              {common('a11y.accessibilityPanelLabel')}
+            </h2>
 
-          <div className="space-y-4">
-            {/* Theme controlled by masthead toggle only; no duplicate control here */}
+            <div className="space-y-4">
+              {/* Theme controlled by masthead toggle only; no duplicate control here */}
 
-            {/* Contrast */}
-            <div>
-              <label
-                htmlFor="a11y-contrast"
-                className="block text-sm font-medium text-text mb-2"
-              >
-                {common('a11y.contrastLabel')}
-              </label>
-              <select
-                id="a11y-contrast"
-                value={contrast}
-                onChange={(e) =>
-                  setContrast(e.target.value as 'default' | 'high')
-                }
-                className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
-                aria-label={common('a11y.contrastLabel')}
-              >
-                <option value="default">
-                  {common('a11y.contrastDefault')}
-                </option>
-                <option value="high">{common('a11y.contrastHigh')}</option>
-              </select>
-            </div>
-
-            {/* Motion */}
-            <div>
-              <label className="flex items-center gap-2 text-sm text-text">
-                <input
-                  type="checkbox"
-                  checked={preferences.motion === 'reduced'}
+              {/* Contrast */}
+              <div>
+                <label
+                  htmlFor="a11y-contrast"
+                  className="block text-sm font-medium text-text mb-2"
+                >
+                  {common('a11y.contrastLabel')}
+                </label>
+                <select
+                  id="a11y-contrast"
+                  value={contrast}
                   onChange={(e) =>
-                    setMotion(e.target.checked ? 'reduced' : 'default')
+                    setContrast(e.target.value as 'default' | 'high')
                   }
-                  className={`${focusRingClass} rounded border-border text-accent`}
-                  aria-label={common('a11y.motionLabel')}
-                />
-                <span>{common('a11y.motionLabel')}</span>
-              </label>
-            </div>
+                  className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
+                  aria-label={common('a11y.contrastLabel')}
+                >
+                  <option value="default">
+                    {common('a11y.contrastDefault')}
+                  </option>
+                  <option value="high">{common('a11y.contrastHigh')}</option>
+                </select>
+              </div>
 
-            {/* Text Size */}
-            <div>
-              <label
-                htmlFor="a11y-text-size"
-                className="block text-sm font-medium text-text mb-2"
-              >
-                {common('a11y.textSizeLabel')}
-              </label>
-              <select
-                id="a11y-text-size"
-                value={preferences.textSize}
-                onChange={(e) =>
-                  setTextSize(e.target.value as 'default' | 'large')
-                }
-                className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
-                aria-label={common('a11y.textSizeLabel')}
-              >
-                <option value="default">
-                  {common('a11y.textSizeDefault')}
-                </option>
-                <option value="large">{common('a11y.textSizeLarge')}</option>
-              </select>
-            </div>
+              {/* Motion */}
+              <div>
+                <label className="flex items-center gap-2 text-sm text-text">
+                  <input
+                    type="checkbox"
+                    checked={preferences.motion === 'reduced'}
+                    onChange={(e) =>
+                      setMotion(e.target.checked ? 'reduced' : 'default')
+                    }
+                    className={`${focusRingClass} rounded border-border text-accent`}
+                    aria-label={common('a11y.motionLabel')}
+                  />
+                  <span>{common('a11y.motionLabel')}</span>
+                </label>
+              </div>
 
-            {/* Underline Links */}
-            <div>
-              <label className="flex items-center gap-2 text-sm text-text">
-                <input
-                  type="checkbox"
-                  checked={preferences.underlineLinks}
-                  onChange={(e) => setUnderlineLinks(e.target.checked)}
-                  className={`${focusRingClass} rounded border-border text-accent`}
-                  aria-label={common('a11y.underlineLinksLabel')}
-                />
-                <span>{common('a11y.underlineLinksLabel')}</span>
-              </label>
+              {/* Text Size */}
+              <div>
+                <label
+                  htmlFor="a11y-text-size"
+                  className="block text-sm font-medium text-text mb-2"
+                >
+                  {common('a11y.textSizeLabel')}
+                </label>
+                <select
+                  id="a11y-text-size"
+                  value={preferences.textSize}
+                  onChange={(e) =>
+                    setTextSize(e.target.value as 'default' | 'large')
+                  }
+                  className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
+                  aria-label={common('a11y.textSizeLabel')}
+                >
+                  <option value="default">
+                    {common('a11y.textSizeDefault')}
+                  </option>
+                  <option value="large">{common('a11y.textSizeLarge')}</option>
+                </select>
+              </div>
+
+              {/* Underline Links */}
+              <div>
+                <label className="flex items-center gap-2 text-sm text-text">
+                  <input
+                    type="checkbox"
+                    checked={preferences.underlineLinks}
+                    onChange={(e) => setUnderlineLinks(e.target.checked)}
+                    className={`${focusRingClass} rounded border-border text-accent`}
+                    aria-label={common('a11y.underlineLinksLabel')}
+                  />
+                  <span>{common('a11y.underlineLinksLabel')}</span>
+                </label>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }

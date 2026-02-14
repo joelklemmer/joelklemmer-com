@@ -13,6 +13,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
 
   return {
     locale: resolvedLocale,
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     messages: await loadMessages(resolvedLocale, [
       'common',
       'nav',

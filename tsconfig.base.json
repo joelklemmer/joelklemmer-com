@@ -50,7 +50,8 @@
         "libs/telemetry-governance/src/index.ts"
       ],
       "@joelklemmer/perf": ["libs/perf/src/index.ts"],
-      "@joelklemmer/shell": ["libs/shell/src/index.ts"]
+      "@joelklemmer/shell": ["libs/shell/src/index.ts"],
+      "@joelklemmer/behavior-runtime": ["libs/behavior-runtime/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

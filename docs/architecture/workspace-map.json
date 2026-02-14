@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-14T15:34:00.865Z",
+  "generatedAt": "2026-02-14T16:51:14.314Z",
   "projects": [
     {
       "name": "a11y",
@@ -41,6 +41,12 @@
       "name": "authority-telemetry",
       "type": "lib",
       "root": "libs/authority-telemetry",
+      "targetCount": 1
+    },
+    {
+      "name": "behavior-runtime",
+      "type": "lib",
+      "root": "libs/behavior-runtime",
       "targetCount": 1
     },
     {
@@ -141,6 +147,11 @@
     }
   ],
   "dependencies": [
+    {
+      "source": "a11y",
+      "target": "behavior-runtime",
+      "type": "static"
+    },
     {
       "source": "aec",
       "target": "authority-orchestration",
@@ -298,17 +309,12 @@
     },
     {
       "source": "shell",
-      "target": "authority-density",
+      "target": "behavior-runtime",
       "type": "static"
     },
     {
       "source": "shell",
-      "target": "compliance",
-      "type": "static"
-    },
-    {
-      "source": "shell",
-      "target": "evaluator-mode",
+      "target": "i18n",
       "type": "static"
     },
     {
@@ -319,6 +325,11 @@
     {
       "source": "ui",
       "target": "a11y",
+      "type": "static"
+    },
+    {
+      "source": "ui",
+      "target": "behavior-runtime",
       "type": "static"
     },
     {
@@ -413,7 +424,7 @@
     }
   ],
   "stats": {
-    "projectCount": 23,
-    "dependencyCount": 54
+    "projectCount": 24,
+    "dependencyCount": 55
   }
 }

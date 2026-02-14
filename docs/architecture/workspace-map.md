@@ -1,11 +1,11 @@
 # Workspace map
 
-Generated at 2026-02-14T15:34:00.865Z.
+Generated at 2026-02-14T16:51:14.314Z.
 
 ## Summary
 
-- **Projects:** 23
-- **Dependencies:** 54
+- **Projects:** 24
+- **Dependencies:** 55
 
 ## Projects
 
@@ -18,6 +18,7 @@ Generated at 2026-02-14T15:34:00.865Z.
 | authority-orchestration | lib | libs/authority-orchestration | 1 |
 | authority-signals | lib | libs/authority-signals | 1 |
 | authority-telemetry | lib | libs/authority-telemetry | 1 |
+| behavior-runtime | lib | libs/behavior-runtime | 1 |
 | compliance | lib | libs/compliance | 1 |
 | content | lib | libs/content | 1 |
 | docs | lib | docs | 3 |
@@ -39,6 +40,7 @@ Generated at 2026-02-14T15:34:00.865Z.
 
 | Source | Target | Type |
 |--------|--------|------|
+| a11y | behavior-runtime | static |
 | aec | authority-orchestration | static |
 | aec | authority-signals | static |
 | aec | evaluator-mode | static |
@@ -70,11 +72,11 @@ Generated at 2026-02-14T15:34:00.865Z.
 | sections | ui | static |
 | seo | i18n | static |
 | shell | a11y | static |
-| shell | authority-density | static |
-| shell | compliance | static |
-| shell | evaluator-mode | static |
+| shell | behavior-runtime | static |
+| shell | i18n | static |
 | shell | ui | static |
 | ui | a11y | static |
+| ui | behavior-runtime | static |
 | ui | i18n | static |
 | web | a11y | static |
 | web | aec | static |

@@ -144,5 +144,7 @@ export type { ConsentBannerSSRProps } from './lib/ConsentBannerSSR';
 export { ConsentBannerSlot } from './lib/ConsentBannerSlot';
 export type { ConsentBannerSlotProps } from './lib/ConsentBannerSlot';
 export { ConsentActionsIsland } from './lib/ConsentActionsIsland';
+export { ConsentClient } from './lib/ConsentClient';
+export type { ConsentClientProps } from './lib/ConsentClient';
 
 export { ConsentPreferencesForm } from './lib/ConsentPreferencesForm';

@@ -9,17 +9,17 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
 import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
-import { ServerShell } from '@joelklemmer/shell';
+import { ServerShell, MobileNavSlot } from '@joelklemmer/shell';
 import {
   getConsentFromCookieV2,
   canLoadAnalyticsV2,
-  ConsentBannerSSR,
 } from '@joelklemmer/compliance';
 import { FooterSection } from '@joelklemmer/sections';
 
 import { routing } from '../../i18n/routing';
 import { DeferredIslandsScript } from './_deferred/DeferredIslands.server';
 import { HeaderDeferredSlot } from './_deferred/HeaderDeferredSlot';
+import { ConsentDeferredSlot } from './_deferred/ConsentDeferredSlot';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -120,15 +120,25 @@ export default async function LocaleLayout({
         }
         languageLinksSlot={null}
         headerDeferredSlot={<HeaderDeferredSlot locale={resolvedLocale} />}
+        mobileNavSlot={
+          <MobileNavSlot
+            navItems={navItems}
+            navLabel={common('a11y.navLabel')}
+          />
+        }
+        consentSlot={
+          <ConsentDeferredSlot
+            showBanner={!initialConsentState?.choiceMade}
+            preferencesHref={`/${resolvedLocale}/preferences`}
+            locale={resolvedLocale}
+          />
+        }
       >
         {children}
       </ServerShell>
       <DeferredIslandsScript
         initialAnalyticsConsent={initialAnalyticsConsent}
       />
-      {!initialConsentState?.choiceMade && (
-        <ConsentBannerSSR preferencesHref={`/${resolvedLocale}/preferences`} />
-      )}
     </>
   );
 }

@@ -273,7 +273,8 @@
         "env": {
           "NEXT_PUBLIC_SITE_URL": "https://example.invalid",
           "NEXT_PUBLIC_IDENTITY_SAME_AS": "https://example.invalid/ci",
-          "STANDALONE": "1"
+          "STANDALONE": "1",
+          "RATE_LIMIT_MODE": "off"
         },
         "commands": [
           "node -e \"try{require('fs').rmSync(require('path').join(process.cwd(),'apps/web/.next'),{recursive:true,force:true});}catch(e){}\"",

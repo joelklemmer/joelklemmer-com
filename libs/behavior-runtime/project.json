@@ -1,0 +1,7 @@
+{
+  "name": "behavior-runtime",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/behavior-runtime/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:behavior-runtime"]
+}

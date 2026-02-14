@@ -596,12 +596,15 @@ section.section-shell:last-child {
   min-height: var(--masthead-touch-min);
 }
 
-/* Tap target spacing: ≥24px between adjacent controls (WCAG 2.2 2.5.8) */
+/* Tap target spacing: ≥24px between adjacent controls (WCAG 2.2 2.5.8).
+   Padding (not just margin) prevents nav overflow from encroaching on utilities. */
 .masthead-nav {
   margin-inline-end: var(--tap-target-spacing, 12px);
+  padding-inline-end: var(--tap-target-spacing, 12px);
 }
 .masthead-utilities {
   margin-inline-start: var(--tap-target-spacing, 12px);
+  padding-inline-start: var(--tap-target-spacing, 12px);
 }
 
 /* Masthead icons: same size, stroke, and baseline alignment (no float) */

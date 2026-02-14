@@ -84,6 +84,7 @@ const PATH_ALIASES: [string, string][] = [
   ],
   ['@joelklemmer/perf', 'libs/perf/src/index.ts'],
   ['@joelklemmer/shell', 'libs/shell/src/index.ts'],
+  ['@joelklemmer/behavior-runtime', 'libs/behavior-runtime/src/index.ts'],
 ];
 
 function hasUseClient(content: string): boolean {

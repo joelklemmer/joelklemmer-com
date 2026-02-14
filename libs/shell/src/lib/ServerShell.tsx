@@ -34,6 +34,10 @@ export interface ServerShellProps {
   languageLinksSlot?: ReactNode;
   /** Deferred: theme, contrast, cookie, a11y panel, language popover, etc. Mounted after first paint; container reserved to avoid CLS. */
   headerDeferredSlot: ReactNode;
+  /** Mobile nav: shadcn Sheet (hamburger + nav links). Replaces details/summary when provided. */
+  mobileNavSlot?: ReactNode;
+  /** Consent banner + client island when no choice made. Rendered at end of layout-root. */
+  consentSlot?: ReactNode;
   children: ReactNode;
   mainId?: string;
 }
@@ -50,6 +54,8 @@ export function ServerShell({
   headerCriticalSlot,
   languageLinksSlot,
   headerDeferredSlot,
+  mobileNavSlot,
+  consentSlot,
   children,
   mainId = MAIN_CONTENT_ID,
 }: ServerShellProps) {
@@ -63,7 +69,7 @@ export function ServerShell({
         data-testid="masthead"
         className="relative z-40 border-b border-border"
       >
-        <Container className="py-2 md:py-3">
+        <Container variant="full" className="py-2 md:py-3">
           <div
             data-system="masthead-bar"
             data-testid="masthead-bar"
@@ -96,45 +102,54 @@ export function ServerShell({
                     </li>
                   ))}
                 </ul>
-                {/* Mobile: zero-JS open/close via details/summary; no client Nav. */}
-                <details
-                  className="nav-primary-mobile md:hidden relative flex items-center"
-                  aria-label={navLabel}
-                  data-testid="masthead-mobile-nav"
-                >
-                  <summary
-                    id="primary-nav-trigger"
-                    className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px] min-w-[44px]`}
+                {/* Mobile: shadcn Sheet when mobileNavSlot provided; else details/summary fallback */}
+                {mobileNavSlot != null ? (
+                  <div
+                    className="nav-primary-mobile md:hidden relative flex items-center"
+                    data-testid="masthead-mobile-nav"
                   >
-                    <span className={visuallyHiddenClass}>{navLabel}</span>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      aria-hidden
+                    {mobileNavSlot}
+                  </div>
+                ) : (
+                  <details
+                    className="nav-primary-mobile md:hidden relative flex items-center"
+                    aria-label={navLabel}
+                    data-testid="masthead-mobile-nav"
+                  >
+                    <summary
+                      id="primary-nav-trigger"
+                      className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px] min-w-[44px]`}
                     >
-                      <path d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                  </summary>
-                  <ul className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start py-1 list-none m-0">
-                    {navItems.map((item) => (
-                      <li key={item.href}>
-                        <Link
-                          href={item.href}
-                          prefetch={false}
-                          {...(item.rank && { 'data-nav-rank': item.rank })}
-                          className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start px-3 py-2 rounded-sm hover:bg-border/50`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
+                      <span className={visuallyHiddenClass}>{navLabel}</span>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden
+                      >
+                        <path d="M4 6h16M4 12h16M4 18h16" />
+                      </svg>
+                    </summary>
+                    <ul className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start py-1 list-none m-0">
+                      {navItems.map((item) => (
+                        <li key={item.href}>
+                          <Link
+                            href={item.href}
+                            prefetch={false}
+                            {...(item.rank && { 'data-nav-rank': item.rank })}
+                            className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start px-3 py-2 rounded-sm hover:bg-border/50`}
+                          >
+                            {item.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
               </nav>
             </div>
             <div
@@ -166,6 +181,7 @@ export function ServerShell({
       <footer aria-label={footerLabel} className="border-t border-border">
         <Container className="py-6">{footerContent}</Container>
       </footer>
+      {consentSlot != null ? consentSlot : null}
     </div>
   );
 }

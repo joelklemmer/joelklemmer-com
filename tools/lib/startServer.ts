@@ -8,8 +8,8 @@ import path from 'node:path';
 import getPort from 'get-port';
 
 const workspaceRoot = path.resolve(__dirname, '../..');
-const READY_PATH = '/en/';
-const SERVER_READY_TIMEOUT_MS = 120_000;
+const READY_PATH = '/en';
+const SERVER_READY_TIMEOUT_MS = 180_000;
 const READY_POLL_MS = 500;
 const SIGTERM_WAIT_MS = 8000;
 
@@ -23,7 +23,7 @@ async function waitForReady(
   baseUrl: string,
   timeoutMs: number,
 ): Promise<{ ok: boolean; body?: string }> {
-  const readyUrl = baseUrl.replace(/\/?$/, '') + READY_PATH;
+  const readyUrl = baseUrl.replace(/\/$/, '') + READY_PATH;
   const deadline = Date.now() + timeoutMs;
   while (Date.now() < deadline) {
     try {
@@ -84,17 +84,17 @@ async function resolvePort(requested?: number): Promise<number> {
 }
 
 /**
- * Start production web server via Nx from repo root; poll GET /en/ until 200 and body
+ * Start production web server via nx start web (next start); poll GET /en until 200 and body
  * contains stable markers (html lang + masthead). Returns baseUrl, port, and stop().
  * stop() sends SIGTERM, waits up to SIGTERM_WAIT_MS, then SIGKILL. Caller must call stop() to teardown.
- * When port is not provided and PORT env is not set, uses a dynamic free port.
+ * Run nx run web:build first.
  */
 export async function startServer(port?: number): Promise<StartServerResult> {
   const resolvedPort = await resolvePort(port);
   const baseUrl = `http://127.0.0.1:${resolvedPort}`;
-  /** Determinism: server must not rate-limit e2e requests (visual, a11y, lighthouse). */
   const env = {
     ...process.env,
+    NODE_ENV: 'production',
     PORT: String(resolvedPort),
     RATE_LIMIT_MODE: process.env.RATE_LIMIT_MODE ?? 'off',
   };

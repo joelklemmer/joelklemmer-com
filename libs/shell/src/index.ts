@@ -10,3 +10,7 @@ export { DeferMount } from './lib/DeferMount';
 export type { DeferMountProps } from './lib/DeferMount';
 export { ShellDeferredControls } from './lib/ShellDeferredControls';
 export type { ShellDeferredControlsProps } from './lib/ShellDeferredControls';
+export { MobileNavSheet } from './lib/MobileNavSheet';
+export type { MobileNavSheetProps } from './lib/MobileNavSheet';
+export { MobileNavSlot } from './lib/MobileNavSlot';
+export type { MobileNavSlotProps } from './lib/MobileNavSlot';

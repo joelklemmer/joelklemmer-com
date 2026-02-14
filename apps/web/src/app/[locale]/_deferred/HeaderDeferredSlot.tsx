@@ -11,10 +11,12 @@ export interface HeaderDeferredSlotProps {
 
 export async function HeaderDeferredSlot({ locale }: HeaderDeferredSlotProps) {
   const messages = await getMessages();
+  const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return (
     <HeaderControlsClient
       locale={locale}
       messages={messages as Record<string, unknown>}
+      timeZone={timeZone}
     />
   );
 }

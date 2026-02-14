@@ -7,6 +7,7 @@
  * - Persistence across reloads
  * - Consistent application to document root
  * - SSR-safe hydration
+ * Delegates to BehaviorRuntime for storage and apply.
  */
 
 import {
@@ -17,24 +18,28 @@ import {
   type ReactNode,
 } from 'react';
 import {
-  type ACPPreferences,
   type MotionPreference,
   type TextSizePreference,
-  type UnderlineLinksPreference,
-  applyMotionPreference,
-  applyTextSizePreference,
-  applyUnderlineLinksPreference,
-  storeMotionPreference,
-  storeTextSizePreference,
-  storeUnderlineLinksPreference,
-  initializeACPPreferences,
-} from './acp';
+  getStoredMotion,
+  getStoredTextSize,
+  getStoredUnderlineLinks,
+  setMotion as setMotionStorage,
+  setTextSize as setTextSizeStorage,
+  setUnderlineLinks as setUnderlineLinksStorage,
+  applyDocumentAttrs,
+} from '@joelklemmer/behavior-runtime';
+
+interface ACPPreferences {
+  motion: MotionPreference;
+  textSize: TextSizePreference;
+  underlineLinks: boolean;
+}
 
 interface ACPContextValue {
   preferences: ACPPreferences;
   setMotion: (motion: MotionPreference) => void;
   setTextSize: (textSize: TextSizePreference) => void;
-  setUnderlineLinks: (underlineLinks: UnderlineLinksPreference) => void;
+  setUnderlineLinks: (underlineLinks: boolean) => void;
 }
 
 const ACPContext = createContext<ACPContextValue | undefined>(undefined);
@@ -50,30 +55,27 @@ export function ACPProvider({ children }: { children: ReactNode }) {
   // SSR-safe hydration: initialize from localStorage and apply to document
   useEffect(() => {
     setMounted(true);
-    const stored = initializeACPPreferences();
+    const stored: ACPPreferences = {
+      motion: getStoredMotion(),
+      textSize: getStoredTextSize(),
+      underlineLinks: getStoredUnderlineLinks(),
+    };
     setPreferencesState(stored);
+    applyDocumentAttrs(stored);
   }, []);
 
-  // Apply motion preference
+  // Apply and persist when preferences change
   useEffect(() => {
     if (!mounted) return;
-    applyMotionPreference(preferences.motion);
-    storeMotionPreference(preferences.motion);
-  }, [preferences.motion, mounted]);
-
-  // Apply text size preference
-  useEffect(() => {
-    if (!mounted) return;
-    applyTextSizePreference(preferences.textSize);
-    storeTextSizePreference(preferences.textSize);
-  }, [preferences.textSize, mounted]);
-
-  // Apply underline links preference
-  useEffect(() => {
-    if (!mounted) return;
-    applyUnderlineLinksPreference(preferences.underlineLinks);
-    storeUnderlineLinksPreference(preferences.underlineLinks);
-  }, [preferences.underlineLinks, mounted]);
+    setMotionStorage(preferences.motion);
+    setTextSizeStorage(preferences.textSize);
+    setUnderlineLinksStorage(preferences.underlineLinks);
+  }, [
+    preferences.motion,
+    preferences.textSize,
+    preferences.underlineLinks,
+    mounted,
+  ]);
 
   const setMotion = (motion: MotionPreference) => {
     setPreferencesState((prev) => ({ ...prev, motion }));
@@ -83,7 +85,7 @@ export function ACPProvider({ children }: { children: ReactNode }) {
     setPreferencesState((prev) => ({ ...prev, textSize }));
   };
 
-  const setUnderlineLinks = (underlineLinks: UnderlineLinksPreference) => {
+  const setUnderlineLinks = (underlineLinks: boolean) => {
     setPreferencesState((prev) => ({ ...prev, underlineLinks }));
   };
 
