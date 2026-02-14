@@ -2,7 +2,6 @@
  * Server-rendered consent banner. Renders immediately when no choice made (no client delay).
  * Buttons are enhanced by /deferred/islands.js which attaches click handlers (data-consent-action).
  */
-import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { focusRingClass } from '@joelklemmer/a11y';
 
@@ -58,16 +57,11 @@ export async function ConsentBannerSSR({
           <button
             type="button"
             data-consent-action="details"
+            data-preferences-href={preferencesHref}
             className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-text hover:bg-border`}
           >
-            {t('details')}
+            {t('managePreferences')}
           </button>
-          <Link
-            href={preferencesHref}
-            className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-text hover:bg-border`}
-          >
-            {t('customise')}
-          </Link>
         </div>
       </div>
     </div>

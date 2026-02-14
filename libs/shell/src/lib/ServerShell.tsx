@@ -61,13 +61,13 @@ export function ServerShell({
       <header
         aria-label={headerLabel}
         data-testid="masthead"
-        className="border-b border-border"
+        className="relative z-40 border-b border-border"
       >
         <Container className="py-2 md:py-3">
           <div
             data-system="masthead-bar"
             data-testid="masthead-bar"
-            className="masthead-bar flex flex-nowrap items-center w-full gap-8"
+            className="masthead-bar flex flex-nowrap items-center justify-between w-full gap-6 md:gap-8"
           >
             <div className="masthead-identity flex-shrink-0">
               <Link
@@ -82,7 +82,7 @@ export function ServerShell({
                 aria-label={navLabel}
                 className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
               >
-                <ul className="nav-primary-list hidden md:flex min-h-[var(--masthead-bar-height)]">
+                <ul className="nav-primary-list hidden md:flex flex-nowrap items-center gap-4 md:gap-6 min-h-[var(--masthead-bar-height)] whitespace-nowrap">
                   {navItems.map((item) => (
                     <li key={item.href} className="flex items-center h-full">
                       <Link
@@ -138,7 +138,7 @@ export function ServerShell({
               </nav>
             </div>
             <div
-              className="masthead-utilities-wrap flex-shrink min-w-0 overflow-x-auto overflow-y-hidden scroll-smooth [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className="masthead-utilities-wrap flex-shrink min-w-0 overflow-visible"
               data-masthead-utilities
             >
               <div className="masthead-utilities masthead-nav-secondary flex flex-nowrap items-center gap-6 min-h-[var(--masthead-bar-height)] shrink-0">

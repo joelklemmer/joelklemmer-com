@@ -333,7 +333,7 @@ html[data-motion='reduced'] .calc-card-material {
 
 .nav-primary-list {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   align-items: center;
   gap: var(--nav-primary-gap);
   margin-inline: 0;

@@ -68,6 +68,9 @@ export function ThemeToggle() {
       : common('a11y.themeSwitchToDark');
   const ariaLabel = `${common('a11y.themeLabel')}: ${currentLabel}. ${actionLabel}`;
 
+  /* Icon reflects target: Sun = click to go light (when dark), Moon = click to go dark (when light). */
+  const showSunIcon = resolvedTheme === 'dark';
+
   return (
     <button
       type="button"
@@ -79,11 +82,7 @@ export function ThemeToggle() {
       title={ariaLabel}
       className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
     >
-      {theme === 'dark' || resolvedTheme === 'dark' ? (
-        <MoonIcon />
-      ) : (
-        <SunIcon />
-      )}
+      {showSunIcon ? <SunIcon /> : <MoonIcon />}
       <span className={visuallyHiddenClass}>{ariaLabel}</span>
     </button>
   );

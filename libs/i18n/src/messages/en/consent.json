@@ -3,7 +3,8 @@
     "title": "Consent and data use",
     "description": "We use cookies and similar technologies for essential operation, analytics, and optional features. Choose how we may process your data.",
     "acceptAll": "Accept all",
-    "rejectNonEssential": "Reject non-essential",
+    "rejectNonEssential": "Reject all",
+    "managePreferences": "Manage preferences",
     "customise": "Customise",
     "bannerShort": "We use cookies for essential operation, analytics, and optional features. Choose how we process your data.",
     "details": "Details"

@@ -1,10 +1,11 @@
 'use client';
 
 /**
- * Full header controls suite: theme, contrast, ACP, cookie prefs, a11y panel, language popover, evaluator/density.
+ * Header controls: theme toggle, language switcher (globe), accessibility (settings).
  * Mounted after first paint (DeferMount) so it does not block LCP.
  * On mount, hides SSR language links so the popover takes over.
  * NextIntlClientProvider wraps this island only (not first paint).
+ * No cookie preferences in header (footer only).
  */
 import type { ReactNode } from 'react';
 import { useEffect } from 'react';
@@ -17,19 +18,14 @@ import {
   LanguageSwitcherPopover,
 } from '@joelklemmer/ui';
 import { ACPProvider } from '@joelklemmer/a11y';
-import { CookiePreferencesTrigger } from '@joelklemmer/compliance';
-import { EvaluatorModeProvider } from '@joelklemmer/evaluator-mode';
-import { DensityViewProvider } from '@joelklemmer/authority-density';
 
 export interface ClientShellDeferredProps {
-  initialEvaluatorMode?: string;
   locale: string;
   messages: Record<string, unknown>;
   children?: ReactNode;
 }
 
 export function ClientShellDeferred({
-  initialEvaluatorMode = 'default',
   locale,
   messages,
   children,
@@ -46,25 +42,10 @@ export function ClientShellDeferred({
       <ThemeProvider>
         <ContrastProvider>
           <ACPProvider>
-            <EvaluatorModeProvider
-              initialMode={
-                initialEvaluatorMode as
-                  | 'default'
-                  | 'executive'
-                  | 'board'
-                  | 'public_service'
-                  | 'investor'
-                  | 'media'
-              }
-            >
-              <DensityViewProvider syncWithHash>
-                <ThemeToggle />
-                <LanguageSwitcherPopover />
-                <CookiePreferencesTrigger />
-                <AccessibilityPanel />
-                {children}
-              </DensityViewProvider>
-            </EvaluatorModeProvider>
+            <ThemeToggle />
+            <LanguageSwitcherPopover />
+            <AccessibilityPanel />
+            {children}
           </ACPProvider>
         </ContrastProvider>
       </ThemeProvider>
