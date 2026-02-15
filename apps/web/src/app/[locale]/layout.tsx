@@ -144,7 +144,6 @@ export default async function LocaleLayout({
             label={footer('label')}
             groups={footerGroups}
             copyright={footer('copyright')}
-            wcagStatement={footer('wcagStatement')}
           />
         }
         languageLinksSlot={null}

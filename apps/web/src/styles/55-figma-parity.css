@@ -166,11 +166,10 @@
   border-radius: 0 !important;
 }
 
-/* Footer top divider: same weight as section dividers — 1px, light (#D9D7D4) */
+/* Footer top divider: matches section dividers (1px, border-subtle token) */
 footer.footer-root {
   border-top-width: 1px !important;
   border-top-style: solid !important;
-  border-top-color: #d9d7d4 !important;
 }
 
 /* --------------------------------------------------------------------------- */

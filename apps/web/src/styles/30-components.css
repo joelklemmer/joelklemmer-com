@@ -328,7 +328,6 @@ html[data-motion='reduced'] .calc-card-material {
   --nav-primary-gap: 0.5rem;
   --nav-primary-padding-inline: 1rem;
   --nav-primary-padding-block: 0.5rem;
-  --nav-primary-active-border-width: 2px;
 }
 
 /* Layout props; visibility controlled by [data-nav] in 20-layout.css */
@@ -359,10 +358,7 @@ html[data-motion='reduced'] .calc-card-material {
   color: hsl(var(--color-text));
   padding-inline: var(--nav-primary-padding-inline);
   padding-block: var(--nav-primary-padding-block);
-  border-block-end: var(--nav-primary-active-border-width) solid transparent;
-  transition:
-    color var(--transition-duration-fast) var(--ease-authority),
-    border-color var(--transition-duration-fast) var(--ease-authority);
+  transition: color var(--transition-duration-fast) var(--ease-authority);
 }
 
 .nav-primary-link[data-nav-rank='primary'] {
@@ -381,7 +377,6 @@ html[data-motion='reduced'] .calc-card-material {
 .nav-primary-link[aria-current='page'] {
   color: hsl(var(--color-text));
   font-weight: var(--font-weight-semibold);
-  border-block-end-color: hsl(var(--color-accent-strong));
 }
 
 /* Figma Make: same serif, size, color as desktop nav for consistency */
@@ -659,12 +654,12 @@ html[data-motion='reduced'] .nav-primary-menu-item {
   color: hsl(var(--color-muted));
 }
 
-/* Figma Make: Left (copyright), Right (WCAG), Far right (scroll-to-top) */
+/* Figma Make: Bottom bar with copyright aligned start */
 .footer-bottom-bar {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-4);
   padding-block-start: var(--space-4);
   border-block-start: 1px solid hsl(var(--color-border-subtle));

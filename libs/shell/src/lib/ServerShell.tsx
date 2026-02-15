@@ -9,6 +9,7 @@
  */
 import type { ReactNode } from 'react';
 import Link from 'next/link';
+import { MastheadNavLinks } from './MastheadNavLinks.client';
 import {
   MAIN_CONTENT_ID,
   skipLinkClass,
@@ -119,23 +120,10 @@ export function ServerShell({
                   aria-label={navLabel}
                   className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
                 >
-                  <ul
-                    className={`nav-primary-list flex-nowrap items-center min-h-[var(--masthead-bar-height)] whitespace-nowrap${isUk ? ' masthead-nav-uk' : ''}`}
-                    data-nav="desktop"
-                  >
-                    {navItems.map((item) => (
-                      <li key={item.href} className="flex items-center h-full">
-                        <Link
-                          href={item.href}
-                          prefetch={false}
-                          {...(item.rank && { 'data-nav-rank': item.rank })}
-                          className={`nav-primary-link ${focusRingClass} rounded-none h-full flex items-center relative`}
-                        >
-                          {item.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
+                  <MastheadNavLinks
+                    items={navItems}
+                    className={isUk ? 'masthead-nav-uk' : ''}
+                  />
                   {mobileNavSlot != null ? (
                     <div
                       className="nav-primary-mobile relative flex items-center shrink-0"
@@ -218,7 +206,7 @@ export function ServerShell({
       <footer
         role="contentinfo"
         aria-label={footerLabel}
-        className="footer-root border-t border-border"
+        className="footer-root border-t border-border-subtle"
       >
         <Container className="py-8 md:py-10">{footerContent}</Container>
       </footer>

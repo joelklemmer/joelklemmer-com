@@ -784,10 +784,7 @@ header[aria-label] {
     box-shadow var(--transition-duration-normal) var(--ease-authority);
 }
 
-/* Divider grid-bound to canonical container width; uses border token */
-header[aria-label] .masthead-outer {
-  border-block-end: 1px solid var(--masthead-border);
-}
+/* No nav divider — clean masthead transition to content */
 
 /* Figma: light mode masthead is light; use dark text and visible focus ring */
 :root[data-theme='light'] header[aria-label] {
@@ -819,10 +816,7 @@ header[aria-label] .masthead-outer {
   }
 }
 
-/* Scrolled: solid surface maintained; subtle shadow for separation */
-[data-masthead-scrolled] header[aria-label] {
-  box-shadow: 0 1px 0 var(--masthead-border);
-}
+/* Scrolled: solid surface maintained (no divider) */
 
 @media (prefers-reduced-motion: reduce) {
   header[aria-label],

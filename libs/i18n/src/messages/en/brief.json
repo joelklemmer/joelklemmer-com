@@ -1,36 +1,152 @@
 {
-  "briefing": {
-    "contextualPanelTitle": "Briefing context",
-    "contextualPanelExpand": "Show context",
-    "contextualPanelCollapse": "Hide context",
-    "whatMattersTitle": "What matters at a glance",
-    "claimProofMapTitle": "Claim–proof map"
-  },
   "hero": {
-    "title": "Executive brief",
-    "lede": "Primary authority hub for structured review and evidence routing."
+    "eyebrow": "EXECUTIVE BRIEF",
+    "headline": "Structured accountability for capital, risk, and continuity.",
+    "subhead": "Enterprise operations, governance architecture, and procurement as capital allocation. Public trust through verifiable artifacts on Public Record.",
+    "ctaPrimary": "Download Executive Brief PDF",
+    "ctaSecondary": "View Public Record",
+    "ctaTertiary": "Case Studies",
+    "lastUpdated": "Last updated",
+    "title": "Executive Brief",
+    "lede": "Structured accountability for capital, risk, and continuity."
   },
-  "identityScope": "Scope: executive evaluation, institutional review, and policy credibility. Method: evidence-led briefing with clear constraints and outcomes. Verification: public record artifacts linked to indexed claims.",
-  "verificationGuidance": {
-    "title": "Verification guidance",
-    "body": "This briefing routes to independently reviewable materials. Evaluators are encouraged to review linked records and case studies for validation context."
-  },
-  "readPath": {
-    "title": "Evaluator read path",
-    "lede": "If you are evaluating for credibility or verification, use these routes.",
-    "routes": [
-      { "label": "See Claims Index", "path": "/brief#claims" },
-      { "label": "See Frameworks and doctrine", "path": "/brief#doctrine" },
-      { "label": "See Case Studies", "path": "/casestudies" },
-      { "label": "See Public Record", "path": "/proof" }
+  "signals": {
+    "title": "Scope signals",
+    "items": [
+      {
+        "metric": "$2B+",
+        "label": "Oversight environments",
+        "qualifier": "Capital allocation under documented review and approval gates"
+      },
+      {
+        "metric": "$16B",
+        "label": "National supply chain exposure",
+        "qualifier": "Modernization and coordination scope across functional units"
+      },
+      {
+        "metric": "$480M+",
+        "label": "Annual procurement architecture oversight",
+        "qualifier": "Portfolios under structured review controls and approval thresholds"
+      },
+      {
+        "metric": "Federal advisory",
+        "label": "Federal advisory exposure",
+        "qualifier": "Regulatory environments and conflict-of-interest governance"
+      }
     ]
   },
-  "narrative": {
-    "title": "Executive narrative",
+  "toc": {
+    "jumpTo": "In this brief",
+    "operatingArchitecture": "Operating Architecture",
+    "structuralImpact": "Structural Impact",
+    "governanceTrust": "Governance and Public Trust",
+    "leadershipEnvelope": "Leadership Envelope",
+    "verification": "Verification and Evidence"
+  },
+  "operatingArchitecture": {
+    "title": "Operating Architecture",
+    "intro": "Capital commitment, vendor evaluation, and reporting cadence follow documented protocols independent of leadership cycles."
+  },
+  "doctrine": {
+    "title": "Structural Doctrine",
+    "lines": [
+      "Capital commitment occurs only after documented review.",
+      "Vendor evaluation follows formal scoring criteria.",
+      "Reporting cadence remains independent of leadership cycles.",
+      "Policy revision is triggered by structural change.",
+      "Audit preparation runs concurrently with execution."
+    ]
+  },
+  "impact": {
+    "title": "Structural Impact",
+    "intro": "Documented interventions across infrastructure, supply chain, and contracting environments.",
+    "labels": {
+      "context": "Context",
+      "intervention": "Intervention",
+      "outcome": "Outcome",
+      "structuralOutcome": "Structural outcome"
+    },
+    "blocks": [
+      {
+        "context": "Public infrastructure entity with decentralized procurement authority and multi-year capital commitments.",
+        "intervention": "Centralized evaluation standards, vendor governance protocols, standardized approval thresholds.",
+        "outcome": "Measured cost reduction.",
+        "structuralOutcome": "Documented audit improvement and codification of review controls."
+      },
+      {
+        "context": "National-level supply chain system requiring modernization across multiple functional units.",
+        "intervention": "Consolidated procurement controls, cross-unit coordination protocols, compliance standardization.",
+        "outcome": "Operational efficiency gains.",
+        "structuralOutcome": "Alignment of procurement documentation with oversight requirements."
+      },
+      {
+        "context": "Enterprise contracting authority within defense-adjacent operational systems.",
+        "intervention": "Structured review gates, reinforced oversight, documented compliance safeguards.",
+        "outcome": "Sustained audit readiness.",
+        "structuralOutcome": "Durable policy integration within contracting processes."
+      }
+    ]
+  },
+  "governance": {
+    "title": "Governance and Public Trust",
+    "intro": "Oversight systems and documentation standards remain active across transitions.",
+    "lines": [
+      {
+        "lead": "Audit posture",
+        "body": "Readiness maintained as baseline; preparation runs concurrently with execution."
+      },
+      {
+        "lead": "Conflict-of-interest rigor",
+        "body": "Review mechanisms embedded within procurement decision flow; disclosure standards enforced."
+      },
+      {
+        "lead": "Documentation integrity",
+        "body": "Structural safeguards maintained; documentation standards independent of leadership cycles."
+      },
+      {
+        "lead": "Board-level accountability",
+        "body": "Reporting cadence and fiduciary alignment remain active across administrative transitions."
+      },
+      {
+        "lead": "Continuity and nonpartisan posture",
+        "body": "Oversight systems and accountability persist independent of political or executive turnover."
+      }
+    ]
+  },
+  "envelope": {
+    "title": "Leadership Envelope",
+    "intro": "Capability domains compatible with CPO, COO, VP Ops, Chief of Staff, and Institutional Advisor pathways.",
     "items": [
-      "Scope: executive evaluation, institutional review, and policy credibility.",
-      "Method: evidence-led briefing with clear constraints and outcomes.",
-      "Verification: public record artifacts linked to indexed claims."
+      "Enterprise Procurement and Capital Allocation",
+      "Operating Model and Transformation",
+      "Governance, Risk, and Compliance Architecture",
+      "Institutional Communications and Board Reporting"
+    ]
+  },
+  "verification": {
+    "title": "Verification and Evidence",
+    "intro": "Verifiable artifacts on-site. Public Record and case studies link to source materials."
+  },
+  "verificationLinks": {
+    "executiveBriefPdf": "Executive Brief PDF",
+    "publicRecord": "Public Record",
+    "caseStudies": "Case Studies",
+    "mediaKit": "Media Kit",
+    "bio": "Bio",
+    "contact": "Contact"
+  },
+  "identityScope": "Scope: executive evaluation, institutional review, and policy credibility.",
+  "readPath": {
+    "title": "Verification Pathways",
+    "lede": "Access verification materials through these routes.",
+    "routes": [
+      {
+        "label": "Executive Brief PDF",
+        "path": "/artifacts/executive-brief.pdf"
+      },
+      { "label": "Public Record", "path": "/proof" },
+      { "label": "Case Studies", "path": "/work" },
+      { "label": "Contact", "path": "/contact" }
     ]
   },
   "navigator": {
@@ -106,9 +222,6 @@
       }
     }
   },
-  "quantifiedOutcomes": {
-    "title": "Outcome quantification"
-  },
   "selectedOutcomes": {
     "title": "Selected outcomes",
     "items": [
@@ -123,36 +236,6 @@
     "title": "Public record highlights",
     "lede": "Verification artifacts with dates, sources, and notes."
   },
-  "routes": {
-    "title": "Core routes",
-    "items": [
-      {
-        "title": "Home",
-        "description": "Orientation system for evaluator routing.",
-        "path": "/"
-      },
-      {
-        "title": "Case Studies",
-        "description": "Capability demonstrations with context and outcomes.",
-        "path": "/work"
-      },
-      {
-        "title": "Books",
-        "description": "Published volumes and official excerpts.",
-        "path": "/writing"
-      },
-      {
-        "title": "Public Record",
-        "description": "Verification artifacts supporting claims.",
-        "path": "/proof"
-      },
-      {
-        "title": "Contact",
-        "description": "Controlled access and coordination.",
-        "path": "/contact"
-      }
-    ]
-  },
   "artifacts": {
     "title": "Artifacts",
     "lede": "Stable PDFs for brief and executive bio.",
@@ -160,23 +243,7 @@
     "downloadLabel": "Download",
     "checksum": "SHA-256",
     "scopeLabel": "Document scope",
-    "executiveBriefScope": "Canonical briefing document for evaluator review.",
-    "items": [
-      {
-        "id": "executive-brief-pdf",
-        "title": "Executive brief (PDF)",
-        "description": "Canonical briefing artifact for review."
-      },
-      {
-        "id": "executive-bio",
-        "title": "Executive bio (PDF)",
-        "description": "Controlled distribution biography."
-      }
-    ]
-  },
-  "evidenceGraph": {
-    "title": "Evidence graph",
-    "tracePath": "Linked"
+    "executiveBriefScope": "Canonical briefing document for evaluator review."
   },
   "contactPathway": {
     "title": "Contact",

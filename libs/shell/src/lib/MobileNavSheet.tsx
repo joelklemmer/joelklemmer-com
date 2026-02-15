@@ -6,6 +6,7 @@
  * Defers Radix render until after mount to avoid hydration mismatch (radix ID generation).
  */
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import {
   Sheet,
@@ -39,6 +40,7 @@ export interface MobileNavSheetProps {
 }
 
 export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
 
@@ -84,18 +86,24 @@ export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
           <SheetTitle className={visuallyHiddenClass}>{navLabel}</SheetTitle>
         </SheetHeader>
         <nav aria-label={navLabel} className="mt-6 flex flex-col gap-1">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              prefetch={false}
-              {...(item.rank && { 'data-nav-rank': item.rank })}
-              className={`nav-primary-menu-item ${focusRingClass} block w-full rounded-none px-4 py-3 text-start`}
-              onClick={() => setOpen(false)}
-            >
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                prefetch={false}
+                {...(item.rank && { 'data-nav-rank': item.rank })}
+                className={`nav-primary-menu-item ${focusRingClass} block w-full rounded-none px-4 py-3 text-start ${
+                  isActive ? 'nav-primary-menu-item--active' : ''
+                }`}
+                aria-current={isActive ? 'page' : undefined}
+                onClick={() => setOpen(false)}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
         </nav>
       </SheetContent>
     </Sheet>

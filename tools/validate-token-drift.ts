@@ -69,7 +69,6 @@ const ALLOWED_NON_TOKEN_CSS_VARS = new Set([
   '--nav-primary-gap',
   '--nav-primary-padding-inline',
   '--nav-primary-padding-block',
-  '--nav-primary-active-border-width',
   '--text-nav', // Figma: nav typography by breakpoint
   '--text-nav-line',
   '--radius', // Figma Make: rectangular (0) for buttons, portrait, cards

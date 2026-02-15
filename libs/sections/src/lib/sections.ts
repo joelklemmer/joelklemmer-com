@@ -1,4 +1,12 @@
 export { ArtifactSingleSection } from './ArtifactSingleSection';
+export {
+  BriefToc,
+  BriefTocMobile,
+  BriefTocRail,
+  BriefTocCompact,
+} from './BriefToc';
+export { BriefTocRailClient } from './BriefTocRail.client';
+export type { BriefTocProps, BriefTocItem } from './BriefToc';
 export { BriefClaimsSection } from './BriefClaimsSection';
 export { CaseStudySection } from './CaseStudySection';
 export { CardGridSection } from './CardGridSection';

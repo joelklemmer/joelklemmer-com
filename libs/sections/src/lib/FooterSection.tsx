@@ -20,8 +20,6 @@ export interface FooterSectionProps {
   groups?: FooterGroup[];
   /** Copyright string for bottom bar (e.g. © 2026 Joel R. Klemmer). */
   copyright?: string;
-  /** WCAG statement for bottom bar (e.g. WCAG 2.2 AA+). */
-  wcagStatement?: string;
 }
 
 export function FooterSection({
@@ -29,7 +27,6 @@ export function FooterSection({
   links,
   groups,
   copyright,
-  wcagStatement,
 }: FooterSectionProps) {
   const useGroups = groups != null && groups.length > 0;
 
@@ -74,20 +71,11 @@ export function FooterSection({
         </nav>
       )}
 
-      {(copyright != null || wcagStatement != null) && (
+      {copyright != null && (
         <div className="footer-bottom-bar">
-          {copyright != null && (
-            <span className="footer-copyright text-muted text-sm">
-              {copyright}
-            </span>
-          )}
-          {wcagStatement != null && (
-            <div className="footer-bottom-right flex items-center gap-4 shrink-0">
-              <span className="footer-wcag text-muted text-sm">
-                {wcagStatement}
-              </span>
-            </div>
-          )}
+          <span className="footer-copyright text-muted text-sm">
+            {copyright}
+          </span>
         </div>
       )}
     </div>

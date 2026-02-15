@@ -1,74 +1,24 @@
-import { Suspense } from 'react';
+/**
+ * Executive Brief: Briefing room composition.
+ * Quiet authority, proof-forward, scannable structure.
+ */
 import { getLocale } from 'next-intl/server';
-import { cookies } from 'next/headers';
 import {
   createScopedTranslator,
   loadMessages,
   type AppLocale,
 } from '@joelklemmer/i18n';
-import { resolveEvaluatorMode } from '@joelklemmer/evaluator-mode';
-import {
-  CLAIM_CATEGORIES,
-  claimRegistry,
-  getFeaturedClaims,
-  getCaseStudies,
-  getCaseStudiesByClaimIdMap,
-  getFrameworkList,
-  getLastVerifiedFromRecordDates,
-  getBriefContent,
-  getPublicRecordList,
-  getExecutiveBriefArtifact,
-  buildClaimProofMap,
-  buildBriefingPanelContext,
-  buildWhatMattersSummary,
-} from '@joelklemmer/content';
-import {
-  populateRegistryFromConfig,
-  getEntitySignalVector,
-  getStructuredMapping,
-  getEntropyContribution,
-} from '@joelklemmer/authority-mapping';
-import {
-  getDominantSignalIdFromEffective,
-  getEffectiveWeights,
-  AUTHORITY_SIGNAL_IDS,
-} from '@joelklemmer/authority-signals';
-import {
-  computeOrchestrationHints,
-  type SignalVectorInput,
-} from '@joelklemmer/authority-orchestration';
-import { buildMetadata, PersonJsonLd, BriefPageJsonLd } from '@joelklemmer/seo';
-import {
-  IdentityScopeSection,
-  ReadPathSection,
-  SectionVisualAnchor,
-  VerificationGuidanceSection,
-  ListSection,
-  QuantifiedOutcomesSection,
-  CardGridSection,
-  ArtifactSingleSection,
-  ContactPathwaySection,
-  FrameworkDetailSection,
-  HeroSection,
-  EvidenceGraphSection,
-  AECBriefingPanel,
-} from '@joelklemmer/sections';
-import type { AECFormattedResult } from '@joelklemmer/aec';
-import { AEC_QUERY_INTENTS } from '@joelklemmer/aec';
-import { getEntityGraph } from '@joelklemmer/intelligence';
-import type { EntityGraph } from '@joelklemmer/intelligence';
-import {
-  Container,
-  ContextualPanel,
-  WhatMattersBlock,
-  ClaimProofMapView,
-} from '@joelklemmer/ui';
-import { DensityAwarePage } from '@joelklemmer/authority-density';
-import { DeferredBriefNavigator } from './DeferredBriefNavigator.client';
+import { getExecutiveBriefArtifact } from '@joelklemmer/content';
+import { PersonJsonLd, BriefPageJsonLd } from '@joelklemmer/seo';
+import { BriefTocMobile, BriefTocCompact } from '@joelklemmer/sections';
+import { Container } from '@joelklemmer/ui';
+import Link from 'next/link';
+import { focusRingClass } from '@joelklemmer/a11y';
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
   const messages = await loadMessages(locale, ['seo', 'meta']);
+  const { buildMetadata } = await import('@joelklemmer/seo');
   return buildMetadata({
     locale,
     routeKey: 'brief',
@@ -82,523 +32,332 @@ export async function generateMetadata(options?: { baseUrl?: string }) {
 export const briefMetadata = generateMetadata;
 
 export interface BriefScreenProps {
-  /** When provided, AEC briefing panel is rendered and uses this action. */
-  queryBriefingAction?: (formData: FormData) => Promise<AECFormattedResult>;
+  queryBriefingAction?: (formData: FormData) => Promise<unknown>;
 }
 
-const CLAIMS_DEFAULT_COUNT = 9;
-const CASE_STUDIES_MAX = 3;
-const PUBLIC_RECORD_HIGHLIGHTS_MAX = 10;
-
-/** Below-fold content: all data loading and sections. Streamed after hero so LCP can paint early. */
-async function BriefBelowFold(props: BriefScreenProps) {
-  const { queryBriefingAction } = props ?? {};
+export async function BriefScreen(_props?: BriefScreenProps) {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, [
-    'brief',
-    'common',
-    'frameworks',
-  ]);
+  const messages = await loadMessages(locale, ['brief', 'common']);
   const t = createScopedTranslator(locale, messages, 'brief');
-  const tCommon = createScopedTranslator(locale, messages, 'common');
-  const tFw = createScopedTranslator(locale, messages, 'frameworks');
 
-  const publicRecords = await getPublicRecordList(locale);
-  const recordLookup = new Map(
-    publicRecords.flatMap((record) => {
-      const pairs: [string, (typeof publicRecords)[number]][] = [
-        [record.frontmatter.slug, record],
-      ];
-      if (record.frontmatter.id) {
-        pairs.push([record.frontmatter.id, record]);
-      }
-      return pairs;
-    }),
-  );
-  const cookieStore = await cookies();
-  const evaluatorMode = resolveEvaluatorMode({
-    cookies: cookieStore.toString(),
-    isDev: process.env.NODE_ENV !== 'production',
-  });
-
-  const recordIdToDate = new Map<string, string>();
-  for (const record of publicRecords) {
-    const date = record.frontmatter.date;
-    if (!date) continue;
-    recordIdToDate.set(record.frontmatter.slug, date);
-    if (record.frontmatter.id) {
-      recordIdToDate.set(record.frontmatter.id, date);
-    }
-  }
-
-  populateRegistryFromConfig();
-  const featuredClaims = getFeaturedClaims();
-  const caseStudiesByClaim = await getCaseStudiesByClaimIdMap(
-    featuredClaims.map((c) => c.id),
-  );
-  const signalOrder = new Map(AUTHORITY_SIGNAL_IDS.map((id, i) => [id, i]));
-  const mapping = getStructuredMapping();
-  const claimEntries = mapping.entries.filter((e) => e.entityKind === 'claim');
-  const claimVectors = claimEntries.map((e) => ({
-    entityId: e.entityId,
-    effective: getEffectiveWeights(e.signalVector),
-  }));
-  const meanVector = AUTHORITY_SIGNAL_IDS.reduce(
-    (acc, id) => {
-      const sum = claimVectors.reduce((s, v) => s + v.effective[id], 0);
-      acc[id] = claimVectors.length ? sum / claimVectors.length : 0;
-      return acc;
-    },
-    {} as Record<(typeof AUTHORITY_SIGNAL_IDS)[number], number>,
-  );
-
-  const claimCardsUnsorted = featuredClaims.map((claim) => {
-    const supportingLinks = claim.recordIds
-      .map((recordId) => {
-        const entry = recordLookup.get(recordId);
-        if (!entry) return null;
-        return {
-          label: entry.frontmatter.title,
-          href: `/${locale}/publicrecord/${entry.frontmatter.slug}`,
-        };
-      })
-      .filter(Boolean) as Array<{ label: string; href: string }>;
-    const caseStudies = caseStudiesByClaim.get(claim.id) ?? [];
-    const lastVerified = getLastVerifiedFromRecordDates(
-      claim.recordIds,
-      recordIdToDate,
-    );
-    const vector = getEntitySignalVector('claim', claim.id, evaluatorMode);
-    const effectiveVector = vector ? getEffectiveWeights(vector) : undefined;
-    const dominantSignalId = vector
-      ? getDominantSignalIdFromEffective(vector)
-      : undefined;
-    const entropyContribution = effectiveVector
-      ? getEntropyContribution(effectiveVector, meanVector)
-      : 0;
-    return {
-      id: claim.id,
-      label: t(claim.labelKey),
-      summary: t(claim.summaryKey),
-      category: t(`claims.categories.${claim.category}`),
-      categoryId: claim.category,
-      verificationStrength: claim.recordIds.length,
-      lastVerified,
-      supportingLinks,
-      caseStudies,
-      casestudiesBasePath: `/${locale}/casestudies`,
-      supportingRecordsLabel: t('claims.supportingRecords'),
-      supportingCaseStudiesLabel: t('claims.supportingCaseStudies'),
-      verificationConnectionsLabel: t('claims.verificationConnections'),
-      lastVerifiedLabel: t('claims.lastVerified'),
-      dominantSignalId,
-      entropyContribution,
-    };
-  });
-
-  const signalVectorsForOrchestration: SignalVectorInput[] =
-    claimCardsUnsorted.map((c) => ({
-      entityKind: 'claims',
-      entityId: c.id,
-      signalScore:
-        c.dominantSignalId != null
-          ? 0.5 + (signalOrder.get(c.dominantSignalId) ?? 99) * 0.01
-          : 0.5,
-      entropyContribution: c.entropyContribution,
-    }));
-  const orchestrationHints = computeOrchestrationHints({
-    evaluatorMode,
-    signalVectors: signalVectorsForOrchestration,
-  });
-
-  const bySignalThenEntropy = [...claimCardsUnsorted].sort((a, b) => {
-    const emphasisA = orchestrationHints.entityEmphasisScores[a.id] ?? 0;
-    const emphasisB = orchestrationHints.entityEmphasisScores[b.id] ?? 0;
-    if (emphasisB !== emphasisA) return emphasisB - emphasisA;
-    const orderA = a.dominantSignalId
-      ? (signalOrder.get(a.dominantSignalId) ?? 99)
-      : 99;
-    const orderB = b.dominantSignalId
-      ? (signalOrder.get(b.dominantSignalId) ?? 99)
-      : 99;
-    if (orderA !== orderB) return orderA - orderB;
-    if (b.entropyContribution !== a.entropyContribution)
-      return b.entropyContribution - a.entropyContribution;
-    return a.id.localeCompare(b.id);
-  });
-
-  const bySignal = new Map<string, typeof bySignalThenEntropy>();
-  for (const card of bySignalThenEntropy) {
-    const key = card.dominantSignalId ?? '_';
-    if (!bySignal.has(key)) bySignal.set(key, []);
-    bySignal.get(key)!.push(card);
-  }
-  const signalOrderList = [...signalOrder.entries()]
-    .sort((a, b) => a[1] - b[1])
-    .map(([id]) => id);
-  const maxLen = Math.max(
-    ...Array.from(bySignal.values()).map((arr) => arr.length),
-    1,
-  );
-  const claimCards: typeof claimCardsUnsorted = [];
-  for (let i = 0; i < maxLen; i++) {
-    for (const signalId of signalOrderList) {
-      const group = bySignal.get(signalId) ?? [];
-      if (group[i]) claimCards.push(group[i]);
-    }
-  }
-
-  const categoryOptions = CLAIM_CATEGORIES.map((id) => ({
-    id,
-    label: t(`claims.categories.${id}`),
-  }));
-  const maxStrength = claimCards.length
-    ? Math.max(...claimCards.map((c) => c.verificationStrength), 1)
-    : 1;
-  const maxCaseStudies = claimCards.length
-    ? Math.max(...claimCards.map((c) => c.caseStudies.length), 0)
-    : 0;
-  type TWithParams = (
-    key: string,
-    values?: Record<string, string | number>,
-  ) => string;
-  const tWithParams = t as TWithParams;
-  const strengthMinByCount: Record<number, string> = {};
-  for (let n = 1; n <= maxStrength; n++) {
-    strengthMinByCount[n] = tWithParams('navigator.strengthMin', { count: n });
-  }
-  const recordCountByCount: Record<number, string> = {};
-  for (let n = 0; n <= maxStrength; n++) {
-    recordCountByCount[n] = tWithParams('navigator.recordCount', { count: n });
-  }
-  const caseStudyCountByCount: Record<number, string> = {};
-  for (let n = 0; n <= maxCaseStudies; n++) {
-    caseStudyCountByCount[n] = tWithParams('navigator.caseStudyCount', {
-      count: n,
-    });
-  }
-  const navigatorLabels = {
-    viewGrid: t('navigator.viewGrid'),
-    viewGraph: t('navigator.viewGraph'),
-    viewModeLabel: t('navigator.viewModeLabel'),
-    filterCategoryLegend: t('navigator.filterCategoryLegend'),
-    filterStrengthLegend: t('navigator.filterStrengthLegend'),
-    categoryAll: t('navigator.categoryAll'),
-    strengthAll: t('navigator.strengthAll'),
-    strengthMinByCount,
-    closePanel: t('navigator.closePanel'),
-    viewInBrief: t('navigator.viewInBrief'),
-    recordCountByCount,
-    caseStudyCountByCount,
-  };
-
-  const readPathRoutes = (
-    t.raw('readPath.routes') as Array<{
-      label: string;
-      path: string;
-    }>
-  ).map((r) => ({ label: r.label, href: `/${locale}${r.path}` }));
-
-  const claimProofMapInput = claimCards.map((c) => ({
-    claimId: c.id,
-    claimLabel: c.label,
-    claimSummary: c.summary,
-    categoryId: c.categoryId ?? 'evidence_verification',
-    proofLinks: c.supportingLinks.map((l, i) => ({
-      id: `${c.id}-proof-${i}`,
-      label: l.label,
-      href: l.href,
-    })),
-    caseStudyCount: c.caseStudies.length,
-    lastVerified: c.lastVerified,
-  }));
-  const claimProofMap = buildClaimProofMap(claimProofMapInput);
-  const briefingPanel = buildBriefingPanelContext(
-    t('identityScope'),
-    readPathRoutes,
-  );
-  const whatMatters = buildWhatMattersSummary(claimProofMap.entries, {
-    maxItems: 6,
-  });
-
-  const caseStudies = (await getCaseStudies(locale)).slice(0, CASE_STUDIES_MAX);
-  const recordHighlights = publicRecords.slice(0, PUBLIC_RECORD_HIGHLIGHTS_MAX);
-  const frameworkList = await getFrameworkList();
-
-  let executiveBriefArtifact: {
-    title: string;
-    version: string;
-    date: string;
-    href: string;
-    checksum?: string;
-    scopeLabel?: string;
-  } | null = null;
+  let pdfHref: string | null = null;
+  let lastUpdated: string | null = null;
   try {
     const artifact = getExecutiveBriefArtifact();
     if (artifact) {
-      executiveBriefArtifact = {
-        title: artifact.title,
-        version: artifact.version,
-        date: artifact.date,
-        href: `/artifacts/${artifact.filename}`,
-        checksum: artifact.sha256,
-        scopeLabel: t('artifacts.executiveBriefScope'),
-      };
+      pdfHref = `/artifacts/${artifact.filename}`;
+      lastUpdated = artifact.date ?? null;
     }
   } catch {
-    // Manifest or file validation failed; show not published in dev
+    // Manifest or file validation failed
   }
 
-  const selectedOutcomesItems = t.raw('selectedOutcomes.items') as string[];
-  const hasMoreClaims = claimRegistry.length > CLAIMS_DEFAULT_COUNT;
-  const briefContent = await getBriefContent(locale);
-  const quantifiedOutcomes = briefContent?.quantifiedOutcomes ?? [];
+  const base = `/${locale}`;
 
-  const entityGraph: EntityGraph = await getEntityGraph(undefined, {
-    getSignalVector: (kind, id) =>
-      getEntitySignalVector(kind, id, evaluatorMode),
+  const tocItems = [
+    { id: 'operating-architecture', label: t('toc.operatingArchitecture') },
+    { id: 'structural-impact', label: t('toc.structuralImpact') },
+    { id: 'governance-trust', label: t('toc.governanceTrust') },
+    { id: 'leadership-envelope', label: t('toc.leadershipEnvelope') },
+    { id: 'verification', label: t('toc.verification') },
+  ];
+
+  const signals = t.raw('signals.items') as Array<{
+    metric: string;
+    label: string;
+    qualifier: string;
+  }>;
+
+  const doctrineLines = t.raw('doctrine.lines') as string[];
+  const impactBlocks = t.raw('impact.blocks') as Array<{
+    context: string;
+    intervention: string;
+    outcome: string;
+    structuralOutcome: string;
+  }>;
+  const governanceLines = t.raw('governance.lines') as Array<{
+    lead: string;
+    body: string;
+  }>;
+  const envelopeItems = t.raw('envelope.items') as string[];
+
+  const verificationLinks: Array<{ label: string; href: string }> = [
+    { label: t('verificationLinks.publicRecord'), href: `${base}/proof` },
+    { label: t('verificationLinks.caseStudies'), href: `${base}/work` },
+  ];
+  if (t('verificationLinks.mediaKit')) {
+    verificationLinks.push({
+      label: t('verificationLinks.mediaKit'),
+      href: `${base}/media-kit`,
+    });
+  }
+  verificationLinks.push({
+    label: t('verificationLinks.contact'),
+    href: `${base}/contact`,
   });
-  const labelByNodeId = new Map<string, string>();
-  const hrefByNodeId = new Map<string, string>();
-  for (const node of entityGraph.nodes) {
-    const label =
-      node.kind === 'claim'
-        ? t(node.labelKey)
-        : node.kind === 'framework'
-          ? tFw(node.titleKey)
-          : (node as { title: string }).title;
-    labelByNodeId.set(node.id, label);
-    if (node.kind === 'record' && 'slug' in node) {
-      hrefByNodeId.set(node.id, `/${locale}/publicrecord/${node.slug}`);
-    } else if (node.kind === 'caseStudy' && 'slug' in node) {
-      hrefByNodeId.set(node.id, `/${locale}/casestudies/${node.slug}`);
-    } else if (node.kind === 'book' && 'slug' in node) {
-      hrefByNodeId.set(node.id, `/${locale}/books/${node.slug}`);
-    } else if (node.kind === 'framework') {
-      hrefByNodeId.set(node.id, `/${locale}/brief#doctrine`);
-    }
+  if (pdfHref) {
+    verificationLinks.push({
+      label: t('verificationLinks.executiveBriefPdf'),
+      href: pdfHref,
+    });
   }
-  const linkedLabelsByNodeId = new Map<string, string[]>();
-  for (const node of entityGraph.nodes) {
-    const linked = new Set<string>();
-    for (const edge of entityGraph.edges) {
-      if (edge.fromId === node.id) {
-        const other = labelByNodeId.get(edge.toId);
-        if (other) linked.add(other);
-      } else if (edge.toId === node.id) {
-        const other = labelByNodeId.get(edge.fromId);
-        if (other) linked.add(other);
-      }
-    }
-    linkedLabelsByNodeId.set(node.id, [...linked]);
+  if (t('verificationLinks.bio')) {
+    verificationLinks.push({
+      label: t('verificationLinks.bio'),
+      href: `${base}/bio`,
+    });
   }
-  const evidenceGraphNodes = entityGraph.nodes.map((node) => ({
-    id: node.id,
-    label: labelByNodeId.get(node.id) ?? node.id,
-    href: hrefByNodeId.get(node.id),
-    linkedLabels: linkedLabelsByNodeId.get(node.id) ?? [],
-  }));
 
   return (
-    <>
+    <div className="brief-page-root" data-route="brief">
       <PersonJsonLd />
       <BriefPageJsonLd
         locale={locale}
-        claimIds={featuredClaims.map((c) => c.id)}
-        caseStudySlugs={caseStudies.map((s) => s.frontmatter.slug)}
-        publicRecordSlugs={recordHighlights.map((r) => r.frontmatter.slug)}
+        claimIds={[]}
+        caseStudySlugs={[]}
+        publicRecordSlugs={[]}
       />
-      <DensityAwarePage
-        toggleLabel={tCommon('density.toggleLabel')}
-        densityDefault={orchestrationHints.densityDefaultSuggestion}
-      >
-        <Container className="section-shell">
-          <ContextualPanel
-            scopeSummary={briefingPanel.scopeSummary}
-            readPathLinks={briefingPanel.readPathLinks}
-            title={t('briefing.contextualPanelTitle')}
-            expandLabel={t('briefing.contextualPanelExpand')}
-            collapseLabel={t('briefing.contextualPanelCollapse')}
-            defaultExpanded={true}
-          />
-          <WhatMattersBlock
-            title={t('briefing.whatMattersTitle')}
-            items={whatMatters.items.map((item) => ({
-              id: item.id,
-              label: item.label,
-              summary: item.summary,
-              refId: item.refId,
-              verificationStrength: item.verificationStrength,
-              href: `/${locale}/brief#claim-${item.refId}`,
-            }))}
-          />
-        </Container>
 
-        <IdentityScopeSection
-          body={t('identityScope')}
-          visualAnchor={<SectionVisualAnchor />}
-        />
-
-        <ReadPathSection
-          title={t('readPath.title')}
-          lede={t('readPath.lede')}
-          routes={readPathRoutes}
-        />
-
-        <VerificationGuidanceSection
-          title={t('verificationGuidance.title')}
-          body={t('verificationGuidance.body')}
-        />
-
-        {queryBriefingAction ? (
-          <AECBriefingPanel
-            title={t('aec.title')}
-            placeholder={t('aec.placeholder')}
-            intentOptions={AEC_QUERY_INTENTS.map((value) => ({
-              value,
-              label: t(`aec.intents.${value}`),
-            }))}
-            submitLabel={t('aec.submitLabel')}
-            collapseLabel={t('aec.collapseLabel')}
-            expandLabel={t('aec.expandLabel')}
-            loadingLabel={t('aec.loadingLabel')}
-            linksLabel={t('aec.linksLabel')}
-            queryAction={queryBriefingAction}
-          />
-        ) : null}
-
-        <section id="claims" className="section-shell">
-          <Container className="section-shell">
-            <div className="section-shell">
-              <h2 className="text-section-heading font-semibold">
-                {t('claims.title')}
-              </h2>
-              <p className="text-body-analytical text-muted">
-                {t('claims.lede')}
+      <Container variant="wide" className="section-shell">
+        <main className="min-w-0 max-w-[56rem]">
+          {/* Hero: single column, no side rail */}
+          <header className="section-shell pb-6">
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
+              <p className="text-xs uppercase tracking-wider text-muted">
+                {t('hero.eyebrow')}
               </p>
+              {lastUpdated ? (
+                <p className="text-xs text-muted">
+                  {t('hero.lastUpdated')}: {lastUpdated}
+                </p>
+              ) : null}
             </div>
-            <DeferredBriefNavigator
-              claimCards={claimCards}
-              briefAnchorBase={`/${locale}/brief`}
-              categoryOptions={categoryOptions}
-              labels={navigatorLabels}
-            />
-            {hasMoreClaims ? (
-              <p className="mt-3 text-sm text-muted">
-                {t('claims.allClaimsExpander')}
-              </p>
-            ) : null}
-            <ClaimProofMapView
-              title={t('briefing.claimProofMapTitle')}
-              entries={claimProofMap.entries.map((e) => ({
-                claimId: e.claimId,
-                claimLabel: e.claimLabel,
-                claimSummary: e.claimSummary,
-                proofs: e.proofs,
-                caseStudyCount: e.caseStudyCount,
-                lastVerified: e.lastVerified,
-                claimHref: `#claim-${e.claimId}`,
-              }))}
-              supportingRecordsLabel={t('claims.supportingRecords')}
-              caseStudiesLabel={t('claims.supportingCaseStudies')}
-              lastVerifiedLabel={t('claims.lastVerified')}
-            />
-          </Container>
-        </section>
+            <h1
+              id="brief-title"
+              className="mt-3 text-2xl md:text-3xl font-serif font-normal leading-tight max-w-prose text-text"
+            >
+              {t('hero.headline')}
+            </h1>
+            <p className="mt-2 text-body-analytical text-muted max-w-prose">
+              {t('hero.subhead')}
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-4 hero-actions">
+              {pdfHref ? (
+                <Link
+                  href={pdfHref}
+                  className={`${focusRingClass} hero-action-link hero-action-primary`}
+                >
+                  {t('hero.ctaPrimary')}
+                </Link>
+              ) : null}
+              <Link
+                href={`${base}/proof`}
+                className={`${focusRingClass} hero-action-link hero-action-secondary`}
+              >
+                {t('hero.ctaSecondary')}
+              </Link>
+              <Link
+                href={`${base}/work`}
+                className={`${focusRingClass} text-sm text-muted hover:text-accent`}
+              >
+                {t('hero.ctaTertiary')}
+              </Link>
+            </div>
+          </header>
 
-        <ListSection
-          title={t('selectedOutcomes.title')}
-          items={selectedOutcomesItems}
-        />
-
-        {quantifiedOutcomes.length > 0 ? (
-          <QuantifiedOutcomesSection
-            title={t('quantifiedOutcomes.title')}
-            items={quantifiedOutcomes}
-          />
-        ) : null}
-
-        <CardGridSection
-          title={t('caseStudies.title')}
-          lede={t('caseStudies.lede')}
-          items={caseStudies.map((study) => ({
-            title: study.frontmatter.title,
-            description: study.frontmatter.summary,
-            meta: study.frontmatter.date,
-            href: `/${locale}/casestudies/${study.frontmatter.slug}`,
-          }))}
-        />
-
-        <CardGridSection
-          title={t('publicRecordHighlights.title')}
-          lede={t('publicRecordHighlights.lede')}
-          items={recordHighlights.map((record) => ({
-            title: record.frontmatter.title,
-            description: record.frontmatter.claimSupported,
-            meta: record.frontmatter.date,
-            href: `/${locale}/publicrecord/${record.frontmatter.slug}`,
-          }))}
-        />
-
-        <ArtifactSingleSection
-          title={t('artifacts.title')}
-          lede={t('artifacts.lede')}
-          artifact={executiveBriefArtifact}
-          notPublishedMessage={t('artifacts.notPublished')}
-          downloadLabel={t('artifacts.downloadLabel')}
-          checksumLabel={t('artifacts.checksum')}
-          scopeLabelHeading={t('artifacts.scopeLabel')}
-        />
-
-        <EvidenceGraphSection
-          title={t('evidenceGraph.title')}
-          tracePathLabel={t('evidenceGraph.tracePath')}
-          nodes={evidenceGraphNodes}
-        />
-
-        {frameworkList.length > 0 ? (
-          <FrameworkDetailSection
-            id="doctrine"
-            title={tFw('section.title')}
-            lede={tFw('section.lede')}
-            expandLabel={tFw('section.expandLabel')}
-            items={frameworkList.map((fw) => ({
-              title: tFw(fw.frontmatter.titleKey),
-              intent10: tFw(fw.frontmatter.intent10Key),
-              intent60: tFw(fw.frontmatter.intent60Key),
-            }))}
-          />
-        ) : null}
-
-        <ContactPathwaySection
-          title={t('contactPathway.title')}
-          linkLabel={t('contactPathway.linkLabel')}
-          href={`/${locale}/contact`}
-        />
-      </DensityAwarePage>
-    </>
-  );
-}
-
-export async function BriefScreen(props?: BriefScreenProps) {
-  const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['brief']);
-  const t = createScopedTranslator(locale, messages, 'brief');
-  return (
-    <>
-      <HeroSection title={t('hero.title')} lede={t('hero.lede')} />
-      <Suspense
-        fallback={
-          <section className="section-shell" aria-hidden>
-            <div className="animate-pulse flex flex-col gap-4 max-w-2xl mx-auto px-4">
-              <div className="h-10 bg-muted/50 rounded w-48" />
-              <div className="h-24 bg-muted/50 rounded" />
+          {/* Scope signals */}
+          <section
+            className="section-shell border-t border-border-subtle pt-8"
+            aria-labelledby="signals-heading"
+          >
+            <h2 id="signals-heading" className="sr-only">
+              {t('signals.title')}
+            </h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {signals.map((item, i) => (
+                <div
+                  key={i}
+                  className="flex flex-col gap-0.5 p-4 bg-muted/5 rounded-sm"
+                >
+                  <span className="text-lg font-serif font-medium text-text">
+                    {item.metric}
+                  </span>
+                  <span className="text-sm font-medium text-text">
+                    {item.label}
+                  </span>
+                  <span className="text-xs text-muted">{item.qualifier}</span>
+                </div>
+              ))}
             </div>
           </section>
-        }
-      >
-        <BriefBelowFold queryBriefingAction={props?.queryBriefingAction} />
-      </Suspense>
-    </>
+
+          {/* In this brief: compact below metrics; mobile collapsible, desktop inline */}
+          <BriefTocMobile items={tocItems} jumpToLabel={t('toc.jumpTo')} />
+          <BriefTocCompact items={tocItems} jumpToLabel={t('toc.jumpTo')} />
+
+          {/* Operating Architecture */}
+          <section
+            id="operating-architecture"
+            className="section-shell border-t border-border-subtle pt-10"
+          >
+            <Container variant="readable" className="section-shell">
+              <h2 className="text-section-heading font-semibold pt-0">
+                {t('operatingArchitecture.title')}
+              </h2>
+              <p className="mt-2 text-body-analytical text-muted">
+                {t('operatingArchitecture.intro')}
+              </p>
+              <ul className="authority-list text-base mt-4">
+                {doctrineLines.map((line) => (
+                  <li key={line} className="flex gap-2">
+                    <span aria-hidden className="authority-list-bullet">
+                      •
+                    </span>
+                    <span className="authority-list-item-text flex-1">
+                      {line}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Container>
+          </section>
+
+          {/* Structural Impact */}
+          <section
+            id="structural-impact"
+            className="section-shell border-t border-border-subtle pt-10"
+          >
+            <Container variant="readable" className="section-shell">
+              <h2 className="text-section-heading font-semibold pt-0">
+                {t('impact.title')}
+              </h2>
+              <p className="mt-2 text-body-analytical text-muted">
+                {t('impact.intro')}
+              </p>
+              <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                {impactBlocks.map((block, i) => (
+                  <div
+                    key={i}
+                    className="flex flex-col gap-3 p-4 bg-muted/5 rounded-sm"
+                  >
+                    <div>
+                      <p className="text-meta-label font-semibold uppercase tracking-wide text-text">
+                        {t('impact.labels.context')}
+                      </p>
+                      <p className="text-body-analytical text-muted">
+                        {block.context}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-meta-label font-semibold uppercase tracking-wide text-text">
+                        {t('impact.labels.intervention')}
+                      </p>
+                      <p className="text-body-analytical text-muted">
+                        {block.intervention}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-meta-label font-semibold uppercase tracking-wide text-text">
+                        {t('impact.labels.outcome')}
+                      </p>
+                      <p className="text-body-analytical text-muted">
+                        {block.outcome}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-meta-label font-semibold uppercase tracking-wide text-text">
+                        {t('impact.labels.structuralOutcome')}
+                      </p>
+                      <p className="text-body-analytical text-muted">
+                        {block.structuralOutcome}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Container>
+          </section>
+
+          {/* Governance and Public Trust */}
+          <section
+            id="governance-trust"
+            className="section-shell border-t border-border-subtle pt-10"
+          >
+            <Container variant="readable" className="section-shell">
+              <h2 className="text-section-heading font-semibold pt-0">
+                {t('governance.title')}
+              </h2>
+              <p className="mt-2 text-body-analytical text-muted">
+                {t('governance.intro')}
+              </p>
+              <dl className="mt-4 grid gap-3">
+                {governanceLines.map((item, i) => (
+                  <div key={i} className="flex flex-col gap-1">
+                    <dt className="text-sm font-semibold text-text">
+                      {item.lead}
+                    </dt>
+                    <dd className="text-body-analytical text-muted">
+                      {item.body}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </Container>
+          </section>
+
+          {/* Leadership Envelope */}
+          <section
+            id="leadership-envelope"
+            className="section-shell border-t border-border-subtle pt-10"
+          >
+            <Container variant="readable" className="section-shell">
+              <h2 className="text-section-heading font-semibold pt-0">
+                {t('envelope.title')}
+              </h2>
+              <p className="mt-2 text-body-analytical text-muted">
+                {t('envelope.intro')}
+              </p>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {envelopeItems.slice(0, 4).map((item) => (
+                  <li
+                    key={item}
+                    className="p-3 bg-muted/5 rounded-sm text-body-analytical"
+                  >
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </Container>
+          </section>
+
+          {/* Verification and Evidence */}
+          <section
+            id="verification"
+            className="section-shell border-t border-border-subtle pt-10"
+          >
+            <Container variant="readable" className="section-shell">
+              <h2 className="text-section-heading font-semibold pt-0">
+                {t('verification.title')}
+              </h2>
+              <p className="mt-2 text-body-analytical text-muted">
+                {t('verification.intro')}
+              </p>
+              <ul className="mt-4 grid gap-2 text-base">
+                {verificationLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className={`${focusRingClass} text-muted underline underline-offset-4 hover:text-accent`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </Container>
+          </section>
+        </main>
+      </Container>
+    </div>
   );
 }

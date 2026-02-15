@@ -1,36 +1,171 @@
 {
-  "briefing": {
-    "contextualPanelTitle": "Contexto del briefing",
-    "contextualPanelExpand": "Mostrar contexto",
-    "contextualPanelCollapse": "Ocultar contexto",
-    "whatMattersTitle": "Lo que importa de un vistazo",
-    "claimProofMapTitle": "Mapa afirmación–prueba"
-  },
   "hero": {
+    "eyebrow": "INFORME EJECUTIVO",
+    "headline": "Responsabilidad estructurada para capital, riesgo y continuidad.",
+    "subhead": "Operaciones empresariales, arquitectura de gobernanza y adquisiciones como asignación de capital. Confianza pública mediante artefactos verificables en Registro público.",
+    "ctaPrimary": "Descargar PDF del informe ejecutivo",
+    "ctaSecondary": "Ver registro público",
+    "ctaTertiary": "Estudios de caso",
+    "lastUpdated": "Última actualización",
     "title": "Informe ejecutivo",
-    "lede": "Centro de autoridad para revisión estructurada y enrutamiento de evidencia."
+    "lede": "Responsabilidad estructurada en entornos de capital y operaciones."
   },
-  "identityScope": "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas. Método: briefing basado en evidencia con restricciones y resultados claros. Verificación: artefactos del registro público vinculados a afirmaciones indexadas.",
-  "verificationGuidance": {
-    "title": "Orientación de verificación",
-    "body": "Este informe enlaza a materiales revisables de forma independiente. Se anima a los evaluadores a revisar los registros y estudios de caso enlazados para contexto de validación."
-  },
-  "readPath": {
-    "title": "Ruta de lectura para evaluadores",
-    "lede": "Si está evaluando credibilidad o verificación, use estas rutas.",
-    "routes": [
-      { "label": "Ver índice de afirmaciones", "path": "/brief#claims" },
-      { "label": "Ver marcos y doctrinas", "path": "/brief#doctrine" },
-      { "label": "Ver estudios de caso", "path": "/casestudies" },
-      { "label": "Ver registro público", "path": "/proof" }
+  "signals": {
+    "title": "Señales de alcance",
+    "items": [
+      {
+        "metric": "$2B+",
+        "label": "Entornos de supervisión",
+        "qualifier": "Asignación de capital bajo revisión documentada"
+      },
+      {
+        "metric": "$16B",
+        "label": "Exposición de cadena de suministro nacional",
+        "qualifier": "Alcance de modernización y coordinación"
+      },
+      {
+        "metric": "$480M+",
+        "label": "Arquitectura anual de adquisiciones",
+        "qualifier": "Portafolios bajo controles de revisión estructurada"
+      },
+      {
+        "metric": "Asesoría federal",
+        "label": "Exposición asesora",
+        "qualifier": "Gobernanza regulatoria y de conflictos"
+      }
     ]
   },
-  "narrative": {
-    "title": "Narrativa ejecutiva",
+  "toc": {
+    "jumpTo": "En este informe",
+    "operatingArchitecture": "Arquitectura operativa",
+    "structuralImpact": "Impacto estructural",
+    "governanceTrust": "Gobernanza y confianza pública",
+    "leadershipEnvelope": "Envolvente de liderazgo",
+    "verification": "Verificación y evidencia"
+  },
+  "operatingArchitecture": {
+    "title": "Arquitectura operativa",
+    "intro": "Compromiso de capital, evaluación de proveedores y ritmo de reportes siguen protocolos documentados independientes de ciclos de liderazgo."
+  },
+  "governance": {
+    "title": "Gobernanza y confianza pública",
+    "intro": "Sistemas de supervisión y estándares de documentación permanecen activos durante transiciones.",
+    "lines": [
+      {
+        "lead": "Postura de auditoría",
+        "body": "Preparación como línea base; ejecución concurrente con operación."
+      },
+      {
+        "lead": "Rigor en conflictos de interés",
+        "body": "Mecanismos de revisión integrados en el flujo de adquisiciones; estándares de divulgación aplicados."
+      },
+      {
+        "lead": "Integridad documental",
+        "body": "Salvaguardas estructurales mantenidas; estándares independientes de ciclos de liderazgo."
+      },
+      {
+        "lead": "Rendición de cuentas a directorio",
+        "body": "Ritmo de reportes y alineación fiduciaria activos durante transiciones administrativas."
+      },
+      {
+        "lead": "Continuidad y postura no partidista",
+        "body": "Sistemas de supervisión y responsabilidad persisten independientes de rotación política o ejecutiva."
+      }
+    ]
+  },
+  "envelope": {
+    "title": "Envolvente de liderazgo",
+    "intro": "Dominios de capacidad compatibles con CPO, COO, VP Ops, Chief of Staff e Institutional Advisor.",
     "items": [
-      "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas.",
-      "Método: briefing basado en evidencia con restricciones y resultados claros.",
-      "Verificación: artefactos del registro público vinculados a afirmaciones indexadas."
+      "Adquisiciones empresariales y asignación de capital",
+      "Modelo operativo y transformación",
+      "Arquitectura de gobernanza, riesgo y cumplimiento",
+      "Comunicaciones institucionales e informes a directorio"
+    ]
+  },
+  "verification": {
+    "title": "Verificación y evidencia",
+    "intro": "Artefactos verificables en sitio. Registro público y estudios de caso enlazan a materiales fuente."
+  },
+  "impact": {
+    "title": "Impacto estructural",
+    "intro": "Intervenciones documentadas en infraestructura, cadena de suministro y entornos contractuales.",
+    "labels": {
+      "context": "Contexto",
+      "intervention": "Intervención",
+      "outcome": "Resultado",
+      "structuralOutcome": "Resultado estructural"
+    },
+    "blocks": [
+      {
+        "context": "Entidad de infraestructura pública con autoridad de adquisiciones descentralizada.",
+        "intervention": "Estándares de evaluación centralizados, protocolos de gobernanza de proveedores.",
+        "outcome": "Reducción de costos medida.",
+        "structuralOutcome": "Mejora documentada de auditoría y codificación de controles."
+      },
+      {
+        "context": "Sistema de cadena de suministro nacional que requiere modernización.",
+        "intervention": "Controles consolidados, protocolos de coordinación, estandarización de cumplimiento.",
+        "outcome": "Ganancias de eficiencia operacional.",
+        "structuralOutcome": "Alineación de documentación con requisitos de supervisión."
+      },
+      {
+        "context": "Autoridad contractual empresarial en sistemas adyacentes a defensa.",
+        "intervention": "Puertas de revisión estructuradas, supervisión reforzada, salvaguardas documentadas.",
+        "outcome": "Preparación de auditoría sostenida.",
+        "structuralOutcome": "Integración durable de políticas en procesos contractuales."
+      }
+    ]
+  },
+  "verificationLinks": {
+    "executiveBriefPdf": "Informe ejecutivo PDF",
+    "publicRecord": "Registro público",
+    "caseStudies": "Estudios de caso",
+    "mediaKit": "Kit de medios",
+    "bio": "Bio",
+    "contact": "Contacto"
+  },
+  "accountability": {
+    "title": "Superficie de responsabilidad",
+    "bullets": [
+      "Entornos de asignación de capital multimillonaria en sistemas federales y del sector público",
+      "Modernización de la cadena de suministro nacional que afecta los marcos de adquisiciones empresariales",
+      "Portafolios de adquisiciones anuales que superan 480 M$ bajo revisión estructurada y controles de aprobación",
+      "Participación directa en entornos regulatorios, de auditoría y de gobernanza de conflictos de interés"
+    ],
+    "clarification": "Estas cifras representan exposición a responsabilidad, no reclamaciones de desempeño."
+  },
+  "doctrine": {
+    "title": "Doctrina estructural",
+    "lines": [
+      "El compromiso de capital ocurre solo después de una revisión documentada.",
+      "La evaluación de proveedores sigue criterios de puntuación formales.",
+      "El ritmo de reportes permanece independiente de los ciclos de liderazgo.",
+      "La revisión de políticas se activa por cambios estructurales.",
+      "La preparación para auditorías corre concurrente con la ejecución."
+    ]
+  },
+  "stewardship": {
+    "title": "Tutela y continuidad",
+    "paragraphs": [
+      "Las transiciones administrativas no suspenden la responsabilidad.",
+      "Los sistemas de supervisión permanecen activos independientes de la rotación política o ejecutiva.",
+      "Los mecanismos de revisión de conflictos están integrados en el flujo de decisiones de adquisiciones.",
+      "Los estándares de documentación se mantienen como salvaguardas estructurales y no como medidas reactivas."
+    ]
+  },
+  "identityScope": "Alcance: evaluación ejecutiva, revisión institucional y credibilidad de políticas.",
+  "readPath": {
+    "title": "Vías de verificación",
+    "lede": "Acceda a materiales de verificación a través de estas rutas.",
+    "routes": [
+      {
+        "label": "Informe ejecutivo (PDF)",
+        "path": "/artifacts/executive-brief.pdf"
+      },
+      { "label": "Registro público", "path": "/proof" },
+      { "label": "Estudios de caso", "path": "/work" },
+      { "label": "Contacto", "path": "/contact" }
     ]
   },
   "navigator": {
@@ -106,9 +241,6 @@
       }
     }
   },
-  "quantifiedOutcomes": {
-    "title": "Cuantificación de resultados"
-  },
   "selectedOutcomes": {
     "title": "Resultados seleccionados",
     "items": [
@@ -123,36 +255,6 @@
     "title": "Destacados del registro público",
     "lede": "Artefactos de verificación con fechas, fuentes y notas."
   },
-  "routes": {
-    "title": "Rutas principales",
-    "items": [
-      {
-        "title": "Inicio",
-        "description": "Sistema de orientación para evaluadores.",
-        "path": "/"
-      },
-      {
-        "title": "Estudios de caso",
-        "description": "Demostraciones de capacidad con contexto y resultados.",
-        "path": "/work"
-      },
-      {
-        "title": "Libros",
-        "description": "Volúmenes publicados y extractos oficiales.",
-        "path": "/writing"
-      },
-      {
-        "title": "Registro público",
-        "description": "Artefactos de verificación que respaldan afirmaciones.",
-        "path": "/proof"
-      },
-      {
-        "title": "Contacto",
-        "description": "Acceso controlado y coordinación.",
-        "path": "/contact"
-      }
-    ]
-  },
   "artifacts": {
     "title": "Artefactos",
     "lede": "PDF estables para informe y biografía ejecutiva.",
@@ -160,23 +262,7 @@
     "downloadLabel": "Descargar",
     "checksum": "SHA-256",
     "scopeLabel": "Alcance del documento",
-    "executiveBriefScope": "Documento canónico de informe para revisión por evaluadores.",
-    "items": [
-      {
-        "id": "executive-brief-pdf",
-        "title": "Informe ejecutivo (PDF)",
-        "description": "Artefacto canónico para revisión."
-      },
-      {
-        "id": "executive-bio",
-        "title": "Biografía ejecutiva (PDF)",
-        "description": "Biografía para distribución controlada."
-      }
-    ]
-  },
-  "evidenceGraph": {
-    "title": "Grafo de evidencia",
-    "tracePath": "Vinculado"
+    "executiveBriefScope": "Documento canónico de informe para revisión por evaluadores."
   },
   "contactPathway": {
     "title": "Contacto",
