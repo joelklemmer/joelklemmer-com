@@ -145,6 +145,59 @@
   border-radius: 0 !important;
 }
 
+/* Footer top divider: same weight as section dividers — 1px, light (#D9D7D4) */
+footer.footer-root {
+  border-top-width: 1px !important;
+  border-top-style: solid !important;
+  border-top-color: #d9d7d4 !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Home page: visual dividers and section spacing per Figma site                 */
+/* --------------------------------------------------------------------------- */
+/* Hero: no extra bottom padding — CTA-to-divider = divider-to-text (both use gap/padding) */
+.content-lane-grid .hero-authority {
+  padding-block-end: 0;
+  margin-block-end: 0;
+}
+
+/* Dividers: 1px line between sections (hero → domains → selected work); same as footer     */
+.content-lane-grid > section.section-shell + section.section-shell {
+  border-block-start: 1px solid #d9d7d4;
+  padding-block-start: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .content-lane-grid > section.section-shell + section.section-shell {
+    padding-block-start: var(--space-10);
+  }
+}
+
+/* Section spacing: Figma — tighter rhythm                                                  */
+.content-lane-grid {
+  gap: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .content-lane-grid {
+    gap: var(--space-10);
+  }
+}
+
+.content-lane-grid > section.section-shell {
+  margin-block-end: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .content-lane-grid > section.section-shell {
+    margin-block-end: var(--space-10);
+  }
+}
+
+.content-lane-grid > section.section-shell:last-child {
+  margin-block-end: 0;
+}
+
 /* --------------------------------------------------------------------------- */
 /* Header/nav: Figma pixel match — divider #D9D7D4 (--color-border-subtle)      */
 /* --------------------------------------------------------------------------- */
