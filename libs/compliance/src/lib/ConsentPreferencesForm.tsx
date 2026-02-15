@@ -1,7 +1,6 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { useTranslations } from 'next-intl';
 import { focusRingClass } from '@joelklemmer/a11y';
 import type { ConsentState } from './consent-state-v2';
 import { useConsentV2 } from './ConsentContextV2';
@@ -13,8 +12,33 @@ const NON_ESSENTIAL_CATEGORIES = CONSENT_CATEGORIES.filter(
   (c) => !isEssentialCategory(c),
 );
 
-export function ConsentPreferencesForm() {
-  const t = useTranslations('consent.preferences');
+export interface ConsentFormLabels {
+  intro: string;
+  categories: string;
+  purposes: string;
+  functional: string;
+  analytics: string;
+  experience: string;
+  marketing: string;
+  measurement: string;
+  experimentation: string;
+  personalization: string;
+  security: string;
+  fraud: string;
+  recommendation: string;
+  profiling: string;
+  modelParticipation: string;
+  save: string;
+  withdraw: string;
+}
+
+export interface ConsentPreferencesFormProps {
+  labels: ConsentFormLabels;
+}
+
+export function ConsentPreferencesForm({
+  labels,
+}: ConsentPreferencesFormProps) {
   const { consentState, updateConsent, withdraw } = useConsentV2();
 
   const [categories, setCategories] = useState<Record<string, boolean>>(
@@ -75,14 +99,14 @@ export function ConsentPreferencesForm() {
       }}
       className="space-y-8"
     >
-      <p className="text-muted text-sm">{t('intro')}</p>
+      <p className="text-muted text-sm">{labels.intro}</p>
 
       <fieldset className="space-y-3" aria-labelledby="categories-legend">
         <legend
           id="categories-legend"
           className="text-sm font-semibold text-text"
         >
-          {t('categories')}
+          {labels.categories}
         </legend>
         {NON_ESSENTIAL_CATEGORIES.map((cat) => (
           <label key={cat} className="flex items-center gap-3">
@@ -93,7 +117,9 @@ export function ConsentPreferencesForm() {
               className={focusRingClass}
               aria-describedby={cat === 'essential' ? undefined : `${cat}-desc`}
             />
-            <span className="text-sm font-medium text-text">{t(cat)}</span>
+            <span className="text-sm font-medium text-text">
+              {labels[cat as keyof ConsentFormLabels]}
+            </span>
           </label>
         ))}
       </fieldset>
@@ -103,7 +129,7 @@ export function ConsentPreferencesForm() {
           id="purposes-legend"
           className="text-sm font-semibold text-text"
         >
-          {t('purposes')}
+          {labels.purposes}
         </legend>
         {PURPOSE_SCOPES.map((p) => (
           <label key={p} className="flex items-center gap-3">
@@ -113,14 +139,16 @@ export function ConsentPreferencesForm() {
               onChange={(e) => handlePurposeChange(p, e.target.checked)}
               className={focusRingClass}
             />
-            <span className="text-sm font-medium text-text">{t(p)}</span>
+            <span className="text-sm font-medium text-text">
+              {labels[p as keyof ConsentFormLabels]}
+            </span>
           </label>
         ))}
       </fieldset>
 
       <fieldset className="space-y-2" aria-labelledby="model-legend">
         <legend id="model-legend" className="sr-only">
-          {t('modelParticipation')}
+          {labels.modelParticipation}
         </legend>
         <label className="flex items-center gap-3">
           <input
@@ -130,7 +158,7 @@ export function ConsentPreferencesForm() {
             className={focusRingClass}
           />
           <span className="text-sm font-medium text-text">
-            {t('modelParticipation')}
+            {labels.modelParticipation}
           </span>
         </label>
       </fieldset>
@@ -140,14 +168,14 @@ export function ConsentPreferencesForm() {
           type="submit"
           className={`${focusRingClass} rounded-none bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
         >
-          {t('save')}
+          {labels.save}
         </button>
         <button
           type="button"
           onClick={handleWithdraw}
           className={`${focusRingClass} rounded-none border border-border px-3 py-2 text-sm text-muted hover:text-text`}
         >
-          {t('withdraw')}
+          {labels.withdraw}
         </button>
       </div>
     </form>

@@ -100,6 +100,12 @@ export {
 } from './lib/revocation-hooks';
 
 export {
+  EVENT_CONSENT_CHANGED,
+  EVENT_OPEN_CONSENT,
+  dispatchConsentChanged,
+  openConsentBanner,
+} from './lib/consent-events';
+export {
   getConsentFromCookieV2,
   readConsentFromDocumentV2,
   writeConsentToDocumentV2,
@@ -147,4 +153,8 @@ export { ConsentActionsIsland } from './lib/ConsentActionsIsland';
 export { ConsentClient } from './lib/ConsentClient';
 export type { ConsentClientProps } from './lib/ConsentClient';
 
-export { ConsentPreferencesForm } from './lib/ConsentPreferencesForm';
+export {
+  ConsentPreferencesForm,
+  type ConsentFormLabels,
+  type ConsentPreferencesFormProps,
+} from './lib/ConsentPreferencesForm';

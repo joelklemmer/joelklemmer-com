@@ -31,6 +31,7 @@ import { createConsentReceiptSync } from './receipt';
 import { appendConsentHistory } from './consent-history';
 import { captureGpcDntAudit } from './gpc-dnt';
 import { MAIN_CONTENT_ID } from '@joelklemmer/a11y';
+import { dispatchConsentChanged, EVENT_OPEN_CONSENT } from './consent-events';
 
 const BANNER_ID = 'consent-banner';
 const ACCEPT_SELECTOR = '[data-consent-action="accept"]';
@@ -68,6 +69,12 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
   const t = useTranslations('consent.banner');
   const tCommon = useTranslations('common');
   const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setDialogOpen(true);
+    window.addEventListener(EVENT_OPEN_CONSENT, handleOpen);
+    return () => window.removeEventListener(EVENT_OPEN_CONSENT, handleOpen);
+  }, []);
   const [localCategories, setLocalCategories] = useState<
     Record<string, boolean>
   >(() => {
@@ -105,6 +112,7 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
         type: 'accept_all',
         receiptHash: createConsentReceiptSync(state).hash,
       });
+      dispatchConsentChanged();
       hideBanner();
       moveFocusToMain();
     };
@@ -120,6 +128,7 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
         type: 'reject_non_essential',
         receiptHash: createConsentReceiptSync(state).hash,
       });
+      dispatchConsentChanged();
       hideBanner();
       moveFocusToMain();
     };
@@ -161,6 +170,7 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
       type: 'update',
       receiptHash: createConsentReceiptSync(state).hash,
     });
+    dispatchConsentChanged();
     hideBanner();
     setDialogOpen(false);
     moveFocusToMain();
@@ -176,6 +186,7 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
       type: 'accept_all',
       receiptHash: createConsentReceiptSync(state).hash,
     });
+    dispatchConsentChanged();
     hideBanner();
     setDialogOpen(false);
     moveFocusToMain();
@@ -191,6 +202,7 @@ export function ConsentClient({ preferencesHref }: ConsentClientProps) {
       type: 'reject_non_essential',
       receiptHash: createConsentReceiptSync(state).hash,
     });
+    dispatchConsentChanged();
     hideBanner();
     setDialogOpen(false);
     moveFocusToMain();

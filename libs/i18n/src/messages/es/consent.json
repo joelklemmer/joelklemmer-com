@@ -11,7 +11,7 @@
   },
   "preferences": {
     "title": "Preferencias de consentimiento",
-    "intro": "Gestione su consentimiento por categoría y finalidad. Puede retirarlo en cualquier momento.",
+    "intro": "Gestione el consentimiento de cookies y las preferencias de accesibilidad.",
     "categories": "Categorías",
     "purposes": "Finalidades",
     "essential": "Esenciales (siempre activas)",

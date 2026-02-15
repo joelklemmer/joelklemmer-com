@@ -354,6 +354,14 @@ export function persistAccessibilityPrefs(prefs: AccessibilityPrefs): void {
   }
 }
 
+/** Custom event for same-tab sync when a11y prefs change (storage does not fire in same tab). */
+export const EVENT_A11Y_PREFS_CHANGED = 'jk:a11y-prefs-changed';
+
+function dispatchA11yPrefsChanged(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new CustomEvent(EVENT_A11Y_PREFS_CHANGED));
+}
+
 /**
  * Set one or more accessibility prefs, merge with current, persist, apply to root.
  * Returns the new merged prefs.
@@ -365,6 +373,7 @@ export function setAccessibilityPref(
   const next: AccessibilityPrefs = { ...current, ...partial };
   persistAccessibilityPrefs(next);
   applyAccessibilityPrefsToRoot(next);
+  dispatchA11yPrefsChanged();
   return next;
 }
 
@@ -389,6 +398,7 @@ export function resetAccessibilityPrefs(): void {
   root.style.removeProperty('--jk-text-scale');
   root.style.removeProperty('--jk-line-height');
   root.style.removeProperty('--jk-letter-spacing');
+  dispatchA11yPrefsChanged();
 }
 
 /**

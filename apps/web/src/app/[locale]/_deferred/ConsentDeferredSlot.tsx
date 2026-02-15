@@ -1,7 +1,6 @@
 /**
- * Server slot: renders ConsentBannerSSR + ConsentClient when no choice made.
- * Layout stays server-only; this file imports the client component.
- * Wraps ConsentClient with NextIntlClientProvider so useTranslations works.
+ * Server slot: ConsentBannerSSR when no choice made; ConsentClient always mounted
+ * so it can respond to jk:open-consent (e.g. from Preferences page).
  */
 import { getMessages } from 'next-intl/server';
 import { NextIntlClientProvider } from 'next-intl';
@@ -18,12 +17,11 @@ export async function ConsentDeferredSlot({
   preferencesHref,
   locale,
 }: ConsentDeferredSlotProps) {
-  if (!showBanner) return null;
   const messages = await getMessages();
   const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
   return (
     <>
-      <ConsentBannerSSR preferencesHref={preferencesHref} />
+      {showBanner && <ConsentBannerSSR preferencesHref={preferencesHref} />}
       <NextIntlClientProvider
         locale={locale}
         messages={messages ?? {}}

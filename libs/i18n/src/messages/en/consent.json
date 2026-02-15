@@ -11,7 +11,7 @@
   },
   "preferences": {
     "title": "Consent preferences",
-    "intro": "Manage your consent by category and purpose. Withdraw at any time.",
+    "intro": "Manage cookie consent and accessibility preferences.",
     "categories": "Categories",
     "purposes": "Purposes",
     "essential": "Essential (always on)",

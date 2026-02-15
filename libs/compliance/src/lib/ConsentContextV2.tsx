@@ -29,12 +29,13 @@ import {
   canUsePersonalization,
 } from './policy-adapter-v2';
 import { createConsentReceiptSync, type ConsentReceipt } from './receipt';
-import {
-  appendConsentHistory,
-  type ConsentHistoryEntry,
-} from './consent-history';
+import { appendConsentHistory } from './consent-history';
 import { captureGpcDntAudit } from './gpc-dnt';
 import { runRevocationHooks } from './revocation-hooks';
+import {
+  dispatchConsentChanged,
+  EVENT_CONSENT_CHANGED,
+} from './consent-events';
 
 export interface ConsentContextValueV2 {
   consentState: ConsentState;
@@ -69,11 +70,19 @@ export function ConsentProviderV2({
   const [receipt, setReceipt] = useState<ConsentReceipt | null>(null);
 
   useEffect(() => {
-    const fromDoc = readConsentFromDocumentV2();
-    if (fromDoc?.choiceMade) {
-      setConsentState(fromDoc);
-      setReceipt(createConsentReceiptSync(fromDoc));
-    }
+    const syncFromDoc = () => {
+      const fromDoc = readConsentFromDocumentV2();
+      if (fromDoc) {
+        setConsentState(fromDoc);
+        setReceipt(createConsentReceiptSync(fromDoc));
+      } else {
+        setConsentState(createDefaultConsentState());
+        setReceipt(null);
+      }
+    };
+    syncFromDoc();
+    window.addEventListener(EVENT_CONSENT_CHANGED, syncFromDoc);
+    return () => window.removeEventListener(EVENT_CONSENT_CHANGED, syncFromDoc);
   }, []);
 
   const updateConsent = useCallback((state: ConsentState) => {
@@ -89,6 +98,7 @@ export function ConsentProviderV2({
       gpc: audit.gpc,
       dnt: audit.dnt,
     });
+    dispatchConsentChanged();
   }, []);
 
   const acceptAll = useCallback(() => {
@@ -125,6 +135,7 @@ export function ConsentProviderV2({
       gpc: audit.gpc,
       dnt: audit.dnt,
     });
+    dispatchConsentChanged();
     await runRevocationHooks();
   }, []);
 

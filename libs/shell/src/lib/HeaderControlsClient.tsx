@@ -11,9 +11,7 @@ import { useLocale } from 'next-intl';
 import { usePathname, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import {
-  readAccessibilityPrefs,
-  setAccessibilityPref,
-  resetAccessibilityPrefs,
+  useAccessibilityPrefs,
   type AccessibilityPrefs,
   type ContrastMode,
 } from '@joelklemmer/behavior-runtime';
@@ -103,12 +101,6 @@ function CheckIcon() {
   );
 }
 
-function RadioDotIcon() {
-  return (
-    <span className="size-2 shrink-0 rounded-full bg-current" aria-hidden />
-  );
-}
-
 function resolvePathname(pathname: string | null, currentLocale: string) {
   const safePathname = pathname ?? `/${currentLocale}`;
   const segments = safePathname.split('/').filter(Boolean);
@@ -188,13 +180,10 @@ function radioValueToTextScale(value: string): AccessibilityPrefs['textScale'] {
 function AccessibilityDropdown() {
   const common = useTranslations('common');
   const [mounted, setMounted] = useState(false);
-  const [prefs, setPrefs] = useState<AccessibilityPrefs>(() =>
-    readAccessibilityPrefs(),
-  );
+  const { prefs, setPref, reset } = useAccessibilityPrefs();
 
   useEffect(() => {
     setMounted(true);
-    setPrefs(readAccessibilityPrefs());
   }, []);
 
   const contrast = mounted ? prefs.contrast : 'default';
@@ -205,42 +194,26 @@ function AccessibilityDropdown() {
 
   const handleContrast = (value: string) => {
     const v = value as ContrastMode;
-    if (v === 'default' || v === 'high') {
-      const next = setAccessibilityPref({ contrast: v });
-      setPrefs(next);
-    }
+    if (v === 'default' || v === 'high') setPref({ contrast: v });
   };
 
   const handleTextSize = (value: string) => {
-    const next = setAccessibilityPref({
-      textScale: radioValueToTextScale(value),
-    });
-    setPrefs(next);
+    setPref({ textScale: radioValueToTextScale(value) });
   };
 
   const handleLineHeight = (checked: boolean) => {
-    const next = setAccessibilityPref({
-      lineHeight: checked ? 'comfortable' : 'default',
-    });
-    setPrefs(next);
+    setPref({ lineHeight: checked ? 'comfortable' : 'default' });
   };
 
   const handleLetterSpacing = (checked: boolean) => {
-    const next = setAccessibilityPref({
-      letterSpacing: checked ? 'increased' : 'default',
-    });
-    setPrefs(next);
+    setPref({ letterSpacing: checked ? 'increased' : 'default' });
   };
 
   const handleDyslexiaFont = (checked: boolean) => {
-    const next = setAccessibilityPref({ dyslexiaFont: checked });
-    setPrefs(next);
+    setPref({ dyslexiaFont: checked });
   };
 
-  const handleReset = () => {
-    resetAccessibilityPrefs();
-    setPrefs(readAccessibilityPrefs());
-  };
+  const handleReset = () => reset();
 
   const onSelectPreventClose = (e: Event) => e.preventDefault();
 
@@ -289,7 +262,7 @@ function AccessibilityDropdown() {
               </span>
               <span className={INDICATOR_AREA_CLASS}>
                 <DropdownMenuPrimitive.ItemIndicator>
-                  <RadioDotIcon />
+                  <CheckIcon />
                 </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
@@ -301,7 +274,7 @@ function AccessibilityDropdown() {
               <span className={LABEL_CLASS}>{common('a11y.contrastHigh')}</span>
               <span className={INDICATOR_AREA_CLASS}>
                 <DropdownMenuPrimitive.ItemIndicator>
-                  <RadioDotIcon />
+                  <CheckIcon />
                 </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
@@ -322,10 +295,7 @@ function AccessibilityDropdown() {
             checked={prefs.motion === 'reduced'}
             onCheckedChange={(checked) => {
               const isOn = checked === true;
-              const next = setAccessibilityPref({
-                motion: isOn ? 'reduced' : 'full',
-              });
-              setPrefs(next);
+              setPref({ motion: isOn ? 'reduced' : 'full' });
             }}
             onSelect={onSelectPreventClose}
             className={ROW_CLASS}
@@ -366,7 +336,7 @@ function AccessibilityDropdown() {
               </span>
               <span className={INDICATOR_AREA_CLASS}>
                 <DropdownMenuPrimitive.ItemIndicator>
-                  <RadioDotIcon />
+                  <CheckIcon />
                 </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
@@ -380,7 +350,7 @@ function AccessibilityDropdown() {
               </span>
               <span className={INDICATOR_AREA_CLASS}>
                 <DropdownMenuPrimitive.ItemIndicator>
-                  <RadioDotIcon />
+                  <CheckIcon />
                 </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
@@ -394,7 +364,7 @@ function AccessibilityDropdown() {
               </span>
               <span className={INDICATOR_AREA_CLASS}>
                 <DropdownMenuPrimitive.ItemIndicator>
-                  <RadioDotIcon />
+                  <CheckIcon />
                 </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>

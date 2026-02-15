@@ -1,9 +1,11 @@
+export { useAccessibilityPrefs } from './lib/useAccessibilityPrefs';
 export {
   readAccessibilityPrefs,
   applyAccessibilityPrefsToRoot,
   persistAccessibilityPrefs,
   setAccessibilityPref,
   resetAccessibilityPrefs,
+  EVENT_A11Y_PREFS_CHANGED,
   applyAccessibilityPreferences,
   getSystemTheme,
   getStoredTheme,
