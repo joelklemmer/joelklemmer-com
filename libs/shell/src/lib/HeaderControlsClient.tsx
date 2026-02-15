@@ -27,8 +27,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@joelklemmer/ui';
+import * as DropdownMenuPrimitive from '@radix-ui/react-dropdown-menu';
 import { locales, type AppLocale } from '@joelklemmer/i18n';
 import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 
@@ -80,6 +82,30 @@ function SlidersHorizontalIcon() {
       <line x1="10" y1="8" x2="14" y2="8" />
       <line x1="18" y1="16" x2="22" y2="16" />
     </svg>
+  );
+}
+
+function CheckIcon() {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className="size-4 shrink-0"
+    >
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+  );
+}
+
+function RadioDotIcon() {
+  return (
+    <span className="size-2 shrink-0 rounded-full bg-current" aria-hidden />
   );
 }
 
@@ -185,13 +211,6 @@ function AccessibilityDropdown() {
     }
   };
 
-  const handleMotion = (checked: boolean | 'indeterminate') => {
-    const next = setAccessibilityPref({
-      motion: checked === true ? 'reduced' : 'full',
-    });
-    setPrefs(next);
-  };
-
   const handleTextSize = (value: string) => {
     const next = setAccessibilityPref({
       textScale: radioValueToTextScale(value),
@@ -225,9 +244,11 @@ function AccessibilityDropdown() {
 
   const onSelectPreventClose = (e: Event) => e.preventDefault();
 
-  const itemClass =
-    'flex justify-between items-center w-full py-2 px-2 text-sm hover:bg-muted/20 outline-none gap-2';
-  const subgroupClass = 'text-xs text-muted px-2 py-1';
+  const ROW_CLASS =
+    'flex items-center justify-between gap-3 rounded-md px-2 py-2 text-text hover:bg-muted/20 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-surface cursor-default select-none text-sm ps-2';
+  const LABEL_CLASS = 'flex-1 min-w-0 text-start';
+  const INDICATOR_AREA_CLASS = 'flex shrink-0 w-6 items-center justify-end';
+  const SECTION_LABEL_CLASS = 'text-xs text-muted px-2 py-1';
 
   return (
     <DropdownMenu modal={false}>
@@ -244,13 +265,13 @@ function AccessibilityDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-[22rem] max-h-[min(70vh,560px)] overflow-y-auto [scrollbar-gutter:stable] p-3 space-y-3 border-border bg-surface shadow-lg"
+        className="w-[22rem] max-h-[min(70vh,560px)] overflow-y-auto rounded-2xl border border-border bg-surface p-3 shadow-sm [scrollbar-gutter:stable]"
       >
         {/* Contrast */}
         <section aria-labelledby="a11y-contrast-heading" className="space-y-1">
           <DropdownMenuLabel
             id="a11y-contrast-heading"
-            className={subgroupClass}
+            className={SECTION_LABEL_CLASS}
           >
             {common('a11y.contrastLabel')}
           </DropdownMenuLabel>
@@ -261,130 +282,186 @@ function AccessibilityDropdown() {
             <DropdownMenuRadioItem
               value="default"
               onSelect={onSelectPreventClose}
-              className={itemClass}
+              className={ROW_CLASS}
             >
-              <span className="flex-1 min-w-0 text-start">
+              <span className={LABEL_CLASS}>
                 {common('a11y.contrastDefault')}
+              </span>
+              <span className={INDICATOR_AREA_CLASS}>
+                <DropdownMenuPrimitive.ItemIndicator>
+                  <RadioDotIcon />
+                </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
             <DropdownMenuRadioItem
               value="high"
               onSelect={onSelectPreventClose}
-              className={itemClass}
+              className={ROW_CLASS}
             >
-              <span className="flex-1 min-w-0 text-start">
-                {common('a11y.contrastHigh')}
+              <span className={LABEL_CLASS}>{common('a11y.contrastHigh')}</span>
+              <span className={INDICATOR_AREA_CLASS}>
+                <DropdownMenuPrimitive.ItemIndicator>
+                  <RadioDotIcon />
+                </DropdownMenuPrimitive.ItemIndicator>
               </span>
             </DropdownMenuRadioItem>
           </DropdownMenuRadioGroup>
         </section>
 
+        <DropdownMenuSeparator className="my-2 border-border" />
+
         {/* Motion */}
         <section aria-labelledby="a11y-motion-heading" className="space-y-1">
-          <DropdownMenuLabel id="a11y-motion-heading" className={subgroupClass}>
+          <DropdownMenuLabel
+            id="a11y-motion-heading"
+            className={SECTION_LABEL_CLASS}
+          >
             {common('a11y.motionSectionLabel')}
           </DropdownMenuLabel>
           <DropdownMenuCheckboxItem
             checked={prefs.motion === 'reduced'}
-            onCheckedChange={handleMotion}
+            onCheckedChange={(checked) => {
+              const isOn = checked === true;
+              const next = setAccessibilityPref({
+                motion: isOn ? 'reduced' : 'full',
+              });
+              setPrefs(next);
+            }}
             onSelect={onSelectPreventClose}
-            className={itemClass}
+            className={ROW_CLASS}
           >
-            <span className="flex-1 min-w-0 text-start">
-              {common('a11y.motionLabel')}
+            <span className={LABEL_CLASS}>{common('a11y.motionLabel')}</span>
+            <span className={INDICATOR_AREA_CLASS}>
+              <DropdownMenuPrimitive.ItemIndicator>
+                <CheckIcon />
+              </DropdownMenuPrimitive.ItemIndicator>
             </span>
           </DropdownMenuCheckboxItem>
         </section>
 
+        <DropdownMenuSeparator className="my-2 border-border" />
+
         {/* Type */}
-        <section aria-labelledby="a11y-type-heading" className="space-y-3">
-          <DropdownMenuLabel id="a11y-type-heading" className={subgroupClass}>
+        <section aria-labelledby="a11y-type-heading" className="space-y-2">
+          <DropdownMenuLabel
+            id="a11y-type-heading"
+            className={SECTION_LABEL_CLASS}
+          >
             {common('a11y.typeSectionLabel')}
           </DropdownMenuLabel>
-          <div className="space-y-2">
-            <p className={subgroupClass}>{common('a11y.textSizeLabel')}</p>
-            <DropdownMenuRadioGroup
-              value={textSize}
-              onValueChange={handleTextSize}
-            >
-              <DropdownMenuRadioItem
-                value="default"
-                onSelect={onSelectPreventClose}
-                className={itemClass}
-              >
-                <span className="flex-1 min-w-0 text-start">
-                  {common('a11y.textSizeDefault')}
-                </span>
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem
-                value="medium"
-                onSelect={onSelectPreventClose}
-                className={itemClass}
-              >
-                <span className="flex-1 min-w-0 text-start">
-                  {common('a11y.textSizeMedium')}
-                </span>
-              </DropdownMenuRadioItem>
-              <DropdownMenuRadioItem
-                value="large"
-                onSelect={onSelectPreventClose}
-                className={itemClass}
-              >
-                <span className="flex-1 min-w-0 text-start">
-                  {common('a11y.textSizeLarge')}
-                </span>
-              </DropdownMenuRadioItem>
-            </DropdownMenuRadioGroup>
-            <p className={subgroupClass}>
-              {common('a11y.readingAdjustmentsLabel')}
-            </p>
-            <DropdownMenuCheckboxItem
-              checked={lineHeight}
-              onCheckedChange={(c) => handleLineHeight(c === true)}
+          <DropdownMenuLabel className={SECTION_LABEL_CLASS}>
+            {common('a11y.textSizeLabel')}
+          </DropdownMenuLabel>
+          <DropdownMenuRadioGroup
+            value={textSize}
+            onValueChange={handleTextSize}
+          >
+            <DropdownMenuRadioItem
+              value="default"
               onSelect={onSelectPreventClose}
-              className={itemClass}
+              className={ROW_CLASS}
             >
-              <span className="flex-1 min-w-0 text-start">
-                {common('a11y.lineHeightComfortable')}
+              <span className={LABEL_CLASS}>
+                {common('a11y.textSizeDefault')}
               </span>
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={letterSpacing}
-              onCheckedChange={(c) => handleLetterSpacing(c === true)}
+              <span className={INDICATOR_AREA_CLASS}>
+                <DropdownMenuPrimitive.ItemIndicator>
+                  <RadioDotIcon />
+                </DropdownMenuPrimitive.ItemIndicator>
+              </span>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem
+              value="medium"
               onSelect={onSelectPreventClose}
-              className={itemClass}
+              className={ROW_CLASS}
             >
-              <span className="flex-1 min-w-0 text-start">
-                {common('a11y.letterSpacingIncreased')}
+              <span className={LABEL_CLASS}>
+                {common('a11y.textSizeMedium')}
               </span>
-            </DropdownMenuCheckboxItem>
-            <DropdownMenuCheckboxItem
-              checked={dyslexiaFont}
-              onCheckedChange={(c) => handleDyslexiaFont(c === true)}
+              <span className={INDICATOR_AREA_CLASS}>
+                <DropdownMenuPrimitive.ItemIndicator>
+                  <RadioDotIcon />
+                </DropdownMenuPrimitive.ItemIndicator>
+              </span>
+            </DropdownMenuRadioItem>
+            <DropdownMenuRadioItem
+              value="large"
               onSelect={onSelectPreventClose}
-              className={itemClass}
+              className={ROW_CLASS}
             >
-              <span className="flex-1 min-w-0 text-start">
-                {common('a11y.dyslexiaFontLabel')}
+              <span className={LABEL_CLASS}>
+                {common('a11y.textSizeLarge')}
               </span>
-            </DropdownMenuCheckboxItem>
-          </div>
+              <span className={INDICATOR_AREA_CLASS}>
+                <DropdownMenuPrimitive.ItemIndicator>
+                  <RadioDotIcon />
+                </DropdownMenuPrimitive.ItemIndicator>
+              </span>
+            </DropdownMenuRadioItem>
+          </DropdownMenuRadioGroup>
+          <DropdownMenuLabel className={SECTION_LABEL_CLASS}>
+            {common('a11y.readingAdjustmentsLabel')}
+          </DropdownMenuLabel>
+          <DropdownMenuCheckboxItem
+            checked={lineHeight}
+            onCheckedChange={(c) => handleLineHeight(c === true)}
+            onSelect={onSelectPreventClose}
+            className={ROW_CLASS}
+          >
+            <span className={LABEL_CLASS}>
+              {common('a11y.lineHeightComfortable')}
+            </span>
+            <span className={INDICATOR_AREA_CLASS}>
+              <DropdownMenuPrimitive.ItemIndicator>
+                <CheckIcon />
+              </DropdownMenuPrimitive.ItemIndicator>
+            </span>
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={letterSpacing}
+            onCheckedChange={(c) => handleLetterSpacing(c === true)}
+            onSelect={onSelectPreventClose}
+            className={ROW_CLASS}
+          >
+            <span className={LABEL_CLASS}>
+              {common('a11y.letterSpacingIncreased')}
+            </span>
+            <span className={INDICATOR_AREA_CLASS}>
+              <DropdownMenuPrimitive.ItemIndicator>
+                <CheckIcon />
+              </DropdownMenuPrimitive.ItemIndicator>
+            </span>
+          </DropdownMenuCheckboxItem>
+          <DropdownMenuCheckboxItem
+            checked={dyslexiaFont}
+            onCheckedChange={(c) => handleDyslexiaFont(c === true)}
+            onSelect={onSelectPreventClose}
+            className={ROW_CLASS}
+          >
+            <span className={LABEL_CLASS}>
+              {common('a11y.dyslexiaFontLabel')}
+            </span>
+            <span className={INDICATOR_AREA_CLASS}>
+              <DropdownMenuPrimitive.ItemIndicator>
+                <CheckIcon />
+              </DropdownMenuPrimitive.ItemIndicator>
+            </span>
+          </DropdownMenuCheckboxItem>
         </section>
 
+        <DropdownMenuSeparator className="my-2 border-border" />
+
         {/* Reset */}
-        <div className="pt-2 border-t border-border">
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              handleReset();
-            }}
-            className={`${focusRingClass} w-full py-2 px-2 text-sm text-muted hover:text-text hover:bg-muted/20 rounded-none text-start cursor-pointer`}
-            aria-label={common('a11y.resetToDefaults')}
-          >
-            {common('a11y.resetToDefaults')}
-          </button>
-        </div>
+        <DropdownMenuItem
+          onSelect={(e) => {
+            e.preventDefault();
+            handleReset();
+          }}
+          className={`${ROW_CLASS} text-muted hover:text-text`}
+          aria-label={common('a11y.resetToDefaults')}
+        >
+          <span className={LABEL_CLASS}>{common('a11y.resetToDefaults')}</span>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
