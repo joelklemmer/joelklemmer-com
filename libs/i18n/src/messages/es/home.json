@@ -29,6 +29,23 @@
       "description": "Arquitecturas operacionales integradas que apoyan la gobernanza de cadena de suministro y la modernización institucional."
     }
   },
+  "section3": {
+    "title": "Escala Institucional y Administración Ejecutiva",
+    "intro": "En entornos de defensa federal, sistemas de salud, infraestructura pública y modernización institucional, el liderazgo se ha enfocado en la claridad de gobernanza, la disciplina del capital y la continuidad operativa dentro de ecosistemas críticos para la misión.",
+    "block1": {
+      "title": "Seguridad Nacional y Sistemas de Defensa",
+      "body": "Supervisión de carteras de ciclo de vida multimillonarias que respaldan infraestructura de comunicaciones global, modernización de armamentos, ecosistemas de pruebas operacionales y preparación de fuerzas conjuntas dentro de entornos de ejecución distribuida."
+    },
+    "block2": {
+      "title": "Sistemas Federales de Salud y Cadena de Suministro",
+      "body": "Adquisición estratégica y administración de capital en redes de instalaciones a nivel nacional, ecosistemas de proveedores y acuerdos de suministro médico a largo plazo que respaldan la estabilidad operativa y la continuidad de la atención."
+    },
+    "block3": {
+      "title": "Infraestructura Pública y Modernización Institucional",
+      "body": "Arquitectura de gobernanza y transformación de adquisiciones que respaldan programas de capital, reforma de cumplimiento, modernización de infraestructura e iniciativas de transición digital institucional."
+    },
+    "cta": "Ver casos de estudio"
+  },
   "selectedWork": {
     "title": "Trabajo Seleccionado",
     "viewAll": "Ver Todos los Casos",

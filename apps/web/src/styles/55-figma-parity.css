@@ -182,9 +182,10 @@ footer.footer-root {
   margin-block-end: 0;
 }
 
-/* Dividers: 1px line between sections (hero → domains → selected work); same as footer     */
+/* Dividers: 1px grid-bound line between sections; width matches canonical container;
+   token color for dark/light theme parity */
 .content-lane-grid > section.section-shell + section.section-shell {
-  border-block-start: 1px solid #d9d7d4;
+  border-block-start: 1px solid hsl(var(--color-border-subtle));
   padding-block-start: var(--space-8);
 }
 
@@ -224,10 +225,19 @@ footer.footer-root {
 /* --------------------------------------------------------------------------- */
 header[aria-label] {
   --masthead-border: hsl(var(--color-border-subtle));
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface));
 }
 
 header[aria-label] .masthead-identity-link {
   font-weight: 500;
+}
+
+/* Visual balance: reduce logo dominance on desktop; keep mobile unchanged */
+@media (min-width: 1024px) {
+  header[aria-label] .masthead-identity-link {
+    font-weight: 400;
+  }
 }
 
 header[aria-label] .nav-primary-link {
@@ -236,4 +246,67 @@ header[aria-label] .nav-primary-link {
 
 header[aria-label] .masthead-icon svg {
   stroke-width: 1.5;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Ukrainian locale: hero H1 wrap + header brand visibility (UA-only overrides) */
+/* --------------------------------------------------------------------------- */
+/* Hero: allow H1 to wrap within column; prevent bleed into photo */
+html[lang='uk'] .hero-authority-content {
+  min-width: 0;
+}
+html[lang='uk'] .hero-title {
+  overflow-wrap: anywhere !important;
+  word-break: break-word;
+  min-width: 0;
+}
+html[lang='uk'] .hero-title span {
+  white-space: normal !important;
+}
+@media (min-width: 1024px) {
+  html[lang='uk'] .hero-title {
+    font-size: clamp(1.5rem, 3vw + 1rem, 3.25rem) !important;
+  }
+}
+
+/* Header: brand never truncates; nav shrinks first; Контакти visible (UA-only) */
+header[data-locale='uk'][aria-label] .masthead-identity {
+  flex-shrink: 0;
+}
+header[data-locale='uk'][aria-label] .masthead-controls {
+  flex-shrink: 1;
+  min-width: 0;
+}
+header[data-locale='uk'][aria-label] .masthead-nav {
+  flex-shrink: 1;
+  min-width: 0;
+}
+header[data-locale='uk'][aria-label] .masthead-utilities-wrap {
+  flex-shrink: 0;
+}
+/* UA nav: tighter gap + smaller font at lg+ so all items visible */
+header[data-locale='uk'] .masthead-nav-uk {
+  flex-wrap: wrap;
+  row-gap: 0.25rem;
+}
+@media (min-width: 1100px) {
+  header[data-locale='uk'] .masthead-nav-primary {
+    --nav-primary-gap: 0.5rem;
+    --nav-primary-padding-inline: 0.5rem;
+    --text-nav: 0.8125rem;
+    --text-nav-line: 1.35;
+  }
+}
+@media (min-width: 1280px) {
+  header[data-locale='uk'] .masthead-nav-primary {
+    --nav-primary-gap: 0.5rem;
+    --nav-primary-padding-inline: 0.5rem;
+    --text-nav: 0.8125rem;
+  }
+}
+@media (min-width: 1536px) {
+  header[data-locale='uk'] .masthead-nav-primary {
+    --nav-primary-gap: 0.75rem;
+    --nav-primary-padding-inline: 0.625rem;
+  }
 }

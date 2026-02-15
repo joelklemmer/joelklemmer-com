@@ -29,6 +29,23 @@
       "description": "Integrated operational architectures supporting supply chain governance and institutional modernization."
     }
   },
+  "section3": {
+    "title": "Institutional Scale & Executive Stewardship",
+    "intro": "Across federal defense, healthcare systems, public infrastructure, and institutional modernization environments, leadership has focused on governance clarity, disciplined capital stewardship, and operational continuity within mission-critical ecosystems.",
+    "block1": {
+      "title": "National Security & Defense Systems",
+      "body": "Oversight of multi-billion lifecycle portfolios supporting global communications infrastructure, weapons modernization, operational testing ecosystems, and joint force readiness within distributed execution environments."
+    },
+    "block2": {
+      "title": "Federal Healthcare & Supply Chain Systems",
+      "body": "Strategic sourcing and capital stewardship across nationwide facility networks, vendor ecosystems, and long-term medical supply agreements supporting operational stability and continuity of care."
+    },
+    "block3": {
+      "title": "Public Infrastructure & Institutional Modernization",
+      "body": "Governance architecture and procurement transformation supporting capital programs, compliance reform, infrastructure modernization, and institutional digital transition initiatives."
+    },
+    "cta": "View Case Studies"
+  },
   "selectedWork": {
     "title": "Selected Work",
     "viewAll": "View All Case Studies",

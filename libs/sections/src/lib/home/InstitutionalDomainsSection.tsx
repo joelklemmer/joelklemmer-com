@@ -22,14 +22,14 @@ export function InstitutionalDomainsSection({
       className="section-shell"
       aria-labelledby="domains-heading"
     >
-      <div className="py-10 sm:py-12">
+      <div className="py-16 sm:py-20 lg:py-24">
         <h2
           id="domains-heading"
           className="text-section-heading font-semibold text-text mb-8"
         >
           {title}
         </h2>
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-10 lg:grid-cols-3 lg:gap-12 xl:gap-16 text-start">
+        <div className="grid grid-cols-1 gap-8 sm:gap-10 md:grid-cols-2 md:gap-12 lg:grid-cols-3 lg:gap-12 text-start">
           <div>
             <h3 className="text-lg font-semibold text-text mb-2">
               {governance.title}

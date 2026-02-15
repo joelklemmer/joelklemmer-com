@@ -279,7 +279,27 @@ section.section-shell:last-child {
   padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
 }
 
-/* Figma: home content band uses Container (wide) for lane+padding; aligns with masthead bar. */
+/* Canonical homepage container: w-full, max-w-6xl (~1200px), mx-auto, px-6, lg:px-8.
+   Single contract for Hero, Core Institutional Domains, Institutional Scale sections.
+   RTL-safe via logical properties; safe-area insets for notched devices;
+   no increase at 2xl/ultra-wide. */
+.home-canonical-container {
+  width: 100%;
+  max-width: 72rem; /* 1152px = Tailwind max-w-6xl */
+  margin-inline: auto;
+  padding-inline: calc(1.5rem + env(safe-area-inset-inline-start, 0px))
+    calc(1.5rem + env(safe-area-inset-inline-end, 0px));
+  min-width: 0;
+}
+
+@media (min-width: 1024px) {
+  .home-canonical-container {
+    padding-inline: calc(2rem + env(safe-area-inset-inline-start, 0px))
+      calc(2rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* Figma: home content band uses canonical container; aligns with masthead bar. */
 .home-content-band {
   min-width: 0;
 }
@@ -668,6 +688,13 @@ section.section-shell:last-child {
   --masthead-icon-size: clamp(1rem, 2vw + 0.75rem, 1.25rem);
 }
 
+/* Visual balance: increase utility icon counterweight on desktop; keep mobile unchanged */
+@media (min-width: 1024px) {
+  header[aria-label] {
+    --masthead-icon-size: 1.375rem;
+  }
+}
+
 /* Figma Make: single horizontal row — logo | nav | utils never wrap (TV→IoT).
    Identity truncates; controls (hamburger+icons) always visible and never under wordmark. */
 .masthead-bar {
@@ -745,17 +772,21 @@ section.section-shell:last-child {
 /* Header: Fortune 10 / statesman briefing interface.
    Sticky with token-driven background. Scroll state set by MastheadScrollEffect.
    overflow: visible so focus rings on masthead controls are not clipped.
-   Figma site: black masthead in light mode → light text (--masthead-bg from 00-tokens). */
+   Background matches page surface (--masthead-bg); solid at all times. */
 header[aria-label] {
   position: sticky;
   top: 0;
   z-index: 40;
   background: var(--masthead-bg);
-  border-bottom: 1px solid var(--masthead-border);
   overflow: visible;
   transition:
     background-color var(--transition-duration-normal) var(--ease-authority),
     box-shadow var(--transition-duration-normal) var(--ease-authority);
+}
+
+/* Divider grid-bound to canonical container width; uses border token */
+header[aria-label] .masthead-outer {
+  border-block-end: 1px solid var(--masthead-border);
 }
 
 /* Figma: light mode masthead is light; use dark text and visible focus ring */
@@ -788,11 +819,8 @@ header[aria-label] {
   }
 }
 
-/* Figma: translucent masthead when scrolled (partial transparency + backdrop blur). */
+/* Scrolled: solid surface maintained; subtle shadow for separation */
 [data-masthead-scrolled] header[aria-label] {
-  background: var(--masthead-bg-scrolled);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 1px 0 var(--masthead-border);
 }
 
@@ -800,7 +828,5 @@ header[aria-label] {
   header[aria-label],
   [data-masthead-scrolled] header[aria-label] {
     transition: none;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
   }
 }

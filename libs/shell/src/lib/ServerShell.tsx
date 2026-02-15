@@ -45,6 +45,8 @@ export interface ServerShellProps {
   mobileNavSlot?: ReactNode;
   /** Consent banner + client island when no choice made. Rendered at end of layout-root. */
   consentSlot?: ReactNode;
+  /** Current locale for UA-only header adjustments (e.g. nav visibility). */
+  locale?: string;
   children: ReactNode;
   mainId?: string;
 }
@@ -65,9 +67,11 @@ export function ServerShell({
   headerDeferredSlot,
   mobileNavSlot,
   consentSlot,
+  locale,
   children,
   mainId = MAIN_CONTENT_ID,
 }: ServerShellProps) {
+  const isUk = locale === 'uk';
   return (
     <div className="layout-root min-h-screen bg-bg text-text">
       <a href={`#${mainId}`} className={skipLinkClass} data-skip-link>
@@ -77,15 +81,13 @@ export function ServerShell({
         aria-label={headerLabel}
         data-testid="masthead"
         className="sticky top-0 z-40"
+        {...(isUk && { 'data-locale': 'uk' })}
       >
-        <Container
-          variant="full"
-          className="masthead-outer py-2 md:py-2 min-w-0"
-        >
+        <div className="masthead-outer home-canonical-container py-2 md:py-2 min-w-0">
           <div
             data-system="masthead-bar"
             data-testid="masthead-bar"
-            className="masthead-bar flex flex-nowrap items-center w-full min-w-0 max-w-[var(--container-max-width)] mx-auto gap-[var(--masthead-bar-gap,1rem)]"
+            className="masthead-bar flex flex-nowrap items-center w-full min-w-0 gap-[var(--masthead-bar-gap,1rem)]"
           >
             {/* Left: wordmark — truncates on narrow; Figma site: uniform weight and size */}
             <div className="masthead-identity flex-shrink min-w-0 overflow-hidden">
@@ -117,7 +119,7 @@ export function ServerShell({
                   className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
                 >
                   <ul
-                    className="nav-primary-list flex-nowrap items-center min-h-[var(--masthead-bar-height)] whitespace-nowrap"
+                    className={`nav-primary-list flex-nowrap items-center min-h-[var(--masthead-bar-height)] whitespace-nowrap${isUk ? ' masthead-nav-uk' : ''}`}
                     data-nav="desktop"
                   >
                     {navItems.map((item) => (
@@ -202,7 +204,7 @@ export function ServerShell({
               </div>
             </div>
           </div>
-        </Container>
+        </div>
       </header>
       <main
         id={mainId}

@@ -17,16 +17,15 @@ import {
 import {
   HeroSection,
   InstitutionalDomainsSection,
-  SelectedWorkSection,
+  InstitutionalScaleSection,
 } from '@joelklemmer/sections';
-import { Container } from '@joelklemmer/ui';
 
 const HOME_HERO_IMAGE_PATH =
   '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp';
 
 /** Section order: H1 (hero) first, then H2 sections. Figma Make design. */
-type SectionId = 'hero' | 'domains' | 'selectedWork';
-const HOME_IA_ORDER: SectionId[] = ['hero', 'domains', 'selectedWork'];
+type SectionId = 'hero' | 'domains' | 'institutionalScale';
+const HOME_IA_ORDER: SectionId[] = ['hero', 'domains', 'institutionalScale'];
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
@@ -69,19 +68,23 @@ async function HomeBelowFold() {
           description: t('domains.operational.description'),
         }}
       />
-      <SelectedWorkSection
-        title={t('selectedWork.title')}
-        viewAll={t('selectedWork.viewAll')}
-        viewAllHref={`/${locale}/work`}
-        caseHref={`/${locale}/work`}
-        caseTitle={t('selectedWork.caseTitle')}
-        sector={t('selectedWork.sector')}
-        sectorValue={t('selectedWork.sectorValue')}
-        capitalScale={t('selectedWork.capitalScale')}
-        capitalValue={t('selectedWork.capitalValue')}
-        impact={t('selectedWork.impact')}
-        impactValue={t('selectedWork.impactValue')}
-        summary={t('selectedWork.summary')}
+      <InstitutionalScaleSection
+        title={t('section3.title')}
+        intro={t('section3.intro')}
+        block1={{
+          title: t('section3.block1.title'),
+          body: t('section3.block1.body'),
+        }}
+        block2={{
+          title: t('section3.block2.title'),
+          body: t('section3.block2.body'),
+        }}
+        block3={{
+          title: t('section3.block3.title'),
+          body: t('section3.block3.body'),
+        }}
+        cta={t('section3.cta')}
+        ctaHref={`/${locale}/work`}
       />
     </>
   );
@@ -132,15 +135,15 @@ export async function HomeScreen() {
       <WebSiteJsonLd locale={locale} />
       <PersonJsonLd />
       <BreadcrumbJsonLd locale={locale} pathSegments={[]} />
-      {/* Figma: unified content band max 1280px; single lane aligns with masthead */}
-      <Container variant="wide" className="home-content-band">
+      {/* Canonical responsive container: max-w-6xl (~1200px), px-6 lg:px-8, single lane aligns with masthead */}
+      <div className="home-canonical-container home-content-band">
         <div className="content-lane-grid">
           <Fragment key="hero">{hero}</Fragment>
           <Suspense fallback={null}>
             <HomeBelowFold />
           </Suspense>
         </div>
-      </Container>
+      </div>
     </>
   );
 }

@@ -157,6 +157,7 @@ export default async function LocaleLayout({
             locale={resolvedLocale}
           />
         }
+        locale={resolvedLocale}
       >
         {children}
       </ServerShell>

@@ -29,10 +29,10 @@ export type {
   FooterLinkItem,
 } from './FooterSection';
 export { HeaderSection } from './HeaderSection';
-export { InstitutionalDomainsSection, SelectedWorkSection } from './home';
+export { InstitutionalDomainsSection, InstitutionalScaleSection } from './home';
 export type {
   InstitutionalDomainsSectionProps,
-  SelectedWorkSectionProps,
+  InstitutionalScaleSectionProps,
 } from './home';
 export { HeroSection } from './HeroSection';
 export { IdentityScopeSection } from './IdentityScopeSection';
