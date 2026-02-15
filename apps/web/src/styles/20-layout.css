@@ -256,7 +256,7 @@ section.section-shell:last-child {
 }
 
 /* Full-width hero: section spans viewport; inner lane from Container variant=full.
-   Mobile: reduced padding and min-height so hero fits viewport without internal scroll.
+   Figma Make: space-12 padding; mobile reduced for viewport fit.
    overflow-x: clip prevents hero from extending viewport (RTL-safe). */
 .hero-authority {
   position: relative;
@@ -271,7 +271,7 @@ section.section-shell:last-child {
 
 @media (min-width: 768px) {
   .hero-authority {
-    padding-block: var(--space-10);
+    padding-block: var(--space-12);
   }
 }
 
@@ -398,11 +398,13 @@ section.section-shell:last-child {
   width: 100%;
   position: relative;
   overflow: hidden;
-  /* Institutional presentation: minimal border-radius, subtle depth */
-  border-radius: 0.125rem;
+  /* Figma Make: xl radius, soft shadow */
+  border-radius: var(--radius-xl, var(--radius-lg));
   background: hsl(var(--color-neutral-100));
-  /* Reduced shadow for editorial/institutional feel, not thumbnail tile */
-  box-shadow: 0 2px 8px hsl(var(--color-text) / 0.04);
+  box-shadow: var(
+    --hero-depth-shadow,
+    0 4px 16px hsl(var(--color-text) / 0.05)
+  );
   /* Height controlled by aspect ratio from PortraitImage component - no max-height to avoid conflicts */
 }
 
@@ -476,6 +478,37 @@ section.section-shell:last-child {
   }
 }
 
+/* Figma Make: hero thesis 3 lines, supporting, CTAs, photo right. */
+.hero-title {
+  font-family: var(--hero-display-font);
+  font-size: var(--text-hero);
+  line-height: var(--text-hero-line);
+  letter-spacing: -0.01em;
+  font-weight: var(--font-weight-normal);
+  color: hsl(var(--color-text));
+  margin: 0;
+}
+
+.hero-lede {
+  font-family: var(--hero-lede-font);
+  font-size: var(--text-body-large);
+  line-height: var(--text-body-large-line);
+  color: hsl(var(--color-muted));
+  margin: 0;
+  max-width: 680px;
+}
+
+.hero-wrap {
+  padding-block-start: var(--space-12);
+  padding-block-end: var(--space-12);
+}
+
+.hero-photo {
+  border-radius: var(--radius-xl, var(--radius-lg));
+  box-shadow: var(--hero-depth-shadow, var(--elevation-premium));
+}
+
+/* Legacy alias for hero display */
 .hero-display {
   font-family: var(--hero-display-font);
   font-size: var(--hero-display-size);
@@ -484,14 +517,6 @@ section.section-shell:last-child {
   font-weight: var(--hero-display-weight);
   color: hsl(var(--color-text));
   margin: 0;
-}
-
-.hero-lede {
-  font-family: var(--hero-lede-font);
-  font-size: var(--hero-lede-size);
-  line-height: var(--hero-lede-line);
-  margin: 0;
-  max-width: min(var(--readable-max-width), 52ch);
 }
 
 .hero-actions {
@@ -506,9 +531,6 @@ section.section-shell:last-child {
   font-size: var(--text-sm);
   font-weight: var(--font-weight-label);
   letter-spacing: var(--hero-cta-letter-spacing);
-  color: hsl(var(--color-text));
-  background: hsl(var(--color-surface));
-  border: 1px solid hsl(var(--color-border));
   border-radius: var(--radius-sm);
   transition:
     color var(--transition-duration-fast) var(--ease-authority),
@@ -516,7 +538,25 @@ section.section-shell:last-child {
     background-color var(--transition-duration-fast) var(--ease-authority);
 }
 
-.hero-action-link:hover {
+.hero-action-primary {
+  color: hsl(var(--color-text-on-accent));
+  background: hsl(var(--color-accent));
+  border: 1px solid hsl(var(--color-accent));
+}
+
+.hero-action-primary:hover {
+  background: hsl(var(--color-accent-strong));
+  border-color: hsl(var(--color-accent-strong));
+  color: hsl(var(--color-text-on-accent));
+}
+
+.hero-action-secondary {
+  color: hsl(var(--color-text));
+  background: hsl(var(--color-surface));
+  border: 1px solid hsl(var(--color-border));
+}
+
+.hero-action-secondary:hover {
   border-color: hsl(var(--color-accent));
   color: hsl(var(--color-accent));
 }
@@ -624,9 +664,30 @@ section.section-shell:last-child {
 }
 
 /* Header: Fortune 10 / statesman briefing interface.
+   Sticky with token-driven background. Scroll state set by MastheadScrollEffect.
    overflow: visible so focus rings on masthead controls are not clipped. */
 header[aria-label] {
-  background: hsl(var(--color-surface));
-  border-bottom-color: hsl(var(--color-border-subtle));
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--masthead-bg);
+  border-bottom: 1px solid var(--masthead-border);
   overflow: visible;
+  transition:
+    background-color var(--transition-duration-normal) var(--ease-authority),
+    box-shadow var(--transition-duration-normal) var(--ease-authority);
+}
+
+[data-masthead-scrolled] header[aria-label] {
+  background: var(--masthead-bg-scrolled);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 1px 0 var(--masthead-border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  header[aria-label],
+  [data-masthead-scrolled] header[aria-label] {
+    transition: none;
+  }
 }

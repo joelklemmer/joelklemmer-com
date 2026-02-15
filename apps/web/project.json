@@ -41,6 +41,14 @@
         "production": {}
       }
     },
+    "dev:stable": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx next dev --no-turbopack",
+        "cwd": "{projectRoot}"
+      },
+      "description": "Dev server without Turbopack; use if 'IO error attempting to create and acquire lockfile (os error 5)' on Windows. If issues persist, remove .next and retry."
+    },
     "a11y": {
       "executor": "nx:run-commands",
       "options": {

@@ -15,6 +15,7 @@
     "footerLabel": "Нижній колонтитул",
     "languageSwitcherLabel": "Вибір мови",
     "languageSwitcherAction": "Змінити мову на {language}",
+    "accessibility": "Доступність",
     "accessibilityPanelLabel": "Налаштування доступності",
     "themeLabel": "Тема",
     "themeLight": "Світла",
@@ -25,12 +26,15 @@
     "contrastLabel": "Контраст",
     "contrastDefault": "За замовчуванням",
     "contrastHigh": "Високий",
+    "motionSectionLabel": "Рух",
     "motionLabel": "Зменшити рух",
     "textSizeLabel": "Розмір тексту",
     "textSizeDefault": "За замовчуванням",
     "textSizeLarge": "Великий",
     "underlineLinksLabel": "Підкреслювати посилання",
-    "evaluatorToggleLabel": "Режим оцінювача"
+    "evaluatorToggleLabel": "Режим оцінювача",
+    "resetToDefaults": "Скинути налаштування",
+    "scrollToTop": "Прокрутити вгору"
   },
   "fallbackNotice": {
     "title": "Попередження про переклад",

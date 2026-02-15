@@ -15,6 +15,7 @@
     "footerLabel": "Footer",
     "languageSwitcherLabel": "Language options",
     "languageSwitcherAction": "Switch language to {language}",
+    "accessibility": "Accessibility",
     "accessibilityPanelLabel": "Accessibility settings",
     "themeLabel": "Theme",
     "themeLight": "Light",
@@ -25,12 +26,15 @@
     "contrastLabel": "Contrast",
     "contrastDefault": "Default",
     "contrastHigh": "High",
+    "motionSectionLabel": "Motion",
     "motionLabel": "Reduce motion",
     "textSizeLabel": "Text size",
     "textSizeDefault": "Default",
     "textSizeLarge": "Large",
     "underlineLinksLabel": "Underline links",
-    "evaluatorToggleLabel": "Evaluator view"
+    "evaluatorToggleLabel": "Evaluator view",
+    "resetToDefaults": "Reset to defaults",
+    "scrollToTop": "Scroll to top"
   },
   "fallbackNotice": {
     "title": "Translation fallback",

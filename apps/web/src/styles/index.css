@@ -1,5 +1,6 @@
 /* CAS: CSS Architecture Split. All @import first. */
 @import '../../../../libs/tokens/src/lib/tokens.css';
+@import '../../../../libs/tokens/src/lib/generated/figma-make.tokens.patch.css';
 @import './00-tokens.css';
 
 @tailwind base;

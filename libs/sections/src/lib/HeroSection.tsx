@@ -6,10 +6,17 @@ import { Container, PortraitImage } from '@joelklemmer/ui';
 export interface HeroAction {
   label: string;
   href: string;
+  /** 'primary' = filled accent; 'secondary' = outline (default) */
+  variant?: 'primary' | 'secondary';
 }
 
+/** Figma v4: headline as three thesis lines. When provided, used instead of title. */
 export interface HeroSectionProps {
-  title: string;
+  /** Single-line title (fallback when thesisLines not used). */
+  title?: string;
+  /** Figma v4: three headline lines. When provided, overrides title for H1. */
+  thesisLines?: [string, string, string];
+  /** Supporting paragraph (Figma: supporting; legacy: lede). */
   lede?: string;
   actions?: HeroAction[];
   /** Optional visual anchor: image path (e.g. /media/portrait.jpg) or ReactNode for custom composition */
@@ -23,12 +30,15 @@ export interface HeroSectionProps {
 
 export function HeroSection({
   title,
+  thesisLines,
   lede,
   actions,
   visual,
   imagePriority = false,
   children,
 }: HeroSectionProps) {
+  const headline: string[] =
+    thesisLines != null ? [...thesisLines] : title != null ? [title] : [];
   let visualNode: ReactNode = null;
   if (visual != null) {
     if (
@@ -81,8 +91,15 @@ export function HeroSection({
           className={useGrid ? 'hero-authority-grid' : 'hero-authority-stack'}
         >
           <div className="hero-authority-content">
-            <h1 id="hero-title" className="hero-display">
-              {title}
+            <h1 id="hero-title" className="hero-title">
+              {headline.length > 0
+                ? headline.map((line, i) => (
+                    <span key={i}>
+                      {line}
+                      {i < headline.length - 1 ? <br /> : null}
+                    </span>
+                  ))
+                : null}
             </h1>
             {lede ? <p className="hero-lede text-muted">{lede}</p> : null}
             {actions?.length ? (
@@ -91,7 +108,7 @@ export function HeroSection({
                   <Link
                     key={action.href}
                     href={action.href}
-                    className={`${focusRingClass} hero-action-link`}
+                    className={`${focusRingClass} hero-action-link hero-action-${action.variant === 'primary' ? 'primary' : 'secondary'}`}
                   >
                     {action.label}
                   </Link>

@@ -34,6 +34,7 @@
   --color-accent: 217 91% 52%;
   --color-accent-strong: 217 91% 45%;
   --color-accent-muted: var(--color-muted-cyan);
+  --color-text-on-accent: 0 0% 100%; /* WCAG AA on accent backgrounds */
   --color-focus: 217 91% 52%;
   /* Semantic aliases (field, surface, inset, text primary/secondary, divider, focus ring) */
   --color-text-primary: var(--color-text);
@@ -335,6 +336,11 @@
   --masthead-icon-size: 1.25rem;
   --masthead-icon-stroke: 2;
 
+  /* Masthead background: token-driven for light/dark/high-contrast */
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface) / 0.92);
+  --masthead-border: hsl(var(--color-border-subtle));
+
   /* Hero CTA: letter spacing for executive clarity */
   --hero-cta-letter-spacing: 0.02em;
 }
@@ -384,6 +390,8 @@
 
 /* Deterministic light theme (Authority Design Constitution light foundation) */
 :root[data-theme='light'] {
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface) / 0.92);
   --color-bg: var(--color-warm-neutral);
   --color-surface: var(--color-paper-base);
   --color-surface-elevated: var(--color-warm-neutral);
@@ -432,12 +440,18 @@
     --authority-glass-border: hsl(var(--color-border) / 0.08);
     --section-anchor-border: hsl(var(--color-border) / 0.1);
     --hero-inner-border: hsl(var(--color-border-subtle) / 0.15);
+    --masthead-bg: hsl(var(--color-surface));
+    --masthead-bg-scrolled: hsl(var(--color-surface) / 0.92);
+    --masthead-border: hsl(var(--color-border-subtle));
   }
 }
 
 :root[data-theme='dark'] {
   --color-bg: var(--color-deep-navy);
   --color-surface: var(--color-slate-core);
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface) / 0.92);
+  --masthead-border: hsl(var(--color-border-subtle));
   --color-surface-elevated: 222 28% 20%;
   --color-surface-field: 222 26% 18%;
   --color-surface-inset: 222 30% 14%;

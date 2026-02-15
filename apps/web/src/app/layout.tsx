@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import type { Metadata } from 'next';
 import { cookies, headers } from 'next/headers';
-import { Inter } from 'next/font/google';
+import { Inter, Crimson_Pro } from 'next/font/google';
 
 import { PATHNAME_HEADER } from '../middleware';
 import { getMetadataBaseUrl } from '../lib/requestBaseUrl';
@@ -27,12 +27,19 @@ export function generateMetadata(): Promise<Metadata> {
   });
 }
 
-/** Authority Design Constitution: Primary stack — Inter Variable. Subset + swap to minimize FOIT/FOUT. */
+/** Figma Make: Inter (body) + Crimson Pro (headings). Subset + swap to minimize FOIT/FOUT. */
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
   display: 'swap',
   preload: true,
+  adjustFontFallback: true,
+});
+const crimsonPro = Crimson_Pro({
+  weight: ['400', '500', '600'],
+  subsets: ['latin'],
+  variable: '--font-serif',
+  display: 'swap',
   adjustFontFallback: true,
 });
 
@@ -79,7 +86,7 @@ export default async function RootLayout({
     <html
       lang="en"
       dir="ltr"
-      className={inter.variable}
+      className={`${inter.variable} ${crimsonPro.variable}`}
       suppressHydrationWarning
       data-theme={theme}
       data-contrast={contrast}

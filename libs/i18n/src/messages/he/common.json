@@ -15,6 +15,7 @@
     "footerLabel": "כותרת תחתונה",
     "languageSwitcherLabel": "אפשרויות שפה",
     "languageSwitcherAction": "החלף שפה ל {language}",
+    "accessibility": "נגישות",
     "accessibilityPanelLabel": "הגדרות נגישות",
     "themeLabel": "ערכת נושא",
     "themeLight": "בהיר",
@@ -25,12 +26,15 @@
     "contrastLabel": "ניגודיות",
     "contrastDefault": "ברירת מחדל",
     "contrastHigh": "גבוה",
+    "motionSectionLabel": "תנועה",
     "motionLabel": "הפחתת תנועה",
     "textSizeLabel": "גודל טקסט",
     "textSizeDefault": "ברירת מחדל",
     "textSizeLarge": "גדול",
     "underlineLinksLabel": "הדגשת קישורים",
-    "evaluatorToggleLabel": "תצוגת מעריך"
+    "evaluatorToggleLabel": "תצוגת מעריך",
+    "resetToDefaults": "אפס לברירת מחדל",
+    "scrollToTop": "גלול למעלה"
   },
   "fallbackNotice": {
     "title": "התראת תרגום",

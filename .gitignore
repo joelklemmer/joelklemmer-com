@@ -4,6 +4,7 @@
 dist
 tmp
 tools/tmp
+temp-figma-extract
 out-tsc
 
 # Lighthouse CI artifacts (reports in tmp/lighthouse)

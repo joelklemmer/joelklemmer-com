@@ -15,6 +15,7 @@
     "footerLabel": "Pie de pagina",
     "languageSwitcherLabel": "Opciones de idioma",
     "languageSwitcherAction": "Cambiar idioma a {language}",
+    "accessibility": "Accesibilidad",
     "accessibilityPanelLabel": "Configuración de accesibilidad",
     "themeLabel": "Tema",
     "themeLight": "Claro",
@@ -25,12 +26,15 @@
     "contrastLabel": "Contraste",
     "contrastDefault": "Predeterminado",
     "contrastHigh": "Alto",
+    "motionSectionLabel": "Movimiento",
     "motionLabel": "Reducir movimiento",
     "textSizeLabel": "Tamaño del texto",
     "textSizeDefault": "Predeterminado",
     "textSizeLarge": "Grande",
     "underlineLinksLabel": "Subrayar enlaces",
-    "evaluatorToggleLabel": "Vista de evaluador"
+    "evaluatorToggleLabel": "Vista de evaluador",
+    "resetToDefaults": "Restablecer valores predeterminados",
+    "scrollToTop": "Ir arriba"
   },
   "fallbackNotice": {
     "title": "Aviso de traducción",
