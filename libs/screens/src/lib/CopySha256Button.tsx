@@ -15,7 +15,7 @@ export function CopySha256Button({
       onClick={() => {
         void navigator.clipboard.writeText(sha256);
       }}
-      className={`${focusRingClass} ml-2 rounded border border-muted bg-transparent px-2 py-0.5 text-xs`}
+      className={`${focusRingClass} ml-2 rounded-none border border-muted bg-transparent px-2 py-0.5 text-xs`}
       title={sha256}
       aria-label={copyLabel}
     >

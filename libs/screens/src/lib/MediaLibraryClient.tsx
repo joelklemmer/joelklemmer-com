@@ -154,7 +154,7 @@ export function MediaLibraryClient({
           <button
             type="button"
             onClick={() => setKind(null)}
-            className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
+            className={`${focusRingClass} rounded-none border px-3 py-1.5 text-sm ${
               !kind
                 ? 'border-accent bg-accent/10 text-accent-strong'
                 : 'border-border text-muted hover:text-text'
@@ -169,7 +169,7 @@ export function MediaLibraryClient({
               key={k}
               type="button"
               onClick={() => setKind(k)}
-              className={`${focusRingClass} rounded border px-3 py-1.5 text-sm capitalize ${
+              className={`${focusRingClass} rounded-none border px-3 py-1.5 text-sm capitalize ${
                 kind === k
                   ? 'border-accent bg-accent/10 text-accent-strong'
                   : 'border-border text-muted hover:text-text'
@@ -208,7 +208,7 @@ export function MediaLibraryClient({
                 className="media-list-item flex flex-col sm:flex-row gap-6 sm:gap-8 border-b border-border pb-8 last:border-0"
               >
                 <div className="media-thumb-rail shrink-0">
-                  <div className="media-thumb-frame rounded-lg overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5">
+                  <div className="media-thumb-frame rounded-none overflow-hidden border border-border bg-muted/50 shadow-sm ring-1 ring-black/5">
                     {showPlaceholder ? (
                       <div
                         className="media-thumb-placeholder"
@@ -218,7 +218,7 @@ export function MediaLibraryClient({
                     ) : (
                       <Link
                         href={asset.file}
-                        className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-lg`}
+                        className={`block w-full h-full ${focusRingClass} focus-visible:ring-2 focus-visible:ring-offset-2 rounded-none`}
                         aria-label={asset.alt}
                       >
                         <Image
@@ -253,7 +253,7 @@ export function MediaLibraryClient({
                   </dl>
                   <details className="mt-1 media-authority-details">
                     <summary
-                      className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text rounded py-1`}
+                      className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text rounded-none py-1`}
                     >
                       {labels.authorityDetails}
                     </summary>
@@ -301,7 +301,7 @@ export function MediaLibraryClient({
                   </details>
                   <details className="mt-1">
                     <summary
-                      className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text rounded py-1`}
+                      className={`${focusRingClass} cursor-pointer text-xs text-muted hover:text-text rounded-none py-1`}
                     >
                       {labels.sha256Disclosure}
                     </summary>
@@ -318,7 +318,7 @@ export function MediaLibraryClient({
                   <div className="mt-auto pt-2 flex flex-wrap gap-4">
                     <Link
                       href={asset.file}
-                      className={`${focusRingClass} text-sm font-medium underline underline-offset-4 text-text hover:text-muted rounded focus-visible:ring-2 focus-visible:ring-offset-2`}
+                      className={`${focusRingClass} text-sm font-medium underline underline-offset-4 text-text hover:text-muted rounded-none focus-visible:ring-2 focus-visible:ring-offset-2`}
                     >
                       {labels.viewImage}
                     </Link>
@@ -348,7 +348,7 @@ export function MediaLibraryClient({
               type="button"
               onClick={() => setPage(currentPageFromUrl - 1)}
               disabled={currentPageFromUrl === 1}
-              className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
+              className={`${focusRingClass} rounded-none border px-3 py-1.5 text-sm ${
                 currentPageFromUrl === 1
                   ? 'border-border text-muted opacity-50 cursor-not-allowed'
                   : 'border-border text-muted hover:text-text'
@@ -364,7 +364,7 @@ export function MediaLibraryClient({
               type="button"
               onClick={() => setPage(currentPageFromUrl + 1)}
               disabled={currentPageFromUrl >= totalPages}
-              className={`${focusRingClass} rounded border px-3 py-1.5 text-sm ${
+              className={`${focusRingClass} rounded-none border px-3 py-1.5 text-sm ${
                 currentPageFromUrl >= totalPages
                   ? 'border-border text-muted opacity-50 cursor-not-allowed'
                   : 'border-border text-muted hover:text-text'

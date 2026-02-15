@@ -27,7 +27,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
   const [mounted, setMounted] = useState(false);
 
-  // SSR-safe hydration: prevent flash of wrong theme
+  // SSR-safe: sync from document/cookie on mount so icon matches page theme
   useEffect(() => {
     setMounted(true);
     const stored = getStoredTheme();
@@ -60,6 +60,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);
+    const resolved = newTheme === 'system' ? getSystemTheme() : newTheme;
+    setResolvedTheme(resolved);
+    setThemeStorage(newTheme);
   };
 
   return (

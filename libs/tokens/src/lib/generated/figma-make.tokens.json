@@ -41,7 +41,23 @@
     "--space-20": "10rem",
     "--max-width": "1280px",
     "--radius": "0rem",
-    "--nav-height": "76px"
+    "--nav-height": "76px",
+    "--color-bg": "60 11% 96%",
+    "--color-surface": "0 0% 100%",
+    "--color-surface-elevated": "36 20% 95%",
+    "--color-bg-nav": "0 0% 100%",
+    "--color-bg-nav-solid": "0 0% 100%",
+    "--color-text": "0 0% 7%",
+    "--color-muted": "0 0% 17%",
+    "--color-text-tertiary": "0 0% 42%",
+    "--color-text-on-accent": "0 0% 100%",
+    "--color-border-subtle": "36 6% 84%",
+    "--color-border": "36 4% 76%",
+    "--color-accent": "211 34% 17%",
+    "--color-accent-strong": "221 31% 24%",
+    "--color-accent-light": "211 34% 17%",
+    "--color-hover-bg": "36 20% 95%",
+    "--color-focus": "211 34% 17%"
   },
   "dark": {
     "--font-size": "16px",
@@ -85,10 +101,27 @@
     "--space-20": "10rem",
     "--max-width": "1280px",
     "--radius": "0rem",
-    "--nav-height": "76px"
+    "--nav-height": "76px",
+    "--color-bg": "216 33% 6%",
+    "--color-surface": "215 23% 10%",
+    "--color-surface-elevated": "219 21% 13%",
+    "--color-bg-nav": "215 23% 10%",
+    "--color-bg-nav-solid": "215 23% 10%",
+    "--color-text": "0 0% 95%",
+    "--color-muted": "216 16% 76%",
+    "--color-text-tertiary": "216 12% 59%",
+    "--color-text-on-accent": "0 0% 95%",
+    "--color-border-subtle": "219 14% 19%",
+    "--color-border": "219 14% 24%",
+    "--color-accent": "213 29% 50%",
+    "--color-accent-strong": "213 33% 57%",
+    "--color-accent-light": "213 29% 50%",
+    "--color-hover-bg": "219 21% 13%",
+    "--color-focus": "213 29% 50%"
   },
   "meta": {
     "source": "Figma Make styles/theme.css",
-    "extractedAt": "2026-02-15T02:39:35.883Z"
+    "figmaSiteUrl": "https://pages-tile-41445691.figma.site/",
+    "extractedAt": "2026-02-15T03:28:01.745Z"
   }
 }

@@ -195,7 +195,7 @@ export function AccessibilityPanel() {
         onKeyDown={(e) => {
           if (e.key === ' ') e.preventDefault(); // Prevent scroll when activating with Space
         }}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={common('a11y.accessibilityPanelLabel')}
       >
         <svg
@@ -226,7 +226,7 @@ export function AccessibilityPanel() {
             role="dialog"
             aria-modal="true"
             aria-labelledby={TITLE_ID}
-            className="fixed z-[9999] w-64 rounded-md border border-border bg-surface shadow-lg p-4 focus:outline-none"
+            className="fixed z-[9999] w-64 rounded-none border border-border bg-surface shadow-lg p-4 focus:outline-none"
             style={{
               top: panelPos.top,
               insetInlineEnd: panelPos.insetInlineEnd,
@@ -254,7 +254,7 @@ export function AccessibilityPanel() {
                   onChange={(e) =>
                     setContrast(e.target.value as 'default' | 'high')
                   }
-                  className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
+                  className={`${focusRingClass} w-full rounded-none border border-border bg-bg px-3 py-2 text-sm text-text`}
                   aria-label={common('a11y.contrastLabel')}
                 >
                   <option value="default">
@@ -273,7 +273,7 @@ export function AccessibilityPanel() {
                     onChange={(e) =>
                       setMotion(e.target.checked ? 'reduced' : 'default')
                     }
-                    className={`${focusRingClass} rounded border-border text-accent`}
+                    className={`${focusRingClass} rounded-none border-border text-accent`}
                     aria-label={common('a11y.motionLabel')}
                   />
                   <span>{common('a11y.motionLabel')}</span>
@@ -294,7 +294,7 @@ export function AccessibilityPanel() {
                   onChange={(e) =>
                     setTextSize(e.target.value as 'default' | 'large')
                   }
-                  className={`${focusRingClass} w-full rounded border border-border bg-bg px-3 py-2 text-sm text-text`}
+                  className={`${focusRingClass} w-full rounded-none border border-border bg-bg px-3 py-2 text-sm text-text`}
                   aria-label={common('a11y.textSizeLabel')}
                 >
                   <option value="default">
@@ -311,7 +311,7 @@ export function AccessibilityPanel() {
                     type="checkbox"
                     checked={preferences.underlineLinks}
                     onChange={(e) => setUnderlineLinks(e.target.checked)}
-                    className={`${focusRingClass} rounded border-border text-accent`}
+                    className={`${focusRingClass} rounded-none border-border text-accent`}
                     aria-label={common('a11y.underlineLinksLabel')}
                   />
                   <span>{common('a11y.underlineLinksLabel')}</span>

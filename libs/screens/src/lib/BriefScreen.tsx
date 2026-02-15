@@ -37,11 +37,7 @@ import {
   computeOrchestrationHints,
   type SignalVectorInput,
 } from '@joelklemmer/authority-orchestration';
-import {
-  createPageMetadata,
-  PersonJsonLd,
-  BriefPageJsonLd,
-} from '@joelklemmer/seo';
+import { buildMetadata, PersonJsonLd, BriefPageJsonLd } from '@joelklemmer/seo';
 import {
   IdentityScopeSection,
   ReadPathSection,
@@ -72,14 +68,13 @@ import { DeferredBriefNavigator } from './DeferredBriefNavigator.client';
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['meta']);
-  const t = createScopedTranslator(locale, messages, 'meta');
-  return createPageMetadata({
-    title: t('brief.title'),
-    description: t('brief.description'),
+  const messages = await loadMessages(locale, ['seo', 'meta']);
+  return buildMetadata({
     locale,
+    routeKey: 'brief',
     pathname: '/brief',
     baseUrl: options?.baseUrl,
+    messages,
     ogImageSlug: 'brief',
   });
 }

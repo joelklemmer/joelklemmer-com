@@ -111,7 +111,7 @@ export function BriefNavigator({
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
             aria-label={labels.filterCategoryLegend}
-            className={`rounded border border-border bg-surface px-2 py-1.5 text-sm text-text ${focusRingClass}`}
+            className={`rounded-none border border-border bg-surface px-2 py-1.5 text-sm text-text ${focusRingClass}`}
           >
             <option value="">{labels.categoryAll}</option>
             {categoryOptions.map((opt) => (
@@ -136,7 +136,7 @@ export function BriefNavigator({
             value={strengthFilter}
             onChange={(e) => setStrengthFilter(Number(e.target.value))}
             aria-label={labels.filterStrengthLegend}
-            className={`rounded border border-border bg-surface px-2 py-1.5 text-sm text-text ${focusRingClass}`}
+            className={`rounded-none border border-border bg-surface px-2 py-1.5 text-sm text-text ${focusRingClass}`}
           >
             <option value={0}>{labels.strengthAll}</option>
             {strengthOptions.slice(1).map((n) => (
@@ -150,13 +150,13 @@ export function BriefNavigator({
           <span className="me-2 text-sm text-muted" id="brief-nav-view-label">
             {labels.viewModeLabel}:
           </span>
-          <span className="inline-flex rounded border border-border bg-surface">
+          <span className="inline-flex rounded-none border border-border bg-surface">
             <button
               type="button"
               onClick={() => setViewMode('grid')}
               aria-pressed={viewMode === 'grid'}
               aria-describedby="brief-nav-view-label"
-              className={`rounded-s border-e border-border px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
+              className={`rounded-none border-e border-border px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'grid'
                   ? 'bg-accent/20 text-accent-strong'
                   : 'text-text hover:bg-muted/50'
@@ -169,7 +169,7 @@ export function BriefNavigator({
               onClick={() => setViewMode('graph')}
               aria-pressed={viewMode === 'graph'}
               aria-describedby="brief-nav-view-label"
-              className={`rounded-e px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
+              className={`rounded-none px-2 py-1.5 text-sm transition-colors motion-reduce:transition-none ${focusRingClass} ${
                 viewMode === 'graph'
                   ? 'bg-accent/20 text-accent-strong'
                   : 'text-text hover:bg-muted/50'
@@ -206,7 +206,7 @@ export function BriefNavigator({
                   onKeyDown={(e) => handleCardKeyDown(e, claim.id)}
                   aria-expanded={isExpanded}
                   aria-controls={panelId}
-                  className={`w-full p-4 text-left ${focusRingClass} rounded-card transition-colors duration-fast motion-reduce:transition-none`}
+                  className={`w-full p-4 text-left ${focusRingClass} rounded-none transition-colors duration-fast motion-reduce:transition-none`}
                 >
                   <h3 className="text-lg font-semibold text-text">
                     {claim.label}
@@ -266,7 +266,7 @@ export function BriefNavigator({
                           }
                         }}
                         aria-label={labels.closePanel}
-                        className={`shrink-0 rounded border border-border bg-surface px-2 py-1 text-xs ${focusRingClass}`}
+                        className={`shrink-0 rounded-none border border-border bg-surface px-2 py-1 text-xs ${focusRingClass}`}
                       >
                         {labels.closePanel}
                       </button>

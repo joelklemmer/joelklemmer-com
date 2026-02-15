@@ -10,11 +10,11 @@
 
 The masthead is a single horizontal bar with three regions:
 
-| Region     | Content            | Behavior                                                                                                                                                                 |
-| ---------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Left**   | Identity anchor    | "Joel R. Klemmer" as home link; subtle authority treatment (font weight, tracking). No logo mark unless specified.                                                       |
-| **Center** | Primary navigation | Home, Executive Brief, Case Studies, Books, Public Record, Contact. Desktop: horizontal list. Mobile: collapsed behind a menu trigger (hamburger or compact disclosure). |
-| **Right**  | Utility controls   | Language, Theme, Accessibility. Consistent icon size and minimum touch target (44px). Order: Language, Theme, Accessibility.                                             |
+| Region     | Content            | Behavior                                                                                                                                                                      |
+| ---------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Left**   | Identity anchor    | "Joel R. Klemmer" as home link; one line by default, wraps to two responsively. Figma: [figma-site-design-spec.md](figma-site-design-spec.md). No logo mark unless specified. |
+| **Center** | Primary navigation | Home, Executive Brief, Case Studies, Books, Public Record, Contact. Desktop: horizontal list. Mobile: collapsed behind a menu trigger (hamburger or compact disclosure).      |
+| **Right**  | Utility controls   | Language, Theme, Accessibility. Consistent icon size and minimum touch target (44px). Order: Language, Theme, Accessibility.                                                  |
 
 - One bar only: no separate "header row" and "nav row." Identity, nav, and utilities share the same horizontal strip.
 - Implemented via `Header` with optional `centerContent` (Nav) and `headerControls` (utilities). Shell renders a single `<header>` with one `Container`; when `navContent` is omitted or null, no second nav row is rendered.

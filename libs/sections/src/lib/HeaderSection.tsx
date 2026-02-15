@@ -17,7 +17,7 @@ export function HeaderSection({
     <div className="flex items-baseline justify-between gap-4 w-full">
       <Link
         href={homeHref}
-        className={`${focusRingClass} rounded-sm text-base font-semibold tracking-tight`}
+        className={`${focusRingClass} rounded-none text-base font-semibold tracking-tight`}
       >
         {wordmark}
       </Link>

@@ -23,7 +23,17 @@ export { FrameworkIntentBand } from './FrameworkIntentBand.client';
 export type { FrameworkIntentBandProps } from './FrameworkIntentBand.client';
 export { FallbackNoticeSection } from './FallbackNoticeSection';
 export { FooterSection } from './FooterSection';
+export type {
+  FooterSectionProps,
+  FooterGroup,
+  FooterLinkItem,
+} from './FooterSection';
 export { HeaderSection } from './HeaderSection';
+export { InstitutionalDomainsSection, SelectedWorkSection } from './home';
+export type {
+  InstitutionalDomainsSectionProps,
+  SelectedWorkSectionProps,
+} from './home';
 export { HeroSection } from './HeroSection';
 export { IdentityScopeSection } from './IdentityScopeSection';
 export { LinkListSection } from './LinkListSection';

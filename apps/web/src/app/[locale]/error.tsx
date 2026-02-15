@@ -1,11 +1,15 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useTranslations } from 'next-intl';
+
+/** Fallback strings when NextIntlClientProvider is unavailable (e.g. layout error before provider mounts). */
+const ERROR_TITLE = 'Something went wrong';
+const TRY_AGAIN = 'Try again';
 
 /**
  * Error boundary for [locale] segment. Ensures document title is set for a11y.
  * Renders inside root layout so html[lang] is already set by root layout.
+ * Does not use useTranslations — can render outside NextIntlClientProvider when layout fails.
  */
 export default function LocaleError({
   reset,
@@ -13,24 +17,22 @@ export default function LocaleError({
   error: Error & { digest?: string };
   reset: () => void;
 }) {
-  const t = useTranslations('meta');
-
   useEffect(() => {
-    document.title = t('error.title');
-  }, [t]);
+    document.title = `${ERROR_TITLE} | Joel R. Klemmer`;
+  }, []);
 
   return (
     <main
       className="min-h-[60vh] flex flex-col items-center justify-center p-6"
       role="main"
     >
-      <h1 className="text-xl font-semibold text-text">{t('error.title')}</h1>
+      <h1 className="text-xl font-semibold text-text">{ERROR_TITLE}</h1>
       <button
         type="button"
         onClick={reset}
-        className="mt-4 px-4 py-2 rounded-card border border-border bg-surface hover:bg-muted/20 text-text"
+        className="mt-4 px-4 py-2 rounded-none border border-border bg-surface hover:bg-muted/20 text-text"
       >
-        {t('error.tryAgain')}
+        {TRY_AGAIN}
       </button>
     </main>
   );

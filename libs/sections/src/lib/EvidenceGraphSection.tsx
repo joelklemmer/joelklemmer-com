@@ -37,7 +37,7 @@ export function EvidenceGraphSection({
               {node.href ? (
                 <Link
                   href={node.href}
-                  className={`block ${focusRingClass} underline underline-offset-4 hover:text-accent rounded focus-visible:ring-offset-2`}
+                  className={`block ${focusRingClass} underline underline-offset-4 hover:text-accent rounded-none focus-visible:ring-offset-2`}
                 >
                   <span className="font-medium text-text">{node.label}</span>
                 </Link>

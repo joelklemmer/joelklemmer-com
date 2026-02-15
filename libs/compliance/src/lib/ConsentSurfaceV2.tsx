@@ -71,20 +71,20 @@ export function ConsentSurfaceV2({ preferencesHref }: ConsentSurfaceV2Props) {
           <button
             type="button"
             onClick={acceptAll}
-            className={`${focusRingClass} rounded-md bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
+            className={`${focusRingClass} rounded-none bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
           >
             {t('acceptAll')}
           </button>
           <button
             type="button"
             onClick={rejectNonEssential}
-            className={`${focusRingClass} rounded-md border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('rejectNonEssential')}
           </button>
           <Link
             href={preferencesHref}
-            className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('customise')}
           </Link>

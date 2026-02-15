@@ -154,7 +154,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
               href={item.href}
               prefetch={false}
               {...(item.rank && { 'data-nav-rank': item.rank })}
-              className={`nav-primary-link ${focusRingClass} rounded-sm h-full flex items-center ${interactionTransitionClass} relative ${
+              className={`nav-primary-link ${focusRingClass} rounded-none h-full flex items-center ${interactionTransitionClass} relative ${
                 isActive ? 'nav-primary-link--active' : ''
               }`}
               aria-current={isActive ? 'page' : undefined}
@@ -186,7 +186,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
           }
           if (e.key === ' ') e.preventDefault(); // Prevent scroll when activating with Space
         }}
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text ${interactionTransitionClass}`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text ${interactionTransitionClass}`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -209,7 +209,7 @@ export function Nav({ items, desktopRendered = false }: NavProps) {
           id={menuId}
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start list-none py-1 m-0 p-0"
+          className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-none border border-border bg-surface shadow-lg z-50 text-start list-none py-1 m-0 p-0"
         >
           {items.map((item, index) => {
             const isActive = pathname === item.href;

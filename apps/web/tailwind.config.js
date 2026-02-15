@@ -33,6 +33,7 @@ module.exports = {
         accent: 'hsl(var(--color-accent) / <alpha-value>)',
         'accent-strong': 'hsl(var(--color-accent-strong) / <alpha-value>)',
         'accent-muted': 'hsl(var(--color-accent-muted) / <alpha-value>)',
+        'text-on-accent': 'hsl(var(--color-text-on-accent) / <alpha-value>)',
         focus: 'hsl(var(--color-focus) / <alpha-value>)',
         neutral: {
           50: 'hsl(var(--color-neutral-50) / <alpha-value>)',
@@ -59,6 +60,19 @@ module.exports = {
         xl: 'var(--space-8)',
       },
       fontSize: {
+        /* Figma Make: sm/base/lg align with Figma site typography */
+        sm: [
+          'var(--text-sm)',
+          { lineHeight: 'var(--text-body-small-line, 1.5)' },
+        ],
+        base: [
+          'var(--text-base)',
+          { lineHeight: 'var(--text-body-line, 1.65)' },
+        ],
+        lg: [
+          'var(--text-lg)',
+          { lineHeight: 'var(--text-body-large-line, 1.65)' },
+        ],
         body: ['var(--text-base)', { lineHeight: 'var(--leading-normal)' }],
         title: ['var(--text-2xl)', { lineHeight: 'var(--leading-tight)' }],
         display: ['var(--text-3xl)', { lineHeight: 'var(--leading-tight)' }],
@@ -93,8 +107,17 @@ module.exports = {
           },
         ],
       },
+      /* Figma Make: rectangular UI (https://pages-tile-41445691.figma.site/) */
       borderRadius: {
-        card: '1rem',
+        DEFAULT: 'var(--radius, 0)',
+        none: '0',
+        sm: 'var(--radius-sm, 0)',
+        md: 'var(--radius-md, 0)',
+        lg: 'var(--radius-lg, 0)',
+        xl: '0',
+        '2xl': '0',
+        '3xl': '0',
+        card: 'var(--radius-card, 0)',
       },
       boxShadow: {
         'authority-elevation': 'var(--authority-surface-elevation)',

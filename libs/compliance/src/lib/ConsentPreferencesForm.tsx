@@ -138,14 +138,14 @@ export function ConsentPreferencesForm() {
       <div className="flex flex-wrap gap-2">
         <button
           type="submit"
-          className={`${focusRingClass} rounded-md bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
+          className={`${focusRingClass} rounded-none bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
         >
           {t('save')}
         </button>
         <button
           type="button"
           onClick={handleWithdraw}
-          className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-muted hover:text-text`}
+          className={`${focusRingClass} rounded-none border border-border px-3 py-2 text-sm text-muted hover:text-text`}
         >
           {t('withdraw')}
         </button>

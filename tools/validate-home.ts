@@ -105,16 +105,37 @@ function validateNoPlaceholders(): void {
   // Check for empty strings in required fields
   const heroTitle = getByPath(home, 'hero.title');
   const heroLede = getByPath(home, 'hero.lede');
+  const heroThesis1 = getByPath(home, 'hero.thesis1');
+  const heroThesis2 = getByPath(home, 'hero.thesis2');
+  const heroThesis3 = getByPath(home, 'hero.thesis3');
+  const heroSupporting = getByPath(home, 'hero.supporting');
   const heroCta = getByPath(home, 'hero.cta');
   const routesTitle = getByPath(home, 'routes.title');
   const claimsTitle = getByPath(home, 'claims.title');
 
-  if (typeof heroTitle !== 'string' || !heroTitle.trim()) {
+  const hasThesis =
+    typeof heroThesis1 === 'string' &&
+    heroThesis1.trim() &&
+    typeof heroThesis2 === 'string' &&
+    heroThesis2.trim() &&
+    typeof heroThesis3 === 'string' &&
+    heroThesis3.trim();
+  const hasSupporting =
+    typeof heroSupporting === 'string' && heroSupporting.trim();
+  const hasLegacyTitle = typeof heroTitle === 'string' && heroTitle.trim();
+  const hasLegacyLede = typeof heroLede === 'string' && heroLede.trim();
+
+  if (hasThesis && !hasSupporting && !hasLegacyLede) {
     errors.push(
-      `[Home] Missing or empty hero.title in home.json (required for H1)`,
+      `[Home] Missing or empty hero.supporting or hero.lede in home.json (required with thesis lines)`,
     );
   }
-  if (typeof heroLede !== 'string' || !heroLede.trim()) {
+  if (!hasThesis && !hasLegacyTitle) {
+    errors.push(
+      `[Home] Missing or empty hero.title or hero.thesis1/2/3 in home.json (required for H1)`,
+    );
+  }
+  if (!hasThesis && !hasLegacyLede) {
     errors.push(`[Home] Missing or empty hero.lede in home.json`);
   }
   if (typeof heroCta !== 'string' || !heroCta.trim()) {
@@ -329,10 +350,12 @@ function validateHeadingOutline(): void {
     );
   }
 
-  // Check that HeroSection receives title prop (required for H1)
-  if (!homeScreenContent.includes("title={t('hero.title')}")) {
+  // Check that HeroSection receives H1 content (thesisLines or title)
+  const hasThesisProp = homeScreenContent.includes('thesisLines={');
+  const hasTitleProp = homeScreenContent.includes("title={t('hero.title')}");
+  if (!hasThesisProp && !hasTitleProp) {
     errors.push(
-      `[Home] Heading outline violation: HeroSection must receive title prop from hero.title`,
+      `[Home] Heading outline violation: HeroSection must receive thesisLines or title prop`,
     );
   }
 

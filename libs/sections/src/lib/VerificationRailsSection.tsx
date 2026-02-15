@@ -28,7 +28,7 @@ export function VerificationRailsSection({
             <Link
               key={item.href}
               href={item.href}
-              className={`${focusRingClass} block rounded-md border border-border bg-surface-elevated p-4 transition-colors motion-reduce:transition-none hover:border-accent hover:bg-surface`}
+              className={`${focusRingClass} block rounded-none border border-border bg-surface-elevated p-4 transition-colors motion-reduce:transition-none hover:border-accent hover:bg-surface`}
             >
               <div className="flex items-start gap-3">
                 <span

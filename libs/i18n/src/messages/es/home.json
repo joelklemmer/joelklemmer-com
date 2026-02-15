@@ -1,13 +1,45 @@
 {
   "hero": {
     "title": "Joel Robert Klemmer",
-    "lede": "Dossier de verificación para evaluación ejecutiva y revisión de consejo.",
-    "cta": "Abrir informe",
+    "thesis1": "Sistemas Institucionales.",
+    "thesis2": "Gobernanza de Capital.",
+    "thesis3": "Autoridad Operacional.",
+    "supporting": "Las instituciones se basan en estructura. El capital requiere disciplina. La gobernanza es arquitectura.",
+    "lede": "Las instituciones se basan en estructura. El capital requiere disciplina. La gobernanza es arquitectura.",
+    "cta": "Informe Ejecutivo →",
+    "ctaSecondary": "Casos de Estudio",
     "portraitAlt": "Retrato profesional"
   },
   "startHere": {
     "sentence": "Empiece aquí para la revisión por evaluadores.",
     "linkLabel": "Abrir informe ejecutivo"
+  },
+  "domains": {
+    "title": "Dominios Institucionales",
+    "governance": {
+      "title": "Arquitectura de Gobernanza",
+      "description": "Marcos estructurales para cumplimiento institucional y responsabilidad operacional en entornos multi-interesados."
+    },
+    "capital": {
+      "title": "Administración de Capital",
+      "description": "Supervisión estratégica de asignación de capital y decisiones de adquisición ajustadas al riesgo a escala empresarial."
+    },
+    "operational": {
+      "title": "Sistemas Operacionales",
+      "description": "Arquitecturas de integración para gobernanza de cadena de suministro e iniciativas de modernización institucionales."
+    }
+  },
+  "selectedWork": {
+    "title": "Trabajo Seleccionado",
+    "viewAll": "Ver Todos los Casos",
+    "caseTitle": "Marco de Gobernanza de Adquisiciones Empresariales",
+    "sector": "Sector",
+    "sectorValue": "Infraestructura Pública",
+    "capitalScale": "Escala de Capital",
+    "capitalValue": "$480M Gasto Anual",
+    "impact": "Impacto de Gobernanza",
+    "impactValue": "23% Reducción de Costos",
+    "summary": "Arquitectura de marco integral de gobernanza de adquisiciones integrando cumplimiento de políticas y supervisión de asignación de capital para ganancias medibles de eficiencia operacional."
   },
   "claims": {
     "title": "Resumen de afirmaciones",

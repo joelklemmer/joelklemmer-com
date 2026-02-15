@@ -1,5 +1,12 @@
 {
   "label": "ניווט שקט",
+  "groups": {
+    "institutional": "משאבים מוסדיים",
+    "context": "הקשר",
+    "legal": "משפט וממשל"
+  },
+  "copyright": "© 2026 Joel R. Klemmer. כל הזכויות שמורות.",
+  "wcagStatement": "WCAG 2.2 AA+",
   "links": {
     "media": "ספריית מדיה",
     "media-kit": "ערכת מדיה",

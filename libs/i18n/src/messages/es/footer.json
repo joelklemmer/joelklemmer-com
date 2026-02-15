@@ -1,5 +1,12 @@
 {
   "label": "Navegación discreta",
+  "groups": {
+    "institutional": "Recursos institucionales",
+    "context": "Contexto",
+    "legal": "Legal y gobernanza"
+  },
+  "copyright": "© 2026 Joel R. Klemmer. Todos los derechos reservados.",
+  "wcagStatement": "WCAG 2.2 AA+",
   "links": {
     "media": "Biblioteca de medios",
     "media-kit": "Kit de medios",

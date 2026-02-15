@@ -19,7 +19,7 @@ export function CookiePreferencesTrigger() {
       aria-haspopup="dialog"
       aria-expanded={isOpen}
       aria-label={t('cookiePreferences.openLabel')}
-      className={`${focusRingClass} masthead-touch-target flex items-center rounded-sm px-2 text-sm text-muted hover:text-text`}
+      className={`${focusRingClass} masthead-touch-target flex items-center rounded-none px-2 text-sm text-muted hover:text-text`}
     >
       {t('cookiePreferences.openLabel')}
     </button>

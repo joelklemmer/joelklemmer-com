@@ -97,7 +97,7 @@ export function AECBriefingPanel({
           aria-expanded={expanded}
           aria-controls="aec-briefing-panel"
           id="aec-briefing-toggle"
-          className={`w-full flex items-center justify-between text-left font-semibold text-section-heading ${focusRingClass} p-2 rounded transition-colors duration-fast motion-reduce:transition-none`}
+          className={`w-full flex items-center justify-between text-left font-semibold text-section-heading ${focusRingClass} p-2 rounded-none transition-colors duration-fast motion-reduce:transition-none`}
         >
           <span>{title}</span>
           <span className="text-sm font-normal text-muted">
@@ -122,7 +122,7 @@ export function AECBriefingPanel({
                 name="intent"
                 required
                 aria-label={placeholder}
-                className={`w-full max-w-md text-base border border-border rounded bg-bg text-text p-2 ${focusRingClass}`}
+                className={`w-full max-w-md text-base border border-border rounded-none bg-bg text-text p-2 ${focusRingClass}`}
               >
                 <option value="">{placeholder}</option>
                 {intentOptions.map((opt) => (
@@ -135,7 +135,7 @@ export function AECBriefingPanel({
                 type="submit"
                 disabled={loading}
                 aria-busy={loading}
-                className={`inline-block px-3 py-2 text-sm font-medium rounded border border-border bg-bg text-text hover:bg-muted/50 disabled:opacity-70 ${focusRingClass}`}
+                className={`inline-block px-3 py-2 text-sm font-medium rounded-none border border-border bg-bg text-text hover:bg-muted/50 disabled:opacity-70 ${focusRingClass}`}
               >
                 {loading ? loadingLabel : submitLabel}
               </button>

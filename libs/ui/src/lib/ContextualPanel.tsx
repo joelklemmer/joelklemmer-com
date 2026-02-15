@@ -32,7 +32,7 @@ export function ContextualPanel({
 
   return (
     <section
-      className="section-shell border border-border rounded-card bg-muted/10"
+      className="section-shell border border-border rounded-none bg-muted/10"
       aria-label={title}
     >
       <h2 className={visuallyHiddenClass}>{title}</h2>
@@ -41,7 +41,7 @@ export function ContextualPanel({
         onClick={toggle}
         aria-expanded={expanded}
         aria-controls="contextual-panel-content"
-        className={`w-full flex items-center justify-between gap-2 p-4 text-left ${focusRingClass} rounded-t-card transition-colors motion-reduce:transition-none`}
+        className={`w-full flex items-center justify-between gap-2 p-4 text-left ${focusRingClass} rounded-t-none transition-colors motion-reduce:transition-none`}
       >
         <span className="font-medium text-text">{title}</span>
         <span className="text-sm text-muted" aria-hidden>

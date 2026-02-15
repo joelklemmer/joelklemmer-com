@@ -1,6 +1,9 @@
 /**
- * Visual contract: required CSS layers exist; no new monolith file.
+ * Visual contract: required CSS layers exist; design layers allowed via pattern.
  * Run: npx tsx --tsconfig tsconfig.base.json tools/validate-visual-contract.ts
+ *
+ * Philosophy: Required layers (10–40) enforce structure. Design layers (50+, 60+)
+ * are allowed—not overly restrictive. i18n, lint, a11y remain strict.
  */
 import * as fs from 'fs';
 import * as path from 'path';
@@ -25,6 +28,15 @@ const ALLOWED_STYLE_FILES = new Set([
   'index.css',
 ]);
 
+/** Design layers: 50-masthead-responsive.css, 60-foo.css, etc. */
+const DESIGN_LAYER_PATTERN = /^\d{2}-[a-z0-9-]+\.css$/;
+
+function isAllowedStyleFile(filename: string): boolean {
+  return (
+    ALLOWED_STYLE_FILES.has(filename) || DESIGN_LAYER_PATTERN.test(filename)
+  );
+}
+
 function main() {
   const errors: string[] = [];
 
@@ -45,9 +57,9 @@ function main() {
   const files = fs.readdirSync(STYLES_DIR);
   const cssFiles = files.filter((f) => f.endsWith('.css'));
   for (const f of cssFiles) {
-    if (!ALLOWED_STYLE_FILES.has(f)) {
+    if (!isAllowedStyleFile(f)) {
       errors.push(
-        `Unexpected style file: ${f}. Add to ALLOWED_STYLE_FILES or use existing layers (10/20/30/40).`,
+        `Unexpected style file: ${f}. Use layers (10–40) or design layers (50-foo.css, 60-bar.css).`,
       );
     }
   }

@@ -1,5 +1,6 @@
 import '../global.css';
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import type { ReactNode } from 'react';
 import { cookies } from 'next/headers';
 import { notFound } from 'next/navigation';
@@ -9,7 +10,11 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 // eslint-disable-next-line no-restricted-imports -- layout composes shell and needs i18n for locale/messages
 import { defaultLocale, loadMessages, type AppLocale } from '@joelklemmer/i18n';
 import { PRIMARY_NAV_ENTRIES } from '@joelklemmer/sections';
-import { ServerShell, MobileNavSlot } from '@joelklemmer/shell';
+import {
+  ServerShell,
+  MastheadScrollEffect,
+  MobileNavSlot,
+} from '@joelklemmer/shell';
 import {
   getConsentFromCookieV2,
   canLoadAnalyticsV2,
@@ -20,6 +25,7 @@ import { routing } from '../../i18n/routing';
 import { DeferredIslandsScript } from './_deferred/DeferredIslands.server';
 import { HeaderDeferredSlot } from './_deferred/HeaderDeferredSlot';
 import { ConsentDeferredSlot } from './_deferred/ConsentDeferredSlot';
+import { ScrollToTopSlot } from './_deferred/ScrollToTopSlot';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -87,36 +93,54 @@ export default async function LocaleLayout({
     initialConsentState ?? null,
   );
 
-  const footerItems = [
-    'media',
-    'media-kit',
-    'press',
-    'bio',
-    'faq',
-    'now',
-    'privacy',
-    'terms',
-    'accessibility',
-    'security',
-    'cookies',
-    'preferences',
-  ].map((slug) => ({
-    href: `/${resolvedLocale}/${slug}`,
-    label: footer(`links.${slug}`),
+  const footerGroups = [
+    {
+      header: footer('groups.institutional'),
+      linkSlugs: ['media', 'media-kit', 'press', 'bio'],
+    },
+    {
+      header: footer('groups.context'),
+      linkSlugs: ['faq', 'now'],
+    },
+    {
+      header: footer('groups.legal'),
+      linkSlugs: [
+        'privacy',
+        'terms',
+        'accessibility',
+        'security',
+        'cookies',
+        'preferences',
+      ],
+    },
+  ].map((g) => ({
+    header: g.header,
+    links: g.linkSlugs.map((slug) => ({
+      href: `/${resolvedLocale}/${slug}`,
+      label: footer(`links.${slug}`),
+    })),
   }));
 
   return (
     <>
+      <MastheadScrollEffect />
       <ServerShell
         skipLabel={common('a11y.skipToContent')}
         headerLabel={common('a11y.headerLabel')}
         navLabel={common('a11y.navLabel')}
         footerLabel={common('a11y.footerLabel')}
         wordmark={common('wordmark')}
+        wordmarkLine1={common('wordmarkLine1')}
+        wordmarkLine2={common('wordmarkLine2')}
         homeHref={`/${resolvedLocale}`}
         navItems={navItems}
         footerContent={
-          <FooterSection label={footer('label')} links={footerItems} />
+          <FooterSection
+            label={footer('label')}
+            groups={footerGroups}
+            copyright={footer('copyright')}
+            wcagStatement={footer('wcagStatement')}
+          />
         }
         languageLinksSlot={null}
         headerDeferredSlot={<HeaderDeferredSlot locale={resolvedLocale} />}
@@ -139,6 +163,9 @@ export default async function LocaleLayout({
       <DeferredIslandsScript
         initialAnalyticsConsent={initialAnalyticsConsent}
       />
+      <Suspense fallback={null}>
+        <ScrollToTopSlot />
+      </Suspense>
     </>
   );
 }

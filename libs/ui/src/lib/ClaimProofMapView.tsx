@@ -51,7 +51,7 @@ export function ClaimProofMapView({
           return (
             <li
               key={entry.claimId}
-              className="border border-border rounded-card overflow-hidden bg-surface"
+              className="border border-border rounded-none overflow-hidden bg-surface"
             >
               <div className="p-4">
                 <a

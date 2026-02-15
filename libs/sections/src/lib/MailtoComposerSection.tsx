@@ -30,7 +30,7 @@ export function MailtoComposerSection({
         <p className="mt-2">
           <Link
             href={mailtoHref}
-            className={`inline-block rounded-md border border-border px-4 py-2 text-sm font-medium text-text hover:border-accent hover:text-accent ${focusRingClass}`}
+            className={`inline-block rounded-none border border-border px-4 py-2 text-sm font-medium text-text hover:border-accent hover:text-accent ${focusRingClass}`}
           >
             {buttonLabel}
           </Link>

@@ -44,6 +44,12 @@ test('a11y brief repro — 10 iterations per locale', async ({ page }) => {
         timeout: 20000,
       });
 
+      // Wait for document title (streaming metadata can arrive after load)
+      await page.waitForFunction(
+        () => document.title && document.title.trim().length > 0,
+        { timeout: 5000 },
+      );
+
       const results = await new AxeBuilder({ page })
         .withTags([
           'wcag2a',

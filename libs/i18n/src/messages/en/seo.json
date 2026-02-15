@@ -1,0 +1,90 @@
+{
+  "home": {
+    "title": "Home",
+    "description": "Orientation system for institutional evaluation."
+  },
+  "brief": {
+    "title": "Executive brief",
+    "description": "Primary authority hub for structured review and evidence routing."
+  },
+  "work": {
+    "title": "Case studies",
+    "description": "Structured demonstrations with evidence-linked references."
+  },
+  "casestudies": {
+    "title": "Case studies",
+    "description": "Structured demonstrations with evidence-linked references."
+  },
+  "books": {
+    "title": "Books",
+    "description": "Published volumes with verification-linked references."
+  },
+  "writing": {
+    "title": "Books",
+    "description": "Published volumes and official excerpts."
+  },
+  "contact": {
+    "title": "Contact",
+    "description": "Controlled intake for role, media, and public record requests."
+  },
+  "proof": {
+    "title": "Public record",
+    "description": "Verification artifacts supporting indexed claims."
+  },
+  "publicrecord": {
+    "title": "Public record",
+    "description": "Verification artifacts supporting indexed claims."
+  },
+  "media": {
+    "title": "Media Library",
+    "description": "Official imagery archive for authority verification and press use."
+  },
+  "mediaKit": {
+    "title": "Media kit",
+    "description": "Approved assets and usage terms."
+  },
+  "press": {
+    "title": "Press kit",
+    "description": "Press reference material and approved biography."
+  },
+  "bio": {
+    "title": "Executive bio",
+    "description": "Professional biography for institutional review."
+  },
+  "faq": {
+    "title": "FAQ",
+    "description": "Operational questions answered with restraint."
+  },
+  "now": {
+    "title": "Now",
+    "description": "Current focus and verified commitments."
+  },
+  "operatingSystem": {
+    "title": "Operating system",
+    "description": "How work is framed, delivered, and verified."
+  },
+  "privacy": {
+    "title": "Privacy",
+    "description": "Privacy controls and data handling commitments."
+  },
+  "terms": {
+    "title": "Terms",
+    "description": "Access terms and use limitations."
+  },
+  "accessibility": {
+    "title": "Accessibility",
+    "description": "Accessibility targets, methods, and review cadence."
+  },
+  "security": {
+    "title": "Security",
+    "description": "Security posture, reporting, and disclosure."
+  },
+  "cookies": {
+    "title": "Cookie policy",
+    "description": "Cookies and consent; your choices and how we use them."
+  },
+  "preferences": {
+    "title": "Preferences",
+    "description": "Cookie and consent preferences."
+  }
+}

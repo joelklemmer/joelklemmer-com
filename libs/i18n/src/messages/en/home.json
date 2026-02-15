@@ -1,13 +1,45 @@
 {
   "hero": {
     "title": "Joel Robert Klemmer",
-    "lede": "Verification dossier for executive and board review.",
-    "cta": "Open brief",
+    "thesis1": "Institutional Systems.",
+    "thesis2": "Capital Governance.",
+    "thesis3": "Operational Authority.",
+    "supporting": "Institutions run on structure. Capital requires discipline. Governance is architecture.",
+    "lede": "Institutions run on structure. Capital requires discipline. Governance is architecture.",
+    "cta": "Executive Brief →",
+    "ctaSecondary": "Case Studies",
     "portraitAlt": "Professional portrait"
   },
   "startHere": {
     "sentence": "Start here for evaluator review.",
     "linkLabel": "Open executive brief"
+  },
+  "domains": {
+    "title": "Institutional Domains",
+    "governance": {
+      "title": "Governance Architecture",
+      "description": "Structural frameworks for institutional compliance and operational accountability across multi-stakeholder environments."
+    },
+    "capital": {
+      "title": "Capital Stewardship",
+      "description": "Strategic oversight of capital allocation and risk-adjusted procurement decisions at enterprise scale."
+    },
+    "operational": {
+      "title": "Operational Systems",
+      "description": "Integration architectures for supply chain governance and institutional modernization initiatives."
+    }
+  },
+  "selectedWork": {
+    "title": "Selected Work",
+    "viewAll": "View All Case Studies",
+    "caseTitle": "Enterprise Procurement Governance Framework",
+    "sector": "Sector",
+    "sectorValue": "Public Infrastructure",
+    "capitalScale": "Capital Scale",
+    "capitalValue": "$480M Annual Spend",
+    "impact": "Governance Impact",
+    "impactValue": "23% Cost Reduction",
+    "summary": "Architected comprehensive procurement governance framework integrating policy compliance and capital allocation oversight for measurable operational efficiency gains."
   },
   "claims": {
     "title": "Claim summary",

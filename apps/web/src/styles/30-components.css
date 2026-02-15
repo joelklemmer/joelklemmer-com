@@ -331,21 +331,32 @@ html[data-motion='reduced'] .calc-card-material {
   --nav-primary-active-border-width: 2px;
 }
 
+/* Layout props; visibility controlled by [data-nav] in 20-layout.css */
 .nav-primary-list {
-  display: flex;
   flex-wrap: nowrap;
   align-items: center;
   gap: var(--nav-primary-gap);
   margin-inline: 0;
   padding-inline: 0;
   list-style: none;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-primary-list::-webkit-scrollbar {
+  display: none;
 }
 
 /* Cognitive hierarchy: rank encodes hub (primary), verification (secondary), institutional (tertiary). No design flourishes. */
+/* Figma Make: serif, --text-nav, normal weight, color matches wordmark (dark gray/black) */
 .nav-primary-link {
-  font-weight: 600;
-  font-size: var(--text-base);
-  color: hsl(var(--color-muted));
+  font-family: var(--font-serif);
+  font-weight: var(--font-weight-normal);
+  font-size: var(--text-nav);
+  line-height: var(--text-nav-line);
+  color: hsl(var(--color-text));
   padding-inline: var(--nav-primary-padding-inline);
   padding-block: var(--nav-primary-padding-block);
   border-block-end: var(--nav-primary-active-border-width) solid transparent;
@@ -355,11 +366,11 @@ html[data-motion='reduced'] .calc-card-material {
 }
 
 .nav-primary-link[data-nav-rank='primary'] {
-  font-weight: 700;
+  font-weight: var(--font-weight-medium);
 }
 
 .nav-primary-link[data-nav-rank='tertiary'] {
-  font-weight: 500;
+  font-weight: var(--font-weight-normal);
 }
 
 .nav-primary-link:hover {
@@ -369,11 +380,15 @@ html[data-motion='reduced'] .calc-card-material {
 .nav-primary-link--active,
 .nav-primary-link[aria-current='page'] {
   color: hsl(var(--color-text));
-  font-weight: 700;
+  font-weight: var(--font-weight-semibold);
   border-block-end-color: hsl(var(--color-accent-strong));
 }
 
+/* Figma Make: same serif, size, color as desktop nav for consistency */
 .nav-primary-menu-item {
+  font-family: var(--font-serif);
+  font-size: var(--text-nav);
+  line-height: var(--text-nav-line);
   padding-inline: var(--space-4);
   padding-block: 0.625rem;
   color: hsl(var(--color-text));
@@ -402,11 +417,12 @@ html[data-motion='reduced'] .calc-card-material {
   border-inline-start: 3px solid hsl(var(--color-accent-strong));
 }
 
+/* Figma Make: utility icons dark gray/black, matching text */
 .masthead-nav-secondary .masthead-touch-target,
 .masthead-nav-secondary button[type='button'] {
   font-weight: 500;
   font-size: var(--text-sm);
-  color: hsl(var(--color-muted));
+  color: hsl(var(--color-text));
   transition: color var(--transition-duration-fast) var(--ease-authority);
 }
 
@@ -434,7 +450,6 @@ html[data-motion='reduced'] .nav-primary-menu-item {
   gap: var(--hero-block-gap);
   align-content: start;
   align-items: start;
-  max-width: var(--readable-line-length);
 }
 
 .hero-display {
@@ -443,7 +458,7 @@ html[data-motion='reduced'] .nav-primary-menu-item {
 }
 
 .hero-lede {
-  max-width: min(var(--readable-line-length), 48ch);
+  /* Readable line length; 20-layout sets max-width */
   margin-block-start: 0;
   margin-block-end: 0;
 }
@@ -455,85 +470,206 @@ html[data-motion='reduced'] .nav-primary-menu-item {
 }
 
 .hero-action-link {
-  font-size: var(--text-base);
-  font-weight: var(--font-weight-section);
+  font-size: var(--text-body);
+  font-weight: var(--font-weight-medium);
   letter-spacing: var(--hero-cta-letter-spacing);
-  padding: var(--space-3) var(--space-5);
+  padding: var(--space-3) var(--space-6);
 }
 
-/* Hero portrait & media: elevation, surface contrast, framing, responsive (token-only) */
+/* Hero portrait & media: Figma Make — light grey bg, no heavy border/shadow.
+   Rectangular crop, minimal framing for institutional presentation. */
 .hero-authority-visual-frame {
-  border-radius: var(--radius-md);
-  padding-block: var(--focus-ring-width);
-  padding-inline: var(--focus-ring-width);
-  background: hsl(var(--color-surface));
-  box-shadow: var(--authority-depth-layer1);
-  border: 1px solid hsl(var(--color-border) / 0.4);
-  transition:
-    box-shadow var(--transition-duration-normal) var(--ease-authority),
-    background-color var(--transition-duration-fast) var(--ease-authority),
-    border-color var(--transition-duration-fast) var(--ease-authority);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .hero-authority-visual-frame {
-    transition: none;
-  }
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  border: none;
 }
 
 .hero-portrait-wrapper {
-  background: hsl(var(--color-surface));
-  border: 1px solid hsl(var(--color-border));
-  border-radius: calc(var(--radius-md) - 1px);
-  box-shadow: var(--hero-visual-depth);
-  transition:
-    box-shadow var(--transition-duration-normal) var(--ease-authority),
-    border-color var(--transition-duration-fast) var(--ease-authority);
+  background: hsl(var(--color-neutral-100));
+  border: none;
+  border-radius: 0;
+  box-shadow: 0 1px 3px hsl(var(--color-text) / 0.04);
 }
 
-/* Responsive elevation: step up by breakpoint for balance */
-@media (min-width: 768px) {
-  .hero-authority-visual-frame {
-    box-shadow: var(--authority-depth-layer2);
-  }
-
-  .hero-portrait-wrapper {
-    box-shadow: var(--authority-depth-layer2);
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero-authority-visual-frame {
-    box-shadow: var(--authority-card-elevation);
-    padding-inline: var(--space-2);
-  }
-
-  .hero-portrait-wrapper {
-    box-shadow: var(--authority-depth-layer3);
-  }
-}
-
-@media (min-width: 1280px) {
-  .hero-authority-visual-frame {
-    padding-inline: var(--space-3);
-  }
-}
-
-/* Surface contrast: dark theme alignment */
 @media (prefers-color-scheme: dark) {
-  .hero-authority-visual-frame {
-    border-color: hsl(var(--color-border) / 0.5);
-  }
-
   .hero-portrait-wrapper {
-    border-color: hsl(var(--color-border));
+    box-shadow: 0 1px 3px hsl(var(--color-text) / 0.08);
   }
-}
-
-:root[data-theme='dark'] .hero-authority-visual-frame {
-  border-color: hsl(var(--color-border) / 0.5);
 }
 
 :root[data-theme='dark'] .hero-portrait-wrapper {
-  border-color: hsl(var(--color-border));
+  box-shadow: 0 1px 3px hsl(var(--color-text) / 0.08);
+}
+
+/* --------------------------------------------------------------------------- */
+/* Footer: Figma Make three-column layout, bottom bar, distinct background     */
+/* Background distinct from main content; generous vertical padding.            */
+/* --------------------------------------------------------------------------- */
+/* Figma: details fallback nav menu dark when masthead is black (light theme) */
+:root[data-theme='light'] header .nav-primary-menu {
+  background: var(--masthead-bg);
+  border-color: hsl(var(--masthead-border));
+  --color-text: var(--masthead-text);
+  --color-muted: var(--masthead-text-muted);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) header .nav-primary-menu {
+    background: var(--masthead-bg);
+    border-color: hsl(var(--masthead-border));
+    --color-text: var(--masthead-text);
+    --color-muted: var(--masthead-text-muted);
+  }
+}
+
+/* Figma: mobile nav sheet dark when masthead is black (light theme) */
+:root[data-theme='light'] .mobile-nav-sheet {
+  background: var(--masthead-bg) !important;
+  --color-text: var(--masthead-text);
+  --color-muted: var(--masthead-text-muted);
+  --color-focus: var(--masthead-focus);
+  border-inline-start-color: hsl(var(--masthead-border));
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) .mobile-nav-sheet {
+    background: var(--masthead-bg) !important;
+    --color-text: var(--masthead-text);
+    --color-muted: var(--masthead-text-muted);
+    --color-focus: var(--masthead-focus);
+    border-inline-start-color: hsl(var(--masthead-border));
+  }
+}
+
+/* Consent banner: solid masthead background so it is always visible. */
+#consent-banner.consent-banner-masthead {
+  background-color: var(--masthead-bg) !important;
+  background-image: none !important;
+  width: 100%;
+  border-top: 1px solid var(--masthead-border);
+  --color-text: var(--masthead-text);
+  --color-muted: var(--masthead-text-muted);
+  --color-focus: var(--masthead-focus);
+}
+
+#consent-banner.consent-banner-masthead > div {
+  background: transparent;
+}
+
+/* Accept button: high-contrast on dark banner. */
+#consent-banner.consent-banner-masthead button[data-consent-action='accept'] {
+  background-color: hsl(0 0% 100%) !important;
+  color: hsl(0 0% 0%) !important;
+}
+
+/* Reject button: dark text on light background in light mode so it is readable. */
+:root[data-theme='light']
+  #consent-banner.consent-banner-masthead
+  button[data-consent-action='reject'],
+:root:not([data-theme='dark'])
+  #consent-banner.consent-banner-masthead
+  button[data-consent-action='reject'] {
+  background-color: hsl(0 0% 100%) !important;
+  color: hsl(0 0% 0%) !important;
+  border-color: hsl(0 0% 30%) !important;
+}
+
+:root[data-theme='light'] #consent-banner.consent-banner-masthead,
+:root:not([data-theme='dark']) #consent-banner.consent-banner-masthead {
+  --color-border: 0 0% 30%;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) #consent-banner.consent-banner-masthead {
+    --color-border: 0 0% 30%;
+  }
+}
+
+:root[data-theme='dark'] #consent-banner.consent-banner-masthead {
+  --color-border: var(--color-border-subtle);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) #consent-banner.consent-banner-masthead {
+    --color-border: var(--color-border-subtle);
+  }
+}
+
+.footer-root {
+  background: var(--footer-bg, hsl(var(--color-surface-elevated)));
+}
+
+.footer-figma-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+.footer-groups {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+  min-width: 0;
+}
+
+/* Two columns at tablet; three at 768px+ for Figma-aligned layout. */
+@media (min-width: 640px) {
+  .footer-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) {
+  .footer-groups {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.footer-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.footer-group-header {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: hsl(var(--color-text-tertiary));
+  margin: 0;
+  overflow-wrap: break-word;
+}
+
+.footer-group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.footer-group-list a {
+  font-size: var(--text-body-small);
+  color: hsl(var(--color-muted));
+}
+
+/* Figma Make: Left (copyright), Right (WCAG), Far right (scroll-to-top) */
+.footer-bottom-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid hsl(var(--color-border-subtle));
+}
+
+.footer-scroll-to-top {
+  flex-shrink: 0;
 }

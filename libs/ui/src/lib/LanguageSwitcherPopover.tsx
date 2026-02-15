@@ -170,7 +170,7 @@ export function LanguageSwitcherPopover() {
         aria-controls={menuId}
         aria-label={common('a11y.languageSwitcherLabel')}
         aria-haspopup="menu"
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <svg
@@ -195,7 +195,7 @@ export function LanguageSwitcherPopover() {
           ref={menuRef}
           id={menuId}
           aria-labelledby={triggerId}
-          className="absolute end-0 top-full z-50 mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg list-none py-1 m-0 px-0"
+          className="absolute end-0 top-full z-[100] mt-1 min-w-[10rem] rounded-none border border-border bg-surface shadow-lg list-none py-1 m-0 px-0"
           onKeyDown={handleKeyDown}
         >
           {locales.map((targetLocale) => {

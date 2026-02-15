@@ -7,36 +7,36 @@ import {
   type AppLocale,
 } from '@joelklemmer/i18n';
 import {
-  createPageMetadata,
+  buildMetadata,
   getCriticalPreloadLinks,
   BreadcrumbJsonLd,
   OrganizationJsonLd,
   PersonJsonLd,
   WebSiteJsonLd,
 } from '@joelklemmer/seo';
-import { FrameworkCard, HeroSection, ListSection } from '@joelklemmer/sections';
-import Link from 'next/link';
+import {
+  HeroSection,
+  InstitutionalDomainsSection,
+  SelectedWorkSection,
+} from '@joelklemmer/sections';
 import { Container } from '@joelklemmer/ui';
-import { focusRingClass } from '@joelklemmer/a11y';
-import { getFrameworkList } from '@joelklemmer/content';
 
 const HOME_HERO_IMAGE_PATH =
   '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01__hero.webp';
 
-/** Section order: H1 (hero) first, then H2 sections. Enforced by validate-home. */
-type SectionId = 'hero' | 'routes' | 'claims' | 'doctrine';
-const HOME_IA_ORDER: SectionId[] = ['hero', 'routes', 'claims', 'doctrine'];
+/** Section order: H1 (hero) first, then H2 sections. Figma Make design. */
+type SectionId = 'hero' | 'domains' | 'selectedWork';
+const HOME_IA_ORDER: SectionId[] = ['hero', 'domains', 'selectedWork'];
 
 export async function generateMetadata(options?: { baseUrl?: string }) {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['meta']);
-  const t = createScopedTranslator(locale, messages, 'meta');
-  return createPageMetadata({
-    title: t('home.title'),
-    description: t('home.description'),
+  const messages = await loadMessages(locale, ['seo', 'meta']);
+  return buildMetadata({
     locale,
+    routeKey: 'home',
     pathname: '/',
     baseUrl: options?.baseUrl,
+    messages,
     ogImageSlug: 'home',
     criticalPreloadLinks: getCriticalPreloadLinks({
       heroImageHref: HOME_HERO_IMAGE_PATH,
@@ -49,126 +49,40 @@ export const homeMetadata = generateMetadata;
 /** Below-fold content in its own async boundary so server can stream hero first (LCP). */
 async function HomeBelowFold() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['home', 'frameworks']);
+  const messages = await loadMessages(locale, ['home']);
   const t = createScopedTranslator(locale, messages, 'home');
-  const tFw = createScopedTranslator(locale, messages, 'frameworks');
-  const claimItems = t.raw('claims.items') as string[];
-  const routeItems = t.raw('routes.items') as Array<{
-    title: string;
-    description: string;
-    path: string;
-  }>;
-  const frameworks = (await getFrameworkList()).slice(0, 3);
-  const briefDoctrineAnchor = `/${locale}/brief#doctrine`;
-
-  const claims = <ListSection title={t('claims.title')} items={claimItems} />;
-  const doctrine =
-    frameworks.length > 0 ? (
-      <section id="doctrine" className="section-shell">
-        <Container variant="wide" className="section-shell">
-          <div className="mb-6">
-            <h2 className="text-section-heading font-semibold">
-              {tFw('section.title')}
-            </h2>
-            <p className="text-body-analytical text-muted mt-2">
-              {tFw('section.lede')}
-            </p>
-          </div>
-          <div className="grid gap-6 md:grid-cols-3">
-            {frameworks.map((fw) => (
-              <FrameworkCard
-                key={fw.frontmatter.id}
-                title={tFw(fw.frontmatter.titleKey)}
-                summary={tFw(fw.frontmatter.summaryKey)}
-                intent10={tFw(fw.frontmatter.intent10Key)}
-                href={briefDoctrineAnchor}
-                prefetch={false}
-              />
-            ))}
-          </div>
-        </Container>
-      </section>
-    ) : null;
-
-  const executiveBriefItem = routeItems.find((item) =>
-    item.path.includes('/brief'),
-  );
-  const otherRoutes = routeItems.filter(
-    (item) => !item.path.includes('/brief'),
-  );
-  const routes = (
-    <section id="routes" className="section-shell">
-      <Container variant="wide" className="section-shell">
-        {executiveBriefItem ? (
-          <div className="mb-8">
-            <Link
-              href={`/${locale}/brief`}
-              className={`${focusRingClass} block rounded-lg border-2 border-accent bg-surface-elevated p-8 transition-all motion-reduce:transition-none hover:border-accent-strong hover:shadow-lg`}
-            >
-              <div className="flex items-start gap-5">
-                <span
-                  aria-hidden="true"
-                  className="text-accent font-bold text-2xl shrink-0 mt-1"
-                >
-                  →
-                </span>
-                <div className="flex-1">
-                  <h2 className="text-section-heading font-semibold text-text mb-3">
-                    {executiveBriefItem.title}
-                  </h2>
-                  <p className="text-base text-muted leading-relaxed">
-                    {executiveBriefItem.description}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          </div>
-        ) : null}
-        {otherRoutes.length > 0 ? (
-          <div>
-            <h2 className="text-section-heading font-semibold mb-4">
-              {t('routes.title')}
-            </h2>
-            <div className="space-y-3">
-              {otherRoutes.map((item) => (
-                <Link
-                  key={`/${locale}${item.path}`}
-                  href={`/${locale}${item.path}`}
-                  prefetch={false}
-                  className={`${focusRingClass} block rounded-md border border-border bg-surface-elevated p-4 transition-colors motion-reduce:transition-none hover:border-accent hover:bg-surface`}
-                >
-                  <div className="flex items-start gap-3">
-                    <span
-                      aria-hidden="true"
-                      className="text-accent font-semibold mt-0.5 shrink-0"
-                    >
-                      →
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-base font-semibold text-text mb-1">
-                        {item.title}
-                      </h3>
-                      {item.description ? (
-                        <p className="text-sm text-muted leading-relaxed">
-                          {item.description}
-                        </p>
-                      ) : null}
-                    </div>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        ) : null}
-      </Container>
-    </section>
-  );
 
   return (
     <>
-      <Fragment key="routes">{routes}</Fragment>
-      <Fragment key="claims">{claims}</Fragment>
-      {doctrine != null ? <Fragment key="doctrine">{doctrine}</Fragment> : null}
+      <InstitutionalDomainsSection
+        title={t('domains.title')}
+        governance={{
+          title: t('domains.governance.title'),
+          description: t('domains.governance.description'),
+        }}
+        capital={{
+          title: t('domains.capital.title'),
+          description: t('domains.capital.description'),
+        }}
+        operational={{
+          title: t('domains.operational.title'),
+          description: t('domains.operational.description'),
+        }}
+      />
+      <SelectedWorkSection
+        title={t('selectedWork.title')}
+        viewAll={t('selectedWork.viewAll')}
+        viewAllHref={`/${locale}/work`}
+        caseHref={`/${locale}/work`}
+        caseTitle={t('selectedWork.caseTitle')}
+        sector={t('selectedWork.sector')}
+        sectorValue={t('selectedWork.sectorValue')}
+        capitalScale={t('selectedWork.capitalScale')}
+        capitalValue={t('selectedWork.capitalValue')}
+        impact={t('selectedWork.impact')}
+        impactValue={t('selectedWork.impactValue')}
+        summary={t('selectedWork.summary')}
+      />
     </>
   );
 }
@@ -178,16 +92,35 @@ export async function HomeScreen() {
   const messages = await loadMessages(locale, ['home']);
   const t = createScopedTranslator(locale, messages, 'home');
 
+  const ctaSecondary = t('hero.ctaSecondary');
+  const heroActions = [
+    {
+      label: t('hero.cta'),
+      href: `/${locale}/brief`,
+      variant: 'primary' as const,
+    },
+    ...(ctaSecondary
+      ? [
+          {
+            label: ctaSecondary,
+            href: `/${locale}/work`,
+            variant: 'secondary' as const,
+          },
+        ]
+      : []),
+  ];
+
   const hero = (
     <HeroSection
-      title={t('hero.title')}
+      thesisLines={[t('hero.thesis1'), t('hero.thesis2'), t('hero.thesis3')]}
       lede={t('hero.lede')}
-      actions={[{ label: t('hero.cta'), href: `/${locale}/brief` }]}
+      actions={heroActions}
       visual={{
         src: HOME_HERO_IMAGE_PATH,
         alt: t('hero.portraitAlt'),
         width: 1200,
         height: 1500,
+        objectPosition: 'right 32%',
       }}
       imagePriority
     />
@@ -199,12 +132,15 @@ export async function HomeScreen() {
       <WebSiteJsonLd locale={locale} />
       <PersonJsonLd />
       <BreadcrumbJsonLd locale={locale} pathSegments={[]} />
-      <div className="content-lane-grid">
-        <Fragment key="hero">{hero}</Fragment>
-        <Suspense fallback={null}>
-          <HomeBelowFold />
-        </Suspense>
-      </div>
+      {/* Figma: unified content band max 1280px; single lane aligns with masthead */}
+      <Container variant="wide" className="home-content-band">
+        <div className="content-lane-grid">
+          <Fragment key="hero">{hero}</Fragment>
+          <Suspense fallback={null}>
+            <HomeBelowFold />
+          </Suspense>
+        </div>
+      </Container>
     </>
   );
 }

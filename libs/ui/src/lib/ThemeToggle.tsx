@@ -80,7 +80,7 @@ export function ThemeToggle() {
       }}
       aria-label={ariaLabel}
       title={ariaLabel}
-      className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+      className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text transition-colors motion-reduce:transition-none cursor-pointer min-h-[44px] min-w-[44px]`}
     >
       {showSunIcon ? <SunIcon /> : <MoonIcon />}
       <span className={visuallyHiddenClass}>{ariaLabel}</span>

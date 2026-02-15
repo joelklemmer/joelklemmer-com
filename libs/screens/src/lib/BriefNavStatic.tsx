@@ -21,7 +21,7 @@ export function BriefNavStatic({
           >
             <Link
               href={`${briefAnchorBase}#claim-${claim.id}`}
-              className="block p-4 text-left rounded-card transition-colors duration-fast motion-reduce:transition-none hover:bg-muted/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
+              className="block p-4 text-left rounded-none transition-colors duration-fast motion-reduce:transition-none hover:bg-muted/30 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-accent"
             >
               <h3 className="text-lg font-semibold text-text">{claim.label}</h3>
               {claim.category ? (

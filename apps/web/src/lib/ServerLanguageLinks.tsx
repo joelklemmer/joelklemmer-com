@@ -37,7 +37,7 @@ export function ServerLanguageLinks({
               prefetch={false}
               lang={locale}
               aria-current={isCurrent ? 'page' : undefined}
-              className={`${focusRingClass} rounded-sm px-1 py-0.5 text-sm text-muted hover:text-text ${isCurrent ? 'font-semibold text-text' : ''}`}
+              className={`${focusRingClass} rounded-none px-1 py-0.5 text-sm text-muted hover:text-text ${isCurrent ? 'font-semibold text-text' : ''}`}
             >
               {label}
             </Link>

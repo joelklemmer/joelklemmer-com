@@ -3,8 +3,9 @@
 /**
  * Mobile nav as shadcn Sheet. Hamburger trigger opens Sheet with nav links.
  * Closes on navigation (Link click).
+ * Defers Radix render until after mount to avoid hydration mismatch (radix ID generation).
  */
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Sheet,
@@ -17,36 +18,60 @@ import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 import { cn } from '@joelklemmer/ui';
 import type { ServerShellNavItem } from './ServerShell';
 
+const HamburgerIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth={2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    aria-hidden
+  >
+    <path d="M4 6h16M4 12h16M4 18h16" />
+  </svg>
+);
+
 export interface MobileNavSheetProps {
   navItems: ServerShellNavItem[];
   navLabel: string;
 }
 
 export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
+  const [mounted, setMounted] = useState(false);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
+      <div
+        className={cn(
+          focusRingClass,
+          'masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted min-h-[44px] min-w-[44px]',
+        )}
+        aria-label={navLabel}
+      >
+        <HamburgerIcon />
+      </div>
+    );
+  }
+
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
         className={cn(
           focusRingClass,
-          'masthead-touch-target masthead-icon flex md:hidden items-center justify-center rounded-sm text-muted hover:text-text min-h-[44px] min-w-[44px]',
+          'masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text min-h-[44px] min-w-[44px]',
         )}
         aria-label={navLabel}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth={2}
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden
-        >
-          <path d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
+        <HamburgerIcon />
       </SheetTrigger>
-      <SheetContent side="end" className="w-[min(20rem,85vw)]">
+      <SheetContent side="end" className="mobile-nav-sheet w-[min(20rem,85vw)]">
         <SheetHeader>
           <SheetTitle className={visuallyHiddenClass}>{navLabel}</SheetTitle>
         </SheetHeader>
@@ -57,7 +82,7 @@ export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
               href={item.href}
               prefetch={false}
               {...(item.rank && { 'data-nav-rank': item.rank })}
-              className={`${focusRingClass} block w-full rounded-sm px-4 py-3 text-start text-text hover:bg-border/50`}
+              className={`nav-primary-menu-item ${focusRingClass} block w-full rounded-none px-4 py-3 text-start`}
               onClick={() => setOpen(false)}
             >
               {item.label}

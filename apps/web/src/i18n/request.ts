@@ -19,6 +19,7 @@ export default getRequestConfig(async ({ requestLocale }) => {
       'nav',
       'footer',
       'meta',
+      'seo',
       'consent',
     ]),
   };

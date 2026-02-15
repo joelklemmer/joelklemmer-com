@@ -47,7 +47,7 @@ export function ContactPathwaysSection({
               <label
                 key={option.id}
                 htmlFor={inputId}
-                className={`flex cursor-pointer gap-3 rounded-md border p-4 transition-colors motion-reduce:transition-none ${focusRingClass} ${
+                className={`flex cursor-pointer gap-3 rounded-none border p-4 transition-colors motion-reduce:transition-none ${focusRingClass} ${
                   isSelected
                     ? 'border-accent bg-surface'
                     : 'border-border hover:border-accent/60'

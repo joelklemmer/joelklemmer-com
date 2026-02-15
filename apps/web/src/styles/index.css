@@ -1,7 +1,8 @@
-/* CAS: CSS Architecture Split. All @import first. */
+/* CAS: CSS Architecture Split. Load order: tokens (base) → 00-tokens (structural) → figma-make (Figma site authority).
+   Figma Make patch loads LAST so its colors, fonts, weights, sizes match https://pages-tile-41445691.figma.site/ exactly. */
 @import '../../../../libs/tokens/src/lib/tokens.css';
-@import '../../../../libs/tokens/src/lib/generated/figma-make.tokens.patch.css';
 @import './00-tokens.css';
+@import '../../../../libs/tokens/src/lib/generated/figma-make.tokens.patch.css';
 
 @tailwind base;
 @tailwind components;

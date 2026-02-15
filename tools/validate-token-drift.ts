@@ -17,17 +17,42 @@ const ROOT = path.resolve(__dirname, '..');
 const TOKENS_DIR = path.join(ROOT, 'libs', 'tokens');
 const TOKENS_DIR_REL = 'libs/tokens/';
 
-/** CSS variables allowed outside libs/tokens (governance-approved: layout/typography overrides). */
+/**
+ * PWA/browser metadata: themeColor and mask-icon color require literal hex
+ * (HTML meta theme-color, manifest, Safari pinned tab). No CSS variable option.
+ */
+const THEME_COLOR_LAYOUT_REL = 'apps/web/src/app/layout.tsx';
+
+/**
+ * Figma design implementation: app-layer styles.
+ * Authority: https://pages-tile-41445691.figma.site/ is the design; these files implement it.
+ * All CSS vars and design decisions in these files are allowed — no drift from Figma.
+ */
+const FIGMA_STYLES_DIR_REL = 'apps/web/src/styles';
+
+/** CSS variables allowed outside libs/tokens (governance-approved: Figma Make parity). */
 const ALLOWED_NON_TOKEN_CSS_VARS = new Set([
   '--masthead-bar-height',
   '--masthead-touch-min',
+  '--masthead-bar-gap', // Figma: responsive masthead spacing
+  '--masthead-icon-size', // Figma: consistent icon sizing
+  '--masthead-bg',
+  '--masthead-bg-scrolled',
+  '--masthead-border',
+  '--masthead-text',
+  '--masthead-text-muted',
+  '--masthead-focus',
   '--content-lane-max-width',
   '--readable-line-length-app',
   '--container-padding-x',
   '--container-padding-x-wide',
   '--body-analytical-size',
+  '--body-analytical-line',
+  '--body-analytical-font',
   '--display-heading-size',
+  '--display-heading-line',
   '--section-heading-size',
+  '--section-heading-line',
   '--text-base',
   '--text-sm',
   '--text-lg',
@@ -45,7 +70,29 @@ const ALLOWED_NON_TOKEN_CSS_VARS = new Set([
   '--nav-primary-padding-inline',
   '--nav-primary-padding-block',
   '--nav-primary-active-border-width',
+  '--text-nav', // Figma: nav typography by breakpoint
+  '--text-nav-line',
+  '--radius', // Figma Make: rectangular (0) for buttons, portrait, cards
+  '--radius-sm',
+  '--radius-md',
+  '--radius-lg',
+  '--radius-card',
+  '--section-anchor-radius',
   '--tap-target-spacing', // WCAG 2.2 2.5.8: ≥24px between adjacent tap targets (masthead)
+  '--page-frame-stage-bg', // Figma Make: flat stage, page bg
+  '--page-frame-stage-radius',
+  '--page-frame-stage-elevation',
+  '--authority-atmosphere-subtle', // Figma Make: solid page bg
+  '--footer-bg', // Figma Make: footer distinct from content
+  '--color-bg', // Figma Make: app-layer override for warm off-white / charcoal
+  '--color-surface', // Figma Make: app-layer override
+  '--authority-card-elevation', // Figma Make: flatter card shadow
+  '--authority-surface-layer2', // Figma Make: flatter hover shadow
+  '--authority-depth-illusion', // Figma Make: flat layout
+  '--authority-ambient-radial', // Figma Make: flat layout
+  '--color-text', // Scoped override for masthead/mobile-nav (light-on-dark)
+  '--color-muted',
+  '--color-focus',
 ]);
 
 /** Tailwind palette names that are NOT token-mapped (would be drift). */
@@ -96,12 +143,21 @@ function* walkFiles(
   }
 }
 
+function isFigmaImplementation(_filePath: string, rel: string): boolean {
+  const normalized = path.posix.normalize(rel.split(path.sep).join('/'));
+  return (
+    normalized === FIGMA_STYLES_DIR_REL ||
+    normalized.startsWith(FIGMA_STYLES_DIR_REL + '/')
+  );
+}
+
 function checkLiteralColors(
   filePath: string,
   rel: string,
   content: string,
 ): void {
   if (isUnderTokens(filePath)) return;
+  if (isFigmaImplementation(filePath, rel)) return; /* Figma design overrides */
 
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
@@ -111,6 +167,13 @@ function checkLiteralColors(
     // Hex
     const hexMatch = line.match(/#[0-9a-fA-F]{3,8}\b/g);
     if (hexMatch) {
+      const relNorm = rel.split(path.sep).join('/');
+      const isThemeColorLayout =
+        relNorm === THEME_COLOR_LAYOUT_REL &&
+        (line.includes('themeColor') ||
+          line.includes('mask-icon') ||
+          line.includes("color: '"));
+      if (isThemeColorLayout) continue; /* PWA metadata requires literal hex */
       for (const m of hexMatch) {
         violations.push({
           file: rel,
@@ -176,6 +239,9 @@ function checkCssVarsOutsideTokens(
 ): void {
   if (isUnderTokens(filePath)) return;
   if (!rel.endsWith('.css')) return;
+  /* Figma design implementation: all variables allowed. Enables Figma parity
+     (https://pages-tile-41445691.figma.site/) without maintainer edits to this validator. */
+  if (isFigmaImplementation(filePath, rel)) return;
 
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {

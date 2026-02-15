@@ -108,7 +108,7 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
           <li key={item.href}>
             <Link
               href={item.href}
-              className={`${focusRingClass} rounded-sm px-2 py-1 transition-colors motion-reduce:transition-none ${
+              className={`${focusRingClass} rounded-none px-2 py-1 transition-colors motion-reduce:transition-none ${
                 isActive ? 'text-text font-semibold' : 'hover:text-text'
               }`}
               aria-current={isActive ? 'page' : undefined}
@@ -133,7 +133,7 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
         aria-haspopup="true"
         aria-label={a11y('a11y.navLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} flex items-center gap-2 rounded-sm px-2 py-1 text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} flex items-center gap-2 rounded-none px-2 py-1 text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
       >
         <span aria-hidden="true">☰</span>
         <span className="sr-only">{a11y('a11y.navLabel')}</span>
@@ -145,7 +145,7 @@ export function PrimaryNavSection({ items }: PrimaryNavSectionProps) {
           id={menuId}
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
+          className="absolute end-0 top-full mt-1 min-w-[12rem] rounded-none border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
         >
           {items.map((item, index) => {
             const isActive = pathname === item.href;

@@ -6,6 +6,7 @@ export const messageNamespaces = [
   'nav',
   'footer',
   'meta',
+  'seo',
   'home',
   'brief',
   'work',

@@ -110,6 +110,7 @@ export interface PageMetadataInput {
 
 const OG_IMAGE_BASENAME = 'joel-klemmer__og__';
 const OG_IMAGE_SUFFIX = '__2026-01__01.webp';
+const DEFAULT_OG_IMAGE_PATH = '/og/default.png';
 
 /** Link descriptor for preload (e.g. LCP image). Rendered as <link> in head when passed via metadata. */
 export type CriticalPreloadLink = {
@@ -174,47 +175,32 @@ export function createPageMetadata({
   // When baseUrl is set, emit canonical + languages. When undefined, omit alternates
   // so root layout's generateMetadata (request-based canonical) is not overwritten and LHCI passes.
   const alternates = baseUrl ? { canonical, languages } : undefined;
-  const openGraph: {
-    title: string;
-    description: string;
-    url: string;
-    siteName: string;
-    locale: string;
-    type: 'website';
-    images?: Array<{
-      url: string;
-      width?: number;
-      height?: number;
-      alt?: string;
-    }>;
-  } = {
+  const ogImageUrl = ogImageSlug
+    ? `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`
+    : `${siteUrl}${DEFAULT_OG_IMAGE_PATH}`;
+
+  const openGraph = {
     title: titleValue,
     description: descriptionValue,
     url: canonical,
-    siteName: titleValue,
+    siteName: 'Joel R. Klemmer',
     locale,
-    type: 'website',
-  };
-  if (ogImageSlug) {
-    openGraph.images = [
+    type: 'website' as const,
+    images: [
       {
-        url: `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`,
+        url: ogImageUrl,
         width: 1200,
         height: 630,
         alt: titleValue,
       },
-    ];
-  }
+    ],
+  };
 
   const twitter = {
     card: 'summary_large_image' as const,
     title: titleValue,
     description: descriptionValue,
-    ...(ogImageSlug && {
-      images: [
-        `${siteUrl}/media/og/${OG_IMAGE_BASENAME}${ogImageSlug}${OG_IMAGE_SUFFIX}`,
-      ],
-    }),
+    images: [ogImageUrl],
   };
 
   const metadata: Metadata = {
@@ -234,10 +220,132 @@ export function createPageMetadata({
   return metadata;
 }
 
+/** Route key to default pathname for static routes. */
+const ROUTE_KEY_TO_PATH: Record<string, string> = {
+  home: '/',
+  brief: '/brief',
+  work: '/work',
+  casestudies: '/casestudies',
+  books: '/books',
+  writing: '/writing',
+  contact: '/contact',
+  proof: '/proof',
+  publicrecord: '/publicrecord',
+  media: '/media',
+  mediaKit: '/media-kit',
+  press: '/press',
+  bio: '/bio',
+  faq: '/faq',
+  now: '/now',
+  operatingSystem: '/operating-system',
+  privacy: '/privacy',
+  terms: '/terms',
+  accessibility: '/accessibility',
+  security: '/security',
+  cookies: '/cookies',
+  preferences: '/preferences',
+};
+
+export interface BuildMetadataInput {
+  locale: AppLocale;
+  routeKey: string;
+  pathname?: string;
+  baseUrl?: string;
+  params?: Record<string, string | undefined>;
+  /** Messages from loadMessages(['seo', 'meta']); seo[routeKey].title/description used. */
+  messages: Record<string, unknown>;
+  ogImageSlug?: string;
+  criticalPreloadLinks?: CriticalPreloadLink[];
+  canonicalOverride?: string;
+}
+
+/**
+ * Build Next.js Metadata from seo namespace messages.
+ * Use in generateMetadata; falls back to meta.defaultTitle/defaultDescription when route missing.
+ */
+export function buildMetadata({
+  locale,
+  routeKey,
+  pathname,
+  baseUrl,
+  params,
+  messages,
+  ogImageSlug,
+  criticalPreloadLinks,
+  canonicalOverride,
+}: BuildMetadataInput): Metadata {
+  const seo = messages.seo as
+    | Record<string, { title?: string; description?: string }>
+    | undefined;
+  const meta = messages.meta as
+    | { defaultTitle?: string; defaultDescription?: string }
+    | undefined;
+  const routeSeo = routeKey && seo?.[routeKey];
+  const routeObj =
+    routeSeo && typeof routeSeo === 'object' && routeSeo !== null
+      ? (routeSeo as { title?: string; description?: string })
+      : null;
+  const title =
+    (typeof routeObj?.title === 'string' && routeObj.title.trim()) ||
+    (typeof meta?.defaultTitle === 'string' && meta.defaultTitle.trim()) ||
+    DEFAULT_PAGE_TITLE;
+  const description =
+    (typeof routeObj?.description === 'string' &&
+      routeObj.description.trim()) ||
+    (typeof meta?.defaultDescription === 'string' &&
+      meta.defaultDescription.trim()) ||
+    'Authority verification ecosystem for executive evaluation and institutional review.';
+
+  let resolvedPathname = pathname ?? ROUTE_KEY_TO_PATH[routeKey] ?? '/';
+  if (
+    params?.slug &&
+    (routeKey === 'casestudies' ||
+      routeKey === 'books' ||
+      routeKey === 'writing' ||
+      routeKey === 'proof' ||
+      routeKey === 'publicrecord')
+  ) {
+    const segment =
+      routeKey === 'casestudies'
+        ? 'casestudies'
+        : routeKey === 'publicrecord'
+          ? 'publicrecord'
+          : routeKey;
+    resolvedPathname = `/${segment}/${params.slug}`;
+  }
+
+  return createPageMetadata({
+    title,
+    description,
+    locale,
+    pathname: resolvedPathname,
+    baseUrl,
+    canonicalOverride,
+    ogImageSlug,
+    criticalPreloadLinks,
+  });
+}
+
+/** Alias for getCanonicalUrl; buildCanonicalUrl for API consistency. */
+export const buildCanonicalUrl = getCanonicalUrl;
+
+/** Alias for hreflangAlternates; buildAlternates for API consistency. */
+export const buildAlternates = hreflangAlternates;
+
 export interface PersonJsonLdProps {
   baseUrl?: string;
   sameAs?: string[];
+  /** Headshot absolute URL for Person schema (default: studio portrait). */
+  image?: string;
+  /** Optional job title for rich results. */
+  jobTitle?: string;
+  /** Optional description (localized where appropriate). */
+  description?: string;
 }
+
+/** Canonical headshot path for Person schema and OG. */
+export const PERSON_HEADSHOT_PATH =
+  '/media/portraits/joel-klemmer__portrait__studio-graphite__2026-01__01.webp';
 
 /**
  * Build a mailto URL with encoded subject and optional body.
@@ -267,9 +375,16 @@ export function getPersonId(
   return `${url}/${locale}#person`;
 }
 
-export function getPersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps = {}) {
+export function getPersonJsonLd({
+  baseUrl,
+  sameAs,
+  image,
+  jobTitle,
+  description,
+}: PersonJsonLdProps = {}) {
   const url = normalizeBaseUrl(baseUrl);
   const sameAsUrls = sameAs ?? getIdentitySameAs();
+  const imageUrl = image ?? (url ? `${url}${PERSON_HEADSHOT_PATH}` : undefined);
   const jsonLd: Record<string, unknown> = {
     '@context': 'https://schema.org',
     '@type': 'Person',
@@ -278,8 +393,17 @@ export function getPersonJsonLd({ baseUrl, sameAs }: PersonJsonLdProps = {}) {
     alternateName: 'Joel R. Klemmer',
     url,
   };
+  if (imageUrl) {
+    jsonLd.image = imageUrl;
+  }
   if (sameAsUrls.length > 0) {
     jsonLd.sameAs = sameAsUrls;
+  }
+  if (jobTitle) {
+    jsonLd.jobTitle = jobTitle;
+  }
+  if (description) {
+    jsonLd.description = description;
   }
   return jsonLd;
 }

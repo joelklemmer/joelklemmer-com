@@ -50,7 +50,17 @@ const navSchema = z
 const footerSchema = z
   .object({
     label: z.string().min(1),
+    groups: z
+      .object({
+        institutional: z.string().min(1),
+        context: z.string().min(1),
+        legal: z.string().min(1),
+      })
+      .optional(),
+    copyright: z.string().min(1).optional(),
+    wcagStatement: z.string().min(1).optional(),
     links: z.object({
+      media: z.string().min(1),
       'media-kit': z.string().min(1),
       press: z.string().min(1),
       bio: z.string().min(1),
@@ -61,6 +71,7 @@ const footerSchema = z
       accessibility: z.string().min(1),
       security: z.string().min(1),
       cookies: z.string().min(1),
+      preferences: z.string().min(1),
     }),
   })
   .passthrough();

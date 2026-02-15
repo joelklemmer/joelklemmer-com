@@ -17,8 +17,6 @@ import {
   setMotion,
   getStoredTextSize,
   setTextSize,
-  getStoredUnderlineLinks,
-  setUnderlineLinks,
   applyDocumentAttrs,
   type ContrastMode,
   type MotionPreference,
@@ -40,9 +38,9 @@ import { focusRingClass, visuallyHiddenClass } from '@joelklemmer/a11y';
 
 const LANGUAGE_LABELS: Record<AppLocale, string> = {
   en: 'English',
-  uk: 'Ukrainian',
-  es: 'Spanish',
-  he: 'Hebrew',
+  es: 'Español',
+  uk: 'Українська',
+  he: 'עברית',
 };
 
 function GlobeIcon() {
@@ -64,7 +62,7 @@ function GlobeIcon() {
   );
 }
 
-function SettingsIcon() {
+function SlidersHorizontalIcon() {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -76,8 +74,15 @@ function SettingsIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-      <circle cx="12" cy="12" r="3" />
+      <line x1="4" y1="21" x2="4" y2="14" />
+      <line x1="4" y1="10" x2="4" y2="3" />
+      <line x1="12" y1="21" x2="12" y2="12" />
+      <line x1="12" y1="8" x2="12" y2="3" />
+      <line x1="20" y1="21" x2="20" y2="16" />
+      <line x1="20" y1="12" x2="20" y2="3" />
+      <line x1="2" y1="14" x2="6" y2="14" />
+      <line x1="10" y1="8" x2="14" y2="8" />
+      <line x1="18" y1="16" x2="22" y2="16" />
     </svg>
   );
 }
@@ -106,15 +111,18 @@ function LanguageDropdown() {
   const { restSegments } = resolvePathname(pathname, locale);
   const queryString = searchParams?.toString() ?? '';
 
+  const currentLabel = LANGUAGE_LABELS[locale];
+
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm p-1 text-muted transition-colors hover:text-text motion-reduce:transition-none`}
+        type="button"
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex min-h-[44px] min-w-[44px] items-center justify-center rounded-none p-1 text-muted transition-colors hover:text-text motion-reduce:transition-none cursor-pointer`}
         aria-label={common('a11y.languageSwitcherLabel')}
       >
         <GlobeIcon />
         <span className={visuallyHiddenClass}>
-          {common('a11y.languageSwitcherLabel')}
+          {common('a11y.languageSwitcherLabel')} ({currentLabel})
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
@@ -152,20 +160,15 @@ function AccessibilityDropdown() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  if (!mounted) {
     const contrast = getStoredContrast();
     const motion = getStoredMotion();
     const textSize = getStoredTextSize();
-    const underlineLinks = getStoredUnderlineLinks();
-    applyDocumentAttrs({ contrast, motion, textSize, underlineLinks });
-  }
+    applyDocumentAttrs({ contrast, motion, textSize });
+  }, []);
 
   const contrast = mounted ? getStoredContrast() : 'default';
   const motion = mounted ? getStoredMotion() : 'default';
   const textSize = mounted ? getStoredTextSize() : 'default';
-  const underlineLinks = mounted ? getStoredUnderlineLinks() : false;
 
   const handleContrast = (value: ContrastMode) => {
     setContrast(value);
@@ -179,17 +182,14 @@ function AccessibilityDropdown() {
     setTextSize(value);
   };
 
-  const handleUnderlineLinks = (checked: boolean) => {
-    setUnderlineLinks(checked);
-  };
-
   return (
-    <DropdownMenu>
+    <DropdownMenu modal={false}>
       <DropdownMenuTrigger
-        className={`${focusRingClass} masthead-touch-target masthead-icon flex min-h-[44px] min-w-[44px] items-center justify-center rounded-sm p-1 text-muted transition-colors hover:text-text motion-reduce:transition-none`}
+        type="button"
+        className={`${focusRingClass} masthead-touch-target masthead-icon flex min-h-[44px] min-w-[44px] items-center justify-center rounded-none p-1 text-muted transition-colors hover:text-text motion-reduce:transition-none cursor-pointer`}
         aria-label={common('a11y.accessibilityPanelLabel')}
       >
-        <SettingsIcon />
+        <SlidersHorizontalIcon />
         <span className={visuallyHiddenClass}>
           {common('a11y.accessibilityPanelLabel')}
         </span>
@@ -205,7 +205,9 @@ function AccessibilityDropdown() {
           {contrast === 'high' && ' ✓'}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>{common('a11y.motionLabel')}</DropdownMenuLabel>
+        <DropdownMenuLabel>
+          {common('a11y.motionSectionLabel')}
+        </DropdownMenuLabel>
         <DropdownMenuCheckboxItem
           checked={motion === 'reduced'}
           onCheckedChange={handleMotion}
@@ -223,27 +225,42 @@ function AccessibilityDropdown() {
           {textSize === 'large' && ' ✓'}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>
-          {common('a11y.underlineLinksLabel')}
-        </DropdownMenuLabel>
-        <DropdownMenuCheckboxItem
-          checked={underlineLinks}
-          onCheckedChange={handleUnderlineLinks}
+        <DropdownMenuItem
+          onClick={() => {
+            setContrast('default');
+            setMotion('default');
+            setTextSize('default');
+          }}
         >
-          {common('a11y.underlineLinksLabel')}
-        </DropdownMenuCheckboxItem>
+          {common('a11y.resetToDefaults')}
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
 }
 
+/* Figma Make order: Globe (language), Moon (theme), Sliders (accessibility) */
 function HeaderControlsInner() {
   return (
     <>
-      <ThemeToggle />
       <LanguageDropdown />
+      <ThemeToggle />
       <AccessibilityDropdown />
     </>
+  );
+}
+
+/* Placeholder to reserve masthead space; avoids CLS when deferred slot mounts. */
+function HeaderControlsPlaceholder() {
+  return (
+    <div
+      className="masthead-deferred-slot-placeholder flex flex-nowrap items-center gap-2 min-h-[var(--masthead-bar-height)]"
+      aria-hidden
+    >
+      <span className="w-[44px] h-[44px]" />
+      <span className="w-[44px] h-[44px]" />
+      <span className="w-[44px] h-[44px]" />
+    </div>
   );
 }
 
@@ -252,6 +269,16 @@ export function HeaderControlsClient({
   messages,
   timeZone,
 }: HeaderControlsClientProps) {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return <HeaderControlsPlaceholder />;
+  }
+
   return (
     <NextIntlClientProvider
       locale={locale}

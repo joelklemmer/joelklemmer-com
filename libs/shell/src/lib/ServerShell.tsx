@@ -1,7 +1,11 @@
 /**
  * Server shell: masthead, static nav links, main, footer.
  * No 'use client'. Outputs full HTML so LCP is not blocked by client hydration.
- * Interactive header: critical slot (Nav + language) + deferred slot (theme, cookie, a11y) after first paint.
+ *
+ * Figma pixel match (https://pages-tile-41445691.figma.site/):
+ * - Header: 76px height, lighter logo/nav weight, thinner icon stroke (1.5), lighter divider
+ * - Container: max 1320px at 1440px viewport, 60px horizontal padding for less boxed feel
+ * - Masthead bar: same max-width as content; aligned via shared container tokens
  */
 import type { ReactNode } from 'react';
 import Link from 'next/link';
@@ -25,6 +29,9 @@ export interface ServerShellProps {
   navLabel: string;
   footerLabel: string;
   wordmark: string;
+  /** Optional wordmark parts (Figma Make). When both provided, rendered as "Joel R. Klemmer" — one line by default, wraps to two responsively at <wbr>. */
+  wordmarkLine1?: string;
+  wordmarkLine2?: string;
   homeHref: string;
   navItems: ServerShellNavItem[];
   footerContent: ReactNode;
@@ -48,6 +55,8 @@ export function ServerShell({
   navLabel,
   footerLabel,
   wordmark,
+  wordmarkLine1,
+  wordmarkLine2,
   homeHref,
   navItems,
   footerContent,
@@ -67,103 +76,128 @@ export function ServerShell({
       <header
         aria-label={headerLabel}
         data-testid="masthead"
-        className="relative z-40 border-b border-border"
+        className="sticky top-0 z-40"
       >
-        <Container variant="full" className="py-2 md:py-3">
+        <Container
+          variant="full"
+          className="masthead-outer py-2 md:py-2 min-w-0"
+        >
           <div
             data-system="masthead-bar"
             data-testid="masthead-bar"
-            className="masthead-bar grid grid-cols-[auto,1fr,auto] items-center w-full min-w-0 gap-6 md:gap-8"
+            className="masthead-bar flex flex-nowrap items-center w-full min-w-0 max-w-[var(--container-max-width)] mx-auto gap-[var(--masthead-bar-gap,1rem)]"
           >
-            <div className="masthead-identity flex-shrink-0 min-w-0">
+            {/* Left: wordmark — truncates on narrow; Figma site: uniform weight and size */}
+            <div className="masthead-identity flex-shrink min-w-0 overflow-hidden">
               <Link
                 href={homeHref}
-                className={`masthead-identity-link ${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center min-h-[var(--masthead-bar-height)]`}
+                className={`masthead-identity-link ${focusRingClass} rounded-none flex items-center min-h-[var(--masthead-bar-height)] leading-tight overflow-hidden text-ellipsis whitespace-nowrap`}
               >
-                {wordmark}
+                {wordmarkLine1 != null && wordmarkLine2 != null ? (
+                  <>
+                    <span className="masthead-wordmark-line1">
+                      {wordmarkLine1}
+                    </span>{' '}
+                    <wbr />
+                    <span className="masthead-wordmark-line2">
+                      {wordmarkLine2}
+                    </span>
+                  </>
+                ) : (
+                  wordmark
+                )}
               </Link>
             </div>
-            <div className="masthead-nav masthead-nav-primary flex-1 min-w-0 flex items-center justify-center">
-              <nav
-                aria-label={navLabel}
-                className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
-              >
-                <ul className="nav-primary-list hidden md:flex flex-nowrap items-center gap-4 md:gap-6 min-h-[var(--masthead-bar-height)] whitespace-nowrap">
-                  {navItems.map((item) => (
-                    <li key={item.href} className="flex items-center h-full">
-                      <Link
-                        href={item.href}
-                        prefetch={false}
-                        {...(item.rank && { 'data-nav-rank': item.rank })}
-                        className={`nav-primary-link ${focusRingClass} rounded-sm h-full flex items-center relative`}
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                {/* Mobile: shadcn Sheet when mobileNavSlot provided; else details/summary fallback */}
-                {mobileNavSlot != null ? (
-                  <div
-                    className="nav-primary-mobile md:hidden relative flex items-center"
-                    data-testid="masthead-mobile-nav"
+
+            {/* Right: nav + utilities as single unit — never wraps, always tappable (TV→IoT) */}
+            <div className="masthead-controls flex flex-shrink-0 flex-nowrap items-center gap-[var(--masthead-bar-gap,1rem)] min-h-[var(--masthead-bar-height)]">
+              <div className="masthead-nav masthead-nav-primary flex items-center flex-shrink-0">
+                <nav
+                  aria-label={navLabel}
+                  className="nav-primary flex items-center min-h-[var(--masthead-bar-height)]"
+                >
+                  <ul
+                    className="nav-primary-list flex-nowrap items-center min-h-[var(--masthead-bar-height)] whitespace-nowrap"
+                    data-nav="desktop"
                   >
-                    {mobileNavSlot}
-                  </div>
-                ) : (
-                  <details
-                    className="nav-primary-mobile md:hidden relative flex items-center"
-                    aria-label={navLabel}
-                    data-testid="masthead-mobile-nav"
-                  >
-                    <summary
-                      id="primary-nav-trigger"
-                      className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-sm text-muted hover:text-text cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px] min-w-[44px]`}
+                    {navItems.map((item) => (
+                      <li key={item.href} className="flex items-center h-full">
+                        <Link
+                          href={item.href}
+                          prefetch={false}
+                          {...(item.rank && { 'data-nav-rank': item.rank })}
+                          className={`nav-primary-link ${focusRingClass} rounded-none h-full flex items-center relative`}
+                        >
+                          {item.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                  {mobileNavSlot != null ? (
+                    <div
+                      className="nav-primary-mobile relative flex items-center shrink-0"
+                      data-testid="masthead-mobile-nav"
+                      data-nav="mobile"
                     >
-                      <span className={visuallyHiddenClass}>{navLabel}</span>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        aria-hidden
+                      {mobileNavSlot}
+                    </div>
+                  ) : (
+                    <details
+                      className="nav-primary-mobile relative flex items-center shrink-0"
+                      data-nav="mobile"
+                      aria-label={navLabel}
+                      data-testid="masthead-mobile-nav"
+                    >
+                      <summary
+                        id="primary-nav-trigger"
+                        className={`${focusRingClass} masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text cursor-pointer list-none [&::-webkit-details-marker]:hidden min-h-[44px] min-w-[44px]`}
                       >
-                        <path d="M4 6h16M4 12h16M4 18h16" />
-                      </svg>
-                    </summary>
-                    <ul className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-md border border-border bg-surface shadow-lg z-50 text-start py-1 list-none m-0">
-                      {navItems.map((item) => (
-                        <li key={item.href}>
-                          <Link
-                            href={item.href}
-                            prefetch={false}
-                            {...(item.rank && { 'data-nav-rank': item.rank })}
-                            className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start px-3 py-2 rounded-sm hover:bg-border/50`}
-                          >
-                            {item.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
-              </nav>
-            </div>
-            <div
-              className="masthead-utilities-wrap flex-shrink min-w-0 overflow-visible"
-              data-masthead-utilities
-            >
-              <div className="masthead-utilities masthead-nav-secondary flex flex-nowrap items-center gap-6 min-h-[var(--masthead-bar-height)] shrink-0">
-                {headerCriticalSlot != null ? headerCriticalSlot : null}
-                {languageLinksSlot != null ? (
-                  <span data-language-links-ssr>{languageLinksSlot}</span>
-                ) : null}
-                {/* Reserved space for deferred controls; no CLS when they mount */}
-                <div className="masthead-deferred-slot flex flex-nowrap items-center gap-6 min-w-[8rem] min-h-[var(--masthead-bar-height)] shrink-0">
-                  {headerDeferredSlot}
+                        <span className={visuallyHiddenClass}>{navLabel}</span>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          aria-hidden
+                        >
+                          <path d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                      </summary>
+                      <ul className="nav-primary-menu absolute end-0 top-full mt-1 min-w-[12rem] rounded-none border border-border bg-surface shadow-lg z-50 text-start py-1 list-none m-0">
+                        {navItems.map((item) => (
+                          <li key={item.href}>
+                            <Link
+                              href={item.href}
+                              prefetch={false}
+                              {...(item.rank && {
+                                'data-nav-rank': item.rank,
+                              })}
+                              className={`nav-primary-menu-item ${focusRingClass} block w-full text-sm text-start px-3 py-2 rounded-none hover:bg-border/50`}
+                            >
+                              {item.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
+                </nav>
+              </div>
+              <div
+                className="masthead-utilities-wrap flex flex-shrink-0 items-center overflow-visible"
+                data-masthead-utilities
+              >
+                <div className="masthead-utilities masthead-nav-secondary flex flex-nowrap items-center min-h-[var(--masthead-bar-height)] shrink-0">
+                  {headerCriticalSlot != null ? headerCriticalSlot : null}
+                  {languageLinksSlot != null ? (
+                    <span data-language-links-ssr>{languageLinksSlot}</span>
+                  ) : null}
+                  <div className="masthead-deferred-slot flex flex-nowrap items-center min-h-[var(--masthead-bar-height)] shrink-0">
+                    {headerDeferredSlot}
+                  </div>
                 </div>
               </div>
             </div>
@@ -173,13 +207,16 @@ export function ServerShell({
       <main
         id={mainId}
         data-testid="main-content"
-        className="vacel-main py-8"
+        className="vacel-main pt-2 pb-8 md:pt-4 md:pb-10"
         tabIndex={-1}
       >
         <PageFrame contentStage>{children}</PageFrame>
       </main>
-      <footer aria-label={footerLabel} className="border-t border-border">
-        <Container className="py-6">{footerContent}</Container>
+      <footer
+        aria-label={footerLabel}
+        className="footer-root border-t border-border"
+      >
+        <Container className="py-8 md:py-10">{footerContent}</Container>
       </footer>
       {consentSlot != null ? consentSlot : null}
     </div>

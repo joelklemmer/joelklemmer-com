@@ -113,7 +113,7 @@ export function CookiePreferencesModal({
         aria-modal="true"
         aria-labelledby="cookie-preferences-title"
         aria-describedby="cookie-preferences-desc"
-        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-lg border border-border bg-bg p-6 shadow-lg"
+        className="max-h-[90vh] w-full max-w-lg overflow-auto rounded-none border border-border bg-bg p-6 shadow-lg"
       >
         <h2
           id="cookie-preferences-title"
@@ -184,21 +184,21 @@ export function CookiePreferencesModal({
             ref={firstFocusableRef}
             type="button"
             onClick={acceptAll}
-            className={`${focusRingClass} rounded-md border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('cookiePreferences.acceptAll')}
           </button>
           <button
             type="button"
             onClick={rejectNonEssential}
-            className={`${focusRingClass} rounded-md border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('cookiePreferences.rejectNonEssential')}
           </button>
           <button
             type="button"
             onClick={handleSave}
-            className={`${focusRingClass} rounded-md bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
+            className={`${focusRingClass} rounded-none bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
           >
             {t('cookiePreferences.save')}
           </button>
@@ -208,7 +208,7 @@ export function CookiePreferencesModal({
               withdraw();
               onClose();
             }}
-            className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-muted hover:text-text`}
+            className={`${focusRingClass} rounded-none border border-border px-3 py-2 text-sm text-muted hover:text-text`}
           >
             {t('cookiePreferences.withdraw')}
           </button>

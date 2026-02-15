@@ -14,3 +14,4 @@ export { MobileNavSheet } from './lib/MobileNavSheet';
 export type { MobileNavSheetProps } from './lib/MobileNavSheet';
 export { MobileNavSlot } from './lib/MobileNavSlot';
 export type { MobileNavSlotProps } from './lib/MobileNavSlot';
+export { MastheadScrollEffect } from './lib/MastheadScrollEffect';

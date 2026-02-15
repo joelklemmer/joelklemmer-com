@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { cookies, headers } from 'next/headers';
 import { Inter, Crimson_Pro } from 'next/font/google';
 
 import { PATHNAME_HEADER } from '../middleware';
 import { getMetadataBaseUrl } from '../lib/requestBaseUrl';
+// eslint-disable-next-line no-restricted-imports -- root layout needs ThemeSync for theme hydration
+import { ThemeSync } from '@joelklemmer/ui';
 /* Root layout: html lang/dir set by script for cacheability (bf-cache). */
 import { themeScript } from './theme-script';
 
@@ -18,14 +20,37 @@ const COOKIE_EVALUATOR = 'evaluator_mode';
 const DEFAULT_META_DESCRIPTION =
   'Authority verification ecosystem for executive evaluation and institutional review.';
 
-/** Root metadata: metadataBase + description so LHCI meta-description and canonical audits pass. */
+/** Root metadata: metadataBase, icons, manifest, themeColor; child layouts merge title/description. */
 export function generateMetadata(): Promise<Metadata> {
   const baseUrl = getMetadataBaseUrl();
   return Promise.resolve({
     metadataBase: new URL(baseUrl),
     description: DEFAULT_META_DESCRIPTION,
+    icons: {
+      icon: [
+        { url: '/icons/favicon.ico', sizes: 'any' },
+        { url: '/icons/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+        { url: '/icons/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      ],
+      apple: [{ url: '/icons/apple-touch-icon.png', sizes: '180x180' }],
+      other: [
+        {
+          rel: 'mask-icon',
+          url: '/icons/safari-pinned-tab.svg',
+          color: '#1e1e23',
+        },
+      ],
+    },
+    manifest: '/site.webmanifest',
   });
 }
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#1e1e23' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0b' },
+  ],
+};
 
 /** Figma Make: Inter (body) + Crimson Pro (headings). Subset + swap to minimize FOIT/FOUT. */
 const inter = Inter({
@@ -36,7 +61,7 @@ const inter = Inter({
   adjustFontFallback: true,
 });
 const crimsonPro = Crimson_Pro({
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   subsets: ['latin'],
   variable: '--font-serif',
   display: 'swap',
@@ -99,7 +124,10 @@ export default async function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <script dangerouslySetInnerHTML={{ __html: localeDirScript }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <ThemeSync />
+        {children}
+      </body>
     </html>
   );
 }

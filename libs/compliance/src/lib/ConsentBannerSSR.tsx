@@ -20,7 +20,7 @@ export async function ConsentBannerSSR({
       aria-labelledby="consent-surface-title"
       aria-describedby="consent-surface-desc"
       aria-modal="true"
-      className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-bg/98 p-3 shadow-[0_-2px_8px_rgba(0,0,0,0.06)]"
+      className="consent-banner-masthead fixed bottom-0 left-0 right-0 z-50 border-t p-3 shadow-[0_-2px_8px_rgba(0,0,0,0.15)]"
     >
       <div className="mx-auto flex max-w-3xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0 flex-1">
@@ -43,14 +43,14 @@ export async function ConsentBannerSSR({
           <button
             type="button"
             data-consent-action="accept"
-            className={`${focusRingClass} rounded-md bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
+            className={`${focusRingClass} rounded-none bg-text px-3 py-2 text-sm text-bg hover:opacity-90`}
           >
             {t('acceptAll')}
           </button>
           <button
             type="button"
             data-consent-action="reject"
-            className={`${focusRingClass} rounded-md border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border bg-surface px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('rejectNonEssential')}
           </button>
@@ -58,7 +58,7 @@ export async function ConsentBannerSSR({
             type="button"
             data-consent-action="details"
             data-preferences-href={preferencesHref}
-            className={`${focusRingClass} rounded-md border border-border px-3 py-2 text-sm text-text hover:bg-border`}
+            className={`${focusRingClass} rounded-none border border-border px-3 py-2 text-sm text-text hover:bg-border`}
           >
             {t('managePreferences')}
           </button>

@@ -115,7 +115,7 @@ export function LanguageMenu() {
         aria-haspopup="true"
         aria-label={common('a11y.languageSwitcherLabel')}
         onClick={handleToggle}
-        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-sm text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
+        className={`${focusRingClass} flex items-center justify-center w-8 h-8 rounded-none text-sm text-muted hover:text-text transition-colors motion-reduce:transition-none`}
         title={`${common('a11y.languageSwitcherLabel')}: ${currentLanguageLabel}`}
       >
         <span aria-hidden="true">🌐</span>
@@ -128,7 +128,7 @@ export function LanguageMenu() {
           id={menuId}
           aria-labelledby={triggerId}
           onKeyDown={handleKeyDown}
-          className="absolute end-0 top-full mt-1 min-w-[10rem] rounded-md border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
+          className="absolute end-0 top-full mt-1 min-w-[10rem] rounded-none border border-border bg-surface shadow-lg z-50 list-none py-1 m-0 px-0"
         >
           {locales.map((targetLocale, index) => {
             const restPath = restSegments.length

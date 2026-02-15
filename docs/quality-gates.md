@@ -6,6 +6,16 @@ This document describes every quality gate in the repo: how to run it, what it c
 
 Evaluator-facing surfaces (Executive Brief, Public Record, Case Studies, and related proof/evidence UI) are governed by the [Visual Authority System](visual-authority-system.md). That spec defines typography hierarchy, layout rhythm, evidence UI patterns, interaction rules, and an anti-pattern blacklist. **Deviations require documented justification.** When changing layout, typography, or interaction on those surfaces, consult the spec; it works alongside the [PGF](pgf.md) (which governs tone and copy) and does not alter verify order or existing gate behavior.
 
+## Allow lists and design flexibility
+
+Validators use allow lists (e.g. `ALLOWED_STYLE_FILES`, `ALLOWED_NON_TOKEN_CSS_VARS`) to prevent drift while avoiding over-restriction. **i18n, lint, and a11y checks remain strict**—they must catch missing keys, rule violations, and accessibility failures. Design-related allow lists (visual-contract, token-drift) are intentionally flexible:
+
+- **Visual contract:** Required layers 10–40 enforce structure. Design layers (50-foo.css, 60-bar.css) are allowed via pattern—add new design layers without validator edits.
+- **Token drift:** Figma design implementation (`apps/web/src/styles/`) is fully exempt from literal-color and CSS-variable checks so the app can adapt to [Figma Make](https://pages-tile-41445691.figma.site/) without validator edits. Figma is the design authority; guard rails must not block Figma parity.
+- **PGF:** CTA label allow list permits known intentional repeats.
+
+When adding a design layer or token override: update the relevant allow list and document in this file or the validator script. Do not relax i18n, lint, or a11y checks.
+
 ## Overview
 
 | Gate                  | Nx target                          | What it checks                                                |

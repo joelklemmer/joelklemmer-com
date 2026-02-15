@@ -32,7 +32,7 @@ export function WhatMattersBlock({ items, title }: WhatMattersBlockProps) {
         {items.map((item) => {
           const href = item.href;
           const baseClass =
-            'block p-3 rounded-card border border-border bg-muted/10 transition-colors motion-reduce:transition-none';
+            'block p-3 rounded-none border border-border bg-muted/10 transition-colors motion-reduce:transition-none';
           return (
             <li key={item.id}>
               {href ? (

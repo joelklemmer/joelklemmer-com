@@ -19,6 +19,7 @@ export { Shell } from './Shell';
 export type { ShellProps } from './Shell';
 export { ThemeProvider, useTheme } from './ThemeProvider';
 export { ThemeToggle } from './ThemeToggle';
+export { ThemeSync } from './ThemeSync';
 export { ContrastProvider, useContrast } from './ContrastProvider';
 export { AccessibilityPanel } from './AccessibilityPanel';
 export {
@@ -73,3 +74,7 @@ export type {
   WhatMattersBlockProps,
   WhatMattersBlockItem,
 } from './WhatMattersBlock';
+export { ScrollToTop } from './ScrollToTop';
+export type { ScrollToTopProps } from './ScrollToTop';
+export { FooterScrollToTop } from './FooterScrollToTop';
+export type { FooterScrollToTopProps } from './FooterScrollToTop';

@@ -86,7 +86,8 @@ The layer automatically detects and fails CI when:
 
 ## 8. How to extend
 
-- **New allowed CSS variable:** Add to `ALLOWED_NON_TOKEN_CSS_VARS` in `tools/validate-token-drift.ts` and document in this file or design-constitution.
+- **Figma design parity:** `apps/web/src/styles/` (all app-layer styles) is fully exempt from literal-color and CSS-variable checks. Figma is the design authority; add any variables or overrides needed to match [Figma Make](https://pages-tile-41445691.figma.site/) without validator edits.
+- **New allowed CSS variable** (for other files): Add to `ALLOWED_NON_TOKEN_CSS_VARS` in `tools/validate-token-drift.ts` and document in this file or design-constitution.
 - **New visual surface:** Add test in `visual-regression.spec.ts` and snapshot under `__screenshots__/`; keep set minimal and high-signal.
 - **New breakpoint/route:** Add to `responsive-layout.spec.ts` BREAKPOINTS/ROUTES and to i18n/overflow tests if needed.
 

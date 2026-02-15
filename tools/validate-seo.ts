@@ -2,8 +2,11 @@
  * Build-time SEO validation: canonical and hreflang correctness for core routes.
  * Asserts home page emits WebSite + Person JSON-LD (with non-empty sameAs).
  * Asserts /brief emits both Person and Report JSON-LD. No server required.
+ * Validates seo.json namespace: all routeKeys exist in all locales with non-empty title/description.
  * Run with: npx tsx --tsconfig tsconfig.base.json tools/validate-seo.ts
  */
+import path from 'node:path';
+import { readFileSync } from 'node:fs';
 import { defaultLocale, locales, type AppLocale } from '@joelklemmer/i18n';
 import {
   getBreadcrumbListJsonLd,
@@ -52,6 +55,69 @@ const corePathnames: string[] = [
 ];
 
 const errors: string[] = [];
+
+// seo.json namespace: every routeKey must exist in all locales with non-empty title and description
+const SEO_ROUTE_KEYS = [
+  'home',
+  'brief',
+  'work',
+  'casestudies',
+  'books',
+  'writing',
+  'contact',
+  'proof',
+  'publicrecord',
+  'media',
+  'mediaKit',
+  'press',
+  'bio',
+  'faq',
+  'now',
+  'operatingSystem',
+  'privacy',
+  'terms',
+  'accessibility',
+  'security',
+  'cookies',
+  'preferences',
+];
+
+const messagesRoot = path.join(
+  process.cwd(),
+  'libs',
+  'i18n',
+  'src',
+  'messages',
+);
+for (const locale of locales) {
+  const seoPath = path.join(messagesRoot, locale, 'seo.json');
+  let seo: Record<string, { title?: string; description?: string }>;
+  try {
+    seo = JSON.parse(readFileSync(seoPath, 'utf-8'));
+  } catch (e) {
+    errors.push(
+      `seo.json missing or invalid for locale ${locale}: ${(e as Error).message}`,
+    );
+    continue;
+  }
+  for (const routeKey of SEO_ROUTE_KEYS) {
+    const route = seo[routeKey];
+    if (!route) {
+      errors.push(`seo.json [${locale}]: missing route key "${routeKey}"`);
+      continue;
+    }
+    const title = route.title?.trim();
+    const description = route.description?.trim();
+    if (!title) {
+      errors.push(`seo.json [${locale}].${routeKey}: title must be non-empty`);
+    }
+    if (!description) {
+      errors.push(
+        `seo.json [${locale}].${routeKey}: description must be non-empty`,
+      );
+    }
+  }
+}
 
 for (const pathname of corePathnames) {
   const normalizedPath =

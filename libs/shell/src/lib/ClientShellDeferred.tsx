@@ -42,8 +42,8 @@ export function ClientShellDeferred({
       <ThemeProvider>
         <ContrastProvider>
           <ACPProvider>
-            <ThemeToggle />
             <LanguageSwitcherPopover />
+            <ThemeToggle />
             <AccessibilityPanel />
             {children}
           </ACPProvider>

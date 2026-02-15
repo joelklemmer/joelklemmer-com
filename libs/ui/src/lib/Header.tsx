@@ -25,7 +25,7 @@ export function Header({
       <div className="masthead-identity flex-shrink-0">
         <Link
           href={homeHref}
-          className={`masthead-identity-link ${focusRingClass} rounded-sm text-base font-semibold tracking-tight flex items-center min-h-[var(--masthead-bar-height)]`}
+          className={`masthead-identity-link ${focusRingClass} rounded-none text-base font-semibold tracking-tight flex items-center min-h-[var(--masthead-bar-height)]`}
         >
           {wordmark}
         </Link>

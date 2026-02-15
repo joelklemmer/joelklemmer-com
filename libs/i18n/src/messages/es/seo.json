@@ -1,0 +1,90 @@
+{
+  "home": {
+    "title": "Inicio",
+    "description": "Sistema de orientacion para evaluacion institucional."
+  },
+  "brief": {
+    "title": "Brief ejecutivo",
+    "description": "Centro de autoridad para revision estructurada y encaminamiento de evidencia."
+  },
+  "work": {
+    "title": "Estudios de caso",
+    "description": "Demostraciones estructuradas con referencias vinculadas a evidencia."
+  },
+  "casestudies": {
+    "title": "Estudios de caso",
+    "description": "Demostraciones estructuradas con referencias vinculadas a evidencia."
+  },
+  "books": {
+    "title": "Libros",
+    "description": "Volumenes publicados con referencias de verificacion."
+  },
+  "writing": {
+    "title": "Libros",
+    "description": "Volumenes publicados y fragmentos oficiales."
+  },
+  "contact": {
+    "title": "Contacto",
+    "description": "Entrada controlada para solicitudes de rol, medios y registros publicos."
+  },
+  "proof": {
+    "title": "Registro publico",
+    "description": "Artefactos de verificacion que respaldan afirmaciones indexadas."
+  },
+  "publicrecord": {
+    "title": "Registro publico",
+    "description": "Artefactos de verificacion que respaldan afirmaciones indexadas."
+  },
+  "media": {
+    "title": "Biblioteca de medios",
+    "description": "Archivo oficial de imagenes para verificacion de autoridad y prensa."
+  },
+  "mediaKit": {
+    "title": "Kit de medios",
+    "description": "Activos aprobados y terminos de uso."
+  },
+  "press": {
+    "title": "Kit de prensa",
+    "description": "Material de referencia y biografia aprobada."
+  },
+  "bio": {
+    "title": "Bio ejecutivo",
+    "description": "Biografia profesional para revision institucional."
+  },
+  "faq": {
+    "title": "FAQ",
+    "description": "Preguntas operativas con respuestas moderadas."
+  },
+  "now": {
+    "title": "Ahora",
+    "description": "Enfoque actual y compromisos verificados."
+  },
+  "operatingSystem": {
+    "title": "Sistema operativo",
+    "description": "Como se enmarca, entrega y verifica el trabajo."
+  },
+  "privacy": {
+    "title": "Privacidad",
+    "description": "Controles de privacidad y compromisos de tratamiento de datos."
+  },
+  "terms": {
+    "title": "Terminos",
+    "description": "Terminos de acceso y limitaciones de uso."
+  },
+  "accessibility": {
+    "title": "Accesibilidad",
+    "description": "Objetivos, metodos y cadencia de revision de accesibilidad."
+  },
+  "security": {
+    "title": "Seguridad",
+    "description": "Postura de seguridad, informes y divulgacion."
+  },
+  "cookies": {
+    "title": "Politica de cookies",
+    "description": "Cookies y consentimiento; tus opciones y como las usamos."
+  },
+  "preferences": {
+    "title": "Preferencias",
+    "description": "Preferencias de cookies y consentimiento."
+  }
+}

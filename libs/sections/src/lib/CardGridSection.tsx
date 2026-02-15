@@ -38,7 +38,7 @@ export function CardGridSection({
           {action ? (
             <Link
               href={action.href}
-              className={`${focusRingClass} rounded-md border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent transition-colors motion-reduce:transition-none`}
+              className={`${focusRingClass} rounded-none border border-border px-4 py-2 text-sm font-medium hover:border-accent hover:text-accent transition-colors motion-reduce:transition-none`}
             >
               {action.label}
             </Link>

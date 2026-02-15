@@ -1,7 +1,17 @@
+/**
+ * HeroSection — Figma pixel match (https://pages-tile-41445691.figma.site/) at 1440px
+ *
+ * Visual deltas fixed in CSS (55-figma-parity.css, 20-layout.css):
+ * - Headline: weight 400, size ~58px, line-height 1.08, thesis spacing 0.12em
+ * - Paragraph: max-width 32rem for wrapping match; content gap space-5
+ * - Buttons: py-2.5, px-4, text-sm, lighter secondary border, icon spacing
+ * - Image: 3:2 aspect, object-position right 32% (head visible), light bg, no shadow
+ * - Grid: gap-x space-8, align-items start, image column 520–600px
+ */
 import type { ReactNode } from 'react';
 import Link from 'next/link';
 import { focusRingClass } from '@joelklemmer/a11y';
-import { Container, PortraitImage } from '@joelklemmer/ui';
+import { PortraitImage } from '@joelklemmer/ui';
 
 export interface HeroAction {
   label: string;
@@ -22,7 +32,14 @@ export interface HeroSectionProps {
   /** Optional visual anchor: image path (e.g. /media/portrait.jpg) or ReactNode for custom composition */
   visual?:
     | ReactNode
-    | { src: string; alt: string; width?: number; height?: number };
+    | {
+        src: string;
+        alt: string;
+        width?: number;
+        height?: number;
+        /** object-position for crop; e.g. "right center" for wide hero frame */
+        objectPosition?: string;
+      };
   /** Set true only for the LCP hero (e.g. home) to avoid multiple priority images */
   imagePriority?: boolean;
   children?: ReactNode;
@@ -51,24 +68,23 @@ export function HeroSection({
         alt: string;
         width?: number;
         height?: number;
+        objectPosition?: string;
       };
-      // Use PortraitImage component for institutional presentation; frame + wrapper for elevation and framing balance
+      // Figma Make: single wrapper for light grey bg; desktop uses wide 3:2 frame via CSS
       visualNode = (
         <div
-          className="hero-authority-visual-frame hero-portrait-composition"
+          className="hero-portrait-composition hero-portrait-wrapper"
           data-hero-visual
         >
-          <div className="hero-portrait-wrapper">
-            <PortraitImage
-              src={v.src}
-              alt={v.alt}
-              width={v.width ?? 1200}
-              height={v.height ?? 1500}
-              priority={imagePriority}
-              quality={90}
-              objectPosition="center top"
-            />
-          </div>
+          <PortraitImage
+            src={v.src}
+            alt={v.alt}
+            width={v.width ?? 1200}
+            height={v.height ?? 1500}
+            priority={imagePriority}
+            quality={90}
+            objectPosition={v.objectPosition ?? 'center top'}
+          />
         </div>
       );
     } else {
@@ -83,22 +99,14 @@ export function HeroSection({
       aria-labelledby="hero-title"
     >
       <div className="hero-authority-atmosphere" aria-hidden />
-      <Container
-        variant="full"
-        className="hero-authority-inner hero-authority-plate"
-      >
+      <div className="hero-authority-inner hero-authority-plate">
         <div
           className={useGrid ? 'hero-authority-grid' : 'hero-authority-stack'}
         >
           <div className="hero-authority-content">
             <h1 id="hero-title" className="hero-title">
               {headline.length > 0
-                ? headline.map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < headline.length - 1 ? <br /> : null}
-                    </span>
-                  ))
+                ? headline.map((line, i) => <span key={i}>{line}</span>)
                 : null}
             </h1>
             {lede ? <p className="hero-lede text-muted">{lede}</p> : null}
@@ -123,7 +131,7 @@ export function HeroSection({
             </div>
           ) : null}
         </div>
-      </Container>
+      </div>
     </section>
   );
 }

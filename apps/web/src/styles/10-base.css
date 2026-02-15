@@ -4,7 +4,8 @@
 }
 
 html {
-  font-family: var(--font-sans);
+  font-family: var(--font-serif);
+  font-size: var(--font-size, 16px);
   line-height: var(--leading-normal);
   scroll-behavior: smooth;
   text-rendering: optimizeLegibility;
@@ -19,9 +20,9 @@ body {
   overflow-x: clip;
   background: var(--authority-atmosphere-subtle);
   color: hsl(var(--color-text));
-  font-size: var(--body-analytical-size);
+  font-size: var(--text-body, var(--body-analytical-size));
   font-weight: var(--font-weight-body);
-  line-height: var(--body-analytical-line);
+  line-height: var(--text-body-line, var(--body-analytical-line));
   letter-spacing: var(--body-analytical-spacing);
 }
 
@@ -42,6 +43,7 @@ body > * {
 main.vacel-main {
   box-shadow: var(--authority-depth-illusion);
   min-width: 0; /* prevent overflow in full-bleed layout at narrow viewports */
+  overflow-x: clip; /* enforce no horizontal scroll at any viewport */
 }
 
 html[dir='rtl'],

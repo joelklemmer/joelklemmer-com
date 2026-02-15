@@ -24,7 +24,7 @@
 }
 
 /* Layout root: full bleed, spans viewport; no fixed max-width wrapper.
-   overflow-x: clip prevents horizontal scroll. */
+   overflow-x: clip prevents horizontal scroll at all breakpoints (mobile→TV). */
 .layout-root {
   width: 100%;
   min-width: 0;
@@ -33,7 +33,8 @@
   overflow-x: clip;
 }
 
-/* Lane utilities: centered content with governed max-width; RTL-safe (logical properties only) */
+/* Lane utilities: centered content with governed max-width; RTL-safe (logical properties only).
+   Figma Make: --max-width via patch; --lane-wide/--container-max-width use it. */
 .lane-full {
   width: 100%;
   max-width: none; /* full bleed: edge-to-edge; --lane-full is none */
@@ -44,7 +45,7 @@
 
 .lane-wide {
   width: 100%;
-  max-width: var(--lane-wide);
+  max-width: var(--lane-wide, var(--container-max-width));
   min-width: 0;
   margin-inline: auto;
   padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
@@ -87,95 +88,127 @@
 }
 
 /* --------------------------------------------------------------------------- */
-/* Responsive gutter scaling: no collapsed gutters; no horizontal scroll 320px→ultrawide */
-/* Mobile (< 640px): gutters from tokens (--gutter-inline-*). Tablet+: wider gutters. */
+/* Responsive gutter scale: mobile → tablet → desktop → TV.
+   Figma spec: ~100–150px horizontal at desktop; no stretched content at any viewport. */
 /* --------------------------------------------------------------------------- */
+/* Base (320–639px): mobile — compact, touch-friendly */
+:root {
+  --container-padding-x: 1rem;
+  --container-padding-x-wide: 1.25rem;
+  --gutter-inline-start: calc(1rem + env(safe-area-inset-inline-start, 0px));
+  --gutter-inline-end: calc(1rem + env(safe-area-inset-inline-end, 0px));
+}
+
+/* 640px+: large phone / small tablet */
 @media (min-width: 640px) {
   :root {
+    --container-padding-x: 1.5rem;
+    --container-padding-x-wide: 1.75rem;
     --gutter-inline-start: calc(
-      var(--container-padding-x-wide) + env(safe-area-inset-inline-start, 0px)
+      1.5rem + env(safe-area-inset-inline-start, 0px)
     );
-    --gutter-inline-end: calc(
-      var(--container-padding-x-wide) + env(safe-area-inset-inline-end, 0px)
+    --gutter-inline-end: calc(1.5rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* 768px+: tablet */
+@media (min-width: 768px) {
+  :root {
+    --container-padding-x: 2rem;
+    --container-padding-x-wide: 2.5rem;
+    --gutter-inline-start: calc(2rem + env(safe-area-inset-inline-start, 0px));
+    --gutter-inline-end: calc(2rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* 1024px+: desktop */
+@media (min-width: 1024px) {
+  :root {
+    --container-padding-x: 3rem;
+    --container-padding-x-wide: 3.5rem;
+    --gutter-inline-start: calc(3rem + env(safe-area-inset-inline-start, 0px));
+    --gutter-inline-end: calc(3rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* 1280px+: large desktop — Figma editorial: more breathing room (~100px horizontal) */
+@media (min-width: 1280px) {
+  :root {
+    --container-padding-x: 5.5rem;
+    --container-padding-x-wide: 6.25rem;
+    --gutter-inline-start: calc(
+      5.5rem + env(safe-area-inset-inline-start, 0px)
     );
+    --gutter-inline-end: calc(5.5rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* 1536px+: extra-large monitor */
+@media (min-width: 1536px) {
+  :root {
+    --container-padding-x: 6rem;
+    --container-padding-x-wide: 7rem;
+    --gutter-inline-start: calc(6rem + env(safe-area-inset-inline-start, 0px));
+    --gutter-inline-end: calc(6rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* 1920px+: ultra-wide / TV — Figma ~150px */
+@media (min-width: 1920px) {
+  :root {
+    --container-padding-x: 6.25rem;
+    --container-padding-x-wide: 9.375rem;
+    --gutter-inline-start: calc(
+      6.25rem + env(safe-area-inset-inline-start, 0px)
+    );
+    --gutter-inline-end: calc(6.25rem + env(safe-area-inset-inline-end, 0px));
   }
 }
 
 /* --------------------------------------------------------------------------- */
-/* Ultrawide scaling (1600px+): authority perception; no stretched paragraphs; balanced composition */
-/* Wide scaling rules, readable lane preservation, whitespace balancing, hero positioning. No floats. */
+/* Ultrawide: authority perception; no stretched paragraphs; balanced composition */
 /* --------------------------------------------------------------------------- */
 @media (min-width: 1600px) {
-  /* No floating elements: all layout is grid/flex; explicit float containment */
   .layout-root,
   .page-frame,
   .full-bleed,
   .section-shell,
-  .content-lane,
   .content-lane-grid,
   .hero-authority,
   .hero-authority-inner {
     float: none;
   }
 
-  /* Readable lane preservation: paragraphs and content stay within readable width */
-  .content-lane,
+  /* Only .content-lane (readable-width lane) narrows; home uses Container (wide) and stays 1280px */
+  .content-lane:not(.content-lane-grid),
   .lane-readable {
     max-width: var(--lane-readable);
     width: 100%;
   }
 
-  /* Hero positioning: center hero inner in wide lane; prevents edge-to-edge stretch */
+  /* Hero inherits width from parent Container; no extra constraint */
   .hero-authority-inner {
-    max-width: var(--lane-wide);
-    margin-inline: auto;
     width: 100%;
-  }
-
-  /* Prevent stretched paragraphs: section content obeys lane; no full-bleed text */
-  .section-shell .content-lane {
-    max-width: var(--lane-readable);
-  }
-
-  /* Whitespace balancing: step up gutters so content does not hug edges */
-  :root {
-    --container-padding-x: var(--space-6);
-    --container-padding-x-wide: var(--space-8);
-    --gutter-inline-start: calc(
-      var(--space-8) + env(safe-area-inset-inline-start, 0px)
-    );
-    --gutter-inline-end: calc(
-      var(--space-8) + env(safe-area-inset-inline-end, 0px)
-    );
+    max-width: none;
   }
 }
 
-@media (min-width: 1920px) {
-  :root {
-    --container-padding-x: var(--space-8);
-    --container-padding-x-wide: var(--space-10);
-    --gutter-inline-start: calc(
-      var(--space-10) + env(safe-area-inset-inline-start, 0px)
-    );
-    --gutter-inline-end: calc(
-      var(--space-10) + env(safe-area-inset-inline-end, 0px)
-    );
-  }
-}
-
-/* Content stage: subtle materiality so center column does not float; does not harm contrast. */
-.page-frame-stage {
+/* Figma Make: flat stage; minimal top padding so hero starts near masthead.
+   Merged into page-frame when contentStage=true (no redundant wrapper). */
+.page-frame.page-frame-stage {
   background: var(--page-frame-stage-bg);
   border-radius: var(--page-frame-stage-radius);
   box-shadow: var(--page-frame-stage-elevation);
-  padding-block: var(--space-6);
+  padding-block-start: var(--space-3);
+  padding-block-end: var(--space-6);
   padding-inline: 0;
   min-height: 0;
 }
 
 @media (min-width: 640px) {
-  .page-frame-stage {
-    padding-block: var(--space-8);
+  .page-frame.page-frame-stage {
+    padding-block-start: var(--space-4);
+    padding-block-end: var(--space-8);
   }
 }
 
@@ -246,6 +279,11 @@ section.section-shell:last-child {
   padding-inline: var(--gutter-inline-start) var(--gutter-inline-end);
 }
 
+/* Figma: home content band uses Container (wide) for lane+padding; aligns with masthead bar. */
+.home-content-band {
+  min-width: 0;
+}
+
 /* Grid of sections: full width; each section uses Container (lane) inside. */
 .content-lane-grid {
   display: grid;
@@ -255,23 +293,23 @@ section.section-shell:last-child {
   min-width: 0;
 }
 
-/* Full-width hero: section spans viewport; inner lane from Container variant=full.
-   Figma Make: space-12 padding; mobile reduced for viewport fit.
-   overflow-x: clip prevents hero from extending viewport (RTL-safe). */
+/* Figma: tighter header-to-hero spacing; overflow visible so text never clips */
 .hero-authority {
   position: relative;
   margin-block-end: var(--section-block-margin);
-  padding-block: var(--space-6);
+  padding-block-start: var(--space-2);
+  padding-block-end: var(--space-8);
   isolation: isolate;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  overflow-x: clip;
+  overflow: visible;
 }
 
 @media (min-width: 768px) {
   .hero-authority {
-    padding-block: var(--space-12);
+    padding-block-start: var(--space-2);
+    padding-block-end: var(--space-10);
   }
 }
 
@@ -299,54 +337,33 @@ section.section-shell:last-child {
   pointer-events: none;
 }
 
+/* Figma Make: no card wrapper. Hero inner is layout-only; page bg shows through. */
 .hero-authority-inner {
   position: relative;
   z-index: 1;
   display: grid;
   gap: var(--hero-block-gap);
-  background: var(--hero-inner-surface);
-  border: 1px solid var(--hero-inner-border);
-  border-radius: 0.5rem;
-  box-shadow: var(--hero-depth-shadow);
-  overflow: hidden;
   width: 100%;
 }
 
-/* Hero plate: premium spacing and visual dominance; RTL-safe logical padding.
-   Mobile: fit within viewport (min-height caps at 50vh) so no scroll-container workaround. */
+/* Figma: tighter plate padding for less boxed feel */
 .hero-authority-plate {
-  padding: var(--space-4);
-  min-height: min(320px, 50vh);
+  padding: var(--space-3);
+  min-height: 0;
 }
 
 @media (min-width: 768px) {
   .hero-authority-plate {
-    padding-block: var(--space-8);
-    padding-inline: calc(var(--space-8) * 1.25);
-    min-height: min(600px, 70vh);
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
   }
 }
 
 @media (min-width: 1024px) {
   .hero-authority-plate {
-    padding-block: var(--space-10);
-    padding-inline: calc(var(--space-10) * 1.25);
+    padding-block: var(--space-4);
+    padding-inline: var(--space-5);
   }
-}
-
-@media (min-width: 1600px) {
-  .hero-authority-plate {
-    padding-inline: calc(var(--space-10) * 1.5);
-  }
-}
-
-.hero-authority-inner::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: var(--hero-atmosphere-tertiary);
-  pointer-events: none;
-  border-radius: inherit;
 }
 
 .hero-authority-inner > * {
@@ -367,24 +384,38 @@ section.section-shell:last-child {
   align-items: start;
 }
 
+/* Figma: 2-col grid; tighter gap, image aligns with headline */
 @media (min-width: 768px) {
   .hero-authority-grid {
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    grid-template-columns: minmax(22rem, 1fr) minmax(0, 340px);
     align-items: start;
     align-content: start;
-    gap: var(--hero-inline-gap);
-    /* Ensure content never overlaps portrait */
+    gap: var(--space-8);
     min-width: 0;
   }
 }
 
+@media (min-width: 1024px) {
+  .hero-authority-grid {
+    grid-template-columns: minmax(32rem, 1fr) minmax(400px, 520px);
+    gap: var(--space-8);
+  }
+}
+
+/* Figma 1440px: image 520–600px, tighter column gap */
+@media (min-width: 1280px) {
+  .hero-authority-grid {
+    grid-template-columns: minmax(36rem, 1fr) minmax(520px, 600px);
+    gap: var(--space-8);
+  }
+}
+
+/* Figma: headline uses full column width; lede constrained for readability. */
 .hero-authority-content {
   display: grid;
   gap: var(--hero-block-gap);
-  max-width: var(--readable-line-length);
   min-width: 0;
   align-content: start;
-  /* Prevent content from being pushed or overlapped */
   width: 100%;
   overflow-wrap: break-word;
 }
@@ -394,18 +425,14 @@ section.section-shell:last-child {
   max-width: 100%;
 }
 
+/* Figma Make: rectangular crop, light grey bg, no shadow (matches live Figma site) */
 .hero-portrait-wrapper {
   width: 100%;
   position: relative;
   overflow: hidden;
-  /* Figma Make: xl radius, soft shadow */
-  border-radius: var(--radius-xl, var(--radius-lg));
+  border-radius: 0;
   background: hsl(var(--color-neutral-100));
-  box-shadow: var(
-    --hero-depth-shadow,
-    0 4px 16px hsl(var(--color-text) / 0.05)
-  );
-  /* Height controlled by aspect ratio from PortraitImage component - no max-height to avoid conflicts */
+  box-shadow: none;
 }
 
 /* Portrait image wrapper handles aspect ratio from component */
@@ -424,22 +451,31 @@ section.section-shell:last-child {
   /* Face-safe cropping: center top ensures head/face remains visible */
 }
 
-/* Mobile-first: portrait stacks above content */
+/* Mobile-first: portrait stacks above content; responsive text scaling */
 @media (max-width: 767px) {
   .hero-authority-grid {
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: var(--space-6);
   }
 
   .hero-portrait-composition {
-    max-width: min(320px, 100%);
+    max-width: min(280px, 100%);
     margin-inline: auto;
     order: -1;
-    /* Width constraint only - height follows aspect ratio (4:5) */
   }
 
-  /* Mobile: ensure content is never overlapped */
   .hero-authority-content {
     order: 1;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-portrait-composition {
+    max-width: min(240px, 100%);
+  }
+
+  .hero-authority-plate {
+    padding-inline: var(--space-3);
   }
 }
 
@@ -460,42 +496,43 @@ section.section-shell:last-child {
   }
 }
 
-/* Desktop: optimal portrait sizing */
+/* Portrait: Figma wide frame — fills column, no max-width constraint at desktop */
+@media (min-width: 768px) {
+  .hero-portrait-composition {
+    max-width: 340px;
+  }
+}
+
 @media (min-width: 1024px) {
   .hero-portrait-composition {
-    max-width: 420px;
-    /* Width constraint only - height follows aspect ratio (4:5) */
-    /* At 420px width, height = 420 / 0.8 = 525px (maintains 4:5 ratio) */
+    max-width: 520px;
   }
 }
 
-/* Large desktop: maintain proportions */
 @media (min-width: 1280px) {
   .hero-portrait-composition {
-    max-width: 450px;
-    /* Width constraint only - height follows aspect ratio (4:5) */
-    /* At 450px width, height = 450 / 0.8 = 562.5px (maintains 4:5 ratio) */
+    max-width: 600px;
   }
 }
 
-/* Figma Make: hero thesis 3 lines, supporting, CTAs, photo right. */
+/* Fluid hero title: Figma spec 60–80px at desktop, bold; clamp for mobile→TV. */
 .hero-title {
-  font-family: var(--hero-display-font);
-  font-size: var(--text-hero);
+  font-family: var(--font-serif, var(--hero-display-font));
+  font-size: clamp(1.75rem, 4.5vw + 1.5rem, 5rem);
   line-height: var(--text-hero-line);
   letter-spacing: -0.01em;
-  font-weight: var(--font-weight-normal);
+  font-weight: 700;
   color: hsl(var(--color-text));
   margin: 0;
 }
 
 .hero-lede {
-  font-family: var(--hero-lede-font);
+  font-family: var(--font-sans);
   font-size: var(--text-body-large);
   line-height: var(--text-body-large-line);
   color: hsl(var(--color-muted));
   margin: 0;
-  max-width: 680px;
+  max-width: min(42rem, 100%);
 }
 
 .hero-wrap {
@@ -503,8 +540,9 @@ section.section-shell:last-child {
   padding-block-end: var(--space-12);
 }
 
+/* Figma Make: rectangular crop */
 .hero-photo {
-  border-radius: var(--radius-xl, var(--radius-lg));
+  border-radius: 0;
   box-shadow: var(--hero-depth-shadow, var(--elevation-premium));
 }
 
@@ -519,19 +557,26 @@ section.section-shell:last-child {
   margin: 0;
 }
 
+/* Figma Make: generous padding, primary filled dark, secondary outline. */
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  align-items: center;
+  gap: var(--space-4);
+  margin-block-start: var(--space-8);
 }
 
+/* Figma Make: rectangular CTAs, serif, ample tap targets (55-figma-parity overrides padding) */
 .hero-action-link {
-  display: inline-block;
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-serif);
+  font-size: var(--text-body);
   font-weight: var(--font-weight-label);
   letter-spacing: var(--hero-cta-letter-spacing);
-  border-radius: var(--radius-sm);
+  border-radius: 0;
   transition:
     color var(--transition-duration-fast) var(--ease-authority),
     border-color var(--transition-duration-fast) var(--ease-authority),
@@ -541,22 +586,23 @@ section.section-shell:last-child {
 .hero-action-primary {
   color: hsl(var(--color-text-on-accent));
   background: hsl(var(--color-accent));
-  border: 1px solid hsl(var(--color-accent));
+  border: 1px solid transparent;
 }
 
 .hero-action-primary:hover {
   background: hsl(var(--color-accent-strong));
-  border-color: hsl(var(--color-accent-strong));
+  border-color: transparent;
   color: hsl(var(--color-text-on-accent));
 }
 
 .hero-action-secondary {
-  color: hsl(var(--color-text));
-  background: hsl(var(--color-surface));
+  color: hsl(var(--color-accent));
+  background: transparent;
   border: 1px solid hsl(var(--color-border));
 }
 
 .hero-action-secondary:hover {
+  background: hsl(var(--color-hover-bg));
   border-color: hsl(var(--color-accent));
   color: hsl(var(--color-accent));
 }
@@ -614,15 +660,47 @@ section.section-shell:last-child {
   padding-inline-start: var(--optical-inset);
 }
 
-/* Masthead: single institutional bar (identity | nav | utilities) */
+/* Masthead: Figma Make --nav-height 76px. Responsive icon size. */
 :root {
-  --masthead-bar-height: 3rem;
+  --masthead-bar-height: var(--nav-height, 76px);
   --masthead-touch-min: 44px;
-  --tap-target-spacing: 24px; /* WCAG 2.2 2.5.8: ≥24px between adjacent tap targets; masthead-bar gap-8 + margins */
+  --tap-target-spacing: 24px; /* WCAG 2.2 2.5.8: ≥24px between adjacent tap targets */
+  --masthead-icon-size: clamp(1rem, 2vw + 0.75rem, 1.25rem);
 }
 
+/* Figma Make: single horizontal row — logo | nav | utils never wrap (TV→IoT).
+   Identity truncates; controls (hamburger+icons) always visible and never under wordmark. */
 .masthead-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--masthead-bar-gap, 1rem);
   min-height: var(--masthead-bar-height);
+  min-width: 0;
+}
+.masthead-outer {
+  min-width: 0;
+}
+
+/* Masthead responsive nav: see 50-masthead-responsive.css (loads last). */
+
+/* Figma site: wordmark — serif, uniform weight and size per https://pages-tile-41445691.figma.site/ */
+.masthead-identity-link {
+  font-family: var(--font-serif), 'Crimson Pro', Georgia, serif;
+  font-size: clamp(0.875rem, 2vw + 0.75rem, var(--text-masthead));
+  font-weight: var(--font-weight-medium, 500);
+  line-height: var(--text-masthead-line);
+  letter-spacing: -0.02em;
+  color: inherit;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.masthead-wordmark-line1,
+.masthead-wordmark-line2 {
+  font-weight: inherit;
+  font-size: inherit;
+  color: inherit;
 }
 
 .masthead-touch-target {
@@ -636,15 +714,16 @@ section.section-shell:last-child {
   min-height: var(--masthead-touch-min);
 }
 
-/* Tap target spacing: ≥24px between adjacent controls (WCAG 2.2 2.5.8).
-   Padding (not just margin) prevents nav overflow from encroaching on utilities. */
-.masthead-nav {
-  margin-inline-end: var(--tap-target-spacing, 12px);
-  padding-inline-end: var(--tap-target-spacing, 12px);
+/* Tap target spacing: ≥24px between adjacent controls (WCAG 2.2 2.5.8) */
+.masthead-controls {
+  min-width: 0;
 }
-.masthead-utilities {
-  margin-inline-start: var(--tap-target-spacing, 12px);
-  padding-inline-start: var(--tap-target-spacing, 12px);
+.masthead-nav {
+  min-width: 0;
+}
+.masthead-utilities,
+.masthead-deferred-slot {
+  gap: var(--masthead-bar-gap, 1rem);
 }
 
 /* Masthead icons: same size, stroke, and baseline alignment (no float) */
@@ -665,7 +744,8 @@ section.section-shell:last-child {
 
 /* Header: Fortune 10 / statesman briefing interface.
    Sticky with token-driven background. Scroll state set by MastheadScrollEffect.
-   overflow: visible so focus rings on masthead controls are not clipped. */
+   overflow: visible so focus rings on masthead controls are not clipped.
+   Figma site: black masthead in light mode → light text (--masthead-bg from 00-tokens). */
 header[aria-label] {
   position: sticky;
   top: 0;
@@ -678,10 +758,39 @@ header[aria-label] {
     box-shadow var(--transition-duration-normal) var(--ease-authority);
 }
 
+/* Figma: light mode masthead is light; use dark text and visible focus ring */
+:root[data-theme='light'] header[aria-label] {
+  --color-text: var(--masthead-text);
+  --color-muted: var(--masthead-text-muted);
+  --color-focus: var(--masthead-focus);
+}
+
+/* Dark mode masthead: surface bg, light text — scoped to header */
+:root[data-theme='dark'] header[aria-label] {
+  --color-text: var(--masthead-text);
+  --color-muted: var(--masthead-text-muted);
+  --color-focus: var(--masthead-focus);
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) header[aria-label] {
+    --color-text: var(--masthead-text);
+    --color-muted: var(--masthead-text-muted);
+    --color-focus: var(--masthead-focus);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) header[aria-label] {
+    --color-text: var(--masthead-text);
+    --color-muted: var(--masthead-text-muted);
+    --color-focus: var(--masthead-focus);
+  }
+}
+
+/* Figma parity: solid masthead when scrolled (no transparency). */
 [data-masthead-scrolled] header[aria-label] {
   background: var(--masthead-bg-scrolled);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
   box-shadow: 0 1px 0 var(--masthead-border);
 }
 

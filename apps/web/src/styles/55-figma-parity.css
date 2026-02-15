@@ -1,0 +1,175 @@
+/* Figma Make parity — loads LAST. Pixel match for https://pages-tile-41445691.figma.site/
+   Target: ~1440px viewport. Values from Figma inspection; tokens preferred, px where needed. */
+
+/* --------------------------------------------------------------------------- */
+/* 1440px: container width + padding — less boxed, more open (Figma editorial)   */
+/* --------------------------------------------------------------------------- */
+@media (min-width: 1440px) {
+  :root {
+    --container-max-width: 1320px;
+    --container-padding-x: 3.75rem;
+    --container-padding-x-wide: 3.75rem;
+    --optical-inset: 0;
+    --gutter-inline-start: calc(
+      3.75rem + env(safe-area-inset-inline-start, 0px)
+    );
+    --gutter-inline-end: calc(3.75rem + env(safe-area-inset-inline-end, 0px));
+  }
+}
+
+/* --------------------------------------------------------------------------- */
+/* Page background: cooler neutral gray (Figma editorial)                       */
+/* --------------------------------------------------------------------------- */
+:root[data-theme='light'],
+:root:not([data-theme='dark']) {
+  --color-bg: 220 10% 97%;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme='dark']) {
+    --color-bg: 220 10% 97%;
+  }
+}
+
+/* --------------------------------------------------------------------------- */
+/* Hero section: Figma pixel match — lighter, editorial, smaller headline       */
+/* --------------------------------------------------------------------------- */
+/* H1: ~58px, weight 400, line-height 1.08 (Figma editorial, not bold) */
+.hero-title {
+  font-family: var(--font-serif) !important;
+  font-size: clamp(1.5rem, 3vw + 1rem, 3.625rem) !important;
+  line-height: 1.08 !important;
+  letter-spacing: 0 !important;
+  font-weight: 400 !important;
+  color: hsl(var(--color-text)) !important;
+}
+
+/* Thesis lines: Figma rhythm — tighter spacing between phrases */
+.hero-title span {
+  display: block;
+  white-space: nowrap;
+}
+.hero-title span:not(:last-child) {
+  margin-block-end: 0.12em;
+}
+
+@media (max-width: 479px) {
+  .hero-title span {
+    white-space: normal;
+  }
+}
+
+/* Lede: Sans-serif, softer gray (Figma editorial); 32rem for wrapping match */
+.hero-lede {
+  font-family: var(--font-sans) !important;
+  font-size: var(--text-body-large, 1.125rem) !important;
+  font-weight: var(--font-weight-normal, 400) !important;
+  line-height: var(--text-body-large-line, 1.65) !important;
+  color: hsl(220 8% 35%) !important;
+  max-width: min(32rem, 100%) !important;
+}
+
+/* CTAs: gap between buttons; vertical spacing from grid gap (hero-authority-content) */
+.hero-actions {
+  gap: var(--space-4) !important;
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Hero image: Figma wide landscape frame (3:2); right 32% so head visible    */
+/* --------------------------------------------------------------------------- */
+@media (min-width: 1024px) {
+  .hero-authority .portrait-image-wrapper {
+    aspect-ratio: 3/2 !important;
+  }
+  .hero-authority .portrait-image {
+    object-position: right 32% !important;
+  }
+}
+
+/* Portrait: Figma light flat bg (no dark), rectangular, no shadow */
+.hero-portrait-wrapper,
+.hero-portrait-composition,
+.hero-authority-visual-frame .hero-portrait-wrapper,
+.portrait-image-wrapper {
+  border-radius: 0 !important;
+}
+
+.hero-authority .hero-portrait-wrapper,
+.hero-authority .hero-portrait-composition {
+  background: hsl(220 8% 96%) !important;
+  box-shadow: none !important;
+}
+
+.hero-portrait-wrapper {
+  box-shadow: none !important;
+}
+
+.hero-photo {
+  border-radius: 0 !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Hero CTAs: Figma editorial — smaller buttons, lighter secondary border     */
+/* --------------------------------------------------------------------------- */
+.hero-action-link,
+.hero-action-primary,
+.hero-action-secondary {
+  border-radius: 0.25rem !important;
+  padding-block: 0.625rem !important;
+  padding-inline: var(--space-4) !important;
+  font-size: 0.875rem !important;
+  font-weight: var(--font-weight-normal, 400) !important;
+  gap: 0.375rem !important;
+}
+
+.hero-action-secondary {
+  border-color: hsl(220 8% 85%) !important;
+}
+
+.hero-action-secondary:hover {
+  border-color: hsl(var(--color-accent)) !important;
+}
+
+/* Hero content block: Figma spacing — tighter headline/lede/buttons rhythm */
+.hero-authority-content {
+  gap: var(--space-5) !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Cards, section anchors: rectangular per Figma                               */
+/* --------------------------------------------------------------------------- */
+.authority-card,
+.section-visual-anchor,
+.authority-glass,
+.authority-panel {
+  border-radius: 0 !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Scroll-to-top, footer controls                                              */
+/* --------------------------------------------------------------------------- */
+.footer-scroll-to-top,
+[class*='scroll-to-top'] {
+  border-radius: 0 !important;
+}
+
+/* --------------------------------------------------------------------------- */
+/* Header/nav: Figma pixel match — lighter typography, thinner icons, divider  */
+/* --------------------------------------------------------------------------- */
+header[aria-label] {
+  --masthead-border: hsl(220 8% 90%);
+}
+
+header[aria-label] .masthead-identity-link {
+  font-weight: 500;
+}
+
+header[aria-label] .nav-primary-link {
+  font-weight: 400;
+}
+
+header[aria-label] .masthead-icon svg {
+  stroke-width: 1.5;
+}

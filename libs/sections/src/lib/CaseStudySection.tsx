@@ -65,7 +65,7 @@ export function CaseStudySection({
           {detailLink ? (
             <Link
               href={detailLink.href}
-              className={`${focusRingClass} inline-flex rounded-sm text-sm underline underline-offset-4`}
+              className={`${focusRingClass} inline-flex rounded-none text-sm underline underline-offset-4`}
             >
               {detailLink.label}
             </Link>
@@ -94,7 +94,7 @@ export function CaseStudySection({
                 <li key={reference.href}>
                   <Link
                     href={reference.href}
-                    className={`${focusRingClass} rounded-sm underline underline-offset-4 hover:text-text`}
+                    className={`${focusRingClass} rounded-none underline underline-offset-4 hover:text-text`}
                   >
                     {reference.label}
                   </Link>
