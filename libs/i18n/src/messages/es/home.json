@@ -15,18 +15,18 @@
     "linkLabel": "Abrir informe ejecutivo"
   },
   "domains": {
-    "title": "Dominios Institucionales",
+    "title": "Dominios Institucionales Principales",
     "governance": {
       "title": "Arquitectura de Gobernanza",
-      "description": "Marcos estructurales para cumplimiento institucional y responsabilidad operacional en entornos multi-interesados."
+      "description": "Marcos de gobernanza diseñados que aseguran cumplimiento, responsabilidad y alineación multi-interesados."
     },
     "capital": {
       "title": "Administración de Capital",
-      "description": "Supervisión estratégica de asignación de capital y decisiones de adquisición ajustadas al riesgo a escala empresarial."
+      "description": "Supervisión estratégica de asignación de capital y adquisición ajustada al riesgo a escala empresarial."
     },
     "operational": {
       "title": "Sistemas Operacionales",
-      "description": "Arquitecturas de integración para gobernanza de cadena de suministro e iniciativas de modernización institucionales."
+      "description": "Arquitecturas operacionales integradas que apoyan la gobernanza de cadena de suministro y la modernización institucional."
     }
   },
   "selectedWork": {

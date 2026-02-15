@@ -15,18 +15,18 @@
     "linkLabel": "Open executive brief"
   },
   "domains": {
-    "title": "Institutional Domains",
+    "title": "Core Institutional Domains",
     "governance": {
       "title": "Governance Architecture",
-      "description": "Structural frameworks for institutional compliance and operational accountability across multi-stakeholder environments."
+      "description": "Engineered governance frameworks ensuring compliance, accountability, and multi-stakeholder alignment."
     },
     "capital": {
       "title": "Capital Stewardship",
-      "description": "Strategic oversight of capital allocation and risk-adjusted procurement decisions at enterprise scale."
+      "description": "Strategic oversight of capital allocation and risk-adjusted procurement at enterprise scale."
     },
     "operational": {
       "title": "Operational Systems",
-      "description": "Integration architectures for supply chain governance and institutional modernization initiatives."
+      "description": "Integrated operational architectures supporting supply chain governance and institutional modernization."
     }
   },
   "selectedWork": {
