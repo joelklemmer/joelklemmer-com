@@ -22,6 +22,7 @@ import {
 import { FooterSection } from '@joelklemmer/sections';
 
 import { routing } from '../../i18n/routing';
+import { ConsentProviderWrapper } from '../../lib/ConsentProviderWrapper';
 import { DeferredIslandsScript } from './_deferred/DeferredIslands.server';
 import { HeaderDeferredSlot } from './_deferred/HeaderDeferredSlot';
 import { ConsentDeferredSlot } from './_deferred/ConsentDeferredSlot';
@@ -126,7 +127,7 @@ export default async function LocaleLayout({
   }));
 
   return (
-    <>
+    <ConsentProviderWrapper initialConsentState={initialConsentState ?? null}>
       <MastheadScrollEffect />
       <ServerShell
         skipLabel={common('a11y.skipToContent')}
@@ -171,6 +172,6 @@ export default async function LocaleLayout({
       <Suspense fallback={null}>
         <ScrollToTopSlot />
       </Suspense>
-    </>
+    </ConsentProviderWrapper>
   );
 }

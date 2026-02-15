@@ -57,6 +57,15 @@
   "density": {
     "toggleLabel": "תצוגת צפיפות"
   },
+  "preferences": {
+    "cookieConsent": "הסכמה לעוגיות",
+    "consentSaved": "הסכמה נשמרה",
+    "noPreferenceSaved": "אין העדפה שמורה",
+    "changeCookieSettings": "שנה הגדרות עוגיות",
+    "clearCookiePreference": "מחק העדפת עוגיות",
+    "clearedNote": "ההעדפה נמחקה. הבאנר יופיע בטעינה הבאה.",
+    "accessibilityPreferences": "העדפות נגישות"
+  },
   "cookiePreferences": {
     "openLabel": "העדפות עוגיות",
     "modalTitle": "העדפות עוגיות",

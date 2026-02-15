@@ -57,6 +57,15 @@
   "density": {
     "toggleLabel": "Режим щільності"
   },
+  "preferences": {
+    "cookieConsent": "Згода на cookie",
+    "consentSaved": "Згоду збережено",
+    "noPreferenceSaved": "Налаштування не збережено",
+    "changeCookieSettings": "Змінити налаштування cookie",
+    "clearCookiePreference": "Очистити налаштування cookie",
+    "clearedNote": "Налаштування очищено. Банер з'явиться при наступному завантаженні.",
+    "accessibilityPreferences": "Налаштування доступності"
+  },
   "cookiePreferences": {
     "openLabel": "Налаштування файлів cookie",
     "modalTitle": "Налаштування файлів cookie",

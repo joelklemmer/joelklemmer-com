@@ -57,6 +57,15 @@
   "density": {
     "toggleLabel": "Density view"
   },
+  "preferences": {
+    "cookieConsent": "Cookie consent",
+    "consentSaved": "Consent saved",
+    "noPreferenceSaved": "No preference saved",
+    "changeCookieSettings": "Change cookie settings",
+    "clearCookiePreference": "Clear cookie preference",
+    "clearedNote": "Preference cleared. Banner will appear on next page load.",
+    "accessibilityPreferences": "Accessibility preferences"
+  },
   "cookiePreferences": {
     "openLabel": "Cookie preferences",
     "modalTitle": "Cookie preferences",

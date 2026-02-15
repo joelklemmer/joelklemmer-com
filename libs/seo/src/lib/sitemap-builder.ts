@@ -39,6 +39,7 @@ const DEFAULT_INDEXABLE_PATHS = [
   '/accessibility',
   '/security',
   '/cookies',
+  '/preferences',
   '/operating-system',
 ];
 

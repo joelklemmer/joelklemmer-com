@@ -6,7 +6,7 @@ import {
 } from '@joelklemmer/i18n';
 import { Container } from '@joelklemmer/ui';
 import { HeroSection } from '@joelklemmer/sections';
-import { ConsentPreferencesForm } from '@joelklemmer/compliance';
+import { PreferencesPageContent } from './PreferencesPageContent';
 
 export async function generateMetadata() {
   const t = await getTranslations('consent.meta');
@@ -20,9 +20,10 @@ export const preferencesMetadata = generateMetadata;
 
 export async function PreferencesScreen() {
   const locale = (await getLocale()) as AppLocale;
-  const messages = await loadMessages(locale, ['consent']);
+  const messages = await loadMessages(locale, ['consent', 'footer']);
   const t = createScopedTranslator(locale, messages, 'consent.preferences');
-  const title = t('title');
+  const tFooter = createScopedTranslator(locale, messages, 'footer.links');
+  const title = tFooter('preferences');
   const lede = t('intro');
 
   return (
@@ -33,7 +34,7 @@ export async function PreferencesScreen() {
           <h2 id="preferences-heading" className="sr-only">
             {title}
           </h2>
-          <ConsentPreferencesForm />
+          <PreferencesPageContent />
         </Container>
       </section>
     </>
