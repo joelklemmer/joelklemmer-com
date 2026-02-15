@@ -100,6 +100,27 @@
   border-radius: 0 !important;
 }
 
+/* Hero portrait: refined contrast, cooler tone, subtle vignette, matte finish.
+   Sharper eyes handled in source asset. */
+.hero-authority .hero-portrait-composition {
+  position: relative;
+  overflow: hidden;
+}
+.hero-authority .portrait-image {
+  filter: contrast(1.06) saturate(0.92) hue-rotate(-5deg) !important;
+}
+.hero-authority .hero-portrait-composition::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 90% at 50% 50%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+  pointer-events: none;
+}
+
 /* --------------------------------------------------------------------------- */
 /* Hero CTAs: Figma editorial — smaller buttons, lighter secondary border     */
 /* --------------------------------------------------------------------------- */

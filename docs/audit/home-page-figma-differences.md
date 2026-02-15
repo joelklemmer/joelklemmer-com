@@ -8,13 +8,13 @@
 
 ## 1. Hero headline (H1)
 
-| Aspect          | Figma                                                                                                     | localhost                                                                                       | Status                  |
-| --------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| **Content**     | "Institutional Systems." / "Capital Governance." / "Operational Authority." (3 lines, each phrase intact) | Same i18n content (thesis1, thesis2, thesis3)                                                   | ✓ Content correct       |
-| **Line breaks** | Three phrases on three lines; no mid-phrase wrap                                                          | Each word on its own line ("Institutional", "Systems.", "Capital", etc.) — wrapping incorrectly | ❌ **Wrong**            |
-| **Font**        | Large, bold **serif**                                                                                     | Serif (Crimson Pro) in CSS                                                                      | ✓ Aligned               |
-| **Line height** | Generous vertical spacing                                                                                 | `line-height: 1.2`                                                                              | ⚠ Verify against Figma |
-| **Color**       | Dark gray / black                                                                                         | `hsl(var(--color-text))`                                                                        | ✓ Aligned               |
+| Aspect          | Figma                                                                                                     | localhost                                                                                                 | Status                  |
+| --------------- | --------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
+| **Content**     | "Institutional Systems." / "Capital Governance." / "Operational Authority." (3 lines, each phrase intact) | "Institutional Architecture." / "Capital Discipline." / "Operational Stewardship." (Final Recommendation) | Diverges (intentional)  |
+| **Line breaks** | Three phrases on three lines; no mid-phrase wrap                                                          | Each word on its own line ("Institutional", "Systems.", "Capital", etc.) — wrapping incorrectly           | ❌ **Wrong**            |
+| **Font**        | Large, bold **serif**                                                                                     | Serif (Crimson Pro) in CSS                                                                                | ✓ Aligned               |
+| **Line height** | Generous vertical spacing                                                                                 | `line-height: 1.2`                                                                                        | ⚠ Verify against Figma |
+| **Color**       | Dark gray / black                                                                                         | `hsl(var(--color-text))`                                                                                  | ✓ Aligned               |
 
 **Root cause:** Thesis spans wrap mid-phrase when the content column is narrow. Need `white-space: nowrap` (with narrow-viewport fallback) or a wider minimum column width so "Institutional Systems." stays on one line.
 
@@ -22,13 +22,13 @@
 
 ## 2. Supporting paragraph (lede)
 
-| Aspect         | Figma                                                                                     | localhost                      | Status       |
-| -------------- | ----------------------------------------------------------------------------------------- | ------------------------------ | ------------ |
-| **Content**    | "Institutions run on structure. Capital requires discipline. Governance is architecture." | Same (hero.lede)               | ✓ Aligned    |
-| **Font**       | Smaller, lighter weight **sans-serif**                                                    | **Serif** (Crimson Pro)        | ❌ **Wrong** |
-| **Color**      | Medium gray (lighter than heading)                                                        | `hsl(var(--color-muted))`      | ✓ Aligned    |
-| **Size**       | Smaller than heading                                                                      | `--text-body-large` (1.125rem) | ✓ Aligned    |
-| **Visibility** | Below heading, above CTAs                                                                 | Present in markup              | ✓ Aligned    |
+| Aspect         | Figma                                                                                     | localhost                                                                                                         | Status               |
+| -------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- | -------------------- |
+| **Content**    | "Institutions run on structure. Capital requires discipline. Governance is architecture." | "Institutions are built on structure. Capital demands discipline. Enduring governance is engineered." (hero.lede) | Diverges (Final Rec) |
+| **Font**       | Smaller, lighter weight **sans-serif**                                                    | **Serif** (Crimson Pro)                                                                                           | ❌ **Wrong**         |
+| **Color**      | Medium gray (lighter than heading)                                                        | `hsl(var(--color-muted))`                                                                                         | ✓ Aligned            |
+| **Size**       | Smaller than heading                                                                      | `--text-body-large` (1.125rem)                                                                                    | ✓ Aligned            |
+| **Visibility** | Below heading, above CTAs                                                                 | Present in markup                                                                                                 | ✓ Aligned            |
 
 **Root cause:** Figma shows lede as sans-serif; codebase uses serif. Tokens and 55-figma-parity both set `--font-serif` for lede.
 

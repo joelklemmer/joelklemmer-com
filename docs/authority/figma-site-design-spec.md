@@ -10,11 +10,14 @@
 
 ### Hero
 
-- **H1:** "Institutional Systems. Capital Governance. Operational Authority." (three lines, period-terminated phrases)
-- **Lede:** "Institutions run on structure. Capital requires discipline. Governance is architecture."
+- **H1 (Figma reference):** "Institutional Systems. Capital Governance. Operational Authority." (three lines, period-terminated phrases)
+- **Lede (Figma reference):** "Institutions run on structure. Capital requires discipline. Governance is architecture."
+- **H1 (implementation):** "Institutional Architecture. Capital Discipline. Operational Stewardship." (Final Recommendation)
+- **Lede (implementation):** "Institutions are built on structure. Capital demands discipline. Enduring governance is engineered."
 - **CTAs:** Executive Brief (primary), Case Studies (secondary)
 - **Layout:** Two-column — headline/lede/CTAs left, portrait right
-- **Portrait:** Light grey background behind subject; rectangular crop
+- **Portrait (Figma):** Light grey background behind subject; rectangular crop
+- **Portrait (implementation):** Refined contrast, cooler tone, subtle vignette, matte finish (Final Recommendation)
 
 ### Sections
 
