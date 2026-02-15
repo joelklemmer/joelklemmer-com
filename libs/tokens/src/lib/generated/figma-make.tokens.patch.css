@@ -75,9 +75,9 @@
   --color-focus: 211 34% 17%;
   --color-neutral-50: 60 11% 96%;
   --color-neutral-100: 36 20% 95%;
-  /* Masthead: light surface + dark text — matches Figma site exactly */
+  /* Masthead: light surface + dark text. Scrolled: translucent per Figma. */
   --masthead-bg: hsl(var(--color-surface));
-  --masthead-bg-scrolled: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface) / 0.9);
   --masthead-border: hsl(var(--color-border-subtle));
   --masthead-text: var(--color-text);
   --masthead-text-muted: var(--color-muted);
@@ -106,7 +106,7 @@
     --color-neutral-50: 60 11% 96%;
     --color-neutral-100: 36 20% 95%;
     --masthead-bg: hsl(var(--color-surface));
-    --masthead-bg-scrolled: hsl(var(--color-surface));
+    --masthead-bg-scrolled: hsl(var(--color-surface) / 0.9);
     --masthead-border: hsl(var(--color-border-subtle));
     --masthead-text: var(--color-text);
     --masthead-text-muted: var(--color-muted);
@@ -136,7 +136,7 @@
     --color-neutral-50: 216 33% 6%;
     --color-neutral-100: 219 21% 13%;
     --masthead-bg: hsl(var(--color-surface));
-    --masthead-bg-scrolled: hsl(var(--color-surface));
+    --masthead-bg-scrolled: hsl(var(--color-surface) / 0.9);
     --masthead-border: hsl(var(--color-border-subtle));
     --masthead-text: var(--color-text);
     --masthead-text-muted: var(--color-muted);
@@ -163,9 +163,9 @@
   --color-focus: 213 29% 50%;
   --color-neutral-50: 216 33% 6%;
   --color-neutral-100: 219 21% 13%;
-  /* Masthead: dark surface + light text — Figma parity */
+  /* Masthead: dark surface + light text. Scrolled: translucent per Figma. */
   --masthead-bg: hsl(var(--color-surface));
-  --masthead-bg-scrolled: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface) / 0.9);
   --masthead-border: hsl(var(--color-border-subtle));
   --masthead-text: var(--color-text);
   --masthead-text-muted: var(--color-muted);

@@ -1,5 +1,5 @@
 /* Figma Make parity — loads LAST. Pixel match for https://pages-tile-41445691.figma.site/
-   Target: ~1440px viewport. Values from Figma inspection; tokens preferred, px where needed. */
+   Target: ~1440px viewport. Exact hex from figma-make tokens — see docs/authority/figma-color-verification.md */
 
 /* --------------------------------------------------------------------------- */
 /* 1440px: container width + padding — less boxed, more open (Figma editorial)   */
@@ -17,19 +17,7 @@
   }
 }
 
-/* --------------------------------------------------------------------------- */
-/* Page background: cooler neutral gray (Figma editorial)                       */
-/* --------------------------------------------------------------------------- */
-:root[data-theme='light'],
-:root:not([data-theme='dark']) {
-  --color-bg: 220 10% 97%;
-}
-
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme='dark']) {
-    --color-bg: 220 10% 97%;
-  }
-}
+/* Body bg: use figma-make token 60 11% 96% (#F6F6F4) — no override */
 
 /* --------------------------------------------------------------------------- */
 /* Hero section: Figma pixel match — lighter, editorial, smaller headline       */
@@ -59,13 +47,13 @@
   }
 }
 
-/* Lede: Sans-serif, softer gray (Figma editorial); 32rem for wrapping match */
+/* Lede: Sans-serif; 32rem for wrapping. Color: --color-text-tertiary (#6B6B6B) exact Figma */
 .hero-lede {
   font-family: var(--font-sans) !important;
   font-size: var(--text-body-large, 1.125rem) !important;
   font-weight: var(--font-weight-normal, 400) !important;
   line-height: var(--text-body-large-line, 1.65) !important;
-  color: hsl(220 8% 35%) !important;
+  color: hsl(var(--color-text-tertiary)) !important;
   max-width: min(32rem, 100%) !important;
 }
 
@@ -98,7 +86,9 @@
 
 .hero-authority .hero-portrait-wrapper,
 .hero-authority .hero-portrait-composition {
-  background: hsl(220 8% 96%) !important;
+  background: hsl(
+    var(--color-neutral-100, var(--color-surface-elevated))
+  ) !important;
   box-shadow: none !important;
 }
 
@@ -125,7 +115,7 @@
 }
 
 .hero-action-secondary {
-  border-color: hsl(220 8% 85%) !important;
+  border-color: hsl(var(--color-border)) !important;
 }
 
 .hero-action-secondary:hover {
@@ -156,10 +146,10 @@
 }
 
 /* --------------------------------------------------------------------------- */
-/* Header/nav: Figma pixel match — lighter typography, thinner icons, divider  */
+/* Header/nav: Figma pixel match — divider #D9D7D4 (--color-border-subtle)      */
 /* --------------------------------------------------------------------------- */
 header[aria-label] {
-  --masthead-border: hsl(220 8% 90%);
+  --masthead-border: hsl(var(--color-border-subtle));
 }
 
 header[aria-label] .masthead-identity-link {

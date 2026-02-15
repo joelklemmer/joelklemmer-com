@@ -788,9 +788,11 @@ header[aria-label] {
   }
 }
 
-/* Figma parity: solid masthead when scrolled (no transparency). */
+/* Figma: translucent masthead when scrolled (partial transparency + backdrop blur). */
 [data-masthead-scrolled] header[aria-label] {
   background: var(--masthead-bg-scrolled);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   box-shadow: 0 1px 0 var(--masthead-border);
 }
 
@@ -798,5 +800,7 @@ header[aria-label] {
   header[aria-label],
   [data-masthead-scrolled] header[aria-label] {
     transition: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
