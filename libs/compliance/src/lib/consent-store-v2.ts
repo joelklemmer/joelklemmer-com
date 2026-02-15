@@ -12,7 +12,7 @@ import {
 import type { ConsentReceipt } from './receipt';
 import { createConsentReceiptSync } from './receipt';
 
-const DEFAULT_COOKIE_NAME = 'consent';
+const DEFAULT_COOKIE_NAME = 'joelklemmer-consent';
 const DEFAULT_COOKIE_MAX_AGE_DAYS = 365;
 const DEFAULT_PATH = '/';
 const RECEIPT_STORAGE_KEY = 'consent_receipt';

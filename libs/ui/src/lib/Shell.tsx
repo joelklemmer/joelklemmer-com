@@ -31,6 +31,7 @@ export function Shell({
         {a11y('a11y.skipToContent')}
       </a>
       <header
+        role="banner"
         aria-label={a11y('a11y.headerLabel')}
         className="border-b border-border"
       >
@@ -48,6 +49,7 @@ export function Shell({
         <PageFrame contentStage>{children}</PageFrame>
       </main>
       <footer
+        role="contentinfo"
         aria-label={a11y('a11y.footerLabel')}
         className="border-t border-border"
       >

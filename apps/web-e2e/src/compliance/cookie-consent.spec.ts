@@ -73,7 +73,7 @@ test.describe('Cookie consent', () => {
     await acceptAll.click();
 
     const cookies = await page.context().cookies();
-    const consentCookie = cookies.find((c) => c.name === 'consent');
+    const consentCookie = cookies.find((c) => c.name === 'joelklemmer-consent');
     expect(
       consentCookie,
       'Consent cookie should be set after accept all',
@@ -97,7 +97,7 @@ test.describe('Cookie consent', () => {
 
     await page.goto(EN_HOME, { waitUntil: 'load', timeout: 45000 });
     const cookies = await page.context().cookies();
-    const consentCookie = cookies.find((c) => c.name === 'consent');
+    const consentCookie = cookies.find((c) => c.name === 'joelklemmer-consent');
     expect(
       consentCookie,
       'Consent cookie should be absent or cleared after withdraw',

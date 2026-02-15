@@ -63,6 +63,9 @@ export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger
+        id="primary-nav-trigger"
+        aria-haspopup="dialog"
+        aria-controls="primary-nav-menu"
         className={cn(
           focusRingClass,
           'masthead-touch-target masthead-icon flex items-center justify-center rounded-none text-muted hover:text-text min-h-[44px] min-w-[44px]',
@@ -71,7 +74,12 @@ export function MobileNavSheet({ navItems, navLabel }: MobileNavSheetProps) {
       >
         <HamburgerIcon />
       </SheetTrigger>
-      <SheetContent side="end" className="mobile-nav-sheet w-[min(20rem,85vw)]">
+      <SheetContent
+        id="primary-nav-menu"
+        side="end"
+        className="mobile-nav-sheet w-[min(20rem,85vw)]"
+        aria-label={navLabel}
+      >
         <SheetHeader>
           <SheetTitle className={visuallyHiddenClass}>{navLabel}</SheetTitle>
         </SheetHeader>

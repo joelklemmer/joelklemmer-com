@@ -236,7 +236,7 @@ export async function setDeterministicClientState(
   const consentValue = encodeConsentAccepted();
   try {
     await context.addCookies([
-      { name: 'consent', value: consentValue, url, path: '/' },
+      { name: 'joelklemmer-consent', value: consentValue, url, path: '/' },
       { name: 'joelklemmer-theme', value: 'light', url, path: '/' },
     ]);
   } catch {

@@ -88,7 +88,11 @@ export default async function LocaleLayout({
     label: nav(entry.labelKey),
     ...(entry.rank && { rank: entry.rank }),
   }));
-  const initialConsentState = getConsentFromCookieV2(cookieStore.toString());
+  const cookieHeader = cookieStore
+    .getAll()
+    .map((c) => `${c.name}=${c.value}`)
+    .join('; ');
+  const initialConsentState = getConsentFromCookieV2(cookieHeader);
   const initialAnalyticsConsent = canLoadAnalyticsV2(
     initialConsentState ?? null,
   );

@@ -502,7 +502,11 @@ async function main() {
       JSON.stringify(consentPayload),
       'utf8',
     ).toString('base64');
-    await page.setCookie({ name: 'consent', value: consentValue, url });
+    await page.setCookie({
+      name: 'joelklemmer-consent',
+      value: consentValue,
+      url,
+    });
 
     await flow.navigate(url);
     await flow.startTimespan({ stepName: 'Interact' });

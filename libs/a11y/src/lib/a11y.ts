@@ -11,10 +11,11 @@ export const focusRingClass =
   'focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus transition-[outline-color,outline-width,outline-offset] duration-feedback ease-out motion-reduce:transition-none data-[contrast=high]:focus-visible:outline-4 data-[contrast=high]:focus-visible:outline-offset-3';
 
 /**
- * Skip link: sr-only until focused; then visible, fixed, high z-index. No focus trap.
+ * Skip link: sr-only until keyboard-focused; then visible, fixed, high z-index. No focus trap.
+ * Uses focus-visible so it appears only on keyboard navigation, per WCAG 2.4.1.
  */
 export const skipLinkClass =
-  'sr-only focus:not-sr-only focus:fixed focus:start-4 focus:top-4 focus:z-50 focus:rounded-none focus:bg-surface focus:px-4 focus:py-2 focus:text-sm focus:text-text focus:shadow';
+  'sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:start-4 focus-visible:top-4 focus-visible:z-50 focus-visible:rounded-none focus-visible:bg-surface focus-visible:px-4 focus-visible:py-2 focus-visible:text-sm focus-visible:text-text focus-visible:shadow';
 
 /**
  * Interaction transition: hover/focus/press feedback timing (token-driven, respects reduced motion).

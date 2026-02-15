@@ -43,7 +43,7 @@ test.describe('Consent surface (banner)', () => {
     const banner = page.getByRole('dialog', { name: /consent and data use/i });
     await expect(banner).not.toBeVisible();
     const cookies = await page.context().cookies();
-    const consentCookie = cookies.find((c) => c.name === 'consent');
+    const consentCookie = cookies.find((c) => c.name === 'joelklemmer-consent');
     expect(consentCookie).toBeDefined();
   });
 

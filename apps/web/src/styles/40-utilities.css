@@ -1,25 +1,89 @@
-/* 40-utilities: small helpers not worth components */
+/* 40-utilities: root-level accessibility only. No component selectors, no layout shift. */
 .text-muted {
   color: hsl(var(--color-muted));
 }
 
-/* Forced motion reduction (user preference override) */
-.motion-reduce-force,
-.motion-reduce-force *,
-.motion-reduce-force *::before,
-.motion-reduce-force *::after {
-  animation-duration: 0.01ms !important;
+/* Text size — root-level scaling via --jk-text-scale (1, 1.12, 1.25), default 1 = no drift */
+html {
+  font-size: calc(100% * var(--jk-text-scale, 1));
+}
+
+/* Line height — comfortable via --jk-line-height or fallback */
+html[data-line-height='comfortable'] body {
+  line-height: var(--jk-line-height, 1.6);
+}
+
+/* Letter spacing — increased via --jk-letter-spacing or fallback */
+html[data-letter-spacing='increased'] body {
+  letter-spacing: var(--jk-letter-spacing, 0.02em);
+}
+
+/* Dyslexia-friendly font — data-dyslexia-font="true" */
+html[data-dyslexia-font='true'] body {
+  font-family:
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
+}
+
+/* Reduce motion — data-motion="reduced" */
+html[data-motion='reduced'] *,
+html[data-motion='reduced'] *::before,
+html[data-motion='reduced'] *::after {
+  animation-duration: 0.001ms !important;
   animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
+  transition-duration: 0.001ms !important;
+}
+html[data-motion='reduced'] {
   scroll-behavior: auto !important;
 }
 
-/* Text size control */
-:root[data-text-size='large'] {
-  --body-analytical-size: 1.125rem;
-  --display-heading-size: 2.25rem;
-  --section-heading-size: 1.75rem;
-  --text-base: 1.125rem;
-  --text-sm: 1rem;
-  --text-lg: 1.25rem;
+/* High contrast — html[data-contrast="high"] with [data-theme] specificity */
+html[data-contrast='high'][data-theme='light'],
+html[data-contrast='high']:not([data-theme='dark']) {
+  --color-bg: 0 0% 100%;
+  --color-surface: 0 0% 100%;
+  --color-surface-elevated: 0 0% 100%;
+  --color-surface-field: 0 0% 98%;
+  --color-surface-inset: 0 0% 98%;
+  --color-text: 0 0% 0%;
+  --color-muted: 0 0% 15%;
+  --color-border: 0 0% 0%;
+  --color-border-subtle: 0 0% 0%;
+  --color-accent: 217 100% 35%;
+  --color-accent-strong: 217 100% 30%;
+  --color-focus: 217 100% 40%;
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface));
+  --masthead-border: hsl(var(--color-border-subtle));
+  --masthead-text: var(--color-text);
+  --masthead-text-muted: var(--color-muted);
+  --masthead-focus: var(--color-focus);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
+}
+html[data-contrast='high'][data-theme='dark'] {
+  --color-bg: 0 0% 0%;
+  --color-surface: 0 0% 0%;
+  --color-surface-elevated: 0 0% 0%;
+  --color-surface-field: 0 0% 5%;
+  --color-surface-inset: 0 0% 5%;
+  --color-text: 0 0% 100%;
+  --color-muted: 0 0% 90%;
+  --color-border: 0 0% 100%;
+  --color-border-subtle: 0 0% 100%;
+  --color-accent: 217 100% 60%;
+  --color-accent-strong: 217 100% 70%;
+  --color-focus: 217 100% 70%;
+  --masthead-bg: hsl(var(--color-surface));
+  --masthead-bg-scrolled: hsl(var(--color-surface));
+  --masthead-border: hsl(var(--color-border-subtle));
+  --masthead-text: var(--color-text);
+  --masthead-text-muted: var(--color-muted);
+  --masthead-focus: var(--color-focus);
+  --focus-ring-width: 3px;
+  --focus-ring-offset: 3px;
 }

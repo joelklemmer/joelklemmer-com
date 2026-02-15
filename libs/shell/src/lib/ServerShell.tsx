@@ -78,6 +78,7 @@ export function ServerShell({
         {skipLabel}
       </a>
       <header
+        role="banner"
         aria-label={headerLabel}
         data-testid="masthead"
         className="sticky top-0 z-40"
@@ -215,6 +216,7 @@ export function ServerShell({
         <PageFrame contentStage>{children}</PageFrame>
       </main>
       <footer
+        role="contentinfo"
         aria-label={footerLabel}
         className="footer-root border-t border-border"
       >
